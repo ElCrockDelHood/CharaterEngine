@@ -1,0 +1,177 @@
+{
+  "landmark_audit": {
+    "sprint": "A0.2",
+    "date": "2026-08-12",
+    "tolerance_mm": 1.0,
+    "coordinate_system": "Z-up, meters, right-handed"
+  },
+  "landmarks": {
+    "HEAD": {
+      "bones": ["FRONTAL", "PARIETAL_L", "PARIETAL_R"],
+      "current_coordinate": {"x": 0.0, "y": -0.05, "z": 3.08},
+      "geometric_representation": "Highest Z-coordinate in skeleton (FRONTAL tail)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "Bone endpoint used as landmark, not anatomical vertex",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual cranial vertex position"
+    },
+    "CERVICAL_BASE": {
+      "bones": ["CERVICAL_1"],
+      "current_coordinate": {"x": 0.0, "y": 0.0, "z": 2.63},
+      "geometric_representation": "CERVICAL_1 head (connection to CRANIUM)",
+      "anatomical_plausibility": "UNCERTAIN",
+      "joint_center_issue": "May represent atlanto-occipital joint region",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual C1-C0 joint center"
+    },
+    "CERVICAL_TOP": {
+      "bones": ["CERVICAL_1"],
+      "current_coordinate": {"x": 0.0, "y": 0.0, "z": 2.60},
+      "geometric_representation": "CERVICAL_1 tail (connection to CERVICAL_2)",
+      "anatomical_plausibility": "UNCERTAIN",
+      "joint_center_issue": "May represent atlanto-axial joint region",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual C1-C2 joint center"
+    },
+    "CLAVICLE_L": {
+      "bones": ["CLAVICLE_L"],
+      "current_coordinate": {"x": -0.25, "y": -0.10, "z": 2.38},
+      "geometric_representation": "CLAVICLE_L head (sternal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "Position incorrect for sternoclavicular joint",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual sternoclavicular joint center"
+    },
+    "CLAVICLE_R": {
+      "bones": ["CLAVICLE_R"],
+      "current_coordinate": {"x": 0.25, "y": -0.10, "z": 2.38},
+      "geometric_representation": "CLAVICLE_R head (sternal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "Position incorrect for sternoclavicular joint",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual sternoclavicular joint center"
+    },
+    "SHOULDER_L": {
+      "bones": ["SCAPULA_L"],
+      "current_coordinate": {"x": -0.35, "y": 0.0, "z": 2.28},
+      "geometric_representation": "SCAPULA_L head (superior aspect)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "Does not represent acromioclavicular or glenohumeral joint",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual glenohumeral joint center"
+    },
+    "SHOULDER_R": {
+      "bones": ["SCAPULA_R"],
+      "current_coordinate": {"x": 0.35, "y": 0.0, "z": 2.28},
+      "geometric_representation": "SCAPULA_R head (superior aspect)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "Does not represent acromioclavicular or glenohumeral joint",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual glenohumeral joint center"
+    },
+    "ELBOW_L": {
+      "bones": ["HUMERUS_L"],
+      "current_coordinate": {"x": -0.35, "y": 0.0, "z": 1.73},
+      "geometric_representation": "HUMERUS_L tail (distal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "7.1cm gap to radius/ulna - not elbow joint center",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual humeroulnar/radiohumeral joint center"
+    },
+    "ELBOW_R": {
+      "bones": ["HUMERUS_R"],
+      "current_coordinate": {"x": 0.35, "y": 0.0, "z": 1.73},
+      "geometric_representation": "HUMERUS_R tail (distal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "7.1cm gap to radius/ulna - not elbow joint center",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual humeroulnar/radiohumeral joint center"
+    },
+    "WRIST_L": {
+      "bones": ["RADIUS_L"],
+      "current_coordinate": {"x": -0.35, "y": -0.05, "z": 1.38},
+      "geometric_representation": "RADIUS_L tail (distal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "25.5cm gap to carpals - not wrist joint center",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual radiocarpal joint center"
+    },
+    "WRIST_R": {
+      "bones": ["RADIUS_R"],
+      "current_coordinate": {"x": 0.35, "y": -0.05, "z": 1.38},
+      "geometric_representation": "RADIUS_R tail (distal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "25.5cm gap to carpals - not wrist joint center",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual radiocarpal joint center"
+    },
+    "PELVIS": {
+      "bones": ["SACRUM"],
+      "current_coordinate": {"x": 0.0, "y": 0.0, "z": 1.53},
+      "geometric_representation": "SACRUM head (superior aspect)",
+      "anatomical_plausibility": "UNCERTAIN",
+      "joint_center_issue": "May represent sacral promontory region",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual pelvic landmark"
+    },
+    "HIP_L": {
+      "bones": ["FEMUR_L"],
+      "current_coordinate": {"x": -0.10, "y": 0.0, "z": 1.28},
+      "geometric_representation": "FEMUR_L head (proximal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "7.1cm gap from COXAL - not hip joint center",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual acetabulofemoral joint center"
+    },
+    "HIP_R": {
+      "bones": ["FEMUR_R"],
+      "current_coordinate": {"x": 0.10, "y": 0.0, "z": 1.28},
+      "geometric_representation": "FEMUR_R head (proximal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "7.1cm gap from COXAL - not hip joint center",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual acetabulofemoral joint center"
+    },
+    "KNEE_L": {
+      "bones": ["FEMUR_L"],
+      "current_coordinate": {"x": -0.10, "y": 0.0, "z": 0.83},
+      "geometric_representation": "FEMUR_L tail (distal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "5.0cm gap to tibia/patella - not knee joint center",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual tibiofemoral/patellofemoral joint center"
+    },
+    "KNEE_R": {
+      "bones": ["FEMUR_R"],
+      "current_coordinate": {"x": 0.10, "y": 0.0, "z": 0.83},
+      "geometric_representation": "FEMUR_R tail (distal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "5.0cm gap to tibia/patella - not knee joint center",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual tibiofemoral/patellofemoral joint center"
+    },
+    "ANKLE_L": {
+      "bones": ["TIBIA_L"],
+      "current_coordinate": {"x": -0.10, "y": 0.0, "z": 0.38},
+      "geometric_representation": "TIBIA_L tail (distal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "11.2cm gap to tarsals - not ankle joint center",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual talocrural joint center"
+    },
+    "ANKLE_R": {
+      "bones": ["TIBIA_R"],
+      "current_coordinate": {"x": 0.10, "y": 0.0, "z": 0.38},
+      "geometric_representation": "TIBIA_R tail (distal end)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "11.2cm gap to tarsals - not ankle joint center",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual talocrural joint center"
+    },
+    "HEEL_ESTIMATE": {
+      "bones": ["METATARSAL_5_L", "METATARSAL_5_R"],
+      "current_coordinate": {"x": 0.15, "y": 0.0, "z": 0.13},
+      "geometric_representation": "Lowest Z-coordinate in foot region (metatarsals)",
+      "anatomical_plausibility": "INCORRECT",
+      "joint_center_issue": "Metatarsal endpoint used as heel - not calcaneus",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual calcaneus position"
+    },
+    "FOREFOOT": {
+      "bones": ["METATARSAL_*"],
+      "current_coordinate": {"x": 0.15, "y": 0.0, "z": 0.13},
+      "geometric_representation": "Metatarsal head region",
+      "anatomical_plausibility": "UNCERTAIN",
+      "joint_center_issue": "Linear arrangement may not represent metatarsal arch",
+      "expected_or_unknown": "REFERENCE_REQUIRED for actual metatarsal arch geometry"
+    }
+  },
+  "critical_landmark_issues": [
+    "No actual joint centers represented - only bone endpoints",
+    "Large gaps between supposed joint regions (5-25cm)",
+    "Incorrect anatomical positioning for major joints",
+    "Missing biomechanical landmark definitions",
+    "No distinction between bone endpoints and joint centers"
+  ]
+}

@@ -1,0 +1,14 @@
+﻿============================================================
+BLOQUE 8.7 – AUDITORÍA DE INTEGRACIÓN
+Fecha: 2026-08-11 09:06:33
+============================================================
+
+JSON canónico: src/character_engine/data/anatomy/human_adult_206.json
+
+RESULTADOS:
+  - Round-trip de 206 huesos: BONES_MATCH: True
+  - Round-trip de 2 contenedores: CONTAINERS_MATCH: True
+  - Dominio sin bpy: True
+  - Blender disponible: False
+
+============================================================

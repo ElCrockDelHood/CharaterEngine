@@ -1,0 +1,171 @@
+{
+  "source_registry": {
+    "version": "1.0.0",
+    "registry_date": "2026-08-20",
+    "status": "PLACEHOLDER",
+    "description": "Registry of anatomical reference data sources for deterministic reconstruction",
+    "conventions": {
+      "provenance_status": ["PROVEN", "DERIVED", "ASSUMPTION", "PLACEHOLDER", "UNKNOWN"],
+      "confidence_levels": ["HIGH", "MEDIUM", "LOW", "UNKNOWN"],
+      "unit_system": "METERS"
+    }
+  },
+  "sources": {
+    "anthropometric_data": {
+      "nhanes": {
+        "id": "NHANES",
+        "name": "National Health and Nutrition Examination Survey",
+        "type": "ANTHROPOMETRIC_DATABASE",
+        "coverage": "US population anthropometric data",
+        "status": "NOT_ACQUIRED",
+        "required_for": ["height_data", "segment_length_data", "body_width_data", "body_depth_data"],
+        "notes": "Primary source for US anthropometric data. Publicly available."
+      },
+      "who_database": {
+        "id": "WHO_BMI",
+        "name": "WHO Global Database on Body Mass Index",
+        "type": "ANTHROPOMETRIC_DATABASE",
+        "coverage": "International anthropometric data",
+        "status": "NOT_ACQUIRED",
+        "required_for": ["height_data", "proportion_data"],
+        "notes": "International anthropometric reference data."
+      }
+    },
+    "biomechanical_data": {
+      "isb_recommendations": {
+        "id": "ISB",
+        "name": "International Society of Biomechanics Standards",
+        "type": "BIOMECHANICAL_STANDARDS",
+        "coverage": "Biomechanical standardization",
+        "status": "NOT_ACQUIRED",
+        "required_for": ["joint_center_data", "joint_axis_data"],
+        "notes": "Standard recommendations for joint centers and coordinate systems."
+      }
+    },
+    "osteometric_data": {
+      "forensic_anthropology": {
+        "id": "FORENSIC",
+        "name": "Forensic Anthropology Reference Collections",
+        "type": "OSTEOMETRIC_DATABASE",
+        "coverage": "Bone dimension and landmark data",
+        "status": "NOT_ACQUIRED",
+        "required_for": ["bone_dimension_data", "landmark_data"],
+        "notes": "Reference collections for osteometric measurements."
+      }
+    },
+    "proportion_data": {
+      "classical_proportions": {
+        "id": "CLASSICAL",
+        "name": "Classical Proportion Systems",
+        "type": "HISTORICAL_REFERENCE",
+        "coverage": "Vitruvian, Leonardo, Egyptian canon proportions",
+        "status": "PARTIALLY_AVAILABLE",
+        "required_for": ["proportion_validation"],
+        "notes": "Historical proportion systems for validation reference."
+      }
+    }
+  },
+  "placeholder_data": {
+    "anthropometric_averages": {
+      "status": "PLACEHOLDER",
+      "description": "Placeholder anthropometric averages for reconstruction testing",
+      "population": "UNDEFINED",
+      "values": {
+        "height": {
+          "mean": 1.75,
+          "unit": "meters",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "shoulder_width": {
+          "mean": 0.40,
+          "unit": "meters",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "hip_width": {
+          "mean": 0.35,
+          "unit": "meters",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        }
+      }
+    },
+    "joint_center_offsets": {
+      "status": "PLACEHOLDER",
+      "description": "Placeholder joint center offsets for reconstruction testing",
+      "values": {
+        "shoulder_offset": {
+          "value": 0.020,
+          "unit": "meters",
+          "direction": "inferior_and_medial",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "elbow_offset": {
+          "value": 0.000,
+          "unit": "meters",
+          "direction": "inferior",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "hip_offset": {
+          "value": 0.025,
+          "unit": "meters",
+          "direction": "inferior_and_posterior",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "knee_offset": {
+          "value": 0.000,
+          "unit": "meters",
+          "direction": "inferior",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "ankle_offset": {
+          "value": 0.000,
+          "unit": "meters",
+          "direction": "inferior",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        }
+      }
+    }
+  },
+  "data_requirements": {
+    "critical": [
+      "Human adult height range (1.7-1.9m)",
+      "Basic body proportions (head/body, limb/torso ratios)",
+      "Joint center definitions for major joints",
+      "Standard bone dimensions"
+    ],
+    "important": [
+      "Gender-specific variations",
+      "Age-related modifications",
+      "Population-specific characteristics"
+    ],
+    "missing": [
+      "All reference data currently marked as NOT_ACQUIRED or PLACEHOLDER",
+      "Population profile undefined",
+      "Target demographic parameters undefined"
+    ]
+  },
+  "acquisition_plan": {
+    "phase_1_critical": [
+      "Research and acquire NHANES anthropometric data",
+      "Research and acquire ISB biomechanical recommendations",
+      "Acquire basic osteometric reference data"
+    ],
+    "phase_2_important": [
+      "Acquire gender-specific anthropometric data",
+      "Acquire age-related anatomical modification data",
+      "Research population-specific variations"
+    ],
+    "phase_3_enhancement": [
+      "Acquire detailed joint range data",
+      "Acquire advanced proportion models",
+      "Acquire surface geometry data for articular surfaces"
+    ]
+  }
+}

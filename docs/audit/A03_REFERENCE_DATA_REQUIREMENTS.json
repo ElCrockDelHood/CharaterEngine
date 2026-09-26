@@ -1,0 +1,517 @@
+{
+  "reference_data_requirements": {
+    "sprint": "A0.3",
+    "date": "2026-08-13",
+    "status": "ANALYSIS_ONLY",
+    "purpose": "Comprehensive reference data requirements for anatomical reconstruction"
+  },
+  "data_categories": {
+    "anthropometric_data": {
+      "category": "HUMAN_BODY_MEASUREMENTS",
+      "priority": "CRITICAL",
+      "current_availability": "MISSING",
+      "required_for": ["All reconstruction stages", "Proportion calculations", "Validation"]
+    },
+    "biomechanical_data": {
+      "category": "JOINT_CENTER_AND_MOTION_DATA",
+      "priority": "CRITICAL",
+      "current_availability": "MISSING",
+      "required_for": ["Joint center calculations", "Motion range definitions", "Validation"]
+    },
+    "osteometric_data": {
+      "category": "BONE_DIMENSION_AND_LANDMARK_DATA",
+      "priority": "HIGH",
+      "current_availability": "MISSING",
+      "required_for": ["Bone geometry generation", "Landmark positioning", "Validation"]
+    },
+    "proportion_data": {
+      "category": "ANATOMICAL_PROPORTION_RELATIONSHIPS",
+      "priority": "CRITICAL",
+      "current_availability": "MISSING",
+      "required_for": ["Proportion calculations", "Scaling", "Validation"]
+    },
+    "demographic_data": {
+      "category": "AGE_GENDER_ETHNICITY_SPECIFIC_DATA",
+      "priority": "MEDIUM",
+      "current_availability": "MISSING",
+      "required_for": ["Demographic adjustments", "Population-specific validation"]
+    }
+  },
+  "anthropometric_data_requirements": {
+    "height_data": {
+      "data_type": "STATISTICAL_DISTRIBUTIONS",
+      "required_parameters": [
+        "Mean height by age and gender",
+        "Standard deviation by age and gender",
+        "Percentile distributions (5th, 25th, 50th, 75th, 95th)",
+        "Population-specific variations"
+      ],
+      "reference_sources": [
+        "NHANES (National Health and Nutrition Examination Survey)",
+        "WHO Global Database on Body Mass Index",
+        "Anthropometric Research Databases"
+      ],
+      "precision_requirement": "1mm",
+      "current_status": "MISSING"
+    },
+    "segment_length_data": {
+      "data_type": "BODY_SEGMENT_PROPORTIONS",
+      "required_parameters": [
+        "Upper arm length as percentage of height",
+        "Forearm length as percentage of height",
+        "Hand length as percentage of height",
+        "Thigh length as percentage of height",
+        "Lower leg length as percentage of height",
+        "Foot length as percentage of height",
+        "Torso length as percentage of height",
+        "Neck length as percentage of height",
+        "Head height as percentage of height"
+      ],
+      "reference_sources": [
+        "Drillis and Contini (1966) - Body segment parameters",
+        "Winter (2009) - Biomechanics and motor control",
+        "Anthropometric research literature"
+      ],
+      "precision_requirement": "0.5% of height",
+      "current_status": "MISSING"
+    },
+    "body_width_data": {
+      "data_type": "TRANSVERSE_BODY_DIMENSIONS",
+      "required_parameters": [
+        "Shoulder width as percentage of height",
+        "Hip width as percentage of height",
+        "Chest width as percentage of height",
+        "Head width as percentage of height",
+        "Gender-specific differences"
+      ],
+      "reference_sources": [
+        "Anthropometric surveys",
+        "Ergonomics research databases",
+        "Biomechanics literature"
+      ],
+      "precision_requirement": "1% of height",
+      "current_status": "MISSING"
+    },
+    "body_depth_data": {
+      "data_type": "ANTERIOR_POSTERIOR_BODY_DIMENSIONS",
+      "required_parameters": [
+        "Chest depth as percentage of height",
+        "Abdominal depth as percentage of height",
+        "Head depth as percentage of height",
+        "Pelvic depth as percentage of height"
+      ],
+      "reference_sources": [
+        "Anthropometric surveys",
+        "Ergonomics research databases",
+        "Medical imaging studies"
+      ],
+      "precision_requirement": "1% of height",
+      "current_status": "MISSING"
+    }
+  },
+  "biomechanical_data_requirements": {
+    "joint_center_data": {
+      "data_type": "JOINT_CENTER_POSITIONS_AND_OFFSETS",
+      "required_parameters": [
+        "Shoulder joint center offset from acromion",
+        "Elbow joint center offset from epicondyles",
+        "Wrist joint center offset from styloid processes",
+        "Hip joint center offset from ASIS",
+        "Knee joint center offset from epicondyles",
+        "Ankle joint center offset from malleoli",
+        "Gender-specific variations",
+        "Age-related variations"
+      ],
+      "reference_sources": [
+        "ISB (International Society of Biomechanics) recommendations",
+        "Biomechanical research studies",
+        "Motion capture calibration studies"
+      ],
+      "precision_requirement": "1mm",
+      "current_status": "MISSING"
+    },
+    "joint_range_data": {
+      "data_type": "JOINT_MOTION_RANGES",
+      "required_parameters": [
+        "Shoulder flexion/extension range",
+        "Shoulder abduction/adduction range",
+        "Shoulder internal/external rotation range",
+        "Elbow flexion/extension range",
+        "Wrist flexion/extension range",
+        "Wrist radial/ulnar deviation range",
+        "Hip flexion/extension range",
+        "Hip abduction/adduction range",
+        "Hip internal/external rotation range",
+        "Knee flexion/extension range",
+        "Ankle dorsiflexion/plantarflexion range",
+        "Ankle inversion/eversion range"
+      ],
+      "reference_sources": [
+        "American Academy of Orthopaedic Surgeons",
+        "Biomechanics textbooks",
+        "Clinical measurement studies"
+      ],
+      "precision_requirement": "5 degrees",
+      "current_status": "MISSING"
+    },
+    "joint_axis_data": {
+      "data_type": "JOINT_ROTATION_AXES",
+      "required_parameters": [
+        "Shoulder joint rotation axis",
+        "Elbow flexion/extension axis",
+        "Wrist flexion/extension axis",
+        "Hip joint rotation axis",
+        "Knee flexion/extension axis",
+        "Ankle dorsiflexion/plantarflexion axis"
+      ],
+      "reference_sources": [
+        "ISB recommendations",
+        "Biomechanical research",
+        "Anatomical studies"
+      ],
+      "precision_requirement": "2 degrees",
+      "current_status": "MISSING"
+    }
+  },
+  "osteometric_data_requirements": {
+    "bone_dimension_data": {
+      "data_type": "INDIVIDUAL_BONE_DIMENSIONS",
+      "required_parameters": [
+        "Femur length, neck angle, head radius",
+        "Tibia length, proximal/distal width",
+        "Humerus length, neck angle, head radius",
+        "Radius and ulna lengths, separation distances",
+        "Metacarpal lengths and widths",
+        "Phalanx lengths and widths",
+        "Metatarsal lengths and widths",
+        "Vertebral body heights and widths",
+        "Pelvic dimensions and orientations",
+        "Scapula dimensions and orientations",
+        "Clavicle length and orientation"
+      ],
+      "reference_sources": [
+        "Osteometric databases",
+        "Forensic anthropology references",
+        "Anatomical research collections",
+        "Medical imaging studies"
+      ],
+      "precision_requirement": "1mm",
+      "current_status": "MISSING"
+    },
+    "landmark_data": {
+      "data_type": "OSTEOMETRIC_LANDMARK_POSITIONS",
+      "required_parameters": [
+        "ASIS (anterior superior iliac spine) positions",
+        "Acromion positions",
+        "Epicondyle positions",
+        "Malleolus positions",
+        "Styloid process positions",
+        "Spinous process positions",
+        "Sternal notch position",
+        "Mental protuberance position",
+        "Nasion position",
+        "Glabella position"
+      ],
+      "reference_sources": [
+        "Osteometric reference manuals",
+        "Anatomical landmark atlases",
+        "Forensic anthropology guides"
+      ],
+      "precision_requirement": "1mm",
+      "current_status": "MISSING"
+    },
+    "articular_surface_data": {
+      "data_type": "JOINT_ARTICULAR_SURFACE_GEOMETRY",
+      "required_parameters": [
+        "Femoral head radius and center",
+        "Acetabular depth and orientation",
+        "Humerus head radius and center",
+        "Glenoid depth and orientation",
+        "Tibial plateau geometry",
+        "Femoral condyle geometry",
+        "Talar dome geometry",
+        "Distal radius geometry"
+      ],
+      "reference_sources": [
+        "Joint anatomy atlases",
+        "Orthopedic research",
+        "Medical imaging studies"
+      ],
+      "precision_requirement": "0.5mm",
+      "current_status": "MISSING"
+    }
+  },
+  "proportion_data_requirements": {
+    "classical_proportions": {
+      "data_type": "HISTORICAL_PROPORTION_SYSTEMS",
+      "required_parameters": [
+        "Vitruvian proportions (8 heads tall)",
+        "Leonardo's refined proportions",
+        "Egyptian canon proportions",
+        "Greek canon proportions"
+      ],
+      "reference_sources": [
+        "Historical art treatises",
+        "Architectural proportion manuals",
+        "Art history references"
+      ],
+      "precision_requirement": "Historical reference",
+      "current_status": "PARTIALLY_AVAILABLE"
+    },
+    "modern_proportions": {
+      "data_type": "CONTEMPORARY_ANTHROPOMETRIC_PROPORTIONS",
+      "required_parameters": [
+        "Head-to-body ratio by age",
+        "Torso-to-limb ratio by gender",
+        "Upper-to-lower limb ratio",
+        "Arm-to-leg ratio",
+        "Hand-to-arm ratio",
+        "Foot-to-leg ratio",
+        "Shoulder-to-hip ratio by gender",
+        "Neck-to-head ratio",
+        "Spine-to-total-height ratio"
+      ],
+      "reference_sources": [
+        "NHANES data",
+        "WHO anthropometric references",
+        "Modern anthropometric research",
+        "Ergonomics databases"
+      ],
+      "precision_requirement": "1% ratio",
+      "current_status": "MISSING"
+    },
+    "age_specific_proportions": {
+      "data_type": "DEVELOPMENTAL_PROPORTION_CHANGES",
+      "required_parameters": [
+        "Infant proportion profiles",
+        "Child proportion profiles",
+        "Adolescent proportion profiles",
+        "Adult proportion profiles",
+        "Elderly proportion profiles",
+        "Age-related proportion transition data"
+      ],
+      "reference_sources": [
+        "Developmental biology research",
+        "Pediatric anthropometric studies",
+        "Geriatric anthropometric studies",
+        "Growth chart references"
+      ],
+      "precision_requirement": "2% ratio",
+      "current_status": "MISSING"
+    }
+  },
+  "demographic_data_requirements": {
+    "gender_specific_data": {
+      "data_type": "SEXUAL_DIMORPHISM_DATA",
+      "required_parameters": [
+        "Male vs female height distributions",
+        "Male vs female proportion differences",
+        "Male vs female bone dimension differences",
+        "Male vs female joint center differences",
+        "Pelvic shape differences",
+        "Shoulder width differences"
+      ],
+      "reference_sources": [
+        "Sexual dimorphism research",
+        "Forensic anthropology guides",
+        "Clinical anthropometric studies"
+      ],
+      "precision_requirement": "2% difference",
+      "current_status": "MISSING"
+    },
+    "age_specific_data": {
+      "data_type": "AGE_RELATED_ANATOMICAL_CHANGES",
+      "required_parameters": [
+        "Bone density changes by age",
+        "Intervertebral disc height changes",
+        "Joint range changes by age",
+        "Spinal curvature changes by age",
+        "Height reduction by age",
+        "Proportion changes by age"
+      ],
+      "reference_sources": [
+        "Geriatric anatomy research",
+        "Age-related change studies",
+        "Clinical aging studies"
+      ],
+      "precision_requirement": "5% change per decade",
+      "current_status": "MISSING"
+    },
+    "population_specific_data": {
+      "data_type": "ETHNIC_AND_REGIONAL_VARIATIONS",
+      "required_parameters": [
+        "Regional height distributions",
+        "Regional proportion differences",
+        "Ethnic bone dimension variations",
+        "Population-specific proportion profiles",
+        "Geographic anthropometric variations"
+      ],
+      "reference_sources": [
+        "Population genetics studies",
+        "Regional anthropometric surveys",
+        "Ethnic anatomy research",
+        "International anthropometric databases"
+      ],
+      "precision_requirement": "3% variation",
+      "current_status": "MISSING"
+    }
+  },
+  "data_source_recommendations": {
+    "primary_sources": {
+      "nhanes": {
+        "name": "National Health and Nutrition Examination Survey",
+        "coverage": "US population anthropometric data",
+        "data_types": ["Height", "Weight", "Body dimensions", "Demographics"],
+        "access": "Publicly available",
+        "suitability": "HIGH"
+      },
+      "who_database": {
+        "name": "WHO Global Database on Body Mass Index",
+        "coverage": "International anthropometric data",
+        "data_types": ["Height", "Weight", "BMI by country"],
+        "access": "Publicly available",
+        "suitability": "HIGH"
+      },
+      "isb_recommendations": {
+        "name": "International Society of Biomechanics Standards",
+        "coverage": "Biomechanical standardization",
+        "data_types": ["Joint centers", "Joint axes", "Coordinate systems"],
+        "access": "Academic publications",
+        "suitability": "HIGH"
+      }
+    },
+    "secondary_sources": {
+      "anthropometric_research": {
+        "name": "Academic anthropometric research databases",
+        "coverage": "Specialized anthropometric studies",
+        "data_types": ["Segment proportions", "Demographic variations"],
+        "access": "Academic databases",
+        "suitability": "MEDIUM"
+      },
+      "forensic_anthropology": {
+        "name": "Forensic anthropology reference collections",
+        "coverage": "Osteometric data",
+        "data_types": ["Bone dimensions", "Landmark positions"],
+        "access": "Academic/research access",
+        "suitability": "MEDIUM"
+      },
+      "medical_imaging_studies": {
+        "name": "Medical imaging research databases",
+        "coverage": "In vivo anatomical measurements",
+        "data_types": ["Joint geometry", "Bone dimensions", "Soft tissue"],
+        "access": "Research collaboration",
+        "suitability": "MEDIUM"
+      }
+    }
+  },
+  "data_format_requirements": {
+    "structured_data": {
+      "format": "JSON or XML",
+      "schema": "Standardized anthropometric schema",
+      "metadata_requirements": [
+        "Source citation",
+        "Population description",
+        "Sample size",
+        "Measurement methodology",
+        "Date of data collection",
+        "Data quality metrics"
+      ],
+      "current_status": "NOT_DEFINED"
+    },
+    "statistical_data": {
+      "format": "Statistical distributions",
+      "required_statistics": [
+        "Mean",
+        "Standard deviation",
+        "Percentile values",
+        "Correlation coefficients",
+        "Confidence intervals"
+      ],
+      "current_status": "NOT_DEFINED"
+    },
+    "metadata": {
+      "format": "Structured metadata",
+      "required_fields": [
+        "Data source",
+        "Collection methodology",
+        "Sample demographics",
+        "Quality metrics",
+        "Version information",
+        "Last update date"
+      ],
+      "current_status": "NOT_DEFINED"
+    }
+  },
+  "data_quality_requirements": {
+    "accuracy": {
+      "requirement": "±1mm for linear measurements, ±2° for angular measurements",
+      "validation_method": "Cross-reference with multiple sources",
+      "current_status": "NOT_VALIDATED"
+    },
+    "precision": {
+      "requirement": "Consistent measurement methodology across dataset",
+      "validation_method": "Methodology documentation review",
+      "current_status": "NOT_VALIDATED"
+    },
+    "completeness": {
+      "requirement": "Complete coverage of required parameters",
+      "validation_method": "Coverage analysis against requirements",
+      "current_status": "NOT_VALIDATED"
+    },
+    "representativeness": {
+      "requirement": "Representative of target population",
+      "validation_method": "Demographic analysis",
+      "current_status": "NOT_VALIDATED"
+    },
+    "currency": {
+      "requirement": "Data collected within last 20 years preferred",
+      "validation_method": "Date verification",
+      "current_status": "NOT_VALIDATED"
+    }
+  },
+  "implementation_priorities": {
+    "phase_1_critical": {
+      "priority": "CRITICAL",
+      "data_categories": [
+        "Height and segment length data",
+        "Basic proportion data",
+        "Joint center offset data",
+        "Bone dimension data"
+      ],
+      "timeline": "Before reconstruction implementation",
+      "reason": "Required for basic reconstruction functionality"
+    },
+    "phase_2_important": {
+      "priority": "HIGH",
+      "data_categories": [
+        "Joint range data",
+        "Joint axis data",
+        "Landmark data",
+        "Articular surface data"
+      ],
+      "timeline": "During reconstruction implementation",
+      "reason": "Required for detailed reconstruction"
+    },
+    "phase_3_enhancement": {
+      "priority": "MEDIUM",
+      "data_categories": [
+        "Gender-specific data",
+        "Age-specific data",
+        "Population-specific data",
+        "Advanced proportion data"
+      ],
+      "timeline": "After basic reconstruction works",
+      "reason": "Required for demographic adjustments"
+    }
+  },
+  "critical_gaps": [
+    "All anthropometric data is MISSING",
+    "All biomechanical data is MISSING",
+    "All osteometric data is MISSING",
+    "All modern proportion data is MISSING",
+    "All demographic data is MISSING",
+    "Data format standards are NOT_DEFINED",
+    "Data quality validation is NOT_IMPLEMENTED",
+    "Reference data integration is NOT_DESIGNED"
+  ]
+}

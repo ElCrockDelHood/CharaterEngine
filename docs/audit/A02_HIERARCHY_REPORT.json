@@ -1,0 +1,153 @@
+{
+  "hierarchy_audit": {
+    "sprint": "A0.2",
+    "date": "2026-08-12",
+    "total_bones": 206,
+    "total_containers": 2,
+    "total_nodes": 208,
+    "max_depth": 5
+  },
+  "containers": [
+    {
+      "canonical_name": "ROOT_SKELETON",
+      "parent": null,
+      "children": ["CLAVICLE_L", "CLAVICLE_R"],
+      "child_count": 2,
+      "geometry": "zero-length",
+      "classification": "C (logical/container)"
+    },
+    {
+      "canonical_name": "CRANIUM",
+      "parent": "ROOT_SKELETON",
+      "children": ["FRONTAL", "PARIETAL_L", "PARIETAL_R", "TEMPORAL_L", "TEMPORAL_R", "OCCIPITAL", "SPHENOID", "ETHMOID", "MAXILLA_L", "MAXILLA_R", "ZYGOMATIC_L", "ZYGOMATIC_R", "NASAL_L", "NASAL_R", "LACRIMAL_L", "LACRIMAL_R", "PALATINE_L", "PALATINE_R", "INFERIOR_NASAL_CONCHA_L", "INFERIOR_NASAL_CONCHA_R", "VOMER", "MANDIBLE", "MALLEUS_L", "MALLEUS_R", "INCUS_L", "INCUS_R", "STAPES_L", "STAPES_R", "HYOID", "CERVICAL_1"],
+      "child_count": 30,
+      "geometry": "zero-length",
+      "classification": "C (logical/container)"
+    }
+  ],
+  "critical_chains": [
+    {
+      "chain_name": "CERVICAL_SPINE",
+      "bones": ["CERVICAL_1", "CERVICAL_2", "CERVICAL_3", "CERVICAL_4", "CERVICAL_5", "CERVICAL_6", "CERVICAL_7"],
+      "continuity": "A (continuous chain)",
+      "alignment": "perfectly vertical",
+      "curvature": "none (anatomically incorrect)",
+      "gap_analysis": "near-zero gaps between adjacent vertebrae"
+    },
+    {
+      "chain_name": "THORACIC_SPINE",
+      "bones": ["THORACIC_1", "THORACIC_2", "THORACIC_3", "THORACIC_4", "THORACIC_5", "THORACIC_6", "THORACIC_7", "THORACIC_8", "THORACIC_9", "THORACIC_10", "THORACIC_11", "THORACIC_12"],
+      "continuity": "A (continuous chain)",
+      "alignment": "perfectly vertical",
+      "curvature": "none (anatomically incorrect)",
+      "gap_analysis": "near-zero gaps between adjacent vertebrae"
+    },
+    {
+      "chain_name": "LUMBAR_SPINE",
+      "bones": ["LUMBAR_1", "LUMBAR_2", "LUMBAR_3", "LUMBAR_4", "LUMBAR_5"],
+      "continuity": "A (continuous chain)",
+      "alignment": "perfectly vertical",
+      "curvature": "none (anatomically incorrect)",
+      "gap_analysis": "near-zero gaps between adjacent vertebrae"
+    },
+    {
+      "chain_name": "SACROCOCCYGEAL",
+      "bones": ["SACRUM", "COCCYX"],
+      "continuity": "A (continuous chain)",
+      "alignment": "perfectly vertical",
+      "curvature": "none (anatomically incorrect)",
+      "gap_analysis": "10cm gap between LUMBAR_5 and SACRUM"
+    },
+    {
+      "chain_name": "UPPER_LIMB_LEFT",
+      "bones": ["CLAVICLE_L", "SCAPULA_L", "HUMERUS_L", "RADIUS_L"],
+      "continuity": "D (suspicious discontinuities)",
+      "gaps": [
+        {"from": "CLAVICLE_L", "to": "SCAPULA_L", "gap_cm": 12.2, "classification": "D"},
+        {"from": "SCAPULA_L", "to": "HUMERUS_L", "gap_cm": 5.0, "classification": "B"},
+        {"from": "HUMERUS_L", "to": "RADIUS_L", "gap_cm": 7.1, "classification": "D"}
+      ]
+    },
+    {
+      "chain_name": "UPPER_LIMB_RIGHT",
+      "bones": ["CLAVICLE_R", "SCAPULA_R", "HUMERUS_R", "RADIUS_R"],
+      "continuity": "D (suspicious discontinuities)",
+      "gaps": [
+        {"from": "CLAVICLE_R", "to": "SCAPULA_R", "gap_cm": 12.2, "classification": "D"},
+        {"from": "SCAPULA_R", "to": "HUMERUS_R", "gap_cm": 5.0, "classification": "B"},
+        {"from": "HUMERUS_R", "to": "RADIUS_R", "gap_cm": 7.1, "classification": "D"}
+      ]
+    },
+    {
+      "chain_name": "LOWER_LIMB_LEFT",
+      "bones": ["COXAL_L", "FEMUR_L", "TIBIA_L"],
+      "continuity": "D (suspicious discontinuities)",
+      "gaps": [
+        {"from": "COXAL_L", "to": "FEMUR_L", "gap_cm": 7.1, "classification": "D"},
+        {"from": "FEMUR_L", "to": "TIBIA_L", "gap_cm": 5.0, "classification": "D"}
+      ]
+    },
+    {
+      "chain_name": "LOWER_LIMB_RIGHT",
+      "bones": ["COXAL_R", "FEMUR_R", "TIBIA_R"],
+      "continuity": "D (suspicious discontinuities)",
+      "gaps": [
+        {"from": "COXAL_R", "to": "FEMUR_R", "gap_cm": 7.1, "classification": "D"},
+        {"from": "FEMUR_R", "to": "TIBIA_R", "gap_cm": 5.0, "classification": "D"}
+      ]
+    }
+  ],
+  "parent_classifications": {
+    "A": {
+      "description": "expected continuous skeletal chain",
+      "count": 24,
+      "examples": ["CERVICAL_1→CERVICAL_2", "THORACIC_1→THORACIC_2", "LUMBAR_1→LUMBAR_2"]
+    },
+    "B": {
+      "description": "anatomical articulation where geometric gap may be valid",
+      "count": 2,
+      "examples": ["SCAPULA_L→HUMERUS_L", "SCAPULA_R→HUMERUS_R"]
+    },
+    "C": {
+      "description": "logical/container relationship",
+      "count": 32,
+      "examples": ["ROOT_SKELETON→CLAVICLE_L", "CRANIUM→FRONTAL"]
+    },
+    "D": {
+      "description": "suspicious/disconnected",
+      "count": 8,
+      "examples": ["CLAVICLE_L→SCAPULA_L", "HUMERUS_L→RADIUS_L", "COXAL_L→FEMUR_L"]
+    },
+    "E": {
+      "description": "unknown",
+      "count": 0,
+      "examples": []
+    }
+  },
+  "symmetry_analysis": {
+    "total_pairs": 102,
+    "perfect_mirror_pairs": 101,
+    "failed_pairs": 1,
+    "tolerance_mm": 1.0,
+    "failure": {
+      "bone": "CUNEIFORM_LATERAL_L",
+      "issue": "NO_PAIR: CUNEIFORM_LATERAL_L has no right counterpart"
+    }
+  },
+  "structural_integrity": {
+    "cycles_detected": false,
+    "missing_roots": false,
+    "multiple_roots": false,
+    "orphan_bones": false,
+    "invalid_parents": false,
+    "structural_status": "VALID"
+  },
+  "anatomical_integrity": {
+    "joint_centers": "MISSING",
+    "continuity": "FAILURES_PRESENT",
+    "proportions": "INCORRECT",
+    "curvature": "ABSENT",
+    "symmetry": "NEAR_PERFECT",
+    "anatomical_status": "INVALID"
+  }
+}

@@ -1,0 +1,469 @@
+{
+  "audit_id": "A05_PHASE_B_EXISTING_REFERENCE_INFRASTRUCTURE",
+  "audit_date": "2026-08-30",
+  "auditor": "Devin AI",
+  "sprint": "A0.5",
+  "phase": "B",
+  "audit_purpose": "Forensic inventory of existing A0.4 reference infrastructure",
+  "audit_completion_percentage": 100.0,
+  
+  "reference_managers": {
+    "reference_manager_py": {
+      "location": "src/character_engine/domain/anatomy/reference/reference_manager.py",
+      "line_count": 282,
+      "classes": [
+        {
+          "name": "ReferenceSourceEntry",
+          "line": 9,
+          "fields": ["id", "name", "type", "coverage", "status", "required_for", "notes"],
+          "status": "MINIMAL_PROVENANCE"
+        },
+        {
+          "name": "ReferenceData",
+          "line": 22,
+          "fields": ["value", "unit", "confidence", "provenance", "source_id", "metadata"],
+          "status": "STRING_BASED_PROVENANCE"
+        },
+        {
+          "name": "ReferenceRegistry",
+          "line": 34,
+          "methods": ["get_source", "get_placeholder_data", "get_all_sources", "get_placeholder_categories"],
+          "status": "NO_VALIDATION"
+        },
+        {
+          "name": "ReferenceDataManager",
+          "line": 127,
+          "methods": ["get_anthropometric_parameter", "get_joint_center_offset", "get_gender_adjustment", "get_data_quality_report"],
+          "status": "PLACEHOLDER_DEPENDENT"
+        }
+      ],
+      "overall_status": "PLACEHOLDER_DEPENDENT",
+      "provenance_enforcement": false,
+      "used_by_reconstruction": true
+    },
+    "source_py": {
+      "location": "src/character_engine/domain/anatomy/reference/source.py",
+      "line_count": 281,
+      "classes": [
+        {
+          "name": "SourceType",
+          "line": 14,
+          "values": ["PRIMARY_RESEARCH", "STANDARD", "DATABASE", "TEXTBOOK", "SECONDARY_REFERENCE", "ASSUMPTION", "DERIVED"],
+          "status": "WELL_DESIGNED"
+        },
+        {
+          "name": "Confidence",
+          "line": 25,
+          "values": ["HIGH", "MEDIUM", "LOW", "UNKNOWN"],
+          "status": "WELL_DESIGNED"
+        },
+        {
+          "name": "ReferenceSource",
+          "line": 33,
+          "fields": ["source_id", "name", "type", "authors", "year", "doi", "url", "sample_size", "population", "confidence", "notes"],
+          "status": "COMPREHENSIVE"
+        },
+        {
+          "name": "ReferenceValue",
+          "line": 88,
+          "fields": ["value_id", "parameter", "value", "unit", "source_id", "population", "age_range", "gender", "confidence", "derivation", "notes"],
+          "status": "COMPREHENSIVE"
+        },
+        {
+          "name": "ReferenceDataset",
+          "line": 139,
+          "fields": ["dataset_id", "name", "version", "sources", "values", "created_at"],
+          "status": "WELL_DESIGNED"
+        },
+        {
+          "name": "ReferenceDatasetBuilder",
+          "line": 212,
+          "methods": ["add_source", "add_value", "build"],
+          "status": "WELL_DESIGNED"
+        }
+      ],
+      "overall_status": "WELL_DESIGNED",
+      "provenance_enforcement": true,
+      "used_by_reconstruction": false
+    }
+  },
+  
+  "provenance_states": {
+    "current_states": {
+      "reference_manager_py": ["USER_INPUT", "ASSUMPTION", "DERIVED", "GENDER_ADJUSTED", "AGE_ADJUSTED", "DEFAULT", "UNKNOWN"],
+      "source_py": ["UNKNOWN", "ASSUMED", "CALCULATED", "MEASURED"]
+    },
+    "required_states": ["PROVEN", "DERIVED", "ESTIMATE", "PLACEHOLDER", "UNKNOWN"],
+    "enforcement_mechanism": false,
+    "type_safety": false,
+    "state_migration_required": true
+  },
+  
+  "placeholder_infrastructure": {
+    "unknown_source": {
+      "location": "source.py line 244",
+      "source_id": "UNKNOWN",
+      "type": "ASSUMPTION",
+      "confidence": "UNKNOWN",
+      "properly_marked": true
+    },
+    "create_unknown_value": {
+      "location": "source.py line 255",
+      "derivation": "UNKNOWN",
+      "confidence": "UNKNOWN",
+      "properly_marked": true
+    },
+    "create_assumed_value": {
+      "location": "source.py line 269",
+      "derivation": "ASSUMED",
+      "confidence": "LOW",
+      "properly_marked": true
+    },
+    "placeholder_detection": {
+      "can_detect_placeholder": false,
+      "can_prevent_placeholder_usage": false,
+      "placeholder_quarantine": false,
+      "explicit_placeholder_state": false
+    }
+  },
+  
+  "module_consumption": {
+    "parameter_normalizer": {
+      "location": "reconstruction/parameter_normalizer.py",
+      "consumes": "ReferenceDataManager",
+      "provenance_handling": ["USES_REF_PROVENANCE", "USES_DEFAULT_PROVENANCE", "USES_USER_INPUT", "EXTRACTS_FROM_METADATA"],
+      "provenance_validation": false,
+      "accepts_any_provenance": true
+    },
+    "proportion_calculator": {
+      "location": "reconstruction/proportion_calculator.py",
+      "consumes": ["ReferenceDataManager", "ParameterNormalizer"],
+      "provenance_handling": ["PROPAGATES_REF_PROVENANCE", "HARDCODES_DERIVED"],
+      "provenance_validation": false,
+      "accepts_any_provenance": true
+    },
+    "landmark_positioner": {
+      "location": "reconstruction/landmark_positioner.py",
+      "consumes": ["ReferenceDataManager", "ParameterNormalizer", "ProportionCalculator"],
+      "provenance_handling": ["HARDCODES_REFERENCE", "HARDCODES_DERIVED"],
+      "provenance_validation": false,
+      "accepts_any_provenance": true
+    },
+    "bone_generator": {
+      "location": "reconstruction/bone_generator.py",
+      "consumes": ["ReferenceDataManager", "ParameterNormalizer", "ProportionCalculator", "LandmarkPositioner"],
+      "provenance_handling": ["HARDCODES_DERIVED"],
+      "provenance_validation": false,
+      "accepts_any_provenance": true
+    }
+  },
+  
+  "provenance_distinction": {
+    "modules_can_distinguish": [],
+    "modules_cannot_distinguish": ["ParameterNormalizer", "ProportionCalculator", "LandmarkPositioner", "BoneGenerator", "ReconstructionPipeline"],
+    "placeholder_can_reach_reconstruction": true,
+    "placeholder_can_become_canonical": true
+  },
+  
+  "hardcoded_constants": {
+    "parameter_normalizer": {
+      "default_height": {
+        "value": 1.75,
+        "unit": "meters",
+        "line": 97,
+        "provenance": "DEFAULT",
+        "reference_backed": false
+      },
+      "age_adjustment": {
+        "value": "1%",
+        "unit": "per_decade",
+        "line": 311,
+        "provenance": "AGE_ADJUSTED",
+        "reference_backed": false
+      }
+    },
+    "proportion_calculator": {
+      "humerus_ratio": {
+        "value": 0.95,
+        "unit": "ratio",
+        "line": 196,
+        "provenance": "DERIVED",
+        "reference_backed": false
+      },
+      "radius_ratio": {
+        "value": 0.52,
+        "unit": "ratio",
+        "line": 210,
+        "provenance": "DERIVED",
+        "reference_backed": false
+      },
+      "ulna_ratio": {
+        "value": 0.48,
+        "unit": "ratio",
+        "line": 212,
+        "provenance": "DERIVED",
+        "reference_backed": false
+      }
+    },
+    "landmark_positioner": {
+      "hip_joint_ratio": {
+        "value": 0.50,
+        "unit": "height_ratio",
+        "line": 149,
+        "provenance": "DERIVED",
+        "reference_backed": false
+      },
+      "shoulder_joint_ratio": {
+        "value": 0.82,
+        "unit": "height_ratio",
+        "line": 157,
+        "provenance": "DERIVED",
+        "reference_backed": false
+      },
+      "knee_joint_ratio": {
+        "value": 0.30,
+        "unit": "height_ratio",
+        "line": 165,
+        "provenance": "DERIVED",
+        "reference_backed": false
+      },
+      "center_of_mass_ratio": {
+        "value": 0.55,
+        "unit": "height_ratio",
+        "line": 174,
+        "provenance": "DERIVED",
+        "reference_backed": false
+      }
+    },
+    "bone_generator": {
+      "spine_ratio": {
+        "value": 0.40,
+        "unit": "height_ratio",
+        "line": 154,
+        "provenance": "DERIVED",
+        "reference_backed": false
+      },
+      "femur_ratio": {
+        "value": 0.25,
+        "unit": "height_ratio",
+        "line": 189,
+        "provenance": "DERIVED",
+        "reference_backed": false
+      },
+      "humerus_ratio": {
+        "value": 0.18,
+        "unit": "height_ratio",
+        "line": 203,
+        "provenance": "DERIVED",
+        "reference_backed": false
+      }
+    }
+  },
+  
+  "test_enforcement": {
+    "test_reference_manager": {
+      "file": "tests/anatomy/test_reference_manager.py",
+      "total_tests": 13,
+      "provenance_enforcement_tests": 0,
+      "placeholder_rejection_tests": 0,
+      "derivation_validation_tests": 0
+    },
+    "test_parameter_normalizer": {
+      "file": "tests/anatomy/test_parameter_normalizer.py",
+      "total_tests": 8,
+      "provenance_enforcement_tests": 0,
+      "placeholder_rejection_tests": 0,
+      "derivation_validation_tests": 0
+    },
+    "test_proportion_calculator": {
+      "file": "tests/anatomy/test_proportion_calculator.py",
+      "total_tests": 7,
+      "provenance_enforcement_tests": 0,
+      "placeholder_rejection_tests": 0,
+      "derivation_validation_tests": 0
+    },
+    "test_coordinate_system": {
+      "file": "tests/anatomy/test_coordinate_system.py",
+      "total_tests": 8,
+      "provenance_enforcement_tests": 0,
+      "placeholder_rejection_tests": 0,
+      "derivation_validation_tests": 0
+    },
+    "test_anatomical_validation": {
+      "file": "tests/anatomy/test_anatomical_validation.py",
+      "total_tests": 27,
+      "provenance_enforcement_tests": 0,
+      "placeholder_rejection_tests": 0,
+      "derivation_validation_tests": 0
+    },
+    "total_tests": 63,
+    "provenance_enforcement_tests": 0,
+    "placeholder_rejection_tests": 0,
+    "derivation_validation_tests": 0
+  },
+  
+  "a04_claims_verification": {
+    "claim_10_deliverables": {
+      "claimed": "10/10 Core Deliverables Completed",
+      "reality": "Different architecture than reported",
+      "evidence": "Reported components do not exist at reported locations"
+    },
+    "claim_69_tests": {
+      "claimed": "69/69 Unit Tests Passing",
+      "reality": "28/28 reconstruction tests passing",
+      "evidence": "Test count mismatch, missing A0.4 deliverable tests"
+    },
+    "claim_provenance_tracking": {
+      "claimed": "Complete Provenance Tracking for All Anatomical Values",
+      "reality": "Provenance exists but not enforced",
+      "evidence": "No validation gates, placeholder data can flow through pipeline"
+    },
+    "claim_no_breaking_changes": {
+      "claimed": "Zero Breaking Changes to Existing Pipeline",
+      "reality": "TRUE",
+      "evidence": "Reconstruction is additive, existing components unchanged"
+    }
+  },
+  
+  "dependency_relationships": {
+    "current_chain": [
+      "ReferenceDataManager (reference_manager.py)",
+      "ParameterNormalizer",
+      "ProportionCalculator",
+      "LandmarkPositioner",
+      "BoneGenerator",
+      "ReconstructionPipeline"
+    ],
+    "unused_well_designed_components": [
+      "ReferenceSource (source.py)",
+      "ReferenceValue (source.py)",
+      "ReferenceDataset (source.py)",
+      "ReferenceDatasetBuilder (source.py)",
+      "Confidence enum (source.py)",
+      "SourceType enum (source.py)"
+    ]
+  },
+  
+  "integration_issues": [
+    "Two parallel reference implementations not integrated",
+    "Reconstruction uses inferior implementation",
+    "Well-designed source.py components unused",
+    "No migration path between implementations",
+    "String-based provenance vs typed enums",
+    "No consistent provenance state model"
+  ],
+  
+  "data_quality": {
+    "overall_status": "PLACEHOLDER_DATA",
+    "anthropometric_accuracy": "UNKNOWN",
+    "anthropometric_precision": "UNKNOWN",
+    "anthropometric_completeness": "UNKNOWN",
+    "biomechanical_accuracy": "UNKNOWN",
+    "biomechanical_precision": "UNKNOWN",
+    "biomechanical_completeness": "UNKNOWN",
+    "real_reference_data_acquired": false,
+    "placeholder_data_percentage": 100
+  },
+  
+  "critical_gaps": [
+    "No distinction between PROVEN and ASSUMPTION",
+    "No validation gates in reconstruction pipeline",
+    "Placeholder data can reach final reconstruction",
+    "No provenance state type safety",
+    "No derivation chain validation",
+    "No uncertainty representation",
+    "Hardcoded anatomical assumptions throughout",
+    "No placeholder quarantine mechanism",
+    "No reconstruction eligibility policy",
+    "No parameter namespace system"
+  ],
+  
+  "reusable_components": [
+    {
+      "component": "ReferenceSource",
+      "location": "source.py",
+      "status": "EXCELLENT",
+      "action": "Keep and enhance"
+    },
+    {
+      "component": "ReferenceValue",
+      "location": "source.py",
+      "status": "EXCELLENT",
+      "action": "Keep and enhance"
+    },
+    {
+      "component": "ReferenceDataset",
+      "location": "source.py",
+      "status": "EXCELLENT",
+      "action": "Keep and enhance"
+    },
+    {
+      "component": "ReferenceDatasetBuilder",
+      "location": "source.py",
+      "status": "EXCELLENT",
+      "action": "Keep and enhance"
+    },
+    {
+      "component": "Confidence enum",
+      "location": "source.py",
+      "status": "EXCELLENT",
+      "action": "Keep and enhance"
+    },
+    {
+      "component": "SourceType enum",
+      "location": "source.py",
+      "status": "EXCELLENT",
+      "action": "Keep and enhance"
+    }
+  ],
+  
+  "components_needing_replacement": [
+    {
+      "component": "ReferenceData",
+      "location": "reference_manager.py",
+      "status": "INSUFFICIENT",
+      "action": "Replace with enhanced ReferenceValue"
+    },
+    {
+      "component": "ReferenceDataManager",
+      "location": "reference_manager.py",
+      "status": "REFACTOR_REQUIRED",
+      "action": "Refactor to use source.py components"
+    },
+    {
+      "component": "String-based provenance",
+      "location": "multiple files",
+      "status": "UNSAFE",
+      "action": "Replace with typed ProvenanceState enum"
+    },
+    {
+      "component": "Hardcoded constants",
+      "location": "multiple files",
+      "status": "VIOLATES_RULE_1",
+      "action": "Replace with reference-backed values or explicit UNKNOWN marking"
+    }
+  ],
+  
+  "required_actions": [
+    "Integrate source.py components into reconstruction pipeline",
+    "Implement typed ProvenanceState enum",
+    "Add provenance validation gates",
+    "Implement placeholder quarantine mechanism",
+    "Replace hardcoded constants with reference-backed values or explicit UNKNOWN marking",
+    "Add derivation chain validation",
+    "Implement uncertainty representation",
+    "Create reconstruction eligibility policy",
+    "Implement parameter namespace system",
+    "Add comprehensive provenance enforcement tests"
+  ],
+  
+  "audit_metadata": {
+    "audit_methodology": "Forensic code analysis",
+    "files_analyzed": 8,
+    "lines_of_code_reviewed": 1500,
+    "classes_analyzed": 10,
+    "test_files_reviewed": 5,
+    "provenance_occurrences": 57,
+    "confidence_level": "HIGH"
+  }
+}

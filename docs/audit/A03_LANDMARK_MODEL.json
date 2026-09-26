@@ -1,0 +1,681 @@
+{
+  "landmark_model": {
+    "sprint": "A0.3",
+    "date": "2026-08-13",
+    "status": "ANALYSIS_ONLY",
+    "purpose": "Minimum anatomical landmark set required for deterministic skeleton reconstruction"
+  },
+  "body_landmarks": {
+    "body_center": {
+      "name": "center_of_mass",
+      "current_availability": "MISSING",
+      "required_for": "OVERALL_SCALE_REFERENCE",
+      "measurement_method": "UNKNOWN",
+      "coordinate_basis": "UNKNOWN",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "pelvis_center": {
+      "name": "pelvic_center",
+      "current_availability": "MISSING",
+      "required_for": "PELVIC_ORIENTATION_LOWER_BODY_ALIGNMENT",
+      "measurement_method": "UNKNOWN",
+      "coordinate_basis": "UNKNOWN",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "root_of_spine": {
+      "name": "spine_root",
+      "current_availability": "MISSING",
+      "required_for": "SPINE_REFERENCE_UPPER_BODY_ALIGNMENT",
+      "measurement_method": "UNKNOWN",
+      "coordinate_basis": "UNKNOWN",
+      "reconstruction_dependency": "PRIMARY"
+    }
+  },
+  "pelvic_landmarks": {
+    "left_hip_joint_center": {
+      "name": "left_acetabulofemoral_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "LEFT_LEG_ORIENTATION_FEMUR_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "PELVIC_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "right_hip_joint_center": {
+      "name": "right_acetabulofemoral_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "RIGHT_LEG_ORIENTATION_FEMUR_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "PELVIC_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "left_asis": {
+      "name": "left_anterior_superior_iliac_spine",
+      "current_availability": "MISSING",
+      "required_for": "PELVIC_ORIENTATION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "PELVIC_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_asis": {
+      "name": "right_anterior_superior_iliac_spine",
+      "current_availability": "MISSING",
+      "required_for": "PELVIC_ORIENTATION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "PELVIC_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "sacrum_promontory": {
+      "name": "sacral_promontory",
+      "current_availability": "MISSING",
+      "required_for": "SPINE_PELVIC_TRANSITION_SACRUM_ORIENTATION",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "PELVIC_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    }
+  },
+  "spine_landmarks": {
+    "cervical_1": {
+      "name": "atlas",
+      "current_availability": "MISSING",
+      "required_for": "CERVICAL_SPINE_REFERENCE_SKULL_ATTACHMENT",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "SPINE_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "cervical_7": {
+      "name": "vertebra_prominens",
+      "current_availability": "MISSING",
+      "required_for": "CERVICAL_THORACIC_TRANSITION",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "SPINE_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "thoracic_1": {
+      "name": "first_thoracic_vertebra",
+      "current_availability": "MISSING",
+      "required_for": "THORACIC_SPINE_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "SPINE_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "thoracic_12": {
+      "name": "twelfth_thoracic_vertebra",
+      "current_availability": "MISSING",
+      "required_for": "THORACIC_LUMBAR_TRANSITION",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "SPINE_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "lumbar_1": {
+      "name": "first_lumbar_vertebra",
+      "current_availability": "MISSING",
+      "required_for": "LUMBAR_SPINE_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "SPINE_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "lumbar_5": {
+      "name": "fifth_lumbar_vertebra",
+      "current_availability": "MISSING",
+      "required_for": "LUMBAR_SACRAL_TRANSITION",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "SPINE_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "sacrum_midpoint": {
+      "name": "sacral_midpoint",
+      "current_availability": "MISSING",
+      "required_for": "SACRUM_ORIENTATION_COCYGEAL_ALIGNMENT",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "SPINE_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    }
+  },
+  "shoulder_landmarks": {
+    "left_shoulder_joint_center": {
+      "name": "left_glenohumeral_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "LEFT_ARM_ORIENTATION_HUMERUS_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "THORACIC_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "right_shoulder_joint_center": {
+      "name": "right_glenohumeral_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "RIGHT_ARM_ORIENTATION_HUMERUS_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "THORACIC_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "left_acromion": {
+      "name": "left_acromion_process",
+      "current_availability": "MISSING",
+      "required_for": "SHOULDER_WIDTH_REFERENCE_CLAVICLE_ATTACHMENT",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "SCAPULA_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_acromion": {
+      "name": "right_acromion_process",
+      "current_availability": "MISSING",
+      "required_for": "SHOULDER_WIDTH_REFERENCE_CLAVICLE_ATTACHMENT",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "SCAPULA_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "sternum_notch": {
+      "name": "sternal_notch_manubrium",
+      "current_availability": "MISSING",
+      "required_for": "STERNUM_ORIENTATION_CLAVICLE_ATTACHMENT",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "THORACIC_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    }
+  },
+  "elbow_landmarks": {
+    "left_elbow_joint_center": {
+      "name": "left_humeroulnar_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "LEFT_FOREARM_ORIENTATION_RADIUS_ULNA_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "HUMERUS_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "right_elbow_joint_center": {
+      "name": "right_humeroulnar_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "RIGHT_FOREARM_ORIENTATION_RADIUS_ULNA_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "HUMERUS_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "left_lateral_epicondyle": {
+      "name": "left_lateral_epicondyle",
+      "current_availability": "MISSING",
+      "required_for": "ELBOW_WIDTH_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "HUMERUS_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_lateral_epicondyle": {
+      "name": "right_lateral_epicondyle",
+      "current_availability": "MISSING",
+      "required_for": "ELBOW_WIDTH_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "HUMERUS_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    }
+  },
+  "wrist_landmarks": {
+    "left_wrist_joint_center": {
+      "name": "left_radiocarpal_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "LEFT_HAND_ORIENTATION_CARPAL_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "RADIUS_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "right_wrist_joint_center": {
+      "name": "right_radiocarpal_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "RIGHT_HAND_ORIENTATION_CARPAL_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "RADIUS_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "left_styloid_process": {
+      "name": "left_distal_radial_styloid",
+      "current_availability": "MISSING",
+      "required_for": "WRIST_ORIENTATION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "RADIUS_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_styloid_process": {
+      "name": "right_distal_radial_styloid",
+      "current_availability": "MISSING",
+      "required_for": "WRIST_ORIENTATION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "RADIUS_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "left_ulnar_styloid": {
+      "name": "left_distal_ulnar_styloid",
+      "current_availability": "MISSING",
+      "required_for": "WRIST_WIDTH_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "ULNA_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_ulnar_styloid": {
+      "name": "right_distal_ulnar_styloid",
+      "current_availability": "MISSING",
+      "required_for": "WRIST_WIDTH_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "ULNA_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    }
+  },
+  "hand_landmarks": {
+    "left_hand_center": {
+      "name": "left_palm_center",
+      "current_availability": "MISSING",
+      "required_for": "HAND_ORIENTATION_METACARPAL_FAN_REFERENCE",
+      "measurement_method": "UNKNOWN",
+      "coordinate_basis": "HAND_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_hand_center": {
+      "name": "right_palm_center",
+      "current_availability": "MISSING",
+      "required_for": "HAND_ORIENTATION_METACARPAL_FAN_REFERENCE",
+      "measurement_method": "UNKNOWN",
+      "coordinate_basis": "HAND_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "left_thumb_cmc_joint": {
+      "name": "left_thumb_carpometacarpal_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "THUMB_OPPOSITION_THUMB_ORIENTATION",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "HAND_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "right_thumb_cmc_joint": {
+      "name": "right_thumb_carpometacarpal_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "THUMB_OPPOSITION_THUMB_ORIENTATION",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "HAND_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "left_index_mcp_joint": {
+      "name": "left_index_metacarpophalangeal_joint",
+      "current_availability": "MISSING",
+      "required_for": "FINGER_POSITIONING_PHALANX_ATTACHMENT",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "HAND_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_index_mcp_joint": {
+      "name": "right_index_metacarpophalangeal_joint",
+      "current_availability": "MISSING",
+      "required_for": "FINGER_POSITIONING_PHALANX_ATTACHMENT",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "HAND_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    }
+  },
+  "knee_landmarks": {
+    "left_knee_joint_center": {
+      "name": "left_tibiofemoral_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "LEFT_LEG_ORIENTATION_TIBIA_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "FEMUR_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "right_knee_joint_center": {
+      "name": "right_tibiofemoral_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "RIGHT_LEG_ORIENTATION_TIBIA_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "FEMUR_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "left_medial_epicondyle": {
+      "name": "left_medial_epicondyle",
+      "current_availability": "MISSING",
+      "required_for": "KNEE_WIDTH_REFERENCE_PATELLA_POSITION",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FEMUR_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_medial_epicondyle": {
+      "name": "right_medial_epicondyle",
+      "current_availability": "MISSING",
+      "required_for": "KNEE_WIDTH_REFERENCE_PATELLA_POSITION",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FEMUR_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "left_patella_center": {
+      "name": "left_patella_center",
+      "current_availability": "MISSING",
+      "required_for": "KNEE_EXTENSION_KNEE_FLEXION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "KNEE_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_patella_center": {
+      "name": "right_patella_center",
+      "current_availability": "MISSING",
+      "required_for": "KNEE_EXTENSION_KNEE_FLEXION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "KNEE_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    }
+  },
+  "ankle_landmarks": {
+    "left_ankle_joint_center": {
+      "name": "left_talocrural_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "LEFT_FOOT_ORIENTATION_TALUS_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "TIBIA_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "right_ankle_joint_center": {
+      "name": "right_talocrural_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "RIGHT_FOOT_ORIENTATION_TALUS_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "TIBIA_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "left_medial_malleolus": {
+      "name": "left_distal_tibial_malleolus",
+      "current_availability": "MISSING",
+      "required_for": "ANKLE_ORIENTATION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "TIBIA_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_medial_malleolus": {
+      "name": "right_distal_tibial_malleolus",
+      "current_availability": "MISSING",
+      "required_for": "ANKLE_ORIENTATION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "TIBIA_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "left_lateral_malleolus": {
+      "name": "left_distal_fibular_malleolus",
+      "current_availability": "MISSING",
+      "required_for": "ANKLE_WIDTH_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FIBULA_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_lateral_malleolus": {
+      "name": "right_distal_fibular_malleolus",
+      "current_availability": "MISSING",
+      "required_for": "ANKLE_WIDTH_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FIBULA_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    }
+  },
+  "foot_landmarks": {
+    "left_heel_center": {
+      "name": "left_calcaneus_center",
+      "current_availability": "MISSING",
+      "required_for": "FOOT_ORIENTATION_ARCH_SUPPORT_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FOOT_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "right_heel_center": {
+      "name": "right_calcaneus_center",
+      "current_availability": "MISSING",
+      "required_for": "FOOT_ORIENTATION_ARCH_SUPPORT_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FOOT_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "left_forefoot_center": {
+      "name": "left_metatarsal_head_center",
+      "current_availability": "MISSING",
+      "required_for": "FOOT_ORIENTATION_TOE_ATTACHMENT_REFERENCE",
+      "measurement_method": "UNKNOWN",
+      "coordinate_basis": "FOOT_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_forefoot_center": {
+      "name": "right_metatarsal_head_center",
+      "current_availability": "MISSING",
+      "required_for": "FOOT_ORIENTATION_TOE_ATTACHMENT_REFERENCE",
+      "measurement_method": "UNKNOWN",
+      "coordinate_basis": "FOOT_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "left_first_metatarsal_head": {
+      "name": "left_first_metatarsal_head",
+      "current_availability": "MISSING",
+      "required_for": "BIG_TOE_ORIENTATION_HALLUX_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FOOT_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_first_metatarsal_head": {
+      "name": "right_first_metatarsal_head",
+      "current_availability": "MISSING",
+      "required_for": "BIG_TOE_ORIENTATION_HALLUX_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FOOT_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "left_fifth_metatarsal_head": {
+      "name": "left_fifth_metatarsal_head",
+      "current_availability": "MISSING",
+      "required_for": "LITTLE_TOE_ORIENTATION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FOOT_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "right_fifth_metatarsal_head": {
+      "name": "right_fifth_metatarsal_head",
+      "current_availability": "MISSING",
+      "required_for": "LITTLE_TOE_ORIENTATION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FOOT_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    }
+  },
+  "skull_landmarks": {
+    "skull_base": {
+      "name": "basion",
+      "current_availability": "MISSING",
+      "required_for": "SKULL_ORIENTATION_CERVICAL_ATTACHMENT",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "SKULL_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "skull_vertex": {
+      "name": "vertex",
+      "current_availability": "MISSING",
+      "required_for": "HEAD_HEIGHT_REFERENCE_CRANIAL_HEIGHT",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "SKULL_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    },
+    "glabella": {
+      "name": "glabella",
+      "current_availability": "MISSING",
+      "required_for": "FACE_ORIENTATION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FACE_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "nasion": {
+      "name": "nasion",
+      "current_availability": "MISSING",
+      "required_for": "FACE_ORIENTATION_REFERENCE",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FACE_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "menton": {
+      "name": "mental_protuberance",
+      "current_availability": "MISSING",
+      "required_for": "FACE_DEPTH_JAW_ORIENTATION",
+      "measurement_method": "OSTEOMETRIC_LANDMARK",
+      "coordinate_basis": "FACE_REFERENCE_FRAME",
+      "reconstruction_dependency": "SECONDARY"
+    },
+    "jaw_joint_center": {
+      "name": "temporomandibular_joint_center",
+      "current_availability": "MISSING",
+      "required_for": "JAW_ORIENTATION_MANDIBLE_POSITIONING",
+      "measurement_method": "BIOMECHANICAL_MEASUREMENT",
+      "coordinate_basis": "SKULL_REFERENCE_FRAME",
+      "reconstruction_dependency": "PRIMARY"
+    }
+  },
+  "landmark_reconstruction_dependencies": {
+    "primary_landmarks": [
+      "body_center",
+      "pelvis_center",
+      "root_of_spine",
+      "left_hip_joint_center",
+      "right_hip_joint_center",
+      "sacrum_promontory",
+      "cervical_1",
+      "cervical_7",
+      "thoracic_1",
+      "thoracic_12",
+      "lumbar_1",
+      "lumbar_5",
+      "sacrum_midpoint",
+      "left_shoulder_joint_center",
+      "right_shoulder_joint_center",
+      "left_elbow_joint_center",
+      "right_elbow_joint_center",
+      "left_wrist_joint_center",
+      "right_wrist_joint_center",
+      "left_knee_joint_center",
+      "right_knee_joint_center",
+      "left_ankle_joint_center",
+      "right_ankle_joint_center",
+      "left_heel_center",
+      "right_heel_center",
+      "left_thumb_cmc_joint",
+      "right_thumb_cmc_joint",
+      "skull_base",
+      "skull_vertex",
+      "jaw_joint_center"
+    ],
+    "secondary_landmarks": [
+      "left_asis",
+      "right_asis",
+      "left_acromion",
+      "right_acromion",
+      "sternum_notch",
+      "left_lateral_epicondyle",
+      "right_lateral_epicondyle",
+      "left_medial_epicondyle",
+      "right_medial_epicondyle",
+      "left_patella_center",
+      "right_patella_center",
+      "left_medial_malleolus",
+      "right_medial_malleolus",
+      "left_lateral_malleolus",
+      "right_lateral_malleolus",
+      "left_styloid_process",
+      "right_styloid_process",
+      "left_ulnar_styloid",
+      "right_ulnar_styloid",
+      "left_hand_center",
+      "right_hand_center",
+      "left_index_mcp_joint",
+      "right_index_mcp_joint",
+      "left_forefoot_center",
+      "right_forefoot_center",
+      "left_first_metatarsal_head",
+      "right_first_metatarsal_head",
+      "left_fifth_metatarsal_head",
+      "right_fifth_metatarsal_head",
+      "glabella",
+      "nasion",
+      "menton"
+    ]
+  },
+  "measurement_methods": {
+    "BIOMECHANICAL_MEASUREMENT": {
+      "description": "Joint center determined through biomechanical analysis",
+      "reference_requirement": "BIOMECHANICAL_RESEARCH_DATA",
+      "precision_requirement": "1mm",
+      "currently_available": "MISSING"
+    },
+    "OSTEOMETRIC_LANDMARK": {
+      "description": "Bone surface feature used as reference point",
+      "reference_requirement": "OSTEOMETRIC_REFERENCE_DATA",
+      "precision_requirement": "1mm",
+      "currently_available": "MISSING"
+    },
+    "UNKNOWN": {
+      "description": "Measurement method not yet determined",
+      "reference_requirement "REFERENCE_RESEARCH_REQUIRED",
+      "precision_requirement": "UNKNOWN",
+      "currently_available": "MISSING"
+    }
+  },
+  "coordinate_frames": {
+    "PELVIC_REFERENCE_FRAME": {
+      "description": "Coordinate system anchored to pelvis for lower body",
+      "origin_requirement": "PELVIC_CENTER_OR_SACRUM_PROMONTORY",
+      "axes_definition": "UNKNOWN"
+    },
+    "SPINE_REFERENCE_FRAME": {
+      "description": "Coordinate system following spinal curvature",
+      "origin_requirement": "ROOT_OF_SPINE_OR_SACRUM_PROMONTORY",
+      "axes_definition": "UNKNOWN"
+    },
+    "THORACIC_REFERENCE_FRAME": {
+      "description": "Coordinate system for thoracic structures",
+      "origin_requirement": "STERNUM_OR_SPINE_REFERENCE",
+      "axes_definition": "UNKNOWN"
+    },
+    "HUMERUS_REFERENCE_FRAME": {
+      "description": "Coordinate system anchored to humerus for upper arm",
+      "origin_requirement "SHOULDER_JOINT_CENTER",
+      "axes_definition": "UNKNOWN"
+    },
+    "RADIUS_REFERENCE_FRAME": {
+      "description": "Coordinate system anchored to radius for forearm",
+      "origin_requirement "ELBOW_JOINT_CENTER",
+      "axes_definition": "UNKNOWN"
+    },
+    "FEMUR_REFERENCE_FRAME": {
+      "description": "Coordinate system anchored to femur for thigh",
+      "origin_requirement "HIP_JOINT_CENTER",
+      "axes_definition": "UNKNOWN"
+    },
+    "TIBIA_REFERENCE_FRAME": {
+      "description": "Coordinate system anchored to tibia for lower leg",
+      "origin_requirement "KNEE_JOINT_CENTER",
+      "axes_definition": "UNKNOWN"
+    },
+    "HAND_REFERENCE_FRAME": {
+      "description": "Coordinate system anchored to hand for detailed anatomy",
+      "origin_requirement "WRIST_JOINT_CENTER_OR_HAND_CENTER",
+      "axes_definition": "UNKNOWN"
+    },
+    "FOOT_REFERENCE_FRAME": {
+      "description": "Coordinate system anchored to foot for detailed anatomy",
+      "origin_requirement "ANKLE_JOINT_CENTER_OR_HEEL_CENTER",
+      "axes_definition": "UNKNOWN"
+    },
+    "SKULL_REFERENCE_FRAME": {
+      "description": "coordinate system anchored to skull for cranial anatomy",
+      "origin_requirement "SKULL_BASE_OR_JAW_JOINT_CENTER",
+      "axes_definition": "UNKNOWN"
+    },
+    "FACE_REFERENCE_FRAME": {
+      "description": "coordinate system anchored to face for facial anatomy",
+      "origin_requirement "GLABELLA_OR_NASION",
+      "axes_definition": "UNKNOWN"
+    }
+  },
+  "critical_unknowns": [
+    "All landmark coordinate measurements are MISSING",
+    "All joint center biomechanical measurements are MISSING",
+    "All osteometric landmark definitions are MISSING",
+    "Coordinate frame definitions are UNKNOWN",
+    "Reference data sources are UNKNOWN",
+    "Measurement protocols are UNKNOWN",
+    "Subject demographic profile is UNKNOWN",
+    "Target pose definition is UNKNOWN"
+  ]
+}

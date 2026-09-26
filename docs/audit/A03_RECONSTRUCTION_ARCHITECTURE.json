@@ -1,0 +1,371 @@
+{
+  "reconstruction_architecture": {
+    "sprint": "A0.3",
+    "date": "2026-08-13",
+    "status": "ANALYSIS_ONLY",
+    "purpose": "Architecture design for deterministic anatomical reconstruction system"
+  },
+  "architecture_overview": {
+    "goal": "Transform abstract anatomical parameters into concrete 3D bone positions and orientations",
+    "approach": "Layered reconstruction with dependency-driven sequence",
+    "key_principles": [
+      "Deterministic output (no random elements)",
+      "Anatomically accurate (based on reference data)",
+      "Validatable (clear validation checkpoints)",
+      "Modular (independent components)",
+      "Traceable (audit trail of decisions)"
+    ]
+  },
+  "reconstruction_pipeline": {
+    "stages": [
+      {
+        "stage": "1. INPUT_VALIDATION",
+        "description": "Validate input parameters and reference data",
+        "inputs": ["Subject profile", "Reference anthropometric data", "Target specifications"],
+        "outputs": ["Validated parameter set", "Reference data index"],
+        "dependencies": [],
+        "current_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": "2. GLOBAL_SCALING",
+        "description": "Calculate global scaling factors from total height",
+        "inputs": ["Total height", "Reference height"],
+        "outputs": ["Global scale factor"],
+        "dependencies": ["INPUT_VALIDATION"],
+        "current_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": "3. PELVIC_RECONSTRUCTION",
+        "description": "Reconstruct pelvis as foundation for lower body",
+        "inputs": ["Pelvic dimensions", "Pelvic orientation", "Global scale"],
+        "outputs": ["Pelvic bone positions", "Hip joint centers"],
+        "dependencies": ["GLOBAL_SCALING"],
+        "current_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": "4. SPINAL_RECONSTRUCTION",
+        "description": "Reconstruct spine with natural curvatures",
+        "inputs": ["Spine dimensions", "Curvature parameters", "Pelvic position"],
+        "outputs": ["Vertebral positions", "Spine curve parameters"],
+        "dependencies": ["PELVIC_RECONSTRUCTION"],
+        "current_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": "5. THORACIC_RECONSTRUCTION",
+        "description": "Reconstruct thorax, ribs, and sternum",
+        "inputs": ["Thoracic dimensions", "Spine positions", "Rib parameters"],
+        "outputs": ["Thoracic bone positions", "Rib cage geometry"],
+        "dependencies": ["SPINAL_RECONSTRUCTION"],
+        "current_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": "6. SHOULDER_GIRDLE_RECONSTRUCTION",
+        "description": "Reconstruct clavicles and scapulae",
+        "inputs": ["Shoulder girdle dimensions", "Thoracic positions"],
+        "outputs": ["Clavicle positions", "Scapula positions", "Shoulder joint centers"],
+        "dependencies": ["THORACIC_RECONSTRUCTION"],
+        "current_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": "7. UPPER_LIMB_RECONSTRUCTION",
+        "description": "Reconstruct arms and forearms",
+        "inputs": ["Upper limb dimensions", "Shoulder joint centers", "Elbow joint centers"],
+        "outputs": ["Humerus positions", "Radius/ulna positions", "Elbow joint centers"],
+        "dependencies": ["SHOULDER_GIRDLE_RECONSTRUCTION"],
+        "current_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": "8. HAND_RECONSTRUCTION",
+        "description": "Reconstruct detailed hand anatomy",
+        "inputs": ["Hand dimensions", "Wrist joint centers", "Hand arch parameters"],
+        "outputs": ["Carpal positions", "Metacarpal positions", "Phalanx positions"],
+        "dependencies": ["UPPER_LIMB_RECONSTRUCTION"],
+        "current_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": "9. LOWER_LIMB_RECONSTRUCTION",
+        "description": "Reconstruct legs and feet",
+        "inputs": ["Lower limb dimensions", "Hip joint centers", "Knee joint centers"],
+        "outputs": ["Femur positions", "Tibia/fibula positions", "Knee joint centers"],
+        "dependencies": ["PELVIC_RECONSTRUCTION"],
+        "current_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": "10. FOOT_RECONSTRUCTION",
+        "description": "Reconstruct detailed foot anatomy",
+        "inputs": ["Foot dimensions", "Ankle joint centers", "Foot arch parameters"],
+        "outputs": ["Tarsal positions", "Metatarsal positions", "Toe phalanx positions"],
+        "dependencies": ["LOWER_LIMB_RECONSTRUCTION"],
+        "current_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": "11. SKULL_RECONSTRUCTION",
+        "description": "Reconstruct skull and facial bones",
+        "inputs": ["Skull dimensions", "Cervical spine position"],
+        "outputs": ["Cranial bone positions", "Facial bone positions"],
+        "dependencies": ["SPINAL_RECONSTRUCTION"],
+        "current_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": "12. GLOBAL_VALIDATION",
+        "description": "Validate entire skeleton for anatomical consistency",
+        "inputs": ["All bone positions", "Validation constraints"],
+        "outputs": ["Validation report", "Anomaly flags"],
+        "dependencies": ["ALL_PREVIOUS_STAGES"],
+        "current_status": "NOT_IMPLEMENTED"
+      }
+    ]
+  },
+  "core_components": {
+    "parameter_normalizer": {
+      "function": "Normalize input parameters to standard reference",
+      "inputs": ["Raw parameters", "Reference anthropometric data"],
+      "outputs": ["Normalized parameters"],
+      "algorithms": ["Gender-specific normalization", "Age-specific normalization", "Height-based scaling"],
+      "current_status": "NOT_IMPLEMENTED"
+    },
+    "proportion_calculator": {
+      "function": "Calculate anatomical proportions from normalized parameters",
+      "inputs": ["Normalized parameters", "Proportion models"],
+      "outputs": ["Segment lengths", "Joint positions", "Bone dimensions"],
+      "algorithms": ["Segment proportion formulas", "Joint position predictors", "Bone scaling laws"],
+      "current_status": "NOT_IMPLEMENTED"
+    },
+    "landmark_positioner": {
+      "function": "Position anatomical landmarks in 3D space",
+      "inputs": ["Landmark definitions", "Proportion data", "Reference frames"],
+      "outputs": ["3D landmark coordinates"],
+      "algorithms": ["Coordinate frame transformations", "Offset calculations", "Curve following"],
+      "current_status": "NOT_IMPLEMENTED"
+    },
+    "bone_generator": {
+      "function": "Generate bone geometry from dimensions and orientations",
+      "inputs": ["Bone dimensions", "Bone orientations", "Joint centers"],
+      "outputs": ["Bone positions", "Bone rotations", "Bone scales"],
+      "algorithms": ["Primitive generation", "Scaling transformations", "Rotation applications"],
+      "current_status": "NOT_IMPLEMENTED"
+    },
+    "joint_center_calculator": {
+      "function": "Calculate joint center positions from bone geometry",
+      "inputs": ["Bone geometry", "Articular surface data", "Biomechanical models"],
+      "outputs": ["Joint center positions", "Joint axes"],
+      "algorithms": ["Sphere fitting", "Surface reconstruction", "Predictive models"],
+      "current_status": "NOT_IMPLEMENTED"
+    },
+    "spine_modeler": {
+      "function": "Model spinal curvatures and vertebral positions",
+      "inputs": ["Spine dimensions", "Curvature parameters", "Pelvic orientation"],
+      "outputs": ["Vertebral positions", "Spine curve functions"],
+      "algorithms": ["Parametric curves", "Intervertebral spacing", "Curvature angle calculations"],
+      "current_status": "NOT_IMPLEMENTED"
+    },
+    "hand_foot_modeler": {
+      "function": "Model detailed hand and foot anatomy",
+      "inputs": ["Hand/foot dimensions", "Arch parameters", "Joint centers"],
+      "outputs": ["Detailed bone positions", "Arch geometry"],
+      "algorithms": ["Fan pattern generation", "Arch parameter application", "Phalanx positioning"],
+      "current_status": "NOT_IMPLEMENTED"
+    },
+    "validation_engine": {
+      "function": "Validate reconstructed anatomy against constraints",
+      "inputs": ["Reconstructed skeleton", "Validation constraints"],
+      "outputs": ["Validation results", "Anomaly reports"],
+      "algorithms": ["Proportion checking", "Joint continuity validation", "Kinematic chain validation"],
+      "current_status": "NOT_IMPLEMENTED"
+    }
+  },
+  "data_flow": {
+    "input_data": {
+      "subject_profile": {
+        "data": ["Height", "Weight", "Age", "Gender", "Ethnicity"],
+        "source": "USER_INPUT_OR_PROFILE_DATABASE"
+      },
+      "reference_data": {
+        "data": ["Anthropometric averages", "Proportion models", "Bone dimension statistics"],
+        "source": "ANTHROPOMETRIC_DATABASE"
+      },
+      "target_specifications": {
+        "data": ["Target pose", "Anatomical constraints", "Validation requirements"],
+        "source": "USER_INPUT_OR_DEFAULTS"
+      }
+    },
+    "intermediate_data": {
+      "normalized_parameters": {
+        "data": ["Height-normalized dimensions", "Gender-adjusted proportions", "Age-modified values"],
+        "stage": "PARAMETER_NORMALIZATION"
+      },
+      "calculated_proportions": {
+        "data": ["Segment lengths", "Joint positions", "Bone dimensions"],
+        "stage": "PROPORTION_CALCULATION"
+      },
+      "landmark_positions": {
+        "data": ["3D coordinates of anatomical landmarks"],
+        "stage": "LANDMARK_POSITIONING"
+      },
+      "skeletal_geometry": {
+        "data": ["Bone positions", "Bone orientations", "Joint centers"],
+        "stage": "BONE_GENERATION"
+      }
+    },
+    "output_data": {
+      "reconstructed_skeleton": {
+        "data": ["Complete bone hierarchy", "All bone positions and orientations", "Joint definitions"],
+        "format": "COMPATIBLE_WITH_EXISTING_PIPELINE"
+      },
+      "validation_report": {
+        "data": ["Validation results", "Anomaly flags", "Correction suggestions"],
+        "format": "STRUCTURED_REPORT"
+      },
+      "reconstruction_metadata": {
+        "data": ["Input parameters used", "Reference data sources", "Algorithm versions"],
+        "format": "METADATA_LOG"
+      }
+    }
+  },
+  "integration_points": {
+    "existing_pipeline": {
+      "current_pipeline": "JSON → JsonLoader → AssetDTO + SkeletonDTO → SkeletonBuilder → Skeleton → SkeletonValidator → SkeletonSerializer → skeleton_serialized.json → BlenderImporter → validation.blend → StateAuditor",
+      "integration_point": "AFTER_SkeletonBuilder_BEFORE_Skeleton",
+      "new_component": "AnatomicalReconstructor",
+      "input_to_new_component": "SkeletonDTO with anatomical parameters",
+      "output_from_new_component": "Enhanced SkeletonDTO with accurate positions",
+      "status": "DESIGNED_NOT_IMPLEMENTED"
+    },
+    "coordinate_system": {
+      "existing_system": "Z-up, right-handed, meters, foot-midline origin",
+      "integration_requirement": "All reconstructions must use this coordinate system",
+      "coordinate_transformations": "Handled within reconstruction components",
+      "status": "DEFINED"
+    },
+    "validation_system": {
+      "existing_validator": "SkeletonValidator",
+      "integration_requirement": "AnatomicalReconstructor output must pass existing validation",
+      "additional_validation": "Anatomical validation added to existing checks",
+      "status": "DESIGNED"
+    }
+  },
+  "error_handling": {
+    "parameter_validation_errors": {
+      "type": "INPUT_PARAMETER_OUT_OF_RANGE",
+      "handling": "CLAMP_TO_VALID_RANGE_OR_REQUEST_USER_INPUT",
+      "logging": "WARNING_LEVEL"
+    },
+    "reference_data_errors": {
+      "type": "REFERENCE_DATA_NOT_FOUND",
+      "handling": "USE_DEFAULT_VALUES_OR_FALLBACK_MODEL",
+      "logging": "ERROR_LEVEL"
+    },
+    "calculation_errors": {
+      "type": "MATHEMATICAL_CALCULATION_FAILURE",
+      "handling": "USE_ALTERNATIVE_ALGORITHM_OR_DEFAULT_VALUE",
+      "logging": "ERROR_LEVEL"
+    },
+    "validation_errors": {
+      "type": "ANATOMICAL_CONSTRAINT_VIOLATION",
+      "handling": "ADJUST_RECONSTRUCTION_OR_FLAG_AS_ANOMALY",
+      "logging": "WARNING_LEVEL"
+    },
+    "integration_errors": {
+      "type": "PIPELINE_INTEGRATION_FAILURE",
+      "handling": "HALT_RECONSTRUCTION_AND_REPORT_ERROR",
+      "logging": "CRITICAL_LEVEL"
+    }
+  },
+  "performance_considerations": {
+    "computational_complexity": {
+      "parameter_normalization": "O(1) - constant time",
+      "proportion_calculation": "O(n) - linear in number of parameters",
+      "landmark_positioning": "O(n) - linear in number of landmarks",
+      "bone_generation": "O(n) - linear in number of bones",
+      "spine_modeling": "O(m) - linear in number of vertebrae",
+      "hand_foot_modeling": "O(k) - linear in number of hand/foot bones",
+      "validation": "O(n) - linear in number of validation checks"
+    },
+    "memory_requirements": {
+      "reference_data": "~10-50 MB (anthropometric database)",
+      "intermediate_data": "~1-5 MB (temporary calculations)",
+      "output_data": "~1-3 MB (reconstructed skeleton)",
+      "total_estimate": "~15-60 MB peak memory"
+    },
+    "timing_estimates": {
+      "parameter_normalization": "< 1 ms",
+      "proportion_calculation": "1-5 ms",
+      "landmark_positioning": "5-10 ms",
+      "bone_generation": "10-20 ms",
+      "spine_modeling": "5-10 ms",
+      "hand_foot_modeling": "10-20 ms",
+      "validation": "5-10 ms",
+      "total_estimate": "35-75 ms per reconstruction"
+    }
+  },
+  "extensibility": {
+    "new_reference_data": {
+      "capability": "Add new anthropometric reference datasets",
+      "mechanism": "Plug-in reference data modules",
+      "interface": "Standardized reference data API"
+    },
+    "new_reconstruction_algorithms": {
+      "capability": "Add or replace reconstruction algorithms",
+      "mechanism": "Strategy pattern for algorithm selection",
+      "interface": "Standardized algorithm API"
+    },
+    "new_validation_rules": {
+      "capability": "Add new anatomical validation rules",
+      "mechanism": "Rule-based validation engine",
+      "interface": "Standardized validation rule API"
+    },
+    "new_anatomical_models": {
+      "capability": "Add support for different anatomical models",
+      "mechanism": "Model-driven reconstruction",
+      "interface": "Standardized anatomical model API"
+    }
+  },
+  "implementation_priorities": {
+    "phase_1": {
+      "priority": "CRITICAL",
+      "components": [
+        "Parameter normalizer",
+        "Proportion calculator",
+        "Basic bone generator",
+        "Integration with existing pipeline"
+      ],
+      "timeline": "Initial implementation"
+    },
+    "phase_2": {
+      "priority": "HIGH",
+      "components": [
+        "Landmark positioner",
+        "Joint center calculator",
+        "Spine modeler",
+        "Validation engine"
+      ],
+      "timeline": "Second implementation phase"
+    },
+    "phase_3": {
+      "priority": "MEDIUM",
+      "components": [
+        "Hand/foot modeler",
+        "Advanced validation",
+        "Error handling improvements"
+      ],
+      "timeline": "Third implementation phase"
+    },
+    "phase_4": {
+      "priority": "LOW",
+      "components": [
+        "Extensibility features",
+        "Performance optimization",
+        "Advanced error recovery"
+      ],
+      "timeline": "Later enhancement"
+    }
+  },
+  "critical_gaps": [
+    "All reconstruction components are NOT_IMPLEMENTED",
+    "Reference anthropometric database is MISSING",
+    "Anatomical parameter validation is UNIMPLEMENTED",
+    "Integration with existing pipeline is DESIGNED_NOT_IMPLEMENTED",
+    "Error handling framework is DESIGNED_NOT_IMPLEMENTED",
+    "Performance validation is UNTESTED"
+  ]
+}

@@ -1,0 +1,251 @@
+{
+  "anthropometric_data": {
+    "version": "1.0.0",
+    "date": "2026-08-20",
+    "status": "PLACEHOLDER",
+    "population": "UNDEFINED",
+    "description": "Placeholder anthropometric data for reconstruction testing",
+    "metadata": {
+      "source": "PLACEHOLDER_DATA",
+      "confidence": "LOW",
+      "provenance": "ASSUMPTION",
+      "notes": "This data should be replaced with actual reference data from sources like NHANES, WHO, etc."
+    },
+    "global_parameters": {
+      "height": {
+        "name": "total_body_height",
+        "unit": "meters",
+        "mean": 1.75,
+        "std_dev": 0.08,
+        "range": [1.60, 1.90],
+        "percentiles": {
+          "5th": 1.60,
+          "25th": 1.68,
+          "50th": 1.75,
+          "75th": 1.82,
+          "95th": 1.90
+        },
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "weight": {
+        "name": "total_body_weight",
+        "unit": "kg",
+        "mean": 70.0,
+        "std_dev": 12.0,
+        "range": [50.0, 90.0],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "age": {
+        "name": "subject_age",
+        "unit": "years",
+        "assumed_value": 30,
+        "range": [18, 65],
+        "confidence": "UNKNOWN",
+        "provenance": "ASSUMPTION"
+      },
+      "gender": {
+        "name": "biological_gender",
+        "unit": "categorical",
+        "assumed_value": "MALE",
+        "confidence": "UNKNOWN",
+        "provenance": "ASSUMPTION"
+      }
+    },
+    "body_proportions": {
+      "head_height_ratio": {
+        "name": "head_height_to_total_height",
+        "value": 0.125,
+        "range": [0.115, 0.135],
+        "confidence": "LOW",
+        "provenance": "CLASSICAL_REFERENCE"
+      },
+      "neck_height_ratio": {
+        "name": "neck_height_to_total_height",
+        "value": 0.025,
+        "range": [0.020, 0.030],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "upper_body_ratio": {
+        "name": "upper_body_to_total_height",
+        "value": 0.50,
+        "range": [0.48, 0.52],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "lower_body_ratio": {
+        "name": "lower_body_to_total_height",
+        "value": 0.50,
+        "range": [0.48, 0.52],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      }
+    },
+    "width_proportions": {
+      "shoulder_width_ratio": {
+        "name": "shoulder_width_to_total_height",
+        "value": 0.23,
+        "range": [0.20, 0.26],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "hip_width_ratio": {
+        "name": "hip_width_to_total_height",
+        "value": 0.18,
+        "range": [0.16, 0.20],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "head_width_ratio": {
+        "name": "head_width_to_total_height",
+        "value": 0.08,
+        "range": [0.07, 0.09],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      }
+    },
+    "depth_proportions": {
+      "chest_depth_ratio": {
+        "name": "chest_depth_to_total_height",
+        "value": 0.10,
+        "range": [0.08, 0.12],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "head_depth_ratio": {
+        "name": "head_depth_to_total_height",
+        "value": 0.07,
+        "range": [0.06, 0.08],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      }
+    },
+    "segment_lengths": {
+      "upper_arm_ratio": {
+        "name": "humerus_length_to_total_height",
+        "value": 0.18,
+        "range": [0.16, 0.20],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "forearm_ratio": {
+        "name": "forearm_length_to_total_height",
+        "value": 0.15,
+        "range": [0.13, 0.17],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "hand_ratio": {
+        "name": "hand_length_to_total_height",
+        "value": 0.07,
+        "range": [0.06, 0.08],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "thigh_ratio": {
+        "name": "femur_length_to_total_height",
+        "value": 0.25,
+        "range": [0.23, 0.27],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "lower_leg_ratio": {
+        "name": "tibia_length_to_total_height",
+        "value": 0.20,
+        "range": [0.18, 0.22],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "foot_ratio": {
+        "name": "foot_length_to_total_height",
+        "value": 0.15,
+        "range": [0.13, 0.17],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      }
+    },
+    "joint_position_ratios": {
+      "shoulder_joint_height_ratio": {
+        "name": "shoulder_joint_height_to_total_height",
+        "value": 0.82,
+        "range": [0.80, 0.84],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "elbow_joint_height_ratio": {
+        "name": "elbow_joint_height_to_total_height",
+        "value": 0.62,
+        "range": [0.60, 0.64],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "wrist_joint_height_ratio": {
+        "name": "wrist_joint_height_to_total_height",
+        "value": 0.48,
+        "range": [0.46, 0.50],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "hip_joint_height_ratio": {
+        "name": "hip_joint_height_to_total_height",
+        "value": 0.50,
+        "range": [0.48, 0.52],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "knee_joint_height_ratio": {
+        "name": "knee_joint_height_to_total_height",
+        "value": 0.28,
+        "range": [0.26, 0.30],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "ankle_joint_height_ratio": {
+        "name": "ankle_joint_height_to_total_height",
+        "value": 0.08,
+        "range": [0.06, 0.10],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      }
+    }
+  },
+  "gender_specific_adjustments": {
+    "male": {
+      "shoulder_to_hip_ratio": {
+        "value": 1.20,
+        "range": [1.15, 1.25],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "head_to_body_ratio": {
+        "value": 0.075,
+        "range": [0.070, 0.080],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      }
+    },
+    "female": {
+      "shoulder_to_hip_ratio": {
+        "value": 1.00,
+        "range": [0.95, 1.05],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "head_to_body_ratio": {
+        "value": 0.080,
+        "range": [0.075, 0.085],
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      }
+    }
+  },
+  "data_quality": {
+    "accuracy": "LOW",
+    "precision": "LOW",
+    "completeness": "PARTIAL",
+    "representativeness": "UNKNOWN",
+    "notes": "All values are placeholders and should be replaced with actual reference data"
+  }
+}

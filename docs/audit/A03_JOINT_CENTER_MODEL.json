@@ -1,0 +1,411 @@
+{
+  "joint_center_model": {
+    "sprint": "A0.3",
+    "date": "2026-08-13",
+    "status": "ANALYSIS_ONLY",
+    "purpose": "Biomechanical joint center definitions for deterministic bone positioning"
+  },
+  "joint_center_definition_methods": {
+    "SURFACE_RECONSTRUCTION": {
+      "description": "Joint center determined from bone surface geometry",
+      "applicability": "FEMORAL_HEAD_HUMERUS_HEAD",
+      "precision_requirement": "0.001m (1mm)",
+      "current_availability": "MISSING"
+    },
+    "SPHERE_FITTING": {
+      "description": "Fit sphere to articular surface to find center",
+      "applicability": "SPHERICAL_JOINTS_SHOULDER_HIP",
+      "precision_requirement": "0.001m (1mm)",
+      "current_availability": "MISSING"
+    },
+    "BIOMECHANICAL_METHODS": {
+      "description": "Functional calibration methods using movement data",
+      "applicability": "ALL_JOINTS_WHEN_SURFACE_DATA_UNAVAILABLE",
+      "precision_requirement": "0.002m (2mm)",
+      "current_availability": "MISSING"
+    },
+    "PREDICTIVE_MODELS": {
+      "description": "Statistical models based on anthropometric data",
+      "applicability": "RECONSTRUCTION_WHEN_DIRECT_MEASUREMENT_UNAVAILABLE",
+      "precision_requirement": "0.005m (5mm)",
+      "current_availability": "MISSING"
+    }
+  },
+  "shoulder_joint": {
+    "left_glenohumeral_joint": {
+      "joint_type": "BALL_AND_SOCKET",
+      "articular_surfaces": ["glenoid_fossa", "humerus_head"],
+      "center_determination": "SPHERE_FITTING_TO_HUMERUS_HEAD",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["humerus_position", "humerus_orientation", "arm_rotation_center"],
+      "reference_frame": "SCAPULA_REFERENCED",
+      "offset_from_acromion": {
+        "typical_value": "0.015-0.025m (15-25mm)",
+        "direction": "INFERIOR_AND_MEDIAL",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "glenoid_depth": "0.025-0.035m (25-35mm)",
+        "humerus_head_radius": "0.020-0.030m (20-30mm)",
+        "capsular_range": "Full 360° rotation"
+      }
+    },
+    "right_glenohumeral_joint": {
+      "joint_type": "BALL_AND_SOCKET",
+      "articular_surfaces": ["glenoid_fossa", "humerus_head"],
+      "center_determination": "SPHERE_FITTING_TO_HUMERUS_HEAD",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["humerus_position", "humerus_orientation", "arm_rotation_center"],
+      "reference_frame": "SCAPULA_REFERENCED",
+      "offset_from_acromion": {
+        "typical_value": "0.015-0.025m (15-25mm)",
+        "direction": "INFERIOR_AND_MEDIAL",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "glenoid_depth": "0.025-0.035m (25-35mm)",
+        "humerus_head_radius": "0.020-0.030m (20-30mm)",
+        "capsular_range": "Full 360° rotation"
+      }
+    }
+  },
+  "elbow_joint": {
+    "left_humeroulnar_joint": {
+      "joint_type": "HINGE",
+      "articular_surfaces": ["trochlea", "trochlear_notch"],
+      "center_determination": "TROCHLEAR_CENTER_CALCULATION",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["ulna_position", "forearm_orientation", "elbow_flexion_axis"],
+      "reference_frame": "HUMERUS_REFERENCED",
+      "offset_from_epicondyles": {
+        "typical_value": "EQUIDISTANT_FROM_MEDIAL_AND_LATERAL_EPICONDYLES",
+        "direction": "INFERIOR",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "flexion_extension_axis": "Transverse humeral axis",
+        "flexion_range": "0-150°",
+        "extension_limit": "0° (full extension)",
+        "carrying_angle": "5-15° (valgus)"
+      }
+    },
+    "right_humeroulnar_joint": {
+      "joint_type": "HINGE",
+      "articular_surfaces": ["trochlea", "trochlear_notch"],
+      "center_determination": "TROCHLEAR_CENTER_CALCULATION",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["ulna_position", "forearm_orientation", "elbow_flexion_axis"],
+      "reference_frame": "HUMERUS_REFERENCED",
+      "offset_from_epicondyles": {
+        "typical_value": "EQUIDISTANT_FROM_MEDIAL_AND_LATERAL_EPICONDYLES",
+        "direction": "INFERIOR",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "flexion_extension_axis": "Transverse humeral axis",
+        "flexion_range": "0-150°",
+        "extension_limit": "0° (full extension)",
+        "carrying_angle": "5-15° (valgus)"
+      }
+    }
+  },
+  "wrist_joint": {
+    "left_radiocarpal_joint": {
+      "joint_type": "CONDYLOID",
+      "articular_surfaces": ["distal_radius", "proximal_carpal_row"],
+      "center_determination": "DISTAL_RADIUS_CENTER_CALCULATION",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["carpal_position", "hand_orientation", "wrist_deviation_axis"],
+      "reference_frame": "RADIUS_REFERENCED",
+      "offset_from_styloid": {
+        "typical_value": "0.010-0.015m (10-15mm)",
+        "direction": "MEDIAL_AND_PROXIMAL",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "flexion_extension_range": "70-90°",
+        "radial_ulnar_deviation": "15-30°",
+        "pronation_supination": "Radius rotates around ulna"
+      }
+    },
+    "right_radiocarpal_joint": {
+      "joint_type": "CONDYLOID",
+      "articular_surfaces": ["distal_radius", "proximal_carpal_row"],
+      "center_determination": "DISTAL_RADIUS_CENTER_CALCULATION",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["carpal_position", "hand_orientation", "wrist_deviation_axis"],
+      "reference_frame": "RADIUS_REFERENCED",
+      "offset_from_styloid": {
+        "typical_value": "0.010-0.015m (10-15mm)",
+        "direction": "MEDIAL_AND_PROXIMAL",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "flexion_extension_range": "70-90°",
+        "radial_ulnar_deviation": "15-30°",
+        "pronation_supination": "Radius rotates around ulna"
+      }
+    }
+  },
+  "hip_joint": {
+    "left_acetabulofemoral_joint": {
+      "joint_type": "BALL_AND_SOCKET",
+      "articular_surfaces": ["acetabulum", "femoral_head"],
+      "center_determination": "SPHERE_FITTING_TO_FEMORAL_HEAD",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["femur_position", "femur_orientation", "leg_rotation_center"],
+      "reference_frame": "PELVIS_REFERENCED",
+      "offset_from_asis": {
+        "typical_value": "0.020-0.030m (20-30mm)",
+        "direction": "INFERIOR_AND_POSTERIOR",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "acetabular_depth": "0.025-0.035m (25-35mm)",
+        "femoral_head_radius": "0.020-0.030m (20-30mm)",
+        "capsular_range": "Full 360° rotation"
+      }
+    },
+    "right_acetabulofemoral_joint": {
+      "joint_type": "BALL_AND_SOCKET",
+      "articular_surfaces": ["acetabulum", "femoral_head"],
+      "center_determination": "SPHERE_FITTING_TO_FEMORAL_HEAD",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["femur_position", "femur_orientation", "leg_rotation_center"],
+      "reference_frame": "PELVIS_REFERENCED",
+      "offset_from_asis": {
+        "typical_value": "0.020-0.030m (20-30mm)",
+        "direction": "INFERIOR_AND_POSTERIOR",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "acetabular_depth": "0.025-0.035m (25-35mm)",
+        "femoral_head_radius": "0.020-0.030m (20-30mm)",
+        "capsular_range": "Full 360° rotation"
+      }
+    }
+  },
+  "knee_joint": {
+    "left_tibiofemoral_joint": {
+      "joint_type": "HINGE_WITH_ROTATION",
+      "articular_surfaces": ["femoral_condyles", "tibial_plateau"],
+      "center_determination": "CONDYLAR_MIDPOINT_CALCULATION",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["tibia_position", "tibia_orientation", "knee_flexion_axis"],
+      "reference_frame": "FEMUR_REFERENCED",
+      "offset_from_epicondyles": {
+        "typical_value": "EQUIDISTANT_FROM_MEDIAL_AND_LATERAL_EPICONDYLES",
+        "direction": "INFERIOR",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "flexion_extension_axis": "Transverse femoral axis",
+        "flexion_range": "0-135°",
+        "extension_limit": "0° (full extension)",
+        "screw_home_mechanism": "Final 15° rotation"
+      }
+    },
+    "right_tibiofemoral_joint": {
+      "joint_type": "HINGE_WITH_ROTATION",
+      "articular_surfaces": ["femoral_condyles", "tibial_plateau"],
+      "center_determination": "CONDYLAR_MIDPOINT_CALCULATION",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["tibia_position", "tibia_orientation", "knee_flexion_axis"],
+      "reference_frame": "FEMUR_REFERENCED",
+      "offset_from_epicondyles": {
+        "typical_value": "EQUIDISTANT_FROM_MEDIAL_AND_LATERAL_EPICONDYLES",
+        "direction": "INFERIOR",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "flexion_extension_axis": "Transverse femoral axis",
+        "flexion_range": "0-135°",
+        "extension_limit": "0° (full extension)",
+        "screw_home_mechanism": "Final 15° rotation"
+      }
+    }
+  },
+  "ankle_joint": {
+    "left_talocrural_joint": {
+      "joint_type": "HINGE",
+      "articular_surfaces": ["tibial_malleolus", "fibular_malleolus", "talus"],
+      "center_determination": "TALAR_DOME_CENTER_CALCULATION",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["talus_position", "foot_orientation", "ankle_dorsiflexion_axis"],
+      "reference_frame": "TIBIA_REFERENCED",
+      "offset_from_malleoli": {
+        "typical_value": "EQUIDISTANT_FROM_MEDIAL_AND_LATERAL_MALLEOLI",
+        "direction": "INFERIOR",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "dorsiflexion_plantarflexion_axis": "Transverse talar axis",
+        "dorsiflexion_range": "0-20°",
+        "plantarflexion_range": "0-50°",
+        "inversion_eversion": "Subtalar joint"
+      }
+    },
+    "right_talocrural_joint": {
+      "joint_type": "HINGE",
+      "articular_surfaces": ["tibial_malleolus", "fibular_malleolus", "talus"],
+      "center_determination": "TALAR_DOME_CENTER_CALCULATION",
+      "current_position": "MISSING",
+      "required_precision": "0.001m (1mm)",
+      "bone_affects": ["talus_position", "foot_orientation", "ankle_dorsiflexion_axis"],
+      "reference_frame": "TIBIA_REFERENCED",
+      "offset_from_malleoli": {
+        "typical_value": "EQUIDISTANT_FROM_MEDIAL_AND_LATERAL_MALLEOLI",
+        "direction": "INFERIOR",
+        "current_value": "MISSING"
+      },
+      "constraints": {
+        "dorsiflexion_plantarflexion_axis": "Transverse talar axis",
+        "dorsiflexion_range": "0-20°",
+        "plantarflexion_range": "0-50°",
+        "inversion_eversion": "Subtalar joint"
+      }
+    }
+  },
+  "hand_joints": {
+    "thumb_cmc_joints": {
+      "left_carpometacarpal": {
+        "joint_type": "SADDLE",
+        "articular_surfaces": ["trapezium", "thumb_metacarpal"],
+        "center_determination": "TRAPEZIAL_ARTICULAR_CENTER",
+        "current_position": "MISSING",
+        "required_precision": "0.001m (1mm)",
+        "bone_affects": ["thumb_metacarpal_position", "thumb_opposition"],
+        "reference_frame": "CARPAL_REFERENCED",
+        "thumb_range": "Wide range of motion for opposition"
+      },
+      "right_carpometacarpal": {
+        "joint_type": "SADDLE",
+        "articular_surfaces": ["trapezium", "thumb_metacarpal"],
+        "center_determination": "TRAPEZIAL_ARTICULAR_CENTER",
+        "current_position": "MISSING",
+        "required_precision": "0.001m (1mm)",
+        "bone_affects": ["thumb_metacarpal_position", "thumb_opposition"],
+        "reference_frame": "CARPAL_REFERENCED",
+        "thumb_range": "Wide range of motion for opposition"
+      }
+    },
+    "finger_mcp_joints": {
+      "description": "Metacarpophalangeal joints for fingers 2-5",
+      "joint_type": "CONDYLOID",
+      "articular_surfaces": ["metacarpal_heads", "proximal_phalangeal_bases"],
+      "center_determination": "METACARPAL_HEAD_CENTER",
+      "current_positions": "MISSING",
+      "required_precision": "0.0005m (0.5mm)",
+      "bone_affects": ["proximal_phalanx_position", "finger_spread"],
+      "reference_frame": "HAND_REFERENCED",
+      "finger_range": "Flexion 90°, extension 30°, abduction 20°"
+    }
+  },
+  "foot_joints": {
+    "subtalar_joints": {
+      "left_subtalar": {
+        "joint_type": "PLANAR",
+        "articular_surfaces": ["talus", "calcaneus"],
+        "center_determination": "SUBTALAR_ARTICULAR_CENTER",
+        "current_position": "MISSING",
+        "required_precision": "0.001m (1mm)",
+        "bone_affects": ["calcaneus_position", "foot_inversion_eversion"],
+        "reference_frame": "TALUS_REFERENCED",
+        "motion_range": "Inversion 20°, eversion 10°"
+      },
+      "right_subtalar": {
+        "joint_type": "PLANAR",
+        "articular_surfaces": ["talus", "calcaneus"],
+        "center_determination": "SUBTALAR_ARTICULAR_CENTER",
+        "current_position": "MISSING",
+        "required_precision": "0.001m (1mm)",
+        "bone_affects": ["calcaneus_position", "foot_inversion_eversion"],
+        "reference_frame": "TALUS_REFERENCED",
+        "motion_range": "Inversion 20°, eversion 10°"
+      }
+    },
+    "toe_mtp_joints": {
+      "description": "Metatarsophalangeal joints for toes 1-5",
+      "joint_type": "CONDYLOID",
+      "articular_surfaces": ["metatarsal_heads", "proximal_phalangeal_bases"],
+      "center_determination": "METATARSAL_HEAD_CENTER",
+      "current_positions": "MISSING",
+      "required_precision": "0.0005m (0.5mm)",
+      "bone_affects": ["proximal_toe_phalanx_position", "toe_spread"],
+      "reference_frame": "FOOT_REFERENCED",
+      "toe_range": "Flexion 45°, extension 20°"
+    }
+  },
+  "spine_joints": {
+    "intervertebral_joints": {
+      "description": "Facet joints between vertebrae",
+      "joint_type": "COMPLEX_PLANAR",
+      "articular_surfaces": ["superior_facets", "inferior_facets"],
+      "center_determination": "INTERVERTEBRAL_DISK_CENTER",
+      "current_positions": "MISSING",
+      "required_precision": "0.0005m (0.5mm)",
+      "bone_affects": ["vertebral_position", "spine_curvature"],
+      "reference_frame": "SPINE_REFERENCED",
+      "motion_range": "Limited per joint, cumulative for spine"
+    }
+  },
+  "joint_center_positioning_consistency": {
+    "bone_length_consistency": {
+      "constraint": "Joint centers must be reachable by bone lengths",
+      "tolerance": "0.001m (1mm)",
+      "current_status": "UNVERIFIED"
+    },
+    "joint_continuity": {
+      "constraint": "Joint centers must align with adjacent segments",
+      "tolerance": "0.001m (1mm)",
+      "current_status": "UNVERIFIED"
+    },
+    "bilateral_symmetry": {
+      "constraint": "Left and right joint centers must be symmetric",
+      "tolerance": "0.002m (2mm)",
+      "current_status": "UNVERIFIED"
+    },
+    "kinematic_chain_validity": {
+      "constraint": "Joint centers must form valid kinematic chains",
+      "tolerance": "0.001m (1mm)",
+      "current_status": "UNVERIFIED"
+    }
+  },
+  "joint_center_calculation_dependencies": {
+    "required_inputs": [
+      "Bone surface geometry",
+      "Articular surface definitions",
+      "Anthropometric reference data",
+      "Subject-specific measurements",
+      "Joint constraint definitions"
+    ],
+    "calculation_order": [
+      "Spine landmarks (primary)",
+      "Pelvic landmarks (primary)",
+      "Shoulder and hip joints (primary)",
+      "Elbow and knee joints (secondary)",
+      "Wrist and ankle joints (tertiary)",
+      "Hand and foot joints (quaternary)"
+    ]
+  },
+  "critical_unknowns": [
+    "All joint center positions are MISSING",
+    "All articular surface geometries are MISSING",
+    "All joint constraint definitions are MISSING",
+    "Biomechanical reference data is MISSING",
+    "Subject-specific joint measurements are MISSING",
+    "Joint center calculation algorithms are UNIMPLEMENTED",
+    "Joint motion ranges are UNDEFINED"
+  ]
+}

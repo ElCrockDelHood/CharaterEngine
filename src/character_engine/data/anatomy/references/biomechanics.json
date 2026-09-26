@@ -1,0 +1,272 @@
+{
+  "biomechanical_data": {
+    "version": "1.0.0",
+    "date": "2026-08-20",
+    "status": "PLACEHOLDER",
+    "description": "Placeholder biomechanical data for reconstruction testing",
+    "metadata": {
+      "source": "PLACEHOLDER_DATA",
+      "confidence": "LOW",
+      "provenance": "ASSUMPTION",
+      "notes": "This data should be replaced with actual reference data from ISB recommendations and biomechanical research"
+    },
+    "joint_centers": {
+      "shoulder": {
+        "glenohumeral": {
+          "name": "glenohumeral_joint_center",
+          "offset_from_acromion": {
+            "value": 0.020,
+            "unit": "meters",
+            "direction": "inferior_and_medial",
+            "range": [0.015, 0.025],
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          },
+          "glenoid_depth": {
+            "value": 0.030,
+            "unit": "meters",
+            "range": [0.025, 0.035],
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          },
+          "humerus_head_radius": {
+            "value": 0.025,
+            "unit": "meters",
+            "range": [0.020, 0.030],
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          }
+        }
+      },
+      "elbow": {
+        "humeroulnar": {
+          "name": "humeroulnar_joint_center",
+          "offset_from_epicondyles": {
+            "value": 0.000,
+            "unit": "meters",
+            "direction": "equidistant_from_medial_and_lateral",
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          },
+          "trochlear_depth": {
+            "value": 0.020,
+            "unit": "meters",
+            "range": [0.015, 0.025],
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          }
+        }
+      },
+      "wrist": {
+        "radiocarpal": {
+          "name": "radiocarpal_joint_center",
+          "offset_from_styloid": {
+            "value": 0.012,
+            "unit": "meters",
+            "direction": "medial_and_proximal",
+            "range": [0.010, 0.015],
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          }
+        }
+      },
+      "hip": {
+        "acetabulofemoral": {
+          "name": "acetabulofemoral_joint_center",
+          "offset_from_asis": {
+            "value": 0.025,
+            "unit": "meters",
+            "direction": "inferior_and_posterior",
+            "range": [0.020, 0.030],
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          },
+          "acetabular_depth": {
+            "value": 0.030,
+            "unit": "meters",
+            "range": [0.025, 0.035],
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          },
+          "femoral_head_radius": {
+            "value": 0.025,
+            "unit": "meters",
+            "range": [0.020, 0.030],
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          }
+        }
+      },
+      "knee": {
+        "tibiofemoral": {
+          "name": "tibiofemoral_joint_center",
+          "offset_from_epicondyles": {
+            "value": 0.000,
+            "unit": "meters",
+            "direction": "equidistant_from_medial_and_lateral",
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          },
+          "femoral_condyle_geometry": {
+            "description": "femoral_condyle_geometry",
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          }
+        }
+      },
+      "ankle": {
+        "talocrural": {
+          "name": "talocrural_joint_center",
+          "offset_from_malleoli": {
+            "value": 0.000,
+            "unit": "meters",
+            "direction": "equidistant_from_medial_and_lateral",
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          },
+          "talar_dome_geometry": {
+            "description": "talar_dome_geometry",
+            "confidence": "LOW",
+            "provenance": "ASSUMPTION"
+          }
+        }
+      }
+    },
+    "joint_ranges": {
+      "shoulder": {
+        "flexion_extension": {
+          "range": [0, 180],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "abduction_adduction": {
+          "range": [0, 180],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "internal_external_rotation": {
+          "range": [0, 180],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        }
+      },
+      "elbow": {
+        "flexion_extension": {
+          "range": [0, 150],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "pronation_supination": {
+          "range": [90, 90],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        }
+      },
+      "wrist": {
+        "flexion_extension": {
+          "range": [70, 90],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "radial_ulnar_deviation": {
+          "range": [15, 30],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        }
+      },
+      "hip": {
+        "flexion_extension": {
+          "range": [0, 120],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "abduction_adduction": {
+          "range": [0, 45],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "internal_external_rotation": {
+          "range": [0, 45],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        }
+      },
+      "knee": {
+        "flexion_extension": {
+          "range": [0, 135],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        }
+      },
+      "ankle": {
+        "dorsiflexion_plantarflexion": {
+          "range": [0, 20],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        },
+        "inversion_eversion": {
+          "range": [0, 20],
+          "unit": "degrees",
+          "confidence": "LOW",
+          "provenance": "ASSUMPTION"
+        }
+      }
+    },
+    "joint_axes": {
+      "shoulder_rotation_axis": {
+        "description": "Shoulder joint rotation axis",
+        "axis": "Not defined",
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "elbow_flexion_axis": {
+        "description": "Elbow flexion/extension axis",
+        "axis": "Transverse humeral axis",
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "wrist_flexion_axis": {
+        "description": "Wrist flexion/extension axis",
+        "axis": "Transverse talar axis",
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "hip_rotation_axis": {
+        "description": "Hip joint rotation axis",
+        "axis": "Not defined",
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "knee_flexion_axis": {
+        "description": "Knee flexion/extension axis",
+        "axis": "Transverse femoral axis",
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      },
+      "ankle_dorsiflexion_axis": {
+        "description": "Ankle dorsiflexion/plantarflexion axis",
+        "axis": "Transverse talar axis",
+        "confidence": "LOW",
+        "provenance": "ASSUMPTION"
+      }
+    }
+  },
+  "data_quality": {
+    "accuracy": "LOW",
+    "precision": "LOW",
+    "completeness": "PARTIAL",
+    "notes": "All values are placeholders and should be replaced with actual reference data from ISB recommendations and biomechanical research"
+  }
+}

@@ -1,0 +1,425 @@
+{
+  "hand_model": {
+    "sprint": "A0.3",
+    "date": "2026-08-13",
+    "status": "ANALYSIS_ONLY",
+    "purpose": "Detailed hand anatomy model for deterministic hand reconstruction"
+  },
+  "hand_overview": {
+    "structure": "Metacarpals (5) + Phalanges (14) + Carpal bones (8)",
+    "total_bones_per_hand": 27,
+    "total_bones_both_hands": 54,
+    "current_state": "SIMPLIFIED_STRUCTURE_DETECTED (ANATOMICAL_FAILURE)",
+    "required_state": "FULL_27_BONE_STRUCTURE"
+  },
+  "carpal_bones": {
+    "proximal_row": {
+      "scaphoid": {
+        "function": "Wrist_stability_thumb_mobility",
+        "articulations": ["Radius", "Lunate", "Trapezium", "Trapezoid"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.025-0.030m (25-30mm)",
+          "width": "0.015-0.020m (15-20mm)",
+          "height": "0.010-0.015m (10-15mm)"
+        }
+      },
+      "lunate": {
+        "function": "Wrist_stability",
+        "articulations": ["Radius", "Scaphoid", "Triquetrum", "Capitate"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.020-0.025m (20-25mm)",
+          "width": "0.015-0.020m (15-20mm)",
+          "height": "0.010-0.015m (10-15mm)"
+        }
+      },
+      "triquetrum": {
+        "function": "Wrist_stability",
+        "articulations": ["Lunate", "Pisiform", "Hamate", "Capitate"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.015-0.020m (15-20mm)",
+          "width": "0.015-0.020m (15-20mm)",
+          "height": "0.010-0.015m (10-15mm)"
+        }
+      },
+      "pisiform": {
+        "function": "Wrist_stability_muscle_attachment",
+        "articulations": ["Triquetrum"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.010-0.015m (10-15mm)",
+          "width": "0.010-0.015m (10-15mm)",
+          "height": "0.010-0.015m (10-15mm)"
+        }
+      }
+    },
+    "distal_row": {
+      "trapezium": {
+        "function": "Thumb_base_saddle_joint",
+        "articulations": ["Scaphoid", "First_metacarpal", "Trapezoid"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.020-0.025m (20-25mm)",
+          "width": "0.020-0.025m (20-25mm)",
+          "height": "0.010-0.015m (10-15mm)"
+        }
+      },
+      "trapezoid": {
+        "function": "Wrist_stability",
+        "articulations": ["Scaphoid", "Trapezium", "Second_metacarpal", "Capitate"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.015-0.020m (15-20mm)",
+          "width": "0.015-0.020m (15-20mm)",
+          "height": "0.010-0.015m (10-15mm)"
+        }
+      },
+      "capitate": {
+        "function": "Largest_carpal_wrist_stability",
+        "articulations": ["Scaphoid", "Lunate", "Trapezoid", "Hamate", "Third_metacarpal"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.025-0.030m (25-30mm)",
+          "width": "0.020-0.025m (20-25mm)",
+          "height": "0.015-0.020m (15-20mm)"
+        }
+      },
+      "hamate": {
+        "function": "Wrist_stability",
+        "articulations": ["Triquetrum", "Capitate", "Fourth_metacarpal", "Fifth_metacarpal"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.020-0.025m (20-25mm)",
+          "width": "0.020-0.025m (20-25mm)",
+          "height": "0.015-0.020m (15-20mm)"
+        }
+      }
+    }
+  },
+  "metacarpals": {
+    "first_metacarpal": {
+      "finger": "Thumb",
+      "unique_features": ["Shortest", "Widest", "Saddle_joint"],
+      "typical_length": "0.040-0.050m (40-50mm)",
+      "typical_width": "0.012-0.015m (12-15mm)",
+      "current_length": "MISSING",
+      "current_position": "MISSING",
+      "articulation": "Trapezium (saddle joint)"
+    },
+    "second_metacarpal": {
+      "finger": "Index",
+      "unique_features": ["Longest", "Base_for_index_finger"],
+      "typical_length": "0.065-0.075m (65-75mm)",
+      "typical_width": "0.010-0.012m (10-12mm)",
+      "current_length": "MISSING",
+      "current_position": "MISSING",
+      "articulation": "Trapezoid"
+    },
+    "third_metacarpal": {
+      "finger": "Middle",
+      "unique_features": ["Longest", "Central_stability"],
+      "typical_length": "0.065-0.075m (65-75mm)",
+      "typical_width": "0.010-0.012m (10-12mm)",
+      "current_length": "MISSING",
+      "current_position": "MISSING",
+      "articulation": "Capitate"
+    },
+    "fourth_metacarpal": {
+      "finger": "Ring",
+      "unique_features": ["Shorter_than_middle", "Base_for_ring_finger"],
+      "typical_length": "0.055-0.065m (55-65mm)",
+      "typical_width": "0.008-0.010m (8-10mm)",
+      "current_length": "MISSING",
+      "current_position": "MISSING",
+      "articulation": "Hamate"
+    },
+    "fifth_metacarpal": {
+      "finger": "Little",
+      "unique_features": ["Shortest", "Base_for_little_finger"],
+      "typical_length": "0.045-0.055m (45-55mm)",
+      "typical_width": "0.008-0.010m (8-10mm)",
+      "current_length": "MISSING",
+      "current_position": "MISSING",
+      "articulation": "Hamate"
+    }
+  },
+  "phalanges": {
+    "thumb_phalanges": {
+      "proximal_phalanx": {
+        "finger": "Thumb",
+        "typical_length": "0.025-0.035m (25-35mm)",
+        "typical_width": "0.010-0.012m (10-12mm)",
+        "current_length": "MISSING",
+        "current_position": "MISSING",
+        "articulation": "First_metacarpal (MCP joint)"
+      },
+      "distal_phalanx": {
+        "finger": "Thumb",
+        "typical_length": "0.020-0.030m (20-30mm)",
+        "typical_width": "0.008-0.010m (8-10mm)",
+        "current_length": "MISSING",
+        "current_position": "MISSING",
+        "articulation": "Proximal_phalanx (IP joint)"
+      }
+    },
+    "finger_phalanges": {
+      "index_finger": {
+        "proximal_phalanx": {
+          "typical_length": "0.040-0.050m (40-50mm)",
+          "typical_width": "0.008-0.010m (8-10mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "intermediate_phalanx": {
+          "typical_length": "0.025-0.035m (25-35mm)",
+          "typical_width": "0.007-0.009m (7-9mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "distal_phalanx": {
+          "typical_length": "0.020-0.030m (20-30mm)",
+          "typical_width": "0.006-0.008m (6-8mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        }
+      },
+      "middle_finger": {
+        "proximal_phalanx": {
+          "typical_length": "0.045-0.055m (45-55mm)",
+          "typical_width": "0.008-0.010m (8-10mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "intermediate_phalanx": {
+          "typical_length": "0.030-0.040m (30-40mm)",
+          "typical_width": "0.007-0.009m (7-9mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "distal_phalanx": {
+          "typical_length": "0.025-0.035m (25-35mm)",
+          "typical_width": "0.006-0.008m (6-8mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        }
+      },
+      "ring_finger": {
+        "proximal_phalanx": {
+          "typical_length": "0.040-0.050m (40-50mm)",
+          "typical_width": "0.008-0.010m (8-10mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "intermediate_phalanx": {
+          "typical_length": "0.025-0.035m (25-35mm)",
+          "typical_width": "0.007-0.009m (7-9mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "distal_phalanx": {
+          "typical_length": "0.020-0.030m (20-30mm)",
+          "typical_width": "0.006-0.008m (6-8mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        }
+      },
+      "little_finger": {
+        "proximal_phalanx": {
+          "typical_length": "0.030-0.040m (30-40mm)",
+          "typical_width": "0.007-0.009m (7-9mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "intermediate_phalanx": {
+          "typical_length": "0.020-0.030m (20-30mm)",
+          "typical_width": "0.006-0.008m (6-8mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "distal_phalanx": {
+          "typical_length": "0.015-0.025m (15-25mm)",
+          "typical_width": "0.005-0.007m (5-7mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        }
+      }
+    }
+  },
+  "hand_joints": {
+    "carpometacarpal_joints": {
+      "thumb_cmc": {
+        "joint_type": "SADDLE",
+        "motion_capability": "Wide_range_opposition_abduction",
+        "current_position": "MISSING",
+        "functional_importance": "Thumb_opposition_grip_strength"
+      },
+      "finger_cmcs": {
+        "joint_type": "PLANAR",
+        "motion_capability": "Limited_motion_stability",
+        "current_positions": "MISSING",
+        "functional_importance": "Hand_stability_fan_spread"
+      }
+    },
+    "metacarpophalangeal_joints": {
+      "joint_type": "CONDYLOID",
+      "motion_capability": "Flexion_extension_abduction_adduction",
+      "flexion_range": "90-100°",
+      "extension_range": "0-30°",
+      "abduction_range": "15-20°",
+      "current_positions": "MISSING",
+      "functional_importance": "Finger_positioning_grip"
+    },
+    "interphalangeal_joints": {
+      "proximal_interphalangeal": {
+        "joint_type": "HINGE",
+        "motion_capability": "Flexion_extension",
+        "flexion_range": "100-110°",
+        "current_positions": "MISSING",
+        "functional_importance": "Finger_curving_grip"
+      },
+      "distal_interphalangeal": {
+        "joint_type": "HINGE",
+        "motion_capability": "Flexion_extension",
+        "flexion_range": "80-90°",
+        "current_positions": "MISSING",
+        "functional_importance": "Fingertip_control_precision"
+      }
+    }
+  },
+  "hand_architecture": {
+    "longitudinal_arches": {
+      "description": "Three longitudinal arches along finger direction",
+      "central_arch": {
+        "function": "Load_distribution_grip_strength",
+        "metacarpals_involved": ["Second", "Third"],
+        "current_status": "MISSING"
+      },
+      "lateral_arches": {
+        "function": "Stability_finger_independence",
+        "metacarpals_involved": ["First", "Fourth", "Fifth"],
+        "current_status": "MISSING"
+      }
+    },
+    "transverse_arches": {
+      "description": "Two transverse arches across palm",
+      "proximal_transverse_arch": {
+        "function": "Wrist_stability",
+        "location": "Carpal_metacarpal_junction",
+        "current_status": "MISSING"
+      },
+      "distal_transverse_arch": {
+        "function": "Palm_concavity_grip",
+        "location": "Metacarpal_heads",
+        "current_status": "MISSING"
+      }
+    }
+  },
+  "hand_proportions": {
+    "hand_length_divisions": {
+      "palm_length_ratio": {
+        "typical_value": "0.60 (60% of hand length)",
+        "anthropometric_range": "0.55-0.65",
+        "current_value": "MISSING"
+      },
+      "finger_length_ratio": {
+        "typical_value": "0.40 (40% of hand length)",
+        "anthropometric_range": "0.35-0.45",
+        "current_value": "MISSING"
+      }
+    },
+    "finger_length_proportions": {
+      "relative_to_middle_finger": {
+        "index_finger": "0.85-0.90",
+        "middle_finger": "1.00 (reference)",
+        "ring_finger": "0.90-0.95",
+        "little_finger": "0.70-0.75",
+        "thumb": "0.60-0.70"
+      }
+    },
+    "metacarpal_length_proportions": {
+      "relative_to_third_metacarpal": {
+        "first_metacarpal": "0.60-0.70",
+        "second_metacarpal": "0.95-1.00",
+        "third_metacarpal": "1.00 (reference)",
+        "fourth_metacarpal": "0.85-0.90",
+        "fifth_metacarpal": "0.70-0.75"
+      }
+    }
+  },
+  "hand_positioning": {
+    "hand_origin": {
+      "reference_point": "Wrist_joint_center",
+      "current_position": "MISSING",
+      "coordinate_frame": "FOREARM_REFERENCED"
+    },
+    "palm_orientation": {
+      "default_pose": "PALM_FACING_ANTERIOR",
+      "natural_arch": "SLIGHT_CONCAVITY",
+      "current_orientation": "MISSING"
+    },
+    "finger_spread": {
+      "natural_fan_angle": "20-30° total spread",
+      "individual_finger_angles": "MISSING",
+      "current_spread": "MISSING"
+    }
+  },
+  "hand_reconstruction_requirements": {
+    "minimum_data_requirements": [
+      "Hand total length",
+      "Palm length and width",
+      "Individual metacarpal lengths",
+      "Individual phalanx lengths",
+      "Finger spread angles",
+      "Hand arch parameters",
+      "Joint center positions",
+      "Thumb opposition parameters"
+    ],
+    "reconstruction_sequence": [
+      "Define hand origin at wrist joint center",
+      "Position carpal bones in proper arrangement",
+      "Position metacarpals with correct lengths and angles",
+      "Define finger spread pattern",
+      "Position proximal phalanges at MCP joints",
+      "Position intermediate phalanges at PIP joints",
+      "Position distal phalanges at DIP joints",
+      "Position thumb with opposition capability",
+      "Apply hand arch architecture",
+      "Validate hand proportions",
+      "Validate joint continuity"
+    ],
+    "validation_constraints": {
+      "total_hand_length": {
+        "target_range": "0.10-0.12 * total_height",
+        "tolerance": "0.005m (5mm)",
+        "current_status": "UNVERIFIED"
+      },
+      "finger_length_proportions": {
+        "constraint": "Finger lengths must follow anthropometric ratios",
+        "tolerance": "±5% of nominal ratios",
+        "current_status": "UNVERIFIED"
+      },
+      "joint_reachability": {
+        "constraint": "Joint centers must be reachable by bone lengths",
+        "tolerance": "0.001m (1mm)",
+        "current_status": "UNVERIFIED"
+      },
+      "thumb_opposition": {
+        "constraint": "Thumb must reach fingertips",
+        "tolerance": "0.010m (10mm)",
+        "current_status": "UNVERIFIED"
+      }
+    }
+  },
+  "critical_unknowns": [
+    "All carpal bone positions are MISSING",
+    "All metacarpal positions are MISSING",
+    "All phalanx positions are MISSING",
+    "All joint center positions are MISSING",
+    "Hand arch parameters are MISSING",
+    "Finger spread angles are MISSING",
+    "Thumb opposition parameters are MISSING",
+    "Hand origin position is MISSING"
+  ]
+}

@@ -1,0 +1,281 @@
+{
+  "audit_metadata": {
+    "sprint": "A0.2",
+    "date": "2026-08-12",
+    "status": "READ-ONLY DISCOVERY",
+    "total_bones_analyzed": 206,
+    "total_containers": 2
+  },
+  "critical_issues": [
+    {
+      "id": "A001",
+      "severity": "CRITICAL",
+      "category": "SCALE",
+      "bone": "SKELETON_OVERALL",
+      "description": "Overall skeleton height is anatomically incorrect",
+      "evidence": "Total height: 3.08m (308cm) vs expected adult height 1.7-1.9m",
+      "current_value": "3.08m",
+      "expected_or_unknown": "1.7-1.9m (REFERENCE_REQUIRED)",
+      "confidence": 0.95
+    },
+    {
+      "id": "A002",
+      "severity": "CRITICAL",
+      "category": "PROPORTIONS",
+      "bone": "SKELETON_OVERALL",
+      "description": "Body proportions are anatomically incorrect",
+      "evidence": "Height/Width ratio: 3.90, head height: 0.45m, torso: 1.2m, legs: 1.43m",
+      "current_value": "Non-human proportions",
+      "expected_or_unknown": "Standard human proportions (REFERENCE_REQUIRED)",
+      "confidence": 0.90
+    },
+    {
+      "id": "A003",
+      "severity": "CRITICAL",
+      "category": "SPINE",
+      "bone": "VERTEBRAL_COLUMN",
+      "description": "Spine is perfectly straight with no physiological curvature",
+      "evidence": "All vertebral bones aligned at X=0, Y=0 with only Z-axis changes",
+      "current_value": "Perfectly vertical alignment",
+      "expected_or_unknown": "Cervical lordosis, thoracic kyphosis, lumbar lordosis (REFERENCE_REQUIRED)",
+      "confidence": 1.0
+    },
+    {
+      "id": "A004",
+      "severity": "CRITICAL",
+      "category": "UPPER_LIMB",
+      "bone": "CLAVICLE_L",
+      "description": "Clavicle has anatomically incorrect orientation and length",
+      "evidence": "Length: 0.071m (7.1cm) vs expected 15-17cm, horizontal orientation",
+      "current_value": "0.071m, horizontal",
+      "expected_or_unknown": "15-17cm, angled ~30-45 degrees (REFERENCE_REQUIRED)",
+      "confidence": 0.95
+    },
+    {
+      "id": "A005",
+      "severity": "CRITICAL",
+      "category": "UPPER_LIMB",
+      "bone": "CLAVICLE_L",
+      "description": "Clavicle-scapula discontinuity is anatomically incorrect",
+      "evidence": "12.2cm gap between clavicle tail and scapula head",
+      "current_value": "12.2cm gap",
+      "expected_or_unknown": "Near-zero gap at acromioclavicular joint (REFERENCE_REQUIRED)",
+      "confidence": 1.0
+    },
+    {
+      "id": "A006",
+      "severity": "CRITICAL",
+      "category": "UPPER_LIMB",
+      "bone": "SCAPULA_L",
+      "description": "Scapula has anatomically incorrect orientation",
+      "evidence": "Vertical orientation, no representation of scapular plane on rib cage",
+      "current_value": "Vertical alignment",
+      "expected_or_unknown": "Angled ~30 degrees from frontal plane (REFERENCE_REQUIRED)",
+      "confidence": 0.90
+    },
+    {
+      "id": "A007",
+      "severity": "CRITICAL",
+      "category": "UPPER_LIMB",
+      "bone": "HUMERUS_L",
+      "description": "Humerus length is anatomically incorrect",
+      "evidence": "Length: 0.35m (35cm) vs expected 30-35cm for entire humerus",
+      "current_value": "0.35m",
+      "expected_or_unknown": "30-35cm (REFERENCE_REQUIRED)",
+      "confidence": 0.70
+    },
+    {
+      "id": "A008",
+      "severity": "CRITICAL",
+      "category": "UPPER_LIMB",
+      "bone": "HUMERUS_L",
+      "description": "Humerus-elbow discontinuity is anatomically incorrect",
+      "evidence": "7.1cm gap between humerus tail and radius/ulna head",
+      "current_value": "7.1cm gap",
+      "expected_or_unknown": "Near-zero gap at elbow joint (REFERENCE_REQUIRED)",
+      "confidence": 1.0
+    },
+    {
+      "id": "A009",
+      "severity": "CRITICAL",
+      "category": "HAND",
+      "bone": "METACARPAL_*_L",
+      "description": "All metacarpals have identical length - anatomically incorrect",
+      "evidence": "All 5 metacarpals: 0.040m (4cm) length",
+      "current_value": "Uniform 4cm length",
+      "expected_or_unknown": "Variable lengths (REFERENCE_REQUIRED)",
+      "confidence": 1.0
+    },
+    {
+      "id": "A010",
+      "severity": "CRITICAL",
+      "category": "HAND",
+      "bone": "PHALANX_*_L",
+      "description": "All phalanges have identical length - anatomically incorrect",
+      "evidence": "All phalanges: 0.030m (3cm) length",
+      "current_value": "Uniform 3cm length",
+      "expected_or_unknown": "Variable lengths by finger and phalanx type (REFERENCE_REQUIRED)",
+      "confidence": 1.0
+    },
+    {
+      "id": "A011",
+      "severity": "CRITICAL",
+      "category": "HAND",
+      "bone": "THUMB",
+      "description": "Thumb lacks opposition geometry - aligned with other fingers",
+      "evidence": "Thumb aligned in same plane as other fingers, no saddle joint representation",
+      "current_value": "Linear alignment",
+      "expected_or_unknown": "Opposition geometry with carpometacarpal saddle joint (REFERENCE_REQUIRED)",
+      "confidence": 0.95
+    },
+    {
+      "id": "A012",
+      "severity": "CRITICAL",
+      "category": "LOWER_LIMB",
+      "bone": "FEMUR_L",
+      "description": "Femur length is anatomically incorrect",
+      "evidence": "Length: 0.45m (45cm) vs expected 40-50cm",
+      "current_value": "0.45m",
+      "expected_or_unknown": "40-50cm (REFERENCE_REQUIRED)",
+      "confidence": 0.60
+    },
+    {
+      "id": "A013",
+      "severity": "CRITICAL",
+      "category": "LOWER_LIMB",
+      "bone": "FEMUR_L",
+      "description": "Femur-tibia discontinuity is anatomically incorrect",
+      "evidence": "5.0cm gap between femur tail and tibia head",
+      "current_value": "5.0cm gap",
+      "expected_or_unknown": "Near-zero gap at knee joint (REFERENCE_REQUIRED)",
+      "confidence": 1.0
+    },
+    {
+      "id": "A014",
+      "severity": "CRITICAL",
+      "category": "FOOT",
+      "bone": "METATARSAL_*_L",
+      "description": "All metatarsals have identical length - anatomically incorrect",
+      "evidence": "All 5 metatarsals: 0.050m (5cm) length",
+      "current_value": "Uniform 5cm length",
+      "expected_or_unknown": "Variable lengths (REFERENCE_REQUIRED)",
+      "confidence": 1.0
+    },
+    {
+      "id": "A015",
+      "severity": "CRITICAL",
+      "category": "FOOT",
+      "bone": "TOE_PHALANX_*_L",
+      "description": "All toe phalanges have identical length - anatomically incorrect",
+      "evidence": "All toe phalanges: 0.030m (3cm) length",
+      "current_value": "Uniform 3cm length",
+      "expected_or_unknown": "Variable lengths by toe and phalanx type (REFERENCE_REQUIRED)",
+      "confidence": 1.0
+    },
+    {
+      "id": "A016",
+      "severity": "CRITICAL",
+      "category": "FOOT",
+      "bone": "FOOT_STRUCTURE",
+      "description": "Foot appears as straight continuation of tibia - no arch representation",
+      "evidence": "No medial/lateral arch geometry, metatarsals in linear progression",
+      "current_value": "Linear extension of tibia",
+      "expected_or_unknown": "Medial and lateral arch architecture (REFERENCE_REQUIRED)",
+      "confidence": 0.95
+    }
+  ],
+  "high_issues": [
+    {
+      "id": "H001",
+      "severity": "HIGH",
+      "category": "UPPER_LIMB",
+      "bone": "RADIUS_L",
+      "description": "Radius/ulna separation is anatomically simplified",
+      "evidence": "10cm separation at both proximal and distal ends, parallel orientation",
+      "current_value": "10cm separation, parallel",
+      "expected_or_unknown": "Variable separation with pronation/supination capability (REFERENCE_REQUIRED)",
+      "confidence": 0.85
+    },
+    {
+      "id": "H002",
+      "severity": "HIGH",
+      "category": "LOWER_LIMB",
+      "bone": "PATELLA_L",
+      "description": "Patella placement is anatomically incorrect",
+      "evidence": "5cm gap from femur, offset position not representative of knee joint",
+      "current_value": "5cm gap, offset position",
+      "expected_or_unknown": "Embedded in knee joint geometry (REFERENCE_REQUIRED)",
+      "confidence": 0.80
+    },
+    {
+      "id": "H003",
+      "severity": "HIGH",
+      "category": "LOWER_LIMB",
+      "bone": "TIBIA_L",
+      "description": "Tibia-ankle discontinuity is anatomically incorrect",
+      "evidence": "11.2cm gap between tibia tail and tarsal bones",
+      "current_value": "11.2cm gap",
+      "expected_or_unknown": "Near-zero gap at ankle joint (REFERENCE_REQUIRED)",
+      "confidence": 1.0
+    },
+    {
+      "id": "H004",
+      "severity": "HIGH",
+      "category": "SYMMETRY",
+      "bone": "CUNEIFORM_LATERAL_L",
+      "description": "Missing right counterpart for left bone",
+      "evidence": "CUNEIFORM_LATERAL_L exists but CUNEIFORM_LATERAL_R does not",
+      "current_value": "Asymmetric bone count",
+      "expected_or_unknown": "Bilateral symmetry (REFERENCE_REQUIRED)",
+      "confidence": 1.0
+    }
+  ],
+  "medium_issues": [
+    {
+      "id": "M001",
+      "severity": "MEDIUM",
+      "category": "VERTEBRAL",
+      "bone": "CERVICAL_1",
+      "description": "Cervical-spine transition gap is anatomically simplified",
+      "evidence": "12cm gap between CERVICAL_7 tail and THORACIC_1 head",
+      "current_value": "12cm gap",
+      "expected_or_unknown": "Near-continuous chain (REFERENCE_REQUIRED)",
+      "confidence": 0.75
+    },
+    {
+      "id": "M002",
+      "severity": "MEDIUM",
+      "category": "VERTEBRAL",
+      "bone": "THORACIC_12",
+      "description": "Thoracic-lumbar transition gap is anatomically simplified",
+      "evidence": "8cm gap between THORACIC_12 tail and LUMBAR_1 head",
+      "current_value": "8cm gap",
+      "expected_or_unknown": "Near-continuous chain (REFERENCE_REQUIRED)",
+      "confidence": 0.75
+    }
+  ],
+  "info_findings": [
+    {
+      "id": "I001",
+      "severity": "INFO",
+      "category": "GENERATION",
+      "bone": "SKELETON_OVERALL",
+      "description": "Skeleton appears to be algorithmically generated with mathematical patterns",
+      "evidence": "Regular spacing intervals, uniform lengths, linear progressions",
+      "current_value": "Algorithmic generation",
+      "expected_or_unknown": "Anatomical reference-based generation (REFERENCE_REQUIRED)",
+      "confidence": 0.90
+    },
+    {
+      "id": "I002",
+      "severity": "INFO",
+      "category": "VALIDATION",
+      "bone": "SKELETON_OVERALL",
+      "description": "Current validation tests pass structural but not anatomical correctness",
+      "evidence": "All validation tests pass despite anatomical issues",
+      "current_value": "Structural validation only",
+      "expected_or_unknown": "Anatomical validation required (REFERENCE_REQUIRED)",
+      "confidence": 1.0
+    }
+  ]
+}

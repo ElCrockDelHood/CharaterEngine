@@ -1,0 +1,982 @@
+{
+  "parameter_inventory": {
+    "sprint": "A0.3",
+    "date": "2026-08-12",
+    "status": "ANALYSIS_ONLY",
+    "purpose": "Comprehensive inventory of anatomical parameters required for deterministic reconstruction"
+  },
+  "A_GLOBAL_PARAMETERS": {
+    "height": {
+      "name": "total_body_height",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "ALL_NORMALIZED_PARAMETERS",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANTHROPOMETRIC_REFERENCE_DATA"
+    },
+    "weight": {
+      "name": "total_body_weight",
+      "unit": "kg",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "BONE_THICKNESS_SCALE",
+      "required_precision": "0.1kg",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANTHROPOMETRIC_REFERENCE_DATA"
+    },
+    "age": {
+      "name": "subject_age",
+      "unit": "years",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "BONE_DENSITY_SPINE_CURVATURE",
+      "required_precision": "1_year",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SUBJECT_DEMOGRAPHIC_PROFILE"
+    },
+    "gender": {
+      "name": "biological_gender",
+      "unit": "categorical",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "PELVIC_WIDTH_SHOULDER_WIDTH_PROPORTIONS",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SUBJECT_DEMOGRAPHIC_PROFILE"
+    },
+    "ethnicity": {
+      "name": "ethnic_background",
+      "unit": "categorical",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "FACIAL_FEATURES_PROPORTIONS",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SUBJECT_DEMOGRAPHIC_PROFILE"
+    },
+    "pose": {
+      "name": "reference_pose",
+      "unit": "categorical",
+      "current_availability": "UNKNOWN",
+      "measured_or_derived": "ASSUMED",
+      "bilateral": false,
+      "affects_other_parameters": "JOINT_ANGLES_LIMB_ORIENTATIONS",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANATOMICAL_STANDARD_POSE_DEFINITION"
+    }
+  },
+  "B_PELVIS": {
+    "pelvic_width": {
+      "name": "bi-iliac_width",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "HIP_JOINT_POSITIONING_FEMUR_ANGLE",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "PELVIC_ANTHROPOMETRY"
+    },
+    "pelvic_depth": {
+      "name": "anterior_posterior_pelvic_depth",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "SACRUM_ORIENTATION_COXAL_ANGLE",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "PELVIC_ANTHROPOMETRY"
+    },
+    "pelvic_tilt": {
+      "name": "pelvic_tilt_angle",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "SACRUM_ORIENTATION_SPINE_CURVATURE",
+      "required_precision": "1_degree",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "PELVIC_ORIENTATION_DATA"
+    },
+    "hip_joint_center_offset": {
+      "name": "hip_joint_center_depth_from_pelvic_plane",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FEMUR_PROXIMAL_ORIENTATION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "BIOMECHANICAL_JOINT_CENTER_DATA"
+    }
+  },
+  "C_SPINE": {
+    "cervical_count": {
+      "name": "cervical_vertebra_count",
+      "unit": "integer",
+      "current_availability": "KNOWN (7)",
+      "measured_or_derived": "ANATOMICAL_CONSTANT",
+      "bilateral": false,
+      "affects_other_parameters": "CERVICAL_CHAIN_LENGTH",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANATOMICAL_CONSTANT"
+    },
+    "thoracic_count": {
+      "name": "thoracic_vertebra_count",
+      "unit": "integer",
+      "current_availability": "KNOWN (12)",
+      "measured_or_derived": "ANATOMICAL_CONSTANT",
+      "bilateral": false,
+      "affects_other_parameters": "THORACIC_CHAIN_LENGTH",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANATOMICAL_CONSTANT"
+    },
+    "lumbar_count": {
+      "name": "lumbar_vertebra_count",
+      "unit": "integer",
+      "current_availability": "KNOWN (5)",
+      "measured_or_derived": "ANATOMICAL_CONSTANT",
+      "bilateral": false,
+      "affects_other_parameters": "LUMBAR_CHAIN_LENGTH",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANATOMICAL_CONSTANT"
+    },
+    "cervical_lordosis_angle": {
+      "name": "cervical_lordosis_curvature_angle",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "CERVICAL_VERTEBRAE_POSITIONS",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SPINAL_CURVATURE_DATA"
+    },
+    "thoracic_kyphosis_angle": {
+      "name": "thoracic_kyphosis_curvature_angle",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "THORACIC_VERTEBRAE_POSITIONS",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SPINAL_CURVATURE_DATA"
+    },
+    "lumbar_lordosis_angle": {
+      "name": "lumbar_lordosis_curvature_angle",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "LUMBAR_VERTEBRAE_POSITIONS",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SPINAL_CURVATURE_DATA"
+    },
+    "sacral_angle": {
+      "name": "sacral_promontory_angle",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "SACRUM_ORIENTATION",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SPINAL_CURVATURE_DATA"
+    },
+    "intervertebral_height_cervical": {
+      "name": "cervical_intervertebral_disc_height",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "CERVICAL_TOTAL_LENGTH",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "VERTEBRAL_ANATOMY_DATA"
+    },
+    "intervertebral_height_thoracic": {
+      "name": "thoracic_intervertebral_disc_height",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "THORACIC_TOTAL_LENGTH",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "VERTEBRAL_ANATOMY_DATA"
+    },
+    "intervertebral_height_lumbar": {
+      "name": "lumbar_intervertebral_disc_height",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "LUMBAR_TOTAL_LENGTH",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "VERTEBRAL_ANATOMY_DATA"
+    }
+  },
+  "D_THORAX": {
+    "sternum_length": {
+      "name": "sternum_body_length",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "RIB_CAGE_DEPTH",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "THORACIC_ANATOMY_DATA"
+    },
+    "sternum_width": {
+      "name": "sternum_body_width",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "RIB_ATTACHMENT_POINTS",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "THORACIC_ANATOMY_DATA"
+    },
+    "rib_cage_depth": {
+      "name": "anterior_posterior_rib_cage_depth",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "THORACIC_VOLUME_BODY_PROFILE",
+      "required_precision": "0.005m (5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "THORACIC_ANATOMY_DATA"
+    },
+    "rib_cage_width": {
+      "name": "transverse_rib_cage_width",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "SHOULDER_POSITIONING_ARM_CLEARANCE",
+      "required_precision": "0.005m (5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "THORACIC_ANATOMY_DATA"
+    },
+    "rib_curvature_radius": {
+      "name": "rib_curvature_radius",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "RIB_CAGE_GEOMETRY",
+      "required_precision": "0.01m (10mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "RIB_ANATOMY_DATA"
+    }
+  },
+  "E_SHOULDER_GIRDLE": {
+    "clavicle_length": {
+      "name": "clavicle_total_length",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "SHOULDER_WIDTH_ARM_REACH",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "CLAVICLE_ANTHROPOMETRY"
+    },
+    "clavicle_angle": {
+      "name": "clavicle_angle_from_horizontal",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "SHOULDER_POSITIONING_SCAPULA_PLANE",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SHOULDER_GIRDLE_ANATOMY"
+    },
+    "scapula_height": {
+      "name": "scapula_vertical_height",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "SHOULDER_JOINT_POSITION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SCAPULA_ANTHROPOMETRY"
+    },
+    "scapula_width": {
+      "name": "scapula_transverse_width",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "SHOULDER_JOINT_POSITION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SCAPULA_ANTHROPOMETRY"
+    },
+    "scapula_angle": {
+      "name": "scapula_angle_from_frontal_plane",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "HUMERUS_ORIENTATION_ARM_REACH",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SCAPULA_ORIENTATION_DATA"
+    },
+    "acromioclavicular_joint_position": {
+      "name": "ac_joint_position_relative_to_clavicle",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "SCAPULA_ATTACHMENT_POINT",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SHOULDER_JOINT_ANATOMY"
+    }
+  },
+  "F_UPPER_LIMBS": {
+    "humerus_length": {
+      "name": "humerus_total_length",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "ARM_REACH_ELBOW_POSITION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "HUMERUS_ANTHROPOMETRY"
+    },
+    "humerus_neck_angle": {
+      "name": "femoral_neck_angle_from_shaft",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "NECK_LENGTH_JOINT_CENTER_POSITION",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "HUMERUS_ANATOMY"
+    },
+    "humerus_head_radius": {
+      "name": "humerus_head_articular_surface_radius",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "JOINT_CENTER_OFFSET",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "HUMERUS_ARTICULAR_ANATOMY"
+    },
+    "radius_length": {
+      "name": "radius_total_length",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FOREARM_LENGTH_WRIST_POSITION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "RADIUS_ANTHROPOMETRY"
+    },
+    "ulna_length": {
+      "name": "ulna_total_length",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FOREARM_LENGTH_WRIST_POSITION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ULNA_ANTHROPOMETRY"
+    },
+    "radius_ulna_separation_proximal": {
+      "name": "radius_ulna_separation_at_elbow",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FOREARM_WIDTH_PRONATION_GEOMETRY",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FOREARM_ANATOMY"
+    },
+    "radius_ulna_separation_distal": {
+      "name": "radius_ulna_separation_at_wrist",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "WRIST_WIDTH_HAND_ATTACHMENT",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FOREARM_ANATOMY"
+    }
+  },
+  "G_HANDS": {
+    "metacarpal_lengths": {
+      "name": "individual_metacarpal_lengths",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "HAND_WIDTH_FINGER_ATTACHMENT",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "HAND_ANTHROPOMETRY"
+    },
+    "metacarpal_widths": {
+      "name": "individual_metacarpal_widths",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "HAND_THICKNESS_FINGER_BASE_WIDTH",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "HAND_ANTHROPOMETRY"
+    },
+    "phalanx_proximal_lengths": {
+      "name": "proximal_phalanx_lengths_by_finger",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FINGER_LENGTH_HAND_SIZE",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FINGER_ANTHROPOMETRY"
+    },
+    "phalanx_intermediate_lengths": {
+      "name": "intermediate_phalanx_lengths_by_finger",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FINGER_LENGTH_HAND_SIZE",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FINGER_ANTHROPOMETRY"
+    },
+    "phalanx_distal_lengths": {
+      "name": "distal_phalanx_lengths_by_finger",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FINGER_LENGTH_HAND_SIZE",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FINGER_ANTHROPOMETRY"
+    },
+    "thumb_metacarpal_length": {
+      "name": "thumb_metacarpal_length",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "THUMB_REACH_OPPosition_CAPABILITY",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "THUMB_ANTHROPOMETRY"
+    },
+    "thumb_cmc_saddle_angle": {
+      "name": "thumb_carpometacarpal_saddle_joint_angle",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "THUMB_OPPosition_RANGE",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "THUMB_JOINT_ANATOMY"
+    },
+    "thumb_mcp_angle": {
+      "name": "thumb_metacarpophalangeal_joint_angle",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "THUMB_ORIENTATION",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "THUMB_JOINT_ANATOMY"
+    },
+    "finger_spread_angle": {
+      "name": "finger_spread_angle_from_palm_center",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "HAND_WIDTH_FINGER_CLEARANCE",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "HAND_GEOMETRY"
+    }
+  },
+  "H_LOWER_LIMBS": {
+    "femur_length": {
+      "name": "femur_total_length",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "LEG_LENGTH_KNEE_POSITION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FEMUR_ANTHROPOMETRY"
+    },
+    "femur_neck_angle": {
+      "name": "femoral_neck_angle_from_shaft",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "HIP_JOINT_CENTER_LEG_ORIENTATION",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FEMUR_ANATOMY"
+    },
+    "femur_head_radius": {
+      "name": "femoral_head_articular_surface_radius",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "HIP_JOINT_CENTER_OFFSET",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FEMUR_ARTICULAR_ANATOMY"
+    },
+    "tibia_length": {
+      "name": "tibia_total_length",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "LEG_LENGTH_ANKLE_POSITION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "TIBIA_ANTHROPOMETRY"
+    },
+    "fibula_length": {
+      "name": "fibula_total_length",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "ANKLE_STABILITY_LATERAL_STABILITY",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FIBULA_ANTHROPOMETRY"
+    },
+    "tibia_fibula_separation_proximal": {
+      "name": "tibia_fibula_separation_at_knee",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "KNEE_WIDTH_PATELLA_POSITION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "KNEE_ANATOMY"
+    },
+    "tibia_fibula_separation_distal": {
+      "name": "tibia_fibula_separation_at_ankle",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "ANKLE_WIDTH_FOOT_ATTACHMENT",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANKLE_ANATOMY"
+    },
+    "patella_height": {
+      "name": "patella_vertical_height",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "KNEE_JOINT_EXTENSION",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "PATELLA_ANTHROPOMETRY"
+    },
+    "patella_width": {
+      "name": "patella_transverse_width",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "KNEE_JOINT_FLEXION",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "PATELLA_ANTHROPOMETRY"
+    }
+  },
+  "I_FEET": {
+    "talus_height": {
+      "name": "talus_vertical_height",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "ANKLE_HEIGHT_FOOT_ORIENTATION",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "TALUS_ANTHROPOMETRY"
+    },
+    "calcaneus_length": {
+      "name": "calcaneus_total_length",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FOOT_LENGTH_HEEL_POSITION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "CALCANEUS_ANTHROPOMETRY"
+    },
+    "calcaneus_height": {
+      "name": "calcaneus_vertical_height",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "HEEL_HEIGHT_ARCH_SUPPORT",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "CALCANEUS_ANTHROPOMETRY"
+    },
+    "metatarsal_lengths": {
+      "name": "individual_metatarsal_lengths",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FOOT_LENGTH_TOE_ATTACHMENT",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "METATARSAL_ANTHROPOMETRY"
+    },
+    "toe_phalanx_proximal_lengths": {
+      "name": "proximal_toe_phalanx_lengths",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "TOE_LENGTH_FOOT_SIZE",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "TOE_ANTHROPOMETRY"
+    },
+    "toe_phalanx_distal_lengths": {
+      "name": "distal_toe_phalanx_lengths",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "TOE_LENGTH_FOOT_SIZE",
+      "required_precision": "0.0005m (0.5mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "TOE_ANTHROPOMETRY"
+    },
+    "medial_arch_height": {
+      "name": "meditudinal_longitudinal_arch_height",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FOOT_HEIGHT_WEIGHT_DISTRIBUTION",
+      "required_precision": "0.002m (2mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FOOT_ARCH_ANATOMY"
+    },
+    "lateral_arch_height": {
+      "name": "lateral_longitudinal_arch_height",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FOOT_HEIGHT_STABILITY",
+      "required_precision": "0.002m (2mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FOOT_ARCH_ANATOMY"
+    },
+    "toe_spread_angle": {
+      "name": "toe_spread_angle_from_foot_centerline",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FOOT_WIDTH_BALANCE",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "FOOT_GEOMETRY"
+    }
+  },
+  "J_SKULL": {
+    "cranial_height": {
+      "name": "cranial_vertical_height",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "HEAD_HEIGHT_OVERALL_HEIGHT",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "CRANIOMETRY"
+    },
+    "cranial_width": {
+      "name": "cranial_transverse_width",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "HEAD_WIDTH_FACE_WIDTH",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "CRANIOMETRY"
+    },
+    "cranial_depth": {
+      "name": "cranial_anterior_posterior_depth",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "HEAD_DEPTH_FACE_DEPTH",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "CRANIOMETRY"
+    },
+    "mandible_length": {
+      "name": "mandible_total_length",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "FACE_DEPTH_JAW_PROJECTION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "MANDIBLE_ANTHROPOMETRY"
+    },
+    "mandible_width": {
+      "name": "mandible_bilateral_width",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": false,
+      "affects_other_parameters": "FACE_WIDTH_JAW_WIDTH",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "MANDIBLE_ANTHROPOMETRY"
+    }
+  },
+  "K_BILATERAL_SYMMETRY": {
+    "symmetry_assumption": {
+      "name": "bilateral_symmetry_assumption",
+      "unit": "boolean",
+      "current_availability": "ASSUMED",
+      "measured_or_derived": "ASSUMED",
+      "bilateral": false,
+      "affects_other_parameters": "RIGHT_SIDE_FROM_LEFT_SIDE",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANATOMICAL_VALIDATION_OF_SYMMETRY_ASSUMPTION"
+    },
+    "asymmetry_tolerance": {
+      "name": "acceptable_asymmetry_tolerance",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "REFERENCE",
+      "bilateral": false,
+      "affects_other_parameters": "BILATERAL_VALIDATION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANTHROPOMETRIC_VARIABILITY_DATA"
+    }
+  },
+  "L_JOINT_CENTERS": {
+    "shoulder_joint_center": {
+      "name": "glenohumeral_joint_center_position",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "HUMERUS_PROXIMAL_POSITION_ARM_ROTATION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "SHOULDER_JOINT_CENTER_BIOMECHANICS"
+    },
+    "elbow_joint_center": {
+      "name": "humeroulnar_joint_center_position",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FOREARM_PROXIMAL_POSITION_ELBOW_ROTATION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ELBOW_JOINT_CENTER_BIOMECHANICS"
+    },
+    "wrist_joint_center": {
+      "name": "radiocarpal_joint_center_position",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "HAND_PROXIMAL_POSITION_WRIST_ROTATION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "WRIST_JOINT_CENTER_BIOMECHANICS"
+    },
+    "hip_joint_center": {
+      "name": "acetabulofemoral_joint_center_position",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FEMUR_PROXIMAL_POSITION_LEG_ROTATION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "HIP_JOINT_CENTER_BIOMECHANICS"
+    },
+    "knee_joint_center": {
+      "name": "tibiofemoral_joint_center_position",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "TIBIA_PROXIMAL_POSITION_KNEE_ROTATION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "KNEE_JOINT_CENTER_BIOMECHANICS"
+    },
+    "ankle_joint_center": {
+      "name": "talocrural_joint_center_position",
+      "unit": "meters",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "FOOT_PROXIMAL_POSITION_ANKLE_ROTATION",
+      "required_precision": "0.001m (1mm)",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANKLE_JOINT_CENTER_BIOMECHANICS"
+    }
+  },
+  "M_COORDINATE_SYSTEM": {
+    "up_axis": {
+      "name": "vertical_axis",
+      "unit": "categorical",
+      "current_availability": "KNOWN (Z-up)",
+      "measured_or_derived": "DEFINED",
+      "bilateral": false,
+      "affects_other_parameters": "ALL_COORDINATES",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "COORDINATE_SYSTEM_CONVENTION"
+    },
+    "forward_axis": {
+      "name": "forward_axis",
+      "unit": "categorical",
+      "current_availability": "UNKNOWN",
+      "measured_or_derived": "DEFINED",
+      "bilateral": false,
+      "affects_other_parameters": "ROTATION_CONVENTIONS",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "COORDINATE_SYSTEM_CONVENTION"
+    },
+    "lateral_axis": {
+      "name": "lateral_axis",
+      "unit": "categorical",
+      "current_availability": "KNOWN (X-axis)",
+      "measured_or_derived": "DEFINED",
+      "bilateral": false,
+      "affects_other_parameters": "LEFT_RIGHT_CONVENTION",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "COORDINATE_SYSTEM_CONVENTION"
+    },
+    "handedness": {
+      "name": "coordinate_system_handedness",
+      "unit": "categorical",
+      "current_availability": "KNOWN (right-handed)",
+      "measured_or_derived": "DEFINED",
+      "bilateral": false,
+      "affects_other_parameters": "ROTATION_DIRECTION",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "COORDINATE_SYSTEM_CONVENTION"
+    },
+    "origin": {
+      "name": "coordinate_origin",
+      "unit": "meters",
+      "current_availability": "KNOWN (foot_midline_ground)",
+      "measured_or_derived": "DEFINED",
+      "bilateral": false,
+      "affects_other_parameters": "ALL_ABSOLUTE_POSITIONS",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "COORDINATE_SYSTEM_CONVENTION"
+    },
+    "units": {
+      "name": "linear_units",
+      "unit": "categorical",
+      "current_availability": "KNOWN (meters)",
+      "measured_or_derived": "DEFINED",
+      "bilateral": false,
+      "affects_other_parameters": "ALL_SCALE_RELATED_PARAMETERS",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "COORDINATE_SYSTEM_CONVENTION"
+    }
+  },
+  "N_POSE": {
+    "reference_pose": {
+      "name": "anatomical_reference_pose",
+      "unit": "categorical",
+      "current_availability": "UNKNOWN",
+      "measured_or_derived": "ASSUMED",
+      "bilateral": false,
+      "affects_other_parameters": "ALL_JOINT_ANGLES",
+      "required_precision": "EXACT",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANATOMICAL_STANDARD_POSE_DEFINITION"
+    },
+    "neutral_joint_angles": {
+      "name": "neutral_pose_joint_angles",
+      "unit": "degrees",
+      "current_availability": "MISSING",
+      "measured_or_derived": "MEASURED",
+      "bilateral": true,
+      "affects_other_parameters": "BONE_ORIENTATIONS",
+      "required_precision": "2_degrees",
+      "can_be_reconstructed_mathematically": false,
+      "reference_requirement": "ANATOMICAL_NEUTRAL_POSE_DATA"
+    }
+  }
+}

@@ -1,0 +1,520 @@
+{
+  "proportion_model": {
+    "sprint": "A0.3",
+    "date": "2026-08-13",
+    "status": "ANALYSIS_ONLY",
+    "purpose": "Anthropometric proportion relationships for deterministic anatomical reconstruction"
+  },
+  "proportion_theories": {
+    "VITRUVIAN_PROPORTIONS": {
+      "description": "Classical Vitruvian proportions based on head height as unit",
+      "reference": "Vitruvius, Leonardo da Vinci",
+      "basis": "HEAD_HEIGHT = 1/8 TOTAL_HEIGHT",
+      "current_applicability": "THEORETICAL_REFERENCE",
+      "precision_requirement": "LOW_LEVEL_REFERENCE"
+    },
+    "LEONARDO_PROPORTIONS": {
+      "description": "Leonardo da Vinci's refined Vitruvian proportions",
+      "reference": "Leonardo da Vinci, Vitruvian Man",
+      "basis": "ARM_SPAN = TOTAL_HEIGHT",
+      "current_applicability": "THEORETICAL_REFERENCE",
+      "precision_requirement": "LOW_LEVEL_REFERENCE"
+    },
+    "MODERN_ANTHROPOMETRY": {
+      "description": "Modern anthropometric data from clinical and research studies",
+      "reference": "NHANES, WHO, anthropometric research databases",
+      "basis": "STATISTICAL_AVERAGES",
+      "current_applicability": "PRIMARY_RECONSTRUCTION_BASIS",
+      "precision_requirement": "HIGH_LEVEL_REFERENCE"
+    },
+    "BONE_SCALING_LAWS": {
+      "description": "Allometric scaling relationships between bone dimensions",
+      "reference": "Biomechanical research, comparative anatomy",
+      "basis": "SCALING_EXPONENTS",
+      "current_applicability": "SECONDARY_VALIDATION",
+      "precision_requirement": "MEDIUM_LEVEL_REFERENCE"
+    }
+  },
+  "global_proportions": {
+    "height_divisions": {
+      "total_height": {
+        "reference_unit": "meters",
+        "current_value": "MISSING",
+        "derivation": "MEASURED_OR_TARGET",
+        "precision_requirement": "0.001m (1mm)"
+      },
+      "head_height_ratio": {
+        "theoretical_value": "0.125 (1/8)",
+        "anthropometric_range": "0.125-0.130",
+        "current_value": "MISSING",
+        "derivation": "HEAD_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.005 (0.5%)"
+      },
+      "neck_height_ratio": {
+        "theoretical_value": "0.025 (1/40)",
+        "anthropometric_range": "0.020-0.030",
+        "current_value": "MISSING",
+        "derivation": "NECK_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.005 (0.5%)"
+      },
+      "upper_body_ratio": {
+        "theoretical_value": "0.50 (1/2)",
+        "anthropometric_range": "0.48-0.52",
+        "current_value": "MISSING",
+        "derivation": "SHOULDER_TO_NAVEL / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "lower_body_ratio": {
+        "theoretical_value": "0.50 (1/2)",
+        "anthropometric_range": "0.48-0.52",
+        "current_value": "MISSING",
+        "derivation": "NAVEL_TO_FLOOR / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      }
+    },
+    "width_proportions": {
+      "shoulder_width_ratio": {
+        "theoretical_value": "0.25 (1/4)",
+        "anthropometric_range": "0.22-0.28",
+        "current_value": "MISSING",
+        "derivation": "SHOULDER_WIDTH / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "hip_width_ratio": {
+        "theoretical_value": "0.18 (1/5.5)",
+        "anthropometric_range": "0.16-0.20",
+        "current_value": "MISSING",
+        "derivation": "HIP_WIDTH / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "head_width_ratio": {
+        "theoretical_value": "0.08 (1/12.5)",
+        "anthropometric_range": "0.07-0.09",
+        "current_value": "MISSING",
+        "derivation": "HEAD_WIDTH / TOTAL_HEIGHT",
+        "precision_requirement": "0.005 (0.5%)"
+      }
+    },
+    "depth_proportions": {
+      "chest_depth_ratio": {
+        "theoretical_value": "0.10 (1/10)",
+        "anthropometric_range": "0.08-0.12",
+        "current_value": "MISSING",
+        "derivation": "CHEST_DEPTH / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "head_depth_ratio": {
+        "theoretical_value": "0.07 (1/14)",
+        "anthropometric_range": "0.06-0.08",
+        "current_value": "MISSING",
+        "derivation": "HEAD_DEPTH / TOTAL_HEIGHT",
+        "precision_requirement": "0.005 (0.5%)"
+      }
+    }
+  },
+  "regional_proportions": {
+    "spine_proportions": {
+      "cervical_ratio": {
+        "theoretical_value": "0.15 (15% of spine)",
+        "anthropometric_range": "0.12-0.18",
+        "current_value": "MISSING",
+        "derivation": "CERVICAL_LENGTH / TOTAL_SPINE_LENGTH",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "thoracic_ratio": {
+        "theoretical_value": "0.45 (45% of spine)",
+        "anthropometric_range": "0.42-0.48",
+        "current_value": "MISSING",
+        "derivation": "THORACIC_LENGTH / TOTAL_SPINE_LENGTH",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "lumbar_ratio": {
+        "theoretical_value": "0.30 (30% of spine)",
+        "anthropometric_range": "0.28-0.32",
+        "current_value": "MISSING",
+        "derivation": "LUMBAR_LENGTH / TOTAL_SPINE_LENGTH",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "sacrum_ratio": {
+        "theoretical_value": "0.10 (10% of spine)",
+        "anthropometric_range": "0.08-0.12",
+        "current_value": "MISSING",
+        "derivation": "SACRUM_LENGTH / TOTAL_SPINE_LENGTH",
+        "precision_requirement": "0.01 (1%)"
+      }
+    },
+    "limb_proportions": {
+      "upper_arm_ratio": {
+        "theoretical_value": "0.18 (18% of total height)",
+        "anthropometric_range": "0.16-0.20",
+        "current_value": "MISSING",
+        "derivation": "HUMERUS_LENGTH / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "forearm_ratio": {
+        "theoretical_value": "0.15 (15% of total height)",
+        "anthropometric_range": "0.13-0.17",
+        "current_value": "MISSING",
+        "derivation": "FOREARM_LENGTH / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "hand_ratio": {
+        "theoretical_value": "0.07 (7% of total height)",
+        "anthropometric_range": "0.06-0.08",
+        "current_value": "MISSING",
+        "derivation": "HAND_LENGTH / TOTAL_HEIGHT",
+        "precision_requirement": "0.005 (0.5%)"
+      },
+      "thigh_ratio": {
+        "theoretical_value": "0.25 (25% of total height)",
+        "anthropometric_range": "0.23-0.27",
+        "current_value": "MISSING",
+        "derivation": "FEMUR_LENGTH / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "lower_leg_ratio": {
+        "theoretical_value": "0.20 (20% of total height)",
+        "anthropometric_range": "0.18-0.22",
+        "current_value": "MISSING",
+        "derivation": "TIBIA_LENGTH / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "foot_ratio": {
+        "theoretical_value": "0.15 (15% of total height)",
+        "anthropometric_range": "0.13-0.17",
+        "current_value": "MISSING",
+        "derivation": "FOOT_LENGTH / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      }
+    },
+    "joint_position_proportions": {
+      "shoulder_joint_height_ratio": {
+        "theoretical_value": "0.82 (82% of total height)",
+        "anthropometric_range": "0.80-0.84",
+        "current_value": "MISSING",
+        "derivation": "SHOULDER_JOINT_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "elbow_joint_height_ratio": {
+        "theoretical_value": "0.62 (62% of total height)",
+        "anthropometric_range": "0.60-0.64",
+        "current_value": "MISSING",
+        "derivation": "ELBOW_JOINT_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "wrist_joint_height_ratio": {
+        "theoretical_value": "0.48 (48% of total height)",
+        "anthropometric_range": "0.46-0.50",
+        "current_value": "MISSING",
+        "derivation": "WRIST_JOINT_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "hip_joint_height_ratio": {
+        "theoretical_value": "0.50 (50% of total height)",
+        "anthropometric_range": "0.48-0.52",
+        "current_value": "MISSING",
+        "derivation": "HIP_JOINT_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "knee_joint_height_ratio": {
+        "theoretical_value": "0.28 (28% of total height)",
+        "anthropometric_range": "0.26-0.30",
+        "current_value": "MISSING",
+        "derivation": "KNEE_JOINT_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "ankle_joint_height_ratio": {
+        "theoretical_value": "0.08 (8% of total height)",
+        "anthropometric_range": "0.06-0.10",
+        "current_value": "MISSING",
+        "derivation": "ANKLE_JOINT_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.005 (0.5%)"
+      }
+    }
+  },
+  "hand_proportions": {
+    "hand_length_divisions": {
+      "palm_length_ratio": {
+        "theoretical_value": "0.60 (60% of hand length)",
+        "anthropometric_range": "0.55-0.65",
+        "current_value": "MISSING",
+        "derivation": "PALM_LENGTH / HAND_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "finger_length_ratio": {
+        "theoretical_value": "0.40 (40% of hand length)",
+        "anthropometric_range": "0.35-0.45",
+        "current_value": "MISSING",
+        "derivation": "FINGER_LENGTH / HAND_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      }
+    },
+    "finger_proportions": {
+      "index_finger_ratio": {
+        "theoretical_value": "0.80 (80% of palm length)",
+        "anthropometric_range": "0.75-0.85",
+        "current_value": "MISSING",
+        "derivation": "INDEX_FINGER_LENGTH / PALM_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "middle_finger_ratio": {
+        "theoretical_value": "0.90 (90% of palm length)",
+        "anthropometric_range": "0.85-0.95",
+        "current_value": "MISSING",
+        "derivation": "MIDDLE_FINGER_LENGTH / PALM_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "ring_finger_ratio": {
+        "theoretical_value": "0.85 (85% of palm length)",
+        "anthropometric_range": "0.80-0.90",
+        "current_value": "MISSING",
+        "derivation": "RING_FINGER_LENGTH / PALM_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "little_finger_ratio": {
+        "theoretical_value": "0.65 (65% of palm length)",
+        "anthropometric_range": "0.60-0.70",
+        "current_value": "MISSING",
+        "derivation": "LITTLE_FINGER_LENGTH / PALM_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "thumb_ratio": {
+        "theoretical_value": "0.70 (70% of palm length)",
+        "anthropometric_range": "0.65-0.75",
+        "current_value": "MISSING",
+        "derivation": "THUMB_LENGTH / PALM_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      }
+    },
+    "phalanx_proportions": {
+      "proximal_phalanx_ratio": {
+        "theoretical_value": "0.45 (45% of finger length)",
+        "anthropometric_range": "0.40-0.50",
+        "current_value": "MISSING",
+        "derivation": "PROXIMAL_PHALANX / FINGER_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "intermediate_phalanx_ratio": {
+        "theoretical_value": "0.30 (30% of finger length)",
+        "anthropometric_range": "0.25-0.35",
+        "current_value": "MISSING",
+        "derivation": "INTERMEDIATE_PHALANX / FINGER_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "distal_phalanx_ratio": {
+        "theoretical_value": "0.25 (25% of finger length)",
+        "anthropometric_range": "0.20-0.30",
+        "current_value": "MISSING",
+        "derivation": "DISTAL_PHALANX / FINGER_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      }
+    }
+  },
+  "foot_proportions": {
+    "foot_length_divisions": {
+      "hindfoot_ratio": {
+        "theoretical_value": "0.35 (35% of foot length)",
+        "anthropometric_range": "0.30-0.40",
+        "current_value": "MISSING",
+        "derivation": "HINDFOOT_LENGTH / FOOT_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "midfoot_ratio": {
+        "theoretical_value": "0.30 (30% of foot length)",
+        "anthropometric_range": "0.25-0.35",
+        "current_value": "MISSING",
+        "derivation": "MIDFOOT_LENGTH / FOOT_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "forefoot_ratio": {
+        "theoretical_value": "0.35 (35% of foot length)",
+        "anthropometric_range": "0.30-0.40",
+        "current_value": "MISSING",
+        "derivation": "FOREFOOT_LENGTH / FOOT_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      }
+    },
+    "toe_proportions": {
+      "big_toe_ratio": {
+        "theoretical_value": "0.35 (35% of forefoot length)",
+        "anthropometric_range": "0.30-0.40",
+        "current_value": "MISSING",
+        "derivation": "BIG_TOE_LENGTH / FOREFOOT_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "second_toe_ratio": {
+        "theoretical_value": "0.40 (40% of forefoot length)",
+        "anthropometric_range": "0.35-0.45",
+        "current_value": "MISSING",
+        "derivation": "SECOND_TOE_LENGTH / FOREFOOT_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "third_toe_ratio": {
+        "theoretical_value": "0.35 (35% of forefoot length)",
+        "anthropometric_range": "0.30-0.40",
+        "current_value": "MISSING",
+        "derivation": "THIRD_TOE_LENGTH / FOREFOOT_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "fourth_toe_ratio": {
+        "theoretical_value": "0.25 (25% of forefoot length)",
+        "anthropometric_range": "0.20-0.30",
+        "current_value": "MISSING",
+        "derivation": "FOURTH_TOE_LENGTH / FOREFOOT_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "little_toe_ratio": {
+        "theoretical_value": "0.20 (20% of forefoot length)",
+        "anthropometric_range": "0.15-0.25",
+        "current_value": "MISSING",
+        "derivation": "LITTLE_TOE_LENGTH / FOREFOOT_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      }
+    },
+    "arch_proportions": {
+      "medial_arch_height_ratio": {
+        "theoretical_value": "0.15 (15% of foot length)",
+        "anthropometric_range": "0.10-0.20",
+        "current_value": "MISSING",
+        "derivation": "MEDIAL_ARCH_HEIGHT / FOOT_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      },
+      "lateral_arch_height_ratio": {
+        "theoretical_value": "0.08 (8% of foot length)",
+        "anthropometric_range": "0.05-0.11",
+        "current_value": "MISSING",
+        "derivation": "LATERAL_ARCH_HEIGHT / FOOT_LENGTH",
+        "precision_requirement": "0.02 (2%)"
+      }
+    }
+  },
+  "gender_differences": {
+    "male_proportions": {
+      "shoulder_to_hip_ratio": {
+        "theoretical_value": "1.20 (shoulders 20% wider than hips)",
+        "anthropometric_range": "1.15-1.25",
+        "current_value": "MISSING",
+        "derivation": "SHOULDER_WIDTH / HIP_WIDTH",
+        "precision_requirement": "0.05 (5%)"
+      },
+      "head_to_body_ratio": {
+        "theoretical_value": "0.075 (7.5% of total height)",
+        "anthropometric_range": "0.070-0.080",
+        "current_value": "MISSING",
+        "derivation": "HEAD_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.005 (0.5%)"
+      }
+    },
+    "female_proportions": {
+      "shoulder_to_hip_ratio": {
+        "theoretical_value": "1.00 (shoulders equal to hips)",
+        "anthropometric_range": "0.95-1.05",
+        "current_value": "MISSING",
+        "derivation": "SHOULDER_WIDTH / HIP_WIDTH",
+        "precision_requirement": "0.05 (5%)"
+      },
+      "head_to_body_ratio": {
+        "theoretical_value": "0.080 (8.0% of total height)",
+        "anthropometric_range": "0.075-0.085",
+        "current_value": "MISSING",
+        "derivation": "HEAD_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.005 (0.5%)"
+      }
+    }
+  },
+  "age_related_changes": {
+    "child_proportions": {
+      "head_to_body_ratio": {
+        "theoretical_value": "0.15-0.20 (15-20% of total height)",
+        "anthropometric_range": "0.15-0.20",
+        "current_value": "MISSING",
+        "derivation": "HEAD_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.01 (1%)"
+      },
+      "limb_to_trunk_ratio": {
+        "theoretical_value": "0.80 (limbs 80% of trunk length)",
+        "anthropometric_range": "0.75-0.85",
+        "current_value": "MISSING",
+        "derivation": "LIMB_LENGTH / TRUNK_LENGTH",
+        "precision_requirement": "0.05 (5%)"
+      }
+    },
+    "adult_proportions": {
+      "head_to_body_ratio": {
+        "theoretical_value": "0.075-0.080 (7.5-8.0% of total height)",
+        "anthropometric_range": "0.075-0.080",
+        "current_value": "MISSING",
+        "derivation": "HEAD_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.005 (0.5%)"
+      },
+      "limb_to_trunk_ratio": {
+        "theoretical_value": "1.00 (limbs equal to trunk length)",
+        "anthropometric_range": "0.95-1.05",
+        "current_value": "MISSING",
+        "derivation": "LIMB_LENGTH / TRUNK_LENGTH",
+        "precision_requirement": "0.05 (5%)"
+      }
+    },
+    "elderly_proportions": {
+      "head_to_body_ratio": {
+        "theoretical_value": "0.080-0.085 (8.0-8.5% of total height)",
+        "anthropometric_range": "0.080-0.085",
+        "current_value": "MISSING",
+        "derivation": "HEAD_HEIGHT / TOTAL_HEIGHT",
+        "precision_requirement": "0.005 (0.5%)"
+      },
+      "limb_to_trunk_ratio": {
+        "theoretical_value": "0.95 (limbs 95% of trunk length)",
+        "anthropometric_range": "0.90-1.00",
+        "current_value": "MISSING",
+        "derivation": "LIMB_LENGTH / TRUNK_LENGTH",
+        "precision_requirement": "0.05 (5%)"
+      }
+    }
+  },
+  "proportion_validation_constraints": {
+    "total_height_consistency": {
+      "constraint": "SUM of all segment heights must equal TOTAL_HEIGHT",
+      "tolerance": "0.01m (10mm)",
+      "current_status": "UNVERIFIED"
+    },
+    "arm_span_consistency": {
+      "constraint": "ARM_SPAN should be approximately equal to TOTAL_HEIGHT",
+      "tolerance": "0.05m (50mm)",
+      "current_status": "UNVERIFIED"
+    },
+    "bilateral_symmetry": {
+      "constraint": "Left and right segments should be within tolerance",
+      "tolerance": "0.005m (5mm)",
+      "current_status": "UNVERIFIED"
+    },
+    "segment_ratio_ranges": {
+      "constraint": "All segment ratios must be within anthropometric ranges",
+      "tolerance": "SPECIFIED_PER_RATIO",
+      "current_status": "UNVERIFIED"
+    },
+    "joint_continuity": {
+      "constraint": "Joint centers must be physically reachable by adjacent segments",
+      "tolerance": "0.001m (1mm)",
+      "current_status": "UNVERIFIED"
+    }
+  },
+  "proportion_reconstruction_strategy": {
+    "primary_reference": "MODERN_ANTHROPOMETRY_DATA",
+    "secondary_reference": "VITRUVIAN_PROPORTIONS_FOR_VALIDATION",
+    "normalization_basis": "TOTAL_HEIGHT_AS_SCALING_FACTOR",
+    "gender_adjustment": "APPLY_GENDER_SPECIFIC_PROPORTIONS",
+    "age_adjustment": "APPLY_AGE_SPECIFIC_MODIFICATIONS",
+    "individualization": "PERMIT_DEVIATIONS_WITHIN_ANOMALY_TOLERANCE",
+    "validation_approach": "MULTI_CONSTRAINT_CHECKING"
+  },
+  "critical_unknowns": [
+    "All current proportion values are MISSING",
+    "Subject gender is UNKNOWN",
+    "Subject age is UNKNOWN",
+    "Target anthropometric reference population is UNKNOWN",
+    "Acceptable deviation ranges are UNDEFINED",
+    "Proportion scaling factors are UNDEFINED",
+    "Individual variation parameters are UNKNOWN"
+  ]
+}

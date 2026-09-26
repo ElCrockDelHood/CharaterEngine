@@ -1,0 +1,414 @@
+{
+  "foot_model": {
+    "sprint": "A0.3",
+    "date": "2026-08-13",
+    "status": "ANALYSIS_ONLY",
+    "purpose": "Detailed foot anatomy model for deterministic foot reconstruction"
+  },
+  "foot_overview": {
+    "structure": "Tarsals (7) + Metatarsals (5) + Phalanges (14)",
+    "total_bones_per_foot": 26,
+    "total_bones_both_feet": 52,
+    "current_state": "SIMPLIFIED_STRUCTURE_DETECTED (ANATOMICAL_FAILURE)",
+    "required_state": "FULL_26_BONE_STRUCTURE"
+  },
+  "tarsal_bones": {
+    "proximal_tarsals": {
+      "talus": {
+        "function": "Ankle_joint_connection_weight_transfer",
+        "articulations": ["Tibia", "Fibula", "Calcaneus", "Navicular"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.050-0.060m (50-60mm)",
+          "width": "0.040-0.050m (40-50mm)",
+          "height": "0.030-0.040m (30-40mm)"
+        }
+      },
+      "calcaneus": {
+        "function": "Heel_structure_weight_bearing_arch_support",
+        "articulations": ["Talus", "Cuboid", "Navicular"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.070-0.080m (70-80mm)",
+          "width": "0.030-0.040m (30-40mm)",
+          "height": "0.040-0.050m (40-50mm)"
+        }
+      }
+    },
+    "intermediate_tarsals": {
+      "navicular": {
+        "function": "Medial_arch_support_talus_connection",
+        "articulations": ["Talus", "Cuboid", "Cuneiforms"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.035-0.045m (35-45mm)",
+          "width": "0.025-0.035m (25-35mm)",
+          "height": "0.020-0.030m (20-30mm)"
+        }
+      },
+      "cuboid": {
+        "function": "Lateral_arch_support_calcaneus_connection",
+        "articulations": ["Calcaneus", "Navicular", "Fourth_metatarsal", "Fifth_metatarsal"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.030-0.040m (30-40mm)",
+          "width": "0.025-0.035m (25-35mm)",
+          "height": "0.020-0.030m (20-30mm)"
+        }
+      }
+    },
+    "distal_tarsals": {
+      "medial_cuneiform": {
+        "function": "First_metatarsal_base_medial_arch",
+        "articulations": ["Navicular", "First_metatarsal", "Intermediate_cuneiform"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.025-0.035m (25-35mm)",
+          "width": "0.020-0.030m (20-30mm)",
+          "height": "0.015-0.025m (15-25mm)"
+        }
+      },
+      "intermediate_cuneiform": {
+        "function": "Second_metatarsal_base_arch_stability",
+        "articulations": ["Navicular", "Second_metatarsal", "Medial_cuneiform", "Lateral_cuneiform"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.020-0.030m (20-30mm)",
+          "width": "0.020-0.030m (20-30mm)",
+          "height": "0.015-0.025m (15-25mm)"
+        }
+      },
+      "lateral_cuneiform": {
+        "function": "Third_metatarsal_base_lateral_arch",
+        "articulations": ["Navicular", "Third_metatarsal", "Intermediate_cuneiform", "Cuboid"],
+        "current_position": "MISSING",
+        "typical_dimensions": {
+          "length": "0.020-0.030m (20-30mm)",
+          "width": "0.020-0.030m (20-30mm)",
+          "height": "0.015-0.025m (15-25mm)"
+        }
+      }
+    }
+  },
+  "metatarsals": {
+    "first_metatarsal": {
+      "toe": "Big_toe",
+      "unique_features": ["Shortest", "Widest", "Weight_bearing"],
+      "typical_length": "0.025-0.035m (25-35mm)",
+      "typical_width": "0.015-0.020m (15-20mm)",
+      "current_length": "MISSING",
+      "current_position": "MISSING",
+      "articulation": "Medial_cuneiform"
+    },
+    "second_metatarsal": {
+      "toe": "Second_toe",
+      "unique_features": ["Longest", "Central_stability"],
+      "typical_length": "0.065-0.075m (65-75mm)",
+      "typical_width": "0.010-0.015m (10-15mm)",
+      "current_length": "MISSING",
+      "current_position": "MISSING",
+      "articulation": "Intermediate_cuneiform"
+    },
+    "third_metatarsal": {
+      "toe": "Third_toe",
+      "unique_features": ["Long", "Lateral_arch"],
+      "typical_length": "0.060-0.070m (60-70mm)",
+      "typical_width": "0.010-0.015m (10-15mm)",
+      "current_length": "MISSING",
+      "current_position": "MISSING",
+      "articulation": "Lateral_cuneiform"
+    },
+    "fourth_metatarsal": {
+      "toe": "Fourth_toe",
+      "unique_features": ["Shorter", "Lateral_arch"],
+      "typical_length": "0.055-0.065m (55-65mm)",
+      "typical_width": "0.008-0.012m (8-12mm)",
+      "current_length": "MISSING",
+      "current_position": "MISSING",
+      "articulation": "Cuboid"
+    },
+    "fifth_metatarsal": {
+      "toe": "Little_toe",
+      "unique_features": ["Shortest", "Lateral_stability"],
+      "typical_length": "0.045-0.055m (45-55mm)",
+      "typical_width": "0.008-0.012m (8-12mm)",
+      "current_length": "MISSING",
+      "current_position": "MISSING",
+      "articulation": "Cuboid"
+    }
+  },
+  "phalanges": {
+    "big_toe_phalanges": {
+      "proximal_phalanx": {
+        "toe": "Big_toe",
+        "typical_length": "0.025-0.035m (25-35mm)",
+        "typical_width": "0.012-0.015m (12-15mm)",
+        "current_length": "MISSING",
+        "current_position": "MISSING",
+        "articulation": "First_metatarsal (MTP joint)"
+      },
+      "distal_phalanx": {
+        "toe": "Big_toe",
+        "typical_length": "0.020-0.030m (20-30mm)",
+        "typical_width": "0.010-0.012m (10-12mm)",
+        "current_length": "MISSING",
+        "current_position": "MISSING",
+        "articulation": "Proximal_phalanx (IP joint)"
+      }
+    },
+    "toe_phalanges": {
+      "second_toe": {
+        "proximal_phalanx": {
+          "typical_length": "0.030-0.040m (30-40mm)",
+          "typical_width": "0.008-0.010m (8-10mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "intermediate_phalanx": {
+          "typical_length": "0.015-0.025m (15-25mm)",
+          "typical_width": "0.007-0.009m (7-9mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "distal_phalanx": {
+          "typical_length": "0.010-0.020m (10-20mm)",
+          "typical_width": "0.005-0.007m (5-7mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        }
+      },
+      "third_toe": {
+        "proximal_phalanx": {
+          "typical_length": "0.025-0.035m (25-35mm)",
+          "typical_width": "0.007-0.009m (7-9mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "intermediate_phalanx": {
+          "typical_length": "0.015-0.020m (15-20mm)",
+          "typical_width": "0.006-0.008m (6-8mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "distal_phalanx": {
+          "typical_length": "0.010-0.015m (10-15mm)",
+          "typical_width": "0.005-0.007m (5-7mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        }
+      },
+      "fourth_toe": {
+        "proximal_phalanx": {
+          "typical_length": "0.020-0.030m (20-30mm)",
+          "typical_width": "0.006-0.008m (6-8mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "intermediate_phalanx": {
+          "typical_length": "0.010-0.020m (10-20mm)",
+          "typical_width": "0.005-0.007m (5-7mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "distal_phalanx": {
+          "typical_length": "0.008-0.015m (8-15mm)",
+          "typical_width": "0.004-0.006m (4-6mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        }
+      },
+      "fifth_toe": {
+        "proximal_phalanx": {
+          "typical_length": "0.015-0.025m (15-25mm)",
+          "typical_width": "0.005-0.007m (5-7mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "intermediate_phalanx": {
+          "typical_length": "0.010-0.015m (10-15mm)",
+          "typical_width": "0.004-0.006m (4-6mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        },
+        "distal_phalanx": {
+          "typical_length": "0.005-0.010m (5-10mm)",
+          "typical_width": "0.003-0.005m (3-5mm)",
+          "current_length": "MISSING",
+          "current_position": "MISSING"
+        }
+      }
+    }
+  },
+  "foot_joints": {
+    "tarsometatarsal_joints": {
+      "joint_type": "PLANAR",
+      "motion_capability": "Limited_motion_stability",
+      "current_positions": "MISSING",
+      "functional_importance": "Arch_stability_forefoot_positioning"
+    },
+    "metatarsophalangeal_joints": {
+      "joint_type": "CONDYLOID",
+      "motion_capability": "Flexion_extension_abduction_adduction",
+      "flexion_range": "45-90°",
+      "extension_range": "0-30°",
+      "abduction_range": "10-15°",
+      "current_positions": "MISSING",
+      "functional_importance": "Toe_positioning_push_off"
+    },
+    "interphalangeal_joints": {
+      "proximal_interphalangeal": {
+        "joint_type": "HINGE",
+        "motion_capability": "Flexion_extension",
+        "flexion_range": "35-45°",
+        "current_positions": "MISSING",
+        "functional_importance": "Toe_curving_balance"
+      },
+      "distal_interphalangeal": {
+        "joint_type": "HINGE",
+        "motion_capability": "Flexion_extension",
+        "flexion_range": "30-40°",
+        "current_positions": "MISSING",
+        "functional_importance": "Toe_tip_control_balance"
+      }
+    }
+  },
+  "foot_architecture": {
+    "longitudinal_arches": {
+      "medial_longitudinal_arch": {
+        "description": "Primary weight-bearing arch on medial side",
+        "components": ["Calcaneus", "Tal us", "Navicular", "Medial_cuneiform", "First_metatarsal"],
+        "height_ratio": "0.15-0.20 of foot length",
+        "current_height": "MISSING",
+        "functional_importance": "Shock_absorption_weight_distribution"
+      },
+      "lateral_longitudinal_arch": {
+        "description": "Secondary arch on lateral side",
+        "components": ["Calcaneus", "Cuboid", "Fourth_metatarsal", "Fifth_metatarsal"],
+        "height_ratio": "0.05-0.10 of foot length",
+        "current_height": "MISSING",
+        "functional_importance": "Stability_balance"
+      }
+    },
+    "transverse_arch": {
+      "description": "Arch across forefoot at metatarsal heads",
+      "components": ["First_metatarsal", "Second_metatarsal", "Third_metatarsal", "Fourth_metatarsal", "Fifth_metatarsal"],
+      "height_ratio": "0.05-0.10 of foot width",
+      "current_height": "MISSING",
+      "functional_importance": "Weight_distribution_balance"
+    }
+  },
+  "foot_proportions": {
+    "foot_length_divisions": {
+      "hindfoot_ratio": {
+        "typical_value": "0.35 (35% of foot length)",
+        "anthropometric_range": "0.30-0.40",
+        "current_value": "MISSING"
+      },
+      "midfoot_ratio": {
+        "typical_value": "0.30 (30% of foot length)",
+        "anthropometric_range": "0.25-0.35",
+        "current_value": "MISSING"
+      },
+      "forefoot_ratio": {
+        "typical_value": "0.35 (35% of foot length)",
+        "anthropometric_range": "0.30-0.40",
+        "current_value": "MISSING"
+      }
+    },
+    "toe_length_proportions": {
+      "relative_to_second_toe": {
+        "big_toe": "0.80-0.90",
+        "second_toe": "1.00 (reference)",
+        "third_toe": "0.80-0.90",
+        "fourth_toe": "0.65-0.75",
+        "little_toe": "0.50-0.60"
+      }
+    },
+    "metatarsal_length_proportions": {
+      "relative_to_second_metatarsal": {
+        "first_metatarsal": "0.40-0.50",
+        "second_metatarsal": "1.00 (reference)",
+        "third_metatarsal": "0.90-0.95",
+        "fourth_metatarsal": "0.80-0.85",
+        "fifth_metatarsal": "0.70-0.75"
+      }
+    }
+  },
+  "foot_positioning": {
+    "foot_origin": {
+      "reference_point": "Ankle_joint_center",
+      "current_position": "MISSING",
+      "coordinate_frame": "LOWER_LEG_REFERENCED"
+    },
+    "foot_orientation": {
+      "default_pose": "PLANTAR_SURFACE_FACING_INFERIOR",
+      "natural_arch": "CONCAVE_PLANTAR_SURFACE",
+      "current_orientation": "MISSING"
+    },
+    "toe_spread": {
+      "natural_fan_angle": "15-25° total spread",
+      "individual_toe_angles": "MISSING",
+      "current_spread": "MISSING"
+    }
+  },
+  "foot_reconstruction_requirements": {
+    "minimum_data_requirements": [
+      "Foot total length",
+      "Foot width",
+      "Arch heights (medial, lateral, transverse)",
+      "Individual metatarsal lengths",
+      "Individual phalanx lengths",
+      "Toe spread angles",
+      "Tarsal bone dimensions",
+      "Joint center positions",
+      "Calcaneus orientation"
+    ],
+    "reconstruction_sequence": [
+      "Define foot origin at ankle joint center",
+      "Position talus with correct orientation",
+      "Position calcaneus with heel structure",
+      "Position remaining tarsal bones in proper arrangement",
+      "Apply arch architecture parameters",
+      "Position metatarsals with correct lengths and angles",
+      "Define toe spread pattern",
+      "Position proximal phalanges at MTP joints",
+      "Position intermediate phalanges at PIP joints",
+      "Position distal phalanges at DIP joints",
+      "Validate foot proportions",
+      "Validate arch heights",
+      "Validate joint continuity"
+    ],
+    "validation_constraints": {
+      "total_foot_length": {
+        "target_range": "0.15-0.17 * total_height",
+        "tolerance": "0.005m (5mm)",
+        "current_status": "UNVERIFIED"
+      },
+      "arch_height_proportions": {
+        "constraint": "Arch heights must follow anthropometric ratios",
+        "tolerance": "±10% of nominal ratios",
+        "current_status": "UNVERIFIED"
+      },
+      "joint_reachability": {
+        "constraint": "Joint centers must be reachable by bone lengths",
+        "tolerance": "0.001m (1mm)",
+        "current_status": "UNVERIFIED"
+      },
+      "ground_contact": {
+        "constraint": "Calcaneus and metatarsal heads must contact ground",
+        "tolerance": "0.005m (5mm)",
+        "current_status": "UNVERIFIED"
+      }
+    }
+  },
+  "critical_unknowns": [
+    "All tarsal bone positions are MISSING",
+    "All metatarsal positions are MISSING",
+    "All phalanx positions are MISSING",
+    "All joint center positions are MISSING",
+    "Arch height parameters are MISSING",
+    "Toe spread angles are MISSING",
+    "Foot origin position is MISSING",
+    "Calcaneus orientation is MISSING"
+  ]
+}

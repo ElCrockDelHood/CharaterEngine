@@ -1,0 +1,3106 @@
+{
+  "bones": [
+    {
+      "canonical_name": "FRONTAL",
+      "name": "Frontal",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0,
+        "y": -0.05,
+        "z": 3.0300000000000002
+      },
+      "tail": {
+        "x": 0,
+        "y": -0.05,
+        "z": 3.08
+      }
+    },
+    {
+      "canonical_name": "PARIETAL_L",
+      "name": "Parietal I",
+      "parent": "CRANIUM",
+      "head": {
+        "x": -0.08,
+        "y": -0.02,
+        "z": 2.9800000000000004
+      },
+      "tail": {
+        "x": -0.08,
+        "y": -0.02,
+        "z": 3.0300000000000002
+      }
+    },
+    {
+      "canonical_name": "PARIETAL_R",
+      "name": "Parietal D",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0.08,
+        "y": -0.02,
+        "z": 2.9800000000000004
+      },
+      "tail": {
+        "x": 0.08,
+        "y": -0.02,
+        "z": 3.0300000000000002
+      }
+    },
+    {
+      "canonical_name": "TEMPORAL_L",
+      "name": "Temporal I",
+      "parent": "CRANIUM",
+      "head": {
+        "x": -0.1,
+        "y": -0.1,
+        "z": 2.88
+      },
+      "tail": {
+        "x": -0.1,
+        "y": -0.1,
+        "z": 2.9800000000000004
+      }
+    },
+    {
+      "canonical_name": "TEMPORAL_R",
+      "name": "Temporal D",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0.1,
+        "y": -0.1,
+        "z": 2.88
+      },
+      "tail": {
+        "x": 0.1,
+        "y": -0.1,
+        "z": 2.9800000000000004
+      }
+    },
+    {
+      "canonical_name": "OCCIPITAL",
+      "name": "Occipital",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0,
+        "y": 0.1,
+        "z": 2.83
+      },
+      "tail": {
+        "x": 0,
+        "y": 0.1,
+        "z": 2.93
+      }
+    },
+    {
+      "canonical_name": "SPHENOID",
+      "name": "Esfenoides",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0,
+        "y": -0.05,
+        "z": 2.7800000000000002
+      },
+      "tail": {
+        "x": 0,
+        "y": -0.05,
+        "z": 2.83
+      }
+    },
+    {
+      "canonical_name": "ETHMOID",
+      "name": "Etmoides",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0,
+        "y": -0.08,
+        "z": 2.83
+      },
+      "tail": {
+        "x": 0,
+        "y": -0.08,
+        "z": 2.88
+      }
+    },
+    {
+      "canonical_name": "MAXILLA_L",
+      "name": "Maxilar I",
+      "parent": "CRANIUM",
+      "head": {
+        "x": -0.06,
+        "y": -0.08,
+        "z": 2.8000000000000003
+      },
+      "tail": {
+        "x": -0.06,
+        "y": -0.08,
+        "z": 2.85
+      }
+    },
+    {
+      "canonical_name": "MAXILLA_R",
+      "name": "Maxilar D",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0.06,
+        "y": -0.08,
+        "z": 2.8000000000000003
+      },
+      "tail": {
+        "x": 0.06,
+        "y": -0.08,
+        "z": 2.85
+      }
+    },
+    {
+      "canonical_name": "ZYGOMATIC_L",
+      "name": "Cigomatico I",
+      "parent": "CRANIUM",
+      "head": {
+        "x": -0.12,
+        "y": -0.06,
+        "z": 2.7800000000000002
+      },
+      "tail": {
+        "x": -0.12,
+        "y": -0.06,
+        "z": 2.83
+      }
+    },
+    {
+      "canonical_name": "ZYGOMATIC_R",
+      "name": "Cigomatico D",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0.12,
+        "y": -0.06,
+        "z": 2.7800000000000002
+      },
+      "tail": {
+        "x": 0.12,
+        "y": -0.06,
+        "z": 2.83
+      }
+    },
+    {
+      "canonical_name": "NASAL_L",
+      "name": "Nasal I",
+      "parent": "CRANIUM",
+      "head": {
+        "x": -0.02,
+        "y": -0.1,
+        "z": 2.93
+      },
+      "tail": {
+        "x": -0.02,
+        "y": -0.1,
+        "z": 2.96
+      }
+    },
+    {
+      "canonical_name": "NASAL_R",
+      "name": "Nasal D",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0.02,
+        "y": -0.1,
+        "z": 2.93
+      },
+      "tail": {
+        "x": 0.02,
+        "y": -0.1,
+        "z": 2.96
+      }
+    },
+    {
+      "canonical_name": "LACRIMAL_L",
+      "name": "Lagrimal I",
+      "parent": "CRANIUM",
+      "head": {
+        "x": -0.05,
+        "y": -0.08,
+        "z": 2.88
+      },
+      "tail": {
+        "x": -0.05,
+        "y": -0.08,
+        "z": 2.9000000000000004
+      }
+    },
+    {
+      "canonical_name": "LACRIMAL_R",
+      "name": "Lagrimal D",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0.05,
+        "y": -0.08,
+        "z": 2.88
+      },
+      "tail": {
+        "x": 0.05,
+        "y": -0.08,
+        "z": 2.9000000000000004
+      }
+    },
+    {
+      "canonical_name": "PALATINE_L",
+      "name": "Palatino I",
+      "parent": "CRANIUM",
+      "head": {
+        "x": -0.04,
+        "y": -0.06,
+        "z": 2.7300000000000004
+      },
+      "tail": {
+        "x": -0.04,
+        "y": -0.06,
+        "z": 2.7600000000000002
+      }
+    },
+    {
+      "canonical_name": "PALATINE_R",
+      "name": "Palatino D",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0.04,
+        "y": -0.06,
+        "z": 2.7300000000000004
+      },
+      "tail": {
+        "x": 0.04,
+        "y": -0.06,
+        "z": 2.7600000000000002
+      }
+    },
+    {
+      "canonical_name": "INFERIOR_NASAL_CONCHA_L",
+      "name": "Concha inf I",
+      "parent": "CRANIUM",
+      "head": {
+        "x": -0.05,
+        "y": -0.07,
+        "z": 2.7800000000000002
+      },
+      "tail": {
+        "x": -0.05,
+        "y": -0.07,
+        "z": 2.8000000000000003
+      }
+    },
+    {
+      "canonical_name": "INFERIOR_NASAL_CONCHA_R",
+      "name": "Concha inf D",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0.05,
+        "y": -0.07,
+        "z": 2.7800000000000002
+      },
+      "tail": {
+        "x": 0.05,
+        "y": -0.07,
+        "z": 2.8000000000000003
+      }
+    },
+    {
+      "canonical_name": "VOMER",
+      "name": "Vomer",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0,
+        "y": -0.09,
+        "z": 2.7800000000000002
+      },
+      "tail": {
+        "x": 0,
+        "y": -0.09,
+        "z": 2.83
+      }
+    },
+    {
+      "canonical_name": "MANDIBLE",
+      "name": "Mandibula",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.7300000000000004
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.7800000000000002
+      }
+    },
+    {
+      "canonical_name": "MALLEUS_L",
+      "name": "Martillo I",
+      "parent": "CRANIUM",
+      "head": {
+        "x": -0.02,
+        "y": -0.02,
+        "z": 2.83
+      },
+      "tail": {
+        "x": -0.02,
+        "y": -0.02,
+        "z": 2.84
+      }
+    },
+    {
+      "canonical_name": "MALLEUS_R",
+      "name": "Martillo D",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0.02,
+        "y": -0.02,
+        "z": 2.83
+      },
+      "tail": {
+        "x": 0.02,
+        "y": -0.02,
+        "z": 2.84
+      }
+    },
+    {
+      "canonical_name": "INCUS_L",
+      "name": "Yunque I",
+      "parent": "CRANIUM",
+      "head": {
+        "x": -0.02,
+        "y": -0.02,
+        "z": 2.8200000000000003
+      },
+      "tail": {
+        "x": -0.02,
+        "y": -0.02,
+        "z": 2.83
+      }
+    },
+    {
+      "canonical_name": "INCUS_R",
+      "name": "Yunque D",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0.02,
+        "y": -0.02,
+        "z": 2.8200000000000003
+      },
+      "tail": {
+        "x": 0.02,
+        "y": -0.02,
+        "z": 2.83
+      }
+    },
+    {
+      "canonical_name": "STAPES_L",
+      "name": "Estribo I",
+      "parent": "CRANIUM",
+      "head": {
+        "x": -0.02,
+        "y": -0.02,
+        "z": 2.81
+      },
+      "tail": {
+        "x": -0.02,
+        "y": -0.02,
+        "z": 2.8200000000000003
+      }
+    },
+    {
+      "canonical_name": "STAPES_R",
+      "name": "Estribo D",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0.02,
+        "y": -0.02,
+        "z": 2.81
+      },
+      "tail": {
+        "x": 0.02,
+        "y": -0.02,
+        "z": 2.8200000000000003
+      }
+    },
+    {
+      "canonical_name": "HYOID",
+      "name": "Hioides",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0,
+        "y": -0.08,
+        "z": 2.58
+      },
+      "tail": {
+        "x": 0,
+        "y": -0.08,
+        "z": 2.6
+      }
+    },
+    {
+      "canonical_name": "CERVICAL_1",
+      "name": "C1",
+      "parent": "CRANIUM",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.63
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.6
+      }
+    },
+    {
+      "canonical_name": "CERVICAL_2",
+      "name": "C2",
+      "parent": "CERVICAL_1",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.6
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.5700000000000003
+      }
+    },
+    {
+      "canonical_name": "CERVICAL_3",
+      "name": "C3",
+      "parent": "CERVICAL_2",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.5700000000000003
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.54
+      }
+    },
+    {
+      "canonical_name": "CERVICAL_4",
+      "name": "C4",
+      "parent": "CERVICAL_3",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.54
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.51
+      }
+    },
+    {
+      "canonical_name": "CERVICAL_5",
+      "name": "C5",
+      "parent": "CERVICAL_4",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.5100000000000002
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.4800000000000004
+      }
+    },
+    {
+      "canonical_name": "CERVICAL_6",
+      "name": "C6",
+      "parent": "CERVICAL_5",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.4800000000000004
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.45
+      }
+    },
+    {
+      "canonical_name": "CERVICAL_7",
+      "name": "C7",
+      "parent": "CERVICAL_6",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.45
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.42
+      }
+    },
+    {
+      "canonical_name": "THORACIC_1",
+      "name": "T1",
+      "parent": "CERVICAL_7",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.33
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.295
+      }
+    },
+    {
+      "canonical_name": "THORACIC_2",
+      "name": "T2",
+      "parent": "THORACIC_1",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.295
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.2600000000000002
+      }
+    },
+    {
+      "canonical_name": "THORACIC_3",
+      "name": "T3",
+      "parent": "THORACIC_2",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.26
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.225
+      }
+    },
+    {
+      "canonical_name": "THORACIC_4",
+      "name": "T4",
+      "parent": "THORACIC_3",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.225
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.1900000000000004
+      }
+    },
+    {
+      "canonical_name": "THORACIC_5",
+      "name": "T5",
+      "parent": "THORACIC_4",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.19
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.155
+      }
+    },
+    {
+      "canonical_name": "THORACIC_6",
+      "name": "T6",
+      "parent": "THORACIC_5",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.1550000000000002
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.12
+      }
+    },
+    {
+      "canonical_name": "THORACIC_7",
+      "name": "T7",
+      "parent": "THORACIC_6",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.12
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.085
+      }
+    },
+    {
+      "canonical_name": "THORACIC_8",
+      "name": "T8",
+      "parent": "THORACIC_7",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.085
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.05
+      }
+    },
+    {
+      "canonical_name": "THORACIC_9",
+      "name": "T9",
+      "parent": "THORACIC_8",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.05
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 2.015
+      }
+    },
+    {
+      "canonical_name": "THORACIC_10",
+      "name": "T10",
+      "parent": "THORACIC_9",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 2.015
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 1.98
+      }
+    },
+    {
+      "canonical_name": "THORACIC_11",
+      "name": "T11",
+      "parent": "THORACIC_10",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 1.98
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 1.9449999999999998
+      }
+    },
+    {
+      "canonical_name": "THORACIC_12",
+      "name": "T12",
+      "parent": "THORACIC_11",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 1.945
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 1.9100000000000001
+      }
+    },
+    {
+      "canonical_name": "LUMBAR_1",
+      "name": "L1",
+      "parent": "THORACIC_12",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 1.83
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 1.79
+      }
+    },
+    {
+      "canonical_name": "LUMBAR_2",
+      "name": "L2",
+      "parent": "LUMBAR_1",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 1.79
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 1.75
+      }
+    },
+    {
+      "canonical_name": "LUMBAR_3",
+      "name": "L3",
+      "parent": "LUMBAR_2",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 1.7500000000000002
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 1.7100000000000002
+      }
+    },
+    {
+      "canonical_name": "LUMBAR_4",
+      "name": "L4",
+      "parent": "LUMBAR_3",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 1.7100000000000002
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 1.6700000000000002
+      }
+    },
+    {
+      "canonical_name": "LUMBAR_5",
+      "name": "L5",
+      "parent": "LUMBAR_4",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 1.6700000000000002
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 1.6300000000000001
+      }
+    },
+    {
+      "canonical_name": "SACRUM",
+      "name": "Sacro",
+      "parent": "LUMBAR_5",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 1.5300000000000002
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 1.4300000000000002
+      }
+    },
+    {
+      "canonical_name": "COCCYX",
+      "name": "Coccix",
+      "parent": "SACRUM",
+      "head": {
+        "x": 0,
+        "y": 0,
+        "z": 1.3800000000000001
+      },
+      "tail": {
+        "x": 0,
+        "y": 0,
+        "z": 1.33
+      }
+    },
+    {
+      "canonical_name": "STERNUM",
+      "name": "Esternon",
+      "parent": "THORACIC_1",
+      "head": {
+        "x": 0,
+        "y": -0.1,
+        "z": 2.18
+      },
+      "tail": {
+        "x": 0,
+        "y": -0.1,
+        "z": 2.0300000000000002
+      }
+    },
+    {
+      "canonical_name": "RIB_01_L",
+      "name": "Costilla01I",
+      "parent": "THORACIC_1",
+      "head": {
+        "x": -0.11,
+        "y": 0,
+        "z": 2.2800000000000002
+      },
+      "tail": {
+        "x": -0.165,
+        "y": 0,
+        "z": 2.2600000000000002
+      }
+    },
+    {
+      "canonical_name": "RIB_02_L",
+      "name": "Costilla02I",
+      "parent": "THORACIC_2",
+      "head": {
+        "x": -0.12000000000000001,
+        "y": 0,
+        "z": 2.245
+      },
+      "tail": {
+        "x": -0.18000000000000002,
+        "y": 0,
+        "z": 2.2250000000000005
+      }
+    },
+    {
+      "canonical_name": "RIB_03_L",
+      "name": "Costilla03I",
+      "parent": "THORACIC_3",
+      "head": {
+        "x": -0.13,
+        "y": 0,
+        "z": 2.21
+      },
+      "tail": {
+        "x": -0.195,
+        "y": 0,
+        "z": 2.1900000000000004
+      }
+    },
+    {
+      "canonical_name": "RIB_04_L",
+      "name": "Costilla04I",
+      "parent": "THORACIC_4",
+      "head": {
+        "x": -0.14,
+        "y": 0,
+        "z": 2.1750000000000003
+      },
+      "tail": {
+        "x": -0.21000000000000002,
+        "y": 0,
+        "z": 2.1550000000000002
+      }
+    },
+    {
+      "canonical_name": "RIB_05_L",
+      "name": "Costilla05I",
+      "parent": "THORACIC_5",
+      "head": {
+        "x": -0.15000000000000002,
+        "y": 0,
+        "z": 2.14
+      },
+      "tail": {
+        "x": -0.22500000000000003,
+        "y": 0,
+        "z": 2.12
+      }
+    },
+    {
+      "canonical_name": "RIB_06_L",
+      "name": "Costilla06I",
+      "parent": "THORACIC_6",
+      "head": {
+        "x": -0.16,
+        "y": 0,
+        "z": 2.1050000000000004
+      },
+      "tail": {
+        "x": -0.24,
+        "y": 0,
+        "z": 2.085
+      }
+    },
+    {
+      "canonical_name": "RIB_07_L",
+      "name": "Costilla07I",
+      "parent": "THORACIC_7",
+      "head": {
+        "x": -0.17,
+        "y": 0,
+        "z": 2.0700000000000003
+      },
+      "tail": {
+        "x": -0.255,
+        "y": 0,
+        "z": 2.0500000000000003
+      }
+    },
+    {
+      "canonical_name": "RIB_08_L",
+      "name": "Costilla08I",
+      "parent": "THORACIC_8",
+      "head": {
+        "x": -0.18,
+        "y": 0,
+        "z": 2.035
+      },
+      "tail": {
+        "x": -0.27,
+        "y": 0,
+        "z": 2.015
+      }
+    },
+    {
+      "canonical_name": "RIB_09_L",
+      "name": "Costilla09I",
+      "parent": "THORACIC_9",
+      "head": {
+        "x": -0.19,
+        "y": 0,
+        "z": 2.0
+      },
+      "tail": {
+        "x": -0.28500000000000003,
+        "y": 0,
+        "z": 1.9800000000000002
+      }
+    },
+    {
+      "canonical_name": "RIB_10_L",
+      "name": "Costilla10I",
+      "parent": "THORACIC_10",
+      "head": {
+        "x": -0.2,
+        "y": 0,
+        "z": 1.9650000000000003
+      },
+      "tail": {
+        "x": -0.30000000000000004,
+        "y": 0,
+        "z": 1.9450000000000003
+      }
+    },
+    {
+      "canonical_name": "RIB_11_L",
+      "name": "Costilla11I",
+      "parent": "THORACIC_11",
+      "head": {
+        "x": -0.21000000000000002,
+        "y": 0,
+        "z": 1.9300000000000002
+      },
+      "tail": {
+        "x": -0.31500000000000006,
+        "y": 0,
+        "z": 1.9100000000000001
+      }
+    },
+    {
+      "canonical_name": "RIB_12_L",
+      "name": "Costilla12I",
+      "parent": "THORACIC_12",
+      "head": {
+        "x": -0.22,
+        "y": 0,
+        "z": 1.8950000000000002
+      },
+      "tail": {
+        "x": -0.33,
+        "y": 0,
+        "z": 1.8750000000000002
+      }
+    },
+    {
+      "canonical_name": "RIB_01_R",
+      "name": "Costilla01D",
+      "parent": "THORACIC_1",
+      "head": {
+        "x": 0.11,
+        "y": 0,
+        "z": 2.2800000000000002
+      },
+      "tail": {
+        "x": 0.165,
+        "y": 0,
+        "z": 2.2600000000000002
+      }
+    },
+    {
+      "canonical_name": "RIB_02_R",
+      "name": "Costilla02D",
+      "parent": "THORACIC_2",
+      "head": {
+        "x": 0.12000000000000001,
+        "y": 0,
+        "z": 2.245
+      },
+      "tail": {
+        "x": 0.18000000000000002,
+        "y": 0,
+        "z": 2.2250000000000005
+      }
+    },
+    {
+      "canonical_name": "RIB_03_R",
+      "name": "Costilla03D",
+      "parent": "THORACIC_3",
+      "head": {
+        "x": 0.13,
+        "y": 0,
+        "z": 2.21
+      },
+      "tail": {
+        "x": 0.195,
+        "y": 0,
+        "z": 2.1900000000000004
+      }
+    },
+    {
+      "canonical_name": "RIB_04_R",
+      "name": "Costilla04D",
+      "parent": "THORACIC_4",
+      "head": {
+        "x": 0.14,
+        "y": 0,
+        "z": 2.1750000000000003
+      },
+      "tail": {
+        "x": 0.21000000000000002,
+        "y": 0,
+        "z": 2.1550000000000002
+      }
+    },
+    {
+      "canonical_name": "RIB_05_R",
+      "name": "Costilla05D",
+      "parent": "THORACIC_5",
+      "head": {
+        "x": 0.15000000000000002,
+        "y": 0,
+        "z": 2.14
+      },
+      "tail": {
+        "x": 0.22500000000000003,
+        "y": 0,
+        "z": 2.12
+      }
+    },
+    {
+      "canonical_name": "RIB_06_R",
+      "name": "Costilla06D",
+      "parent": "THORACIC_6",
+      "head": {
+        "x": 0.16,
+        "y": 0,
+        "z": 2.1050000000000004
+      },
+      "tail": {
+        "x": 0.24,
+        "y": 0,
+        "z": 2.085
+      }
+    },
+    {
+      "canonical_name": "RIB_07_R",
+      "name": "Costilla07D",
+      "parent": "THORACIC_7",
+      "head": {
+        "x": 0.17,
+        "y": 0,
+        "z": 2.0700000000000003
+      },
+      "tail": {
+        "x": 0.255,
+        "y": 0,
+        "z": 2.0500000000000003
+      }
+    },
+    {
+      "canonical_name": "RIB_08_R",
+      "name": "Costilla08D",
+      "parent": "THORACIC_8",
+      "head": {
+        "x": 0.18,
+        "y": 0,
+        "z": 2.035
+      },
+      "tail": {
+        "x": 0.27,
+        "y": 0,
+        "z": 2.015
+      }
+    },
+    {
+      "canonical_name": "RIB_09_R",
+      "name": "Costilla09D",
+      "parent": "THORACIC_9",
+      "head": {
+        "x": 0.19,
+        "y": 0,
+        "z": 2.0
+      },
+      "tail": {
+        "x": 0.28500000000000003,
+        "y": 0,
+        "z": 1.9800000000000002
+      }
+    },
+    {
+      "canonical_name": "RIB_10_R",
+      "name": "Costilla10D",
+      "parent": "THORACIC_10",
+      "head": {
+        "x": 0.2,
+        "y": 0,
+        "z": 1.9650000000000003
+      },
+      "tail": {
+        "x": 0.30000000000000004,
+        "y": 0,
+        "z": 1.9450000000000003
+      }
+    },
+    {
+      "canonical_name": "RIB_11_R",
+      "name": "Costilla11D",
+      "parent": "THORACIC_11",
+      "head": {
+        "x": 0.21000000000000002,
+        "y": 0,
+        "z": 1.9300000000000002
+      },
+      "tail": {
+        "x": 0.31500000000000006,
+        "y": 0,
+        "z": 1.9100000000000001
+      }
+    },
+    {
+      "canonical_name": "RIB_12_R",
+      "name": "Costilla12D",
+      "parent": "THORACIC_12",
+      "head": {
+        "x": 0.22,
+        "y": 0,
+        "z": 1.8950000000000002
+      },
+      "tail": {
+        "x": 0.33,
+        "y": 0,
+        "z": 1.8750000000000002
+      }
+    },
+    {
+      "canonical_name": "CLAVICLE_L",
+      "name": "Clavicula I",
+      "parent": "ROOT_SKELETON",
+      "head": {
+        "x": -0.25,
+        "y": -0.1,
+        "z": 2.38
+      },
+      "tail": {
+        "x": -0.3,
+        "y": -0.1,
+        "z": 2.33
+      }
+    },
+    {
+      "canonical_name": "SCAPULA_L",
+      "name": "Escapula I",
+      "parent": "CLAVICLE_L",
+      "head": {
+        "x": -0.35,
+        "y": 0,
+        "z": 2.2800000000000002
+      },
+      "tail": {
+        "x": -0.35,
+        "y": 0,
+        "z": 2.13
+      }
+    },
+    {
+      "canonical_name": "CLAVICLE_R",
+      "name": "Clavicula D",
+      "parent": "ROOT_SKELETON",
+      "head": {
+        "x": 0.25,
+        "y": -0.1,
+        "z": 2.38
+      },
+      "tail": {
+        "x": 0.3,
+        "y": -0.1,
+        "z": 2.33
+      }
+    },
+    {
+      "canonical_name": "SCAPULA_R",
+      "name": "Escapula D",
+      "parent": "CLAVICLE_R",
+      "head": {
+        "x": 0.35,
+        "y": 0,
+        "z": 2.2800000000000002
+      },
+      "tail": {
+        "x": 0.35,
+        "y": 0,
+        "z": 2.13
+      }
+    },
+    {
+      "canonical_name": "HUMERUS_L",
+      "name": "Húmero I",
+      "parent": "SCAPULA_L",
+      "head": {
+        "x": -0.35,
+        "y": 0,
+        "z": 2.08
+      },
+      "tail": {
+        "x": -0.35,
+        "y": 0,
+        "z": 1.7300000000000002
+      }
+    },
+    {
+      "canonical_name": "RADIUS_L",
+      "name": "Radio I",
+      "parent": "HUMERUS_L",
+      "head": {
+        "x": -0.35,
+        "y": -0.05,
+        "z": 1.6800000000000002
+      },
+      "tail": {
+        "x": -0.35,
+        "y": -0.05,
+        "z": 1.3800000000000001
+      }
+    },
+    {
+      "canonical_name": "ULNA_L",
+      "name": "Cubito I",
+      "parent": "HUMERUS_L",
+      "head": {
+        "x": -0.35,
+        "y": 0.05,
+        "z": 1.6800000000000002
+      },
+      "tail": {
+        "x": -0.35,
+        "y": 0.05,
+        "z": 1.3800000000000001
+      }
+    },
+    {
+      "canonical_name": "HUMERUS_R",
+      "name": "Húmero D",
+      "parent": "SCAPULA_R",
+      "head": {
+        "x": 0.35,
+        "y": 0,
+        "z": 2.08
+      },
+      "tail": {
+        "x": 0.35,
+        "y": 0,
+        "z": 1.7300000000000002
+      }
+    },
+    {
+      "canonical_name": "RADIUS_R",
+      "name": "Radio D",
+      "parent": "HUMERUS_R",
+      "head": {
+        "x": 0.35,
+        "y": -0.05,
+        "z": 1.6800000000000002
+      },
+      "tail": {
+        "x": 0.35,
+        "y": -0.05,
+        "z": 1.3800000000000001
+      }
+    },
+    {
+      "canonical_name": "ULNA_R",
+      "name": "Cubito D",
+      "parent": "HUMERUS_R",
+      "head": {
+        "x": 0.35,
+        "y": 0.05,
+        "z": 1.6800000000000002
+      },
+      "tail": {
+        "x": 0.35,
+        "y": 0.05,
+        "z": 1.3800000000000001
+      }
+    },
+    {
+      "canonical_name": "SCAPHOID_L",
+      "name": "Scaphoid I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.36,
+        "y": -0.0,
+        "z": 1.1300000000000001
+      },
+      "tail": {
+        "x": -0.36,
+        "y": -0.0,
+        "z": 1.11
+      }
+    },
+    {
+      "canonical_name": "LUNATE_L",
+      "name": "Lunate I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.365,
+        "y": -0.02,
+        "z": 1.1250000000000002
+      },
+      "tail": {
+        "x": -0.365,
+        "y": -0.02,
+        "z": 1.1050000000000002
+      }
+    },
+    {
+      "canonical_name": "TRIQUETRUM_L",
+      "name": "Triquetrum I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.37,
+        "y": -0.04,
+        "z": 1.12
+      },
+      "tail": {
+        "x": -0.37,
+        "y": -0.04,
+        "z": 1.1
+      }
+    },
+    {
+      "canonical_name": "PISIFORM_L",
+      "name": "Pisiform I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.375,
+        "y": -0.06,
+        "z": 1.1150000000000002
+      },
+      "tail": {
+        "x": -0.375,
+        "y": -0.06,
+        "z": 1.0950000000000002
+      }
+    },
+    {
+      "canonical_name": "TRAPEZIUM_L",
+      "name": "Trapezium I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.38,
+        "y": -0.08,
+        "z": 1.11
+      },
+      "tail": {
+        "x": -0.38,
+        "y": -0.08,
+        "z": 1.09
+      }
+    },
+    {
+      "canonical_name": "TRAPEZOID_L",
+      "name": "Trapezoid I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.385,
+        "y": -0.1,
+        "z": 1.1050000000000002
+      },
+      "tail": {
+        "x": -0.385,
+        "y": -0.1,
+        "z": 1.0850000000000002
+      }
+    },
+    {
+      "canonical_name": "CAPITATE_L",
+      "name": "Capitate I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.38999999999999996,
+        "y": -0.12,
+        "z": 1.1
+      },
+      "tail": {
+        "x": -0.38999999999999996,
+        "y": -0.12,
+        "z": 1.08
+      }
+    },
+    {
+      "canonical_name": "HAMATE_L",
+      "name": "Hamate I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.39499999999999996,
+        "y": -0.14,
+        "z": 1.0950000000000002
+      },
+      "tail": {
+        "x": -0.39499999999999996,
+        "y": -0.14,
+        "z": 1.0750000000000002
+      }
+    },
+    {
+      "canonical_name": "SCAPHOID_R",
+      "name": "Scaphoid D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.36,
+        "y": -0.0,
+        "z": 1.1300000000000001
+      },
+      "tail": {
+        "x": 0.36,
+        "y": -0.0,
+        "z": 1.11
+      }
+    },
+    {
+      "canonical_name": "LUNATE_R",
+      "name": "Lunate D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.365,
+        "y": -0.02,
+        "z": 1.1250000000000002
+      },
+      "tail": {
+        "x": 0.365,
+        "y": -0.02,
+        "z": 1.1050000000000002
+      }
+    },
+    {
+      "canonical_name": "TRIQUETRUM_R",
+      "name": "Triquetrum D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.37,
+        "y": -0.04,
+        "z": 1.12
+      },
+      "tail": {
+        "x": 0.37,
+        "y": -0.04,
+        "z": 1.1
+      }
+    },
+    {
+      "canonical_name": "PISIFORM_R",
+      "name": "Pisiform D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.375,
+        "y": -0.06,
+        "z": 1.1150000000000002
+      },
+      "tail": {
+        "x": 0.375,
+        "y": -0.06,
+        "z": 1.0950000000000002
+      }
+    },
+    {
+      "canonical_name": "TRAPEZIUM_R",
+      "name": "Trapezium D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.38,
+        "y": -0.08,
+        "z": 1.11
+      },
+      "tail": {
+        "x": 0.38,
+        "y": -0.08,
+        "z": 1.09
+      }
+    },
+    {
+      "canonical_name": "TRAPEZOID_R",
+      "name": "Trapezoid D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.385,
+        "y": -0.1,
+        "z": 1.1050000000000002
+      },
+      "tail": {
+        "x": 0.385,
+        "y": -0.1,
+        "z": 1.0850000000000002
+      }
+    },
+    {
+      "canonical_name": "CAPITATE_R",
+      "name": "Capitate D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.38999999999999996,
+        "y": -0.12,
+        "z": 1.1
+      },
+      "tail": {
+        "x": 0.38999999999999996,
+        "y": -0.12,
+        "z": 1.08
+      }
+    },
+    {
+      "canonical_name": "HAMATE_R",
+      "name": "Hamate D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.39499999999999996,
+        "y": -0.14,
+        "z": 1.0950000000000002
+      },
+      "tail": {
+        "x": 0.39499999999999996,
+        "y": -0.14,
+        "z": 1.0750000000000002
+      }
+    },
+    {
+      "canonical_name": "METACARPAL_1_L",
+      "name": "Metacarpal1 I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.07,
+        "y": 0,
+        "z": 1.07
+      },
+      "tail": {
+        "x": -0.07,
+        "y": 0,
+        "z": 1.0300000000000002
+      }
+    },
+    {
+      "canonical_name": "METACARPAL_2_L",
+      "name": "Metacarpal2 I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.09,
+        "y": 0,
+        "z": 1.06
+      },
+      "tail": {
+        "x": -0.09,
+        "y": 0,
+        "z": 1.0200000000000002
+      }
+    },
+    {
+      "canonical_name": "METACARPAL_3_L",
+      "name": "Metacarpal3 I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.11,
+        "y": 0,
+        "z": 1.0500000000000003
+      },
+      "tail": {
+        "x": -0.11,
+        "y": 0,
+        "z": 1.0100000000000002
+      }
+    },
+    {
+      "canonical_name": "METACARPAL_4_L",
+      "name": "Metacarpal4 I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.13,
+        "y": 0,
+        "z": 1.04
+      },
+      "tail": {
+        "x": -0.13,
+        "y": 0,
+        "z": 1.0000000000000002
+      }
+    },
+    {
+      "canonical_name": "METACARPAL_5_L",
+      "name": "Metacarpal5 I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.15000000000000002,
+        "y": 0,
+        "z": 1.0300000000000002
+      },
+      "tail": {
+        "x": -0.15000000000000002,
+        "y": 0,
+        "z": 0.9900000000000001
+      }
+    },
+    {
+      "canonical_name": "METACARPAL_1_R",
+      "name": "Metacarpal1 D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.07,
+        "y": 0,
+        "z": 1.07
+      },
+      "tail": {
+        "x": 0.07,
+        "y": 0,
+        "z": 1.0300000000000002
+      }
+    },
+    {
+      "canonical_name": "METACARPAL_2_R",
+      "name": "Metacarpal2 D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.09,
+        "y": 0,
+        "z": 1.06
+      },
+      "tail": {
+        "x": 0.09,
+        "y": 0,
+        "z": 1.0200000000000002
+      }
+    },
+    {
+      "canonical_name": "METACARPAL_3_R",
+      "name": "Metacarpal3 D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.11,
+        "y": 0,
+        "z": 1.0500000000000003
+      },
+      "tail": {
+        "x": 0.11,
+        "y": 0,
+        "z": 1.0100000000000002
+      }
+    },
+    {
+      "canonical_name": "METACARPAL_4_R",
+      "name": "Metacarpal4 D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.13,
+        "y": 0,
+        "z": 1.04
+      },
+      "tail": {
+        "x": 0.13,
+        "y": 0,
+        "z": 1.0000000000000002
+      }
+    },
+    {
+      "canonical_name": "METACARPAL_5_R",
+      "name": "Metacarpal5 D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.15000000000000002,
+        "y": 0,
+        "z": 1.0300000000000002
+      },
+      "tail": {
+        "x": 0.15000000000000002,
+        "y": 0,
+        "z": 0.9900000000000001
+      }
+    },
+    {
+      "canonical_name": "PHALANX_PROXIMAL_1_L",
+      "name": "THUMB Prox I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.05,
+        "y": 0,
+        "z": 1.0300000000000002
+      },
+      "tail": {
+        "x": -0.05,
+        "y": 0,
+        "z": 1.0000000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_DISTAL_1_L",
+      "name": "THUMB Dist I",
+      "parent": "PHALANX_PROXIMAL_1_L",
+      "head": {
+        "x": -0.05,
+        "y": 0,
+        "z": 1.0000000000000002
+      },
+      "tail": {
+        "x": -0.05,
+        "y": 0,
+        "z": 0.9700000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_PROXIMAL_2_L",
+      "name": "INDEX Prox I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.07,
+        "y": 0,
+        "z": 1.0200000000000002
+      },
+      "tail": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.9900000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_INTERMEDIATE_2_L",
+      "name": "INDEX Inter I",
+      "parent": "PHALANX_PROXIMAL_2_L",
+      "head": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.9900000000000002
+      },
+      "tail": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.9600000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_DISTAL_2_L",
+      "name": "INDEX Dist I",
+      "parent": "PHALANX_INTERMEDIATE_2_L",
+      "head": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.9600000000000002
+      },
+      "tail": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.9300000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_PROXIMAL_3_L",
+      "name": "MIDDLE Prox I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.09,
+        "y": 0,
+        "z": 1.0100000000000002
+      },
+      "tail": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.9800000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_INTERMEDIATE_3_L",
+      "name": "MIDDLE Inter I",
+      "parent": "PHALANX_PROXIMAL_3_L",
+      "head": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.9800000000000002
+      },
+      "tail": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.9500000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_DISTAL_3_L",
+      "name": "MIDDLE Dist I",
+      "parent": "PHALANX_INTERMEDIATE_3_L",
+      "head": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.9500000000000002
+      },
+      "tail": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.9200000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_PROXIMAL_4_L",
+      "name": "RING Prox I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.11,
+        "y": 0,
+        "z": 1.0000000000000002
+      },
+      "tail": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.9700000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_INTERMEDIATE_4_L",
+      "name": "RING Inter I",
+      "parent": "PHALANX_PROXIMAL_4_L",
+      "head": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.9700000000000002
+      },
+      "tail": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.9400000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_DISTAL_4_L",
+      "name": "RING Dist I",
+      "parent": "PHALANX_INTERMEDIATE_4_L",
+      "head": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.9400000000000002
+      },
+      "tail": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.9100000000000001
+      }
+    },
+    {
+      "canonical_name": "PHALANX_PROXIMAL_5_L",
+      "name": "LITTLE Prox I",
+      "parent": "RADIUS_L",
+      "head": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.9900000000000002
+      },
+      "tail": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.9600000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_INTERMEDIATE_5_L",
+      "name": "LITTLE Inter I",
+      "parent": "PHALANX_PROXIMAL_5_L",
+      "head": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.9600000000000002
+      },
+      "tail": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.9300000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_DISTAL_5_L",
+      "name": "LITTLE Dist I",
+      "parent": "PHALANX_INTERMEDIATE_5_L",
+      "head": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.9300000000000002
+      },
+      "tail": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.9000000000000001
+      }
+    },
+    {
+      "canonical_name": "PHALANX_PROXIMAL_1_R",
+      "name": "THUMB Prox D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.05,
+        "y": 0,
+        "z": 1.0300000000000002
+      },
+      "tail": {
+        "x": 0.05,
+        "y": 0,
+        "z": 1.0000000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_DISTAL_1_R",
+      "name": "THUMB Dist D",
+      "parent": "PHALANX_PROXIMAL_1_R",
+      "head": {
+        "x": 0.05,
+        "y": 0,
+        "z": 1.0000000000000002
+      },
+      "tail": {
+        "x": 0.05,
+        "y": 0,
+        "z": 0.9700000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_PROXIMAL_2_R",
+      "name": "INDEX Prox D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.07,
+        "y": 0,
+        "z": 1.0200000000000002
+      },
+      "tail": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.9900000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_INTERMEDIATE_2_R",
+      "name": "INDEX Inter D",
+      "parent": "PHALANX_PROXIMAL_2_R",
+      "head": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.9900000000000002
+      },
+      "tail": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.9600000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_DISTAL_2_R",
+      "name": "INDEX Dist D",
+      "parent": "PHALANX_INTERMEDIATE_2_R",
+      "head": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.9600000000000002
+      },
+      "tail": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.9300000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_PROXIMAL_3_R",
+      "name": "MIDDLE Prox D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.09,
+        "y": 0,
+        "z": 1.0100000000000002
+      },
+      "tail": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.9800000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_INTERMEDIATE_3_R",
+      "name": "MIDDLE Inter D",
+      "parent": "PHALANX_PROXIMAL_3_R",
+      "head": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.9800000000000002
+      },
+      "tail": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.9500000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_DISTAL_3_R",
+      "name": "MIDDLE Dist D",
+      "parent": "PHALANX_INTERMEDIATE_3_R",
+      "head": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.9500000000000002
+      },
+      "tail": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.9200000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_PROXIMAL_4_R",
+      "name": "RING Prox D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.11,
+        "y": 0,
+        "z": 1.0000000000000002
+      },
+      "tail": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.9700000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_INTERMEDIATE_4_R",
+      "name": "RING Inter D",
+      "parent": "PHALANX_PROXIMAL_4_R",
+      "head": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.9700000000000002
+      },
+      "tail": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.9400000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_DISTAL_4_R",
+      "name": "RING Dist D",
+      "parent": "PHALANX_INTERMEDIATE_4_R",
+      "head": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.9400000000000002
+      },
+      "tail": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.9100000000000001
+      }
+    },
+    {
+      "canonical_name": "PHALANX_PROXIMAL_5_R",
+      "name": "LITTLE Prox D",
+      "parent": "RADIUS_R",
+      "head": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.9900000000000002
+      },
+      "tail": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.9600000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_INTERMEDIATE_5_R",
+      "name": "LITTLE Inter D",
+      "parent": "PHALANX_PROXIMAL_5_R",
+      "head": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.9600000000000002
+      },
+      "tail": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.9300000000000002
+      }
+    },
+    {
+      "canonical_name": "PHALANX_DISTAL_5_R",
+      "name": "LITTLE Dist D",
+      "parent": "PHALANX_INTERMEDIATE_5_R",
+      "head": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.9300000000000002
+      },
+      "tail": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.9000000000000001
+      }
+    },
+    {
+      "canonical_name": "COXAL_L",
+      "name": "Coxal I",
+      "parent": "SACRUM",
+      "head": {
+        "x": -0.15,
+        "y": 0,
+        "z": 1.4300000000000002
+      },
+      "tail": {
+        "x": -0.15,
+        "y": 0,
+        "z": 1.33
+      }
+    },
+    {
+      "canonical_name": "COXAL_R",
+      "name": "Coxal D",
+      "parent": "SACRUM",
+      "head": {
+        "x": 0.15,
+        "y": 0,
+        "z": 1.4300000000000002
+      },
+      "tail": {
+        "x": 0.15,
+        "y": 0,
+        "z": 1.33
+      }
+    },
+    {
+      "canonical_name": "FEMUR_L",
+      "name": "Femur I",
+      "parent": "COXAL_L",
+      "head": {
+        "x": -0.1,
+        "y": 0,
+        "z": 1.2800000000000002
+      },
+      "tail": {
+        "x": -0.1,
+        "y": 0,
+        "z": 0.8300000000000002
+      }
+    },
+    {
+      "canonical_name": "FEMUR_R",
+      "name": "Femur D",
+      "parent": "COXAL_R",
+      "head": {
+        "x": 0.1,
+        "y": 0,
+        "z": 1.2800000000000002
+      },
+      "tail": {
+        "x": 0.1,
+        "y": 0,
+        "z": 0.8300000000000002
+      }
+    },
+    {
+      "canonical_name": "PATELLA_L",
+      "name": "Rotula I",
+      "parent": "FEMUR_L",
+      "head": {
+        "x": -0.1,
+        "y": -0.05,
+        "z": 0.8300000000000002
+      },
+      "tail": {
+        "x": -0.1,
+        "y": -0.07,
+        "z": 0.8300000000000002
+      }
+    },
+    {
+      "canonical_name": "PATELLA_R",
+      "name": "Rotula D",
+      "parent": "FEMUR_R",
+      "head": {
+        "x": 0.1,
+        "y": -0.05,
+        "z": 0.8300000000000002
+      },
+      "tail": {
+        "x": 0.1,
+        "y": -0.07,
+        "z": 0.8300000000000002
+      }
+    },
+    {
+      "canonical_name": "TIBIA_L",
+      "name": "Tibia I",
+      "parent": "FEMUR_L",
+      "head": {
+        "x": -0.1,
+        "y": 0,
+        "z": 0.7800000000000001
+      },
+      "tail": {
+        "x": -0.1,
+        "y": 0,
+        "z": 0.3800000000000001
+      }
+    },
+    {
+      "canonical_name": "FIBULA_L",
+      "name": "Perone I",
+      "parent": "FEMUR_L",
+      "head": {
+        "x": -0.1,
+        "y": -0.05,
+        "z": 0.7800000000000001
+      },
+      "tail": {
+        "x": -0.1,
+        "y": -0.05,
+        "z": 0.3800000000000001
+      }
+    },
+    {
+      "canonical_name": "TIBIA_R",
+      "name": "Tibia D",
+      "parent": "FEMUR_R",
+      "head": {
+        "x": 0.1,
+        "y": 0,
+        "z": 0.7800000000000001
+      },
+      "tail": {
+        "x": 0.1,
+        "y": 0,
+        "z": 0.3800000000000001
+      }
+    },
+    {
+      "canonical_name": "FIBULA_R",
+      "name": "Perone D",
+      "parent": "FEMUR_R",
+      "head": {
+        "x": 0.1,
+        "y": -0.05,
+        "z": 0.7800000000000001
+      },
+      "tail": {
+        "x": 0.1,
+        "y": -0.05,
+        "z": 0.3800000000000001
+      }
+    },
+    {
+      "canonical_name": "TALUS_L",
+      "name": "Talus I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.15000000000000002,
+        "y": -0.0,
+        "z": 0.28000000000000014
+      },
+      "tail": {
+        "x": -0.15000000000000002,
+        "y": -0.0,
+        "z": 0.2500000000000001
+      }
+    },
+    {
+      "canonical_name": "CALCANEUS_L",
+      "name": "Calcaneus I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.155,
+        "y": -0.02,
+        "z": 0.27000000000000013
+      },
+      "tail": {
+        "x": -0.155,
+        "y": -0.02,
+        "z": 0.2400000000000001
+      }
+    },
+    {
+      "canonical_name": "NAVICULAR_L",
+      "name": "Navicular I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.16,
+        "y": -0.04,
+        "z": 0.2600000000000001
+      },
+      "tail": {
+        "x": -0.16,
+        "y": -0.04,
+        "z": 0.2300000000000001
+      }
+    },
+    {
+      "canonical_name": "CUBOID_L",
+      "name": "Cuboid I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.165,
+        "y": -0.06,
+        "z": 0.2500000000000001
+      },
+      "tail": {
+        "x": -0.165,
+        "y": -0.06,
+        "z": 0.22000000000000008
+      }
+    },
+    {
+      "canonical_name": "CUNEIFORM_MEDIAL_L",
+      "name": "Cuneiform_Medial I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.17,
+        "y": -0.08,
+        "z": 0.2400000000000001
+      },
+      "tail": {
+        "x": -0.17,
+        "y": -0.08,
+        "z": 0.21000000000000008
+      }
+    },
+    {
+      "canonical_name": "CUNEIFORM_INTERMEDIATE_L",
+      "name": "Cuneiform_Intermediate I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.17500000000000002,
+        "y": -0.1,
+        "z": 0.2300000000000001
+      },
+      "tail": {
+        "x": -0.17500000000000002,
+        "y": -0.1,
+        "z": 0.20000000000000007
+      }
+    },
+    {
+      "canonical_name": "CUNEIFORM_LATERAL_L",
+      "name": "Cuneiform_Lateral I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.18,
+        "y": -0.12,
+        "z": 0.2200000000000002
+      },
+      "tail": {
+        "x": -0.18,
+        "y": -0.12,
+        "z": 0.19000000000000017
+      }
+    },
+    {
+      "canonical_name": "TALUS_R",
+      "name": "Talus D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.15000000000000002,
+        "y": -0.0,
+        "z": 0.28000000000000014
+      },
+      "tail": {
+        "x": 0.15000000000000002,
+        "y": -0.0,
+        "z": 0.2500000000000001
+      }
+    },
+    {
+      "canonical_name": "CALCANEUS_R",
+      "name": "Calcaneus D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.155,
+        "y": -0.02,
+        "z": 0.27000000000000013
+      },
+      "tail": {
+        "x": 0.155,
+        "y": -0.02,
+        "z": 0.2400000000000001
+      }
+    },
+    {
+      "canonical_name": "NAVICULAR_R",
+      "name": "Navicular D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.16,
+        "y": -0.04,
+        "z": 0.2600000000000001
+      },
+      "tail": {
+        "x": 0.16,
+        "y": -0.04,
+        "z": 0.2300000000000001
+      }
+    },
+    {
+      "canonical_name": "CUBOID_R",
+      "name": "Cuboid D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.165,
+        "y": -0.06,
+        "z": 0.2500000000000001
+      },
+      "tail": {
+        "x": 0.165,
+        "y": -0.06,
+        "z": 0.22000000000000008
+      }
+    },
+    {
+      "canonical_name": "CUNEIFORM_MEDIAL_R",
+      "name": "Cuneiform_Medial D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.17,
+        "y": -0.08,
+        "z": 0.2400000000000001
+      },
+      "tail": {
+        "x": 0.17,
+        "y": -0.08,
+        "z": 0.21000000000000008
+      }
+    },
+    {
+      "canonical_name": "CUNEIFORM_INTERMEDIATE_R",
+      "name": "Cuneiform_Intermediate D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.17500000000000002,
+        "y": -0.1,
+        "z": 0.2300000000000001
+      },
+      "tail": {
+        "x": 0.17500000000000002,
+        "y": -0.1,
+        "z": 0.20000000000000007
+      }
+    },
+    {
+      "canonical_name": "CUNEIFORM_LATERAL_R",
+      "name": "Cuneiform_Lateral D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.18,
+        "y": -0.12,
+        "z": 0.2200000000000002
+      },
+      "tail": {
+        "x": 0.18,
+        "y": -0.12,
+        "z": 0.19000000000000017
+      }
+    },
+    {
+      "canonical_name": "METATARSAL_1_L",
+      "name": "Metatarsal1 I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.17000000000000015
+      },
+      "tail": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.1200000000000001
+      }
+    },
+    {
+      "canonical_name": "METATARSAL_2_L",
+      "name": "Metatarsal2 I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.16000000000000014
+      },
+      "tail": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.1100000000000001
+      }
+    },
+    {
+      "canonical_name": "METATARSAL_3_L",
+      "name": "Metatarsal3 I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.15000000000000013
+      },
+      "tail": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.10000000000000009
+      }
+    },
+    {
+      "canonical_name": "METATARSAL_4_L",
+      "name": "Metatarsal4 I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.14000000000000012
+      },
+      "tail": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.09000000000000008
+      }
+    },
+    {
+      "canonical_name": "METATARSAL_5_L",
+      "name": "Metatarsal5 I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.15000000000000002,
+        "y": 0,
+        "z": 0.13000000000000012
+      },
+      "tail": {
+        "x": -0.15000000000000002,
+        "y": 0,
+        "z": 0.08000000000000007
+      }
+    },
+    {
+      "canonical_name": "METATARSAL_1_R",
+      "name": "Metatarsal1 D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.17000000000000015
+      },
+      "tail": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.1200000000000001
+      }
+    },
+    {
+      "canonical_name": "METATARSAL_2_R",
+      "name": "Metatarsal2 D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.16000000000000014
+      },
+      "tail": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.1100000000000001
+      }
+    },
+    {
+      "canonical_name": "METATARSAL_3_R",
+      "name": "Metatarsal3 D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.15000000000000013
+      },
+      "tail": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.10000000000000009
+      }
+    },
+    {
+      "canonical_name": "METATARSAL_4_R",
+      "name": "Metatarsal4 D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.14000000000000012
+      },
+      "tail": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.09000000000000008
+      }
+    },
+    {
+      "canonical_name": "METATARSAL_5_R",
+      "name": "Metatarsal5 D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.15000000000000002,
+        "y": 0,
+        "z": 0.13000000000000012
+      },
+      "tail": {
+        "x": 0.15000000000000002,
+        "y": 0,
+        "z": 0.08000000000000007
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_PROXIMAL_1_L",
+      "name": "HALLUX Prox I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.05,
+        "y": 0,
+        "z": 0.13000000000000012
+      },
+      "tail": {
+        "x": -0.05,
+        "y": 0,
+        "z": 0.10000000000000009
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_DISTAL_1_L",
+      "name": "HALLUX Dist I",
+      "parent": "TOE_PHALANX_PROXIMAL_1_L",
+      "head": {
+        "x": -0.05,
+        "y": 0,
+        "z": 0.10000000000000009
+      },
+      "tail": {
+        "x": -0.05,
+        "y": 0,
+        "z": 0.07000000000000006
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_PROXIMAL_2_L",
+      "name": "SECOND Prox I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.1200000000000001
+      },
+      "tail": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.09000000000000008
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_INTERMEDIATE_2_L",
+      "name": "SECOND Inter I",
+      "parent": "TOE_PHALANX_PROXIMAL_2_L",
+      "head": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.09000000000000008
+      },
+      "tail": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.06000000000000005
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_DISTAL_2_L",
+      "name": "SECOND Dist I",
+      "parent": "TOE_PHALANX_INTERMEDIATE_2_L",
+      "head": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.06000000000000005
+      },
+      "tail": {
+        "x": -0.07,
+        "y": 0,
+        "z": 0.030000000000000027
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_PROXIMAL_3_L",
+      "name": "THIRD Prox I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.1100000000000001
+      },
+      "tail": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.08000000000000007
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_INTERMEDIATE_3_L",
+      "name": "THIRD Inter I",
+      "parent": "TOE_PHALANX_PROXIMAL_3_L",
+      "head": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.08000000000000007
+      },
+      "tail": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.050000000000000044
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_DISTAL_3_L",
+      "name": "THIRD Dist I",
+      "parent": "TOE_PHALANX_INTERMEDIATE_3_L",
+      "head": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.050000000000000044
+      },
+      "tail": {
+        "x": -0.09,
+        "y": 0,
+        "z": 0.020000000000000018
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_PROXIMAL_4_L",
+      "name": "FOURTH Prox I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.10000000000000009
+      },
+      "tail": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.07000000000000006
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_INTERMEDIATE_4_L",
+      "name": "FOURTH Inter I",
+      "parent": "TOE_PHALANX_PROXIMAL_4_L",
+      "head": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.07000000000000006
+      },
+      "tail": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.040000000000000036
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_DISTAL_4_L",
+      "name": "FOURTH Dist I",
+      "parent": "TOE_PHALANX_INTERMEDIATE_4_L",
+      "head": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.040000000000000036
+      },
+      "tail": {
+        "x": -0.11,
+        "y": 0,
+        "z": 0.010000000000000009
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_PROXIMAL_5_L",
+      "name": "FIFTH Prox I",
+      "parent": "TIBIA_L",
+      "head": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.09000000000000008
+      },
+      "tail": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.06000000000000005
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_INTERMEDIATE_5_L",
+      "name": "FIFTH Inter I",
+      "parent": "TOE_PHALANX_PROXIMAL_5_L",
+      "head": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.06000000000000005
+      },
+      "tail": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.030000000000000027
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_DISTAL_5_L",
+      "name": "FIFTH Dist I",
+      "parent": "TOE_PHALANX_INTERMEDIATE_5_L",
+      "head": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.030000000000000027
+      },
+      "tail": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0.0
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_PROXIMAL_1_R",
+      "name": "HALLUX Prox D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.05,
+        "y": 0,
+        "z": 0.13000000000000012
+      },
+      "tail": {
+        "x": 0.05,
+        "y": 0,
+        "z": 0.10000000000000009
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_DISTAL_1_R",
+      "name": "HALLUX Dist D",
+      "parent": "TOE_PHALANX_PROXIMAL_1_R",
+      "head": {
+        "x": 0.05,
+        "y": 0,
+        "z": 0.10000000000000009
+      },
+      "tail": {
+        "x": 0.05,
+        "y": 0,
+        "z": 0.07000000000000006
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_PROXIMAL_2_R",
+      "name": "SECOND Prox D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.1200000000000001
+      },
+      "tail": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.09000000000000008
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_INTERMEDIATE_2_R",
+      "name": "SECOND Inter D",
+      "parent": "TOE_PHALANX_PROXIMAL_2_R",
+      "head": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.09000000000000008
+      },
+      "tail": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.06000000000000005
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_DISTAL_2_R",
+      "name": "SECOND Dist D",
+      "parent": "TOE_PHALANX_INTERMEDIATE_2_R",
+      "head": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.06000000000000005
+      },
+      "tail": {
+        "x": 0.07,
+        "y": 0,
+        "z": 0.030000000000000027
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_PROXIMAL_3_R",
+      "name": "THIRD Prox D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.1100000000000001
+      },
+      "tail": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.08000000000000007
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_INTERMEDIATE_3_R",
+      "name": "THIRD Inter D",
+      "parent": "TOE_PHALANX_PROXIMAL_3_R",
+      "head": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.08000000000000007
+      },
+      "tail": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.050000000000000044
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_DISTAL_3_R",
+      "name": "THIRD Dist D",
+      "parent": "TOE_PHALANX_INTERMEDIATE_3_R",
+      "head": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.050000000000000044
+      },
+      "tail": {
+        "x": 0.09,
+        "y": 0,
+        "z": 0.020000000000000018
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_PROXIMAL_4_R",
+      "name": "FOURTH Prox D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.10000000000000009
+      },
+      "tail": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.07000000000000006
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_INTERMEDIATE_4_R",
+      "name": "FOURTH Inter D",
+      "parent": "TOE_PHALANX_PROXIMAL_4_R",
+      "head": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.07000000000000006
+      },
+      "tail": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.040000000000000036
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_DISTAL_4_R",
+      "name": "FOURTH Dist D",
+      "parent": "TOE_PHALANX_INTERMEDIATE_4_R",
+      "head": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.040000000000000036
+      },
+      "tail": {
+        "x": 0.11,
+        "y": 0,
+        "z": 0.010000000000000009
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_PROXIMAL_5_R",
+      "name": "FIFTH Prox D",
+      "parent": "TIBIA_R",
+      "head": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.09000000000000008
+      },
+      "tail": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.06000000000000005
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_INTERMEDIATE_5_R",
+      "name": "FIFTH Inter D",
+      "parent": "TOE_PHALANX_PROXIMAL_5_R",
+      "head": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.06000000000000005
+      },
+      "tail": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.030000000000000027
+      }
+    },
+    {
+      "canonical_name": "TOE_PHALANX_DISTAL_5_R",
+      "name": "FIFTH Dist D",
+      "parent": "TOE_PHALANX_INTERMEDIATE_5_R",
+      "head": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.030000000000000027
+      },
+      "tail": {
+        "x": 0.13,
+        "y": 0,
+        "z": 0.0
+      }
+    }
+  ],
+  "containers": [
+    {
+      "canonical_name": "ROOT_SKELETON",
+      "name": "RootSkeleton",
+      "parent": null
+    },
+    {
+      "canonical_name": "CRANIUM",
+      "name": "Craneo",
+      "parent": "ROOT_SKELETON"
+    }
+  ]
+}

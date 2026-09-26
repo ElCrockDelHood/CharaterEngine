@@ -1,0 +1,280 @@
+{
+  "coordinate_system_verification": {
+    "sprint": "A0.3",
+    "date": "2026-08-13",
+    "status": "ANALYSIS_ONLY",
+    "purpose": "Coordinate system definition and verification for anatomical reconstruction"
+  },
+  "current_coordinate_system": {
+    "up_axis": {
+      "value": "Z",
+      "direction": "POSITIVE_Z_UP",
+      "confirmation": "VERIFIED_FROM_CURRENT_DATA",
+      "consistency_with_anatomy": "ANATOMICAL_STANDARD"
+    },
+    "forward_axis": {
+      "value": "UNKNOWN",
+      "direction": "UNKNOWN",
+      "confirmation": "MISSING",
+      "consistency_with_anatomy": "NEEDS_DETERMINATION"
+    },
+    "lateral_axis": {
+      "value": "X",
+      "direction": "POSITIVE_X_LEFT_TO_RIGHT",
+      "confirmation": "VERIFIED_FROM_CURRENT_DATA",
+      "consistency_with_anatomy": "ANATOMICAL_STANDARD"
+    },
+    "handedness": {
+      "value": "RIGHT_HANDED",
+      "confirmation": "VERIFIED_FROM_CURRENT_DATA",
+      "consistency_with_anatomy": "ANATOMICAL_STANDARD"
+    },
+    "linear_units": {
+      "value": "METERS",
+      "confirmation": "VERIFIED_FROM_CURRENT_DATA",
+      "consistency_with_anatomy": "ANATOMICAL_STANDARD"
+    },
+    "angular_units": {
+      "value": "UNKNOWN",
+      "confirmation": "MISSING",
+      "consistency_with_anatomy": "NEEDS_DETERMINATION"
+    }
+  },
+  "coordinate_origin": {
+    "current_origin": {
+      "location": "FOOT_MIDLINE_GROUND_LEVEL",
+      "position": "X=0, Y=0, Z=0",
+      "confirmation": "VERIFIED_FROM_CURRENT_DATA",
+      "consistency_with_anatomy": "ANATOMICAL_STANDARD"
+    },
+    "alternative_origins": {
+      "pelvic_center": {
+        "description": "Center of pelvis",
+        "advantages": ["Natural_body_center", "Lower_body_reference"],
+        "disadvantages": ["Not_ground_based", "Requires_height_offset"]
+      },
+      "sacral_promontory": {
+        "description": "Sacral promontory",
+        "advantages": ["Spine_attachment_point", "Standard_anatomical_landmark"],
+        "disadvantages": ["Not_ground_based", "Requires_height_offset"]
+      },
+      "body_center_of_mass": {
+        "description": "Overall center of mass",
+        "advantages": ["Biomechanical_center", "Natural_balance_point"],
+        "disadvantages": ["Variable_position", "Not_fixed_anatomical_point"]
+      }
+    }
+  },
+  "axis_conventions": {
+    "up_axis_conventions": {
+      "Z_UP": {
+        "description": "Positive Z points upward",
+        "usage": ["Blender", "Many_3D_applications"],
+        "current_status": "ACTIVE"
+      },
+      "Y_UP": {
+        "description": "Positive Y points upward",
+        "usage": ["Maya", "Many_3D_applications"],
+        "current_status": "NOT_USED"
+      }
+    },
+    "forward_axis_conventions": {
+      "NEGATIVE_Y_FORWARD": {
+        "description": "Negative Y points forward (when Z is up)",
+        "usage": ["Many_3D_applications"],
+        "current_status": "POTENTIAL"
+      },
+      "POSITIVE_X_FORWARD": {
+        "description": "Positive X points forward (when Z is up)",
+        "usage": ["Some_applications"],
+        "current_status": "POTENTIAL"
+      }
+    },
+    "lateral_axis_conventions": {
+      "POSITIVE_X_RIGHT": {
+        "description": "Positive X points right",
+        "usage": ["Many_applications"],
+        "current_status": "POTENTIAL"
+      },
+      "POSITIVE_X_LEFT": {
+        "description": "Positive X points left",
+        "usage": ["Some_applications"],
+        "current_status": "CURRENT"
+      }
+    }
+  },
+  "rotation_conventions": {
+    "rotation_order": {
+      "current_value": "UNKNOWN",
+      "possible_orders": [
+        "XYZ",
+        "XZY",
+        "YXZ",
+        "YZX",
+        "ZXY",
+        "ZYX"
+      ],
+      "current_status": "MISSING"
+    },
+    "rotation_direction": {
+      "current_value": "UNKNOWN",
+      "possible_directions": [
+        "COUNTER_CLOCKWISE_POSITIVE",
+        "CLOCKWISE_POSITIVE"
+      ],
+      "current_status": "MISSING"
+    },
+    "euler_vs_quaternion": {
+      "current_value": "UNKNOWN",
+      "preferences": {
+        "euler_angles": ["Intuitive", "Common_in_animation"],
+        "quaternions": ["No_gimbal_lock", "Smooth_interpolation"]
+      },
+      "current_status": "MISSING"
+    }
+  },
+  "coordinate_frame_transformations": {
+    "world_to_local": {
+      "method": "UNKNOWN",
+      "current_implementation": "MISSING",
+      "required_for": ["Bone_local_positioning", "Joint_angle_definitions"]
+    },
+    "local_to_world": {
+      "method": "UNKNOWN",
+      "current_implementation": "MISSING",
+      "required_for": ["Bone_world_positioning", "Global_validation"]
+    },
+    "parent_to_child": {
+      "method": "UNKNOWN",
+      "current_implementation": "MISSING",
+      "required_for": ["Hierarchical_positioning", "Chain_continuity"]
+    }
+  },
+  "scale_consistency": {
+    "current_scale": {
+      "value": "1.0",
+      "unit": "METERS",
+      "verification": "VERIFIED"
+    },
+    "scale_application": {
+      "uniform_scaling": {
+        "current_status": "UNKNOWN",
+        "requirement": "UNIFORM_SCALING_FOR_BONES"
+      },
+      "non_uniform_scaling": {
+        "current_status": "UNKNOWN",
+        "requirement": "AVOID_NON_UNIFORM_SCALING"
+      }
+    }
+  },
+  "coordinate_system_validation": {
+    "vertical_consistency": {
+      "test": "Z-axis points upward",
+      "expected_result": "POSITIVE_Z_UP",
+      "current_result": "PASS",
+      "status": "VERIFIED"
+    },
+    "lateral_consistency": {
+      "test": "X-axis defines left-right",
+      "expected_result": "POSITIVE_X_LEFT_TO_RIGHT",
+      "current_result": "PASS",
+      "status": "VERIFIED"
+    },
+    "handedness_consistency": {
+      "test": "Right-handed coordinate system",
+      "expected_result": "RIGHT_HANDED",
+      "current_result": "PASS",
+      "status": "VERIFIED"
+    },
+    "unit_consistency": {
+      "test": "Linear units in meters",
+      "expected_result": "METERS",
+      "current_result": "PASS",
+      "status": "VERIFIED"
+    },
+    "origin_consistency": {
+      "test": "Origin at foot midline ground",
+      "expected_result": "FOOT_MIDLINE_GROUND",
+      "current_result": "PASS",
+      "status": "VERIFIED"
+    },
+    "forward_axis_consistency": {
+      "test": "Forward axis defined",
+      "expected_result": "DEFINED_FORWARD_AXIS",
+      "current_result": "FAIL",
+      "status": "MISSING"
+    },
+    "rotation_consistency": {
+      "test": "Rotation conventions defined",
+      "expected_result": "DEFINED_ROTATION_CONVENTIONS",
+      "current_result": "FAIL",
+      "status": "MISSING"
+    }
+  },
+  "coordinate_system_issues": {
+    "critical_issues": [
+      "Forward axis not defined",
+      "Rotation order not defined",
+      "Rotation direction not defined",
+      "Euler vs quaternion preference not defined"
+    ],
+    "potential_issues": [
+      "Coordinate frame transformation methods not implemented",
+      "Scale application not verified",
+      "Local vs world coordinate consistency not validated"
+    ]
+  },
+  "coordinate_system_requirements": {
+    "minimum_requirements": [
+      "Define forward axis (Y-axis direction)",
+      "Define rotation order (e.g., ZYX)",
+      "Define rotation direction (counter-clockwise positive)",
+      "Define rotation representation (Euler vs quaternion)",
+      "Implement coordinate frame transformations",
+      "Validate local vs world coordinate consistency"
+    ],
+    "recommended_conventions": {
+      "forward_axis": "NEGATIVE_Y_FORWARD (when Z is up)",
+      "rotation_order": "ZYX (intrinsic rotations)",
+      "rotation_direction": "COUNTER_CLOCKWISE_POSITIVE",
+      "rotation_representation": "QUATERNIONS_FOR_INTERPOLATION_EULER_FOR_EDITING"
+    }
+  },
+  "coordinate_system_integration": {
+    "blender_integration": {
+      "current_status": "PARTIALLY_COMPATIBLE",
+      "known_compatible": ["Z_UP", "RIGHT_HANDED", "METERS"],
+      "needs_definition": ["FORWARD_AXIS", "ROTATION_CONVENTIONS"]
+    },
+    "internal_coordinate_system": {
+      "current_status": "PARTIALLY_DEFINED",
+      "known_defined": ["UP_AXIS", "LATERAL_AXIS", "HANDEDNESS", "UNITS"],
+      "needs_definition": ["FORWARD_AXIS", "ROTATION_CONVENTIONS"]
+    }
+  },
+  "coordinate_system_determinations": {
+    "forward_axis_recommendation": {
+      "recommended_value": "NEGATIVE_Y_FORWARD",
+      "rationale": "Standard convention for Z-up coordinate systems",
+      "impact_on_current_data": "MINIMAL_ROTATION_ADJUSTMENT_REQUIRED"
+    },
+    "rotation_order_recommendation": {
+      "recommended_value": "ZYX",
+      "rationale": "Standard intrinsic rotation order, avoids gimbal lock for typical poses",
+      "impact_on_current_data": "ROTATION_REPRESENTATION_CHANGE_REQUIRED"
+    },
+    "rotation_direction_recommendation": {
+      "recommended_value": "COUNTER_CLOCKWISE_POSITIVE",
+      "rationale": "Mathematical standard, matches Blender conventions",
+      "impact_on_current_data": "ROTATION_SIGN_CONSISTENCY_CHECK_REQUIRED"
+    }
+  },
+  "critical_unknowns": [
+    "Forward axis direction is UNDEFINED",
+    "Rotation order is UNDEFINED",
+    "Rotation direction is UNDEFINED",
+    "Rotation representation preference is UNDEFINED",
+    "Coordinate frame transformation methods are UNIMPLEMENTED",
+    "Local vs world coordinate consistency is UNVALIDATED"
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "spine_model": {
+    "sprint": "A0.3",
+    "date": "2026-08-13",
+    "status": "ANALYSIS_ONLY",
+    "purpose": "Spinal curvature and vertebral structure model for deterministic spine reconstruction"
+  },
+  "spinal_curvature": {
+    "overview": {
+      "description": "Human spine exhibits natural curvatures in sagittal and coronal planes",
+      "functional_purpose": "Shock absorption, balance, mobility, and weight distribution",
+      "current_state": "STRAIGHT_SPINE_DETECTED (ANATOMICAL_FAILURE)",
+      "required_state": "NATURAL_CURVATURES_PRESENT"
+    },
+    "sagittal_curvatures": {
+      "cervical_lordosis": {
+        "curvature_type": "LORDOTIC (concave posterior)",
+        "vertebral_range": "C1-C7",
+        "normal_angle_range": "20-40°",
+        "current_angle": "MISSING",
+        "curve_center": "C4-C5 region",
+        "functional_importance": "Head balance, neck mobility",
+        "reconstruction_requirement": "CURVE_ANGLE_20-40_DEGREES"
+      },
+      "thoracic_kyphosis": {
+        "curvature_type": "KYPHOTIC (convex posterior)",
+        "vertebral_range": "T1-T12",
+        "normal_angle_range": "20-45°",
+        "current_angle": "MISSING",
+        "curve_center": "T6-T7 region",
+        "functional_importance": "Thoracic cavity protection, spinal stability",
+        "reconstruction_requirement": "CURVE_ANGLE_20-45_DEGREES"
+      },
+      "lumbar_lordosis": {
+        "curvature_type": "LORDOTIC (concave posterior)",
+        "vertebral_range": "L1-L5",
+        "normal_angle_range": "30-60°",
+        "current_angle": "MISSING",
+        "curve_center": "L3-L4 region",
+        "functional_importance": "Weight bearing, balance, lumbar mobility",
+        "reconstruction_requirement": "CURVE_ANGLE_30-60_DEGREES"
+      },
+      "sacral_curvature": {
+        "curvature_type": "KYPHOTIC (convex posterior)",
+        "vertebral_range": "Sacrum",
+        "normal_angle_range": "30-40°",
+        "current_angle": "MISSING",
+        "curve_center": "Sacral midline",
+        "functional_importance": "Pelvic attachment, weight transfer",
+        "reconstruction_requirement": "CURVE_ANGLE_30-40_DEGREES"
+      }
+    },
+    "coronal_curvatures": {
+      "spinal_alignment": {
+        "curvature_type": "STRAIGHT (no lateral curvature)",
+        "normal_deviation": "0-5° from vertical",
+        "current_deviation": "MISSING",
+        "functional_importance": "Lateral balance, equal weight distribution",
+        "reconstruction_requirement": "LATERAL_DEVIATION_LESS_THAN_5_DEGREES"
+      },
+      "scoliosis_risk": {
+        "description": "Pathological lateral curvature",
+        "normal_state": "ABSENT",
+        "threshold": ">10° Cobb angle",
+        "current_assessment": "UNKNOWN",
+        "reconstruction_requirement": "NO_SCOLIOSIS_IN_REFERENCE_ANATOMY"
+      }
+    }
+  },
+  "vertebral_structure": {
+    "cervical_vertebrae": {
+      "vertebral_count": 7,
+      "vertebral_names": ["C1_Atlas", "C2_Axis", "C3", "C4", "C5", "C6", "C7_Vertebra_Prominens"],
+      "special_vertebrae": {
+        "C1_Atlas": {
+          "unique_features": ["No_body", "Ring_shaped", "Facets_for_occipital_condyles"],
+          "articulation": "Occipital_condyles_and_C2",
+          "motion_type": "NODDING",
+          "current_position": "MISSING"
+        },
+        "C2_Axis": {
+          "unique_features": ["Odontoid_process", "Dens"],
+          "articulation": "C1_atlas_and_C3",
+          "motion_type": "ROTATION",
+          "current_position": "MISSING"
+        },
+        "C7_Vertebra_Prominens": {
+          "unique_features": ["Long_spinous_process", "Palpable_landmark"],
+          "articulation": "C6_and_T1",
+          "motion_type": "LIMITED",
+          "current_position": "MISSING"
+        }
+      },
+      "vertebral_dimensions": {
+        "body_height_proximal": {
+          "typical_range": "0.015-0.020m (15-20mm)",
+          "current_values": "MISSING"
+        },
+        "body_height_distal": {
+          "typical_range": "0.020-0.025m (20-25mm)",
+          "current_values": "MISSING"
+        },
+        "intervertebral_disc_height": {
+          "typical_range": "0.003-0.005m (3-5mm)",
+          "current_values": "MISSING"
+        }
+      }
+    },
+    "thoracic_vertebrae": {
+      "vertebral_count": 12,
+      "vertebral_names": ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"],
+      "unique_features": ["Costal_facets_for_ribs", "Long_spinous_processes", "Restricted_motion"],
+      "rib_attachment": {
+        "true_ribs": "T1-T7 (attach directly to sternum)",
+        "false_ribs": "T8-T10 (attach via costal cartilage)",
+        "floating_ribs": "T11-T12 (no anterior attachment)"
+      },
+      "vertebral_dimensions": {
+        "body_height_proximal": {
+          "typical_range": "0.020-0.025m (20-25mm)",
+          "current_values": "MISSING"
+        },
+        "body_height_distal": {
+          "typical_range": "0.025-0.030m (25-30mm)",
+          "current_values": "MISSING"
+        },
+        "intervertebral_disc_height": {
+          "typical_range": "0.004-0.006m (4-6mm)",
+          "current_values": "MISSING"
+        }
+      }
+    },
+    "lumbar_vertebrae": {
+      "vertebral_count": 5,
+      "vertebral_names": ["L1", "L2", "L3", "L4", "L5"],
+      "unique_features": ["Large_bodies", "Short_spinous_processes", "High_mobility"],
+      "load_bearing": "Primary weight-bearing region",
+      "vertebral_dimensions": {
+        "body_height_proximal": {
+          "typical_range": "0.025-0.030m (25-30mm)",
+          "current_values": "MISSING"
+        },
+        "body_height_distal": {
+          "typical_range": "0.030-0.035m (30-35mm)",
+          "current_values": "MISSING"
+        },
+        "intervertebral_disc_height": {
+          "typical_range": "0.007-0.010m (7-10mm)",
+          "current_values": "MISSING"
+        }
+      }
+    },
+    "sacrum": {
+      "vertebral_count": 5 (fused),
+      "vertebral_names": ["S1", "S2", "S3", "S4", "S5"],
+      "unique_features": ["Fused_vertebrae", "Triangular_shape", "Sacral_canal"],
+      "articulation": ["L5", "Pelvis", "Coccyx"],
+      "sacral_dimensions": {
+        "sacral_height": {
+          "typical_range": "0.100-0.120m (100-120mm)",
+          "current_value": "MISSING"
+        },
+        "sacral_width": {
+          "typical_range": "0.080-0.100m (80-100mm)",
+          "current_value": "MISSING"
+        },
+        "sacral_depth": {
+          "typical_range": "0.040-0.050m (40-50mm)",
+          "current_value": "MISSING"
+        }
+      }
+    },
+    "coccyx": {
+      "vertebral_count": 3-4 (fused),
+      "vertebral_names": ["Co1", "Co2", "Co3", "Co4"],
+      "unique_features": ["Small_fused_vertebrae", "Terminal_spine"],
+      "functional_importance": "Attachment for pelvic floor muscles",
+      "coccyx_dimensions": {
+        "coccyx_length": {
+          "typical_range": "0.020-0.040m (20-40mm)",
+          "current_value": "MISSING"
+        }
+      }
+    }
+  },
+  "spine_positioning": {
+    "spine_origin": {
+      "reference_point": "Sacral_promontory_or_pelvic_center",
+      "current_position": "MISSING",
+      "coordinate_frame": "PELVIC_REFERENCED"
+    },
+    "spine_orientation": {
+      "upward_direction": "Superior_along_spinal_curvature",
+      "forward_direction": "Anterior_with_natural_curvature",
+      "lateral_direction": "Medial_toward_body_midline",
+      "current_orientation": "MISSING"
+    },
+    "vertebral_positioning_sequence": {
+      "method": "CUMULATIVE_POSITIONING_ALONG_CURVATURE",
+      "starting_point": "Sacral_promontory",
+      "direction": "Superior",
+      "positioning_logic": "EACH_VERTEBRA_POSITIONED_RELATIVE_TO_PREVIOUS_ALONG_CURVATURE_PATH"
+    }
+  },
+  "curvature_modeling": {
+    "curvature_representation": {
+      "method_options": [
+        "Bezier_curves_for_smooth_curvature",
+        "Catmull-Rom_splines_for_interpolation",
+        "Circular_arcs_for_approximation",
+        "Parametric_equations_for_precise_modeling"
+      ],
+      "recommended_method": "PARAMETRIC_CURVATURE_FUNCTIONS",
+      "precision_requirement": "0.001m (1mm) deviation tolerance"
+    },
+    "curvature_parameters": {
+      "cervical_curvature_function": {
+        "parameters": ["Control_points", "Tension", "Continuity"],
+        "current_values": "MISSING"
+      },
+      "thoracic_curvature_function": {
+        "parameters": ["Control_points", "Tension", "Continuity"],
+        "current_values": "MISSING"
+      },
+      "lumbar_curvature_function": {
+        "parameters": ["Control_points", "Tension", "Continuity"],
+        "current_values": "MISSING"
+      }
+    }
+  },
+  "spine_reconstruction_requirements": {
+    "minimum_data_requirements": [
+      "Total spine length",
+      "Curvature angles for each region",
+      "Vertebral count per region",
+      "Individual vertebral dimensions",
+      "Intervertebral disc heights",
+      "Sacral dimensions and orientation",
+      "Spine origin position and orientation"
+    ],
+    "reconstruction_sequence": [
+      "Define spine origin at sacral promontory",
+      "Position sacrum with correct orientation",
+      "Calculate lumbar curvature function",
+      "Position lumbar vertebrae along curvature",
+      "Calculate thoracic curvature function",
+      "Position thoracic vertebrae along curvature",
+      "Calculate cervical curvature function",
+      "Position cervical vertebrae along curvature",
+      "Position skull relative to C1 atlas",
+      "Validate total spine length",
+      "Validate curvature angles"
+    ],
+    "validation_constraints": {
+      "total_spine_length": {
+        "target_range": "0.70-0.75 * total_height",
+        "tolerance": "0.010m (10mm)",
+        "current_status": "UNVERIFIED"
+      },
+      "curvature_continuity": {
+        "constraint": "Smooth transitions between spinal regions",
+        "tolerance": "First_derivative_continuity",
+        "current_status": "UNVERIFIED"
+      },
+      "vertebral_spacing": {
+        "constraint": "Consistent intervertebral spacing",
+        "tolerance": "±10% of nominal disc height",
+        "current_status": "UNVERIFIED"
+      },
+      "spine_balance": {
+        "constraint": "Center of mass over feet in neutral pose",
+        "tolerance": "0.020m (20mm) anterior-posterior",
+        "current_status": "UNVERIFIED"
+      }
+    }
+  },
+  "spine_integration_points": {
+    "cranial_integration": {
+      "connection_point": "C1_Atlas_occipital_condyles",
+      "integration_requirement": "Skull_orientation_determined_by_cervical_curvature",
+      "current_status": "UNIMPLEMENTED"
+    },
+    "pelvic_integration": {
+      "connection_point": "Sacral_promontory",
+      "integration_requirement": "Spine_orientation_determined_by_pelvic_tilt",
+      "current_status": "UNIMPLEMENTED"
+    },
+    "thoracic_integration": {
+      "connection_points": ["Thoracic_vertebrae_costal_facets"],
+      "integration_requirement": "Rib_cage_dimensions_determined_by_thoracic_curvature",
+      "current_status": "UNIMPLEMENTED"
+    }
+  },
+  "age_related_spine_changes": {
+    "degenerative_changes": {
+      "disc_height_reduction": {
+        "typical_reduction": "10-20% over lifetime",
+        "effect_on_curvature": "Increased_kyphosis",
+        "reconstruction_consideration": "ADJUST_DISC_HEIGHTS_BY_AGE"
+      },
+      "vertebral_compression": {
+        "typical_reduction": "5-10% over lifetime",
+        "effect_on_height": "Overall_height_reduction",
+        "reconstruction_consideration": "ADJUST_VERTEBRAL_DIMENSIONS_BY_AGE"
+      }
+    },
+    "postural_changes": {
+      "kyphosis_increase": {
+        "typical_change": "5-10° increase in thoracic kyphosis",
+        "effect_on_pose": "Forward_head_posture",
+        "reconstruction_consideration": "ADJUST_CURVATURE_ANGLES_BY_AGE"
+      }
+    }
+  },
+  "critical_unknowns": [
+    "All vertebral positions are MISSING",
+    "All curvature angles are MISSING",
+    "All vertebral dimensions are MISSING",
+    "All intervertebral disc heights are MISSING",
+    "Spine origin position is MISSING",
+    "Spine orientation is MISSING",
+    "Curvature modeling parameters are MISSING",
+    "Age-related spine modifications are UNDEFINED"
+  ]
+}
