@@ -64,3 +64,4 @@ tmp/
 builds/tests/upbge_validation.blend
 # Engine test outputs (scripts/engine_tests.py): reports, .blend, .glb, logs
 builds/tests/
+builds/benchmarks/
