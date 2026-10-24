@@ -196,3 +196,32 @@ Acceptance criteria: **not specified**. Open questions — MANIFESTATION-LEVELS:
 differs between levels (simulation fidelity, mesh resolution, rig detail, render quality, runtime target)? Is the
 level part of each manifestation's signed ID? — MESH-AUTHORING-TOOL: form A or B? Input = drawing directly in
 the tool, scanned drawings, or both? Which assets first (bodies, clothing, equipment, animals)?
+
+---
+
+## Row PHYSICS-BACKENDS — DRAFT (owner, 2026-10-24 21:04 UTC)
+
+Owner (verbatim): "Que con Blender y Godot podes usar libreias Jolt PBD XPBD FEM Bullet, asi poder simular
+colisiones de materiales". Verification evidence: `docs/audit/PHYSICS-BACKENDS-VERIFICATION-2026-10-24.md`
+(read-only probes on the baseline PC).
+
+| Item | Verified fact | Unverified |
+|------|---------------|------------|
+| Godot 4.7.2 | `physics/3d/physics_engine` options `DEFAULT, Jolt Physics, GodotPhysics3D, Dummy`; 33 `physics/jolt_physics_3d/*` settings; `SoftBody3D` exists; no Bullet; `runtime/godot` = `DEFAULT` | what `DEFAULT` maps to for this project; Jolt soft-body support in practice; cross-run determinism of Jolt in this build |
+| Blender 3.6.23 | Bullet built in (`build_options.bullet=True`): rigid body world; cloth, soft body, collision, fluid, particles, dynamic paint, geometry-nodes simulation; numpy 1.23.5 (no scipy); **no XPBD or FEM** | determinism of baked simulations across machines; Blender 4.2 (not installed) |
+| XPBD / PBD | not present anywhere (would be own code) | — |
+| FEM | not built into either tool | — |
+| Repository | no physics or mechanical-material code/data | — |
+
+Per-layer candidates — **PROPOSED**, engine choice per layer **PENDING** the owner's decision (engagement open
+question 3: where does L2 physics run):
+
+| Layer (Decision 44) | Candidates |
+|---------------------|------------|
+| L1 deterministic combat | own logic + own capsules (Python domain + GDScript port, as today) |
+| L2 physical reaction (recorded) | own XPBD (deterministic by design) · Bullet/cloth/soft body/geometry nodes in Blender (offline, baked) · Jolt or GodotPhysics3D in Godot (real time, determinism unverified) · FEM offline only (new technology) |
+| L3 polish + bake | Blender (bake to a canonical file played back by Godot) |
+
+Rules: no new technology before a validated full flow (dossier); mechanical material parameters (density, Young's
+modulus, Poisson ratio, damping, fracture thresholds) need cited sources or ESTIMATE/PLACEHOLDER marking
+(Decision 12). Acceptance criteria: **not specified**. Status: **PENDING**.
