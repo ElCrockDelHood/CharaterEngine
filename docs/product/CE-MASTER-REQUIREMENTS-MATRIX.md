@@ -174,6 +174,25 @@ content from the drawings (uniform, poses, characters) is owner design, not meas
 Acceptance criteria: **not specified**. Open questions: (1) "NTFS" — NFT or something else? (2) where is the
 documentation and what may be used (confidentiality)? (3) photogrammetry on the owner's hardware — not
 researched (owner did not request it). (4) What exactly is sold: the physical document, photos/prints, the
-digital manifestations, the game/film, or a combination? (5) Licensing of third-party sources in anything sold:
+digital manifestations, the game/film, or a combination? — **ANSWERED** (owner, verbatim, 2026-10-24 20:59 UTC):
+"yo vendo todas, pero esto es un engine gral, cada uno puede sacar diferentes manifestaciones segun el nivel en
+simulaciones y Artistico Tecnico en cada Manifestacion Final, cada cosa la vendo por separado, asi que todo o que
+es audio visual me conviene crear el programa para dibujar y crear meshes que luego yo los retoco o agrego AI que
+me ayuden, algo bien ligero." → every output is sold **separately** (physical notebook, photos/prints, digital
+manifestations, game, film). (5) Licensing of third-party sources in anything sold:
 share-alike sources (CC BY-SA, e.g. Z-Anatomy, older BodyParts3D) could constrain a commercial product — an
 owner decision (not legal advice).
+
+---
+
+## Rows MANIFESTATION-LEVELS / MESH-AUTHORING-TOOL — DRAFT (owner, 2026-10-24 20:59 UTC)
+
+| ID | Requirement (owner's words) | Notes / current state | Status |
+|----|-----------------------------|------------------------|--------|
+| **MANIFESTATION-LEVELS** | "esto es un engine gral, cada uno puede sacar diferentes manifestaciones segun el nivel en simulaciones y Artistico Tecnico en cada Manifestacion Final, cada cosa la vendo por separado" | Character Engine is a **general engine**; each Final Manifestation is defined by a *simulation level* and an *artistic-technical level*, and is sold separately. Relates to the confirmed L1/L2/L3 layers (Decision 44). Definition of the levels **UNKNOWN** | PENDING |
+| **MESH-AUTHORING-TOOL** | "crear el programa para dibujar y crear meshes que luego yo los retoco o agrego AI que me ayuden, algo bien ligero" | Lightweight draw → mesh program; meshes retouched by the owner. Hardware constraint: GT 740M 2 GB, OpenGL 3.3, driver 388.73; Blender 3.6 reference. Implementation form **UNDECIDED** — candidates, listed neutrally: **(A)** a mode inside the existing Blender 3.6 addon (no new technology); **(B)** a standalone lightweight app (new dependencies/technology — needs justification per the dossier). **AI assistance is out of scope** until the owner decides (licence, cost, hardware) | PENDING |
+
+Acceptance criteria: **not specified**. Open questions — MANIFESTATION-LEVELS: how many levels per axis? What
+differs between levels (simulation fidelity, mesh resolution, rig detail, render quality, runtime target)? Is the
+level part of each manifestation's signed ID? — MESH-AUTHORING-TOOL: form A or B? Input = drawing directly in
+the tool, scanned drawings, or both? Which assets first (bodies, clothing, equipment, animals)?
