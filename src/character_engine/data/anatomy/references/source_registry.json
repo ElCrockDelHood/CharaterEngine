@@ -217,7 +217,8 @@
       "Per-vertebra and per-bone dimensions (osteometric)",
       "Joint-centre offsets (ISB)",
       "Depth/width data other than shoulder and hip breadth",
-      "HAND_SEGMENT_PROPORTIONS: carpus / metacarpal / phalanx length split per ray, ray spacing and thumb orientation (e.g. Buryanov & Kotiuk 2010 phalangeal proportions; hand-breadth tables such as ANSUR II). NOT_ACQUIRED - the canonical hand (finding A10, docs/audit/A10_HAND_LAYOUT.md) uses PLACEHOLDER proportions 2:4:3 and 0.0133 m spacing taken from the pre-existing data, scaled to the PROVEN wrist-fingertip length (0.108 H, DRILLIS_CONTINI_1966)."
+      "HAND_SEGMENT_PROPORTIONS: carpus / metacarpal / phalanx length split per ray, ray spacing and thumb orientation (e.g. Buryanov & Kotiuk 2010 phalangeal proportions; hand-breadth tables such as ANSUR II). NOT_ACQUIRED - the canonical hand (finding A10, docs/audit/A10_HAND_LAYOUT.md) uses PLACEHOLDER proportions 2:4:3 and 0.0133 m spacing taken from the pre-existing data, scaled to the PROVEN wrist-fingertip length (0.108 H, DRILLIS_CONTINI_1966).",
+      "FOREARM_INTEROSSEOUS_WIDTH: radius-ulna centre separation at elbow and wrist in the anatomical position. NOT_ACQUIRED - finding A11 (docs/audit/A11_FOREARM_LAYOUT.md) keeps the pre-existing PLACEHOLDER 0.0666 m separation, moved from the antero-posterior (Y) to the lateral (X) axis."
     ]
   },
   "acquisition_plan": {

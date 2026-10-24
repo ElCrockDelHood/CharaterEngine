@@ -1,0 +1,154 @@
+{
+  "finding": "A11 forearm layout (radius/ulna split in Y instead of X)",
+  "file": "src/character_engine/data/anatomy/human_adult_206.json",
+  "sha256_before": "223f4660150e99ba7b2e6e29c0a2e59c2dbaf7d499e4b4c4d565cbb9bbeb9e0c",
+  "sha256_after": "9b49c1c0ce05d821051287f3d027682ad6117db3118654f1b7fa1718b3e5d355",
+  "changed_bones": [
+    "RADIUS_L",
+    "RADIUS_R",
+    "ULNA_L",
+    "ULNA_R"
+  ],
+  "parameters": {
+    "L_head": {
+      "midpoint_xy_m": [
+        0.2331,
+        0.0
+      ],
+      "half_separation_m": 0.0333
+    },
+    "L_tail": {
+      "midpoint_xy_m": [
+        0.2331,
+        0.0
+      ],
+      "half_separation_m": 0.0333
+    },
+    "R_head": {
+      "midpoint_xy_m": [
+        -0.2331,
+        0.0
+      ],
+      "half_separation_m": 0.0333
+    },
+    "R_tail": {
+      "midpoint_xy_m": [
+        -0.2331,
+        0.0
+      ],
+      "half_separation_m": 0.0333
+    }
+  },
+  "provenance": {
+    "midpoints_lengths_z": "unchanged existing data (z = elbow/wrist landmarks, DERIVED)",
+    "half_separation": "PLACEHOLDER — pre-existing 0.0333 m, moved from Y to X; pending FOREARM_INTEROSSEOUS_WIDTH",
+    "radius_lateral_to_ulna": "PROVEN topology (anatomical position)"
+  },
+  "samples": {
+    "RADIUS_L": {
+      "before": {
+        "head": {
+          "x": 0.2331,
+          "y": -0.0333,
+          "z": 1.1139
+        },
+        "tail": {
+          "x": 0.2331,
+          "y": -0.0333,
+          "z": 0.873
+        }
+      },
+      "after": {
+        "head": {
+          "x": 0.2664,
+          "y": 0.0,
+          "z": 1.1139
+        },
+        "tail": {
+          "x": 0.2664,
+          "y": 0.0,
+          "z": 0.873
+        }
+      }
+    },
+    "ULNA_L": {
+      "before": {
+        "head": {
+          "x": 0.2331,
+          "y": 0.0333,
+          "z": 1.1139
+        },
+        "tail": {
+          "x": 0.2331,
+          "y": 0.0333,
+          "z": 0.873
+        }
+      },
+      "after": {
+        "head": {
+          "x": 0.1998,
+          "y": 0.0,
+          "z": 1.1139
+        },
+        "tail": {
+          "x": 0.1998,
+          "y": 0.0,
+          "z": 0.873
+        }
+      }
+    },
+    "RADIUS_R": {
+      "before": {
+        "head": {
+          "x": -0.2331,
+          "y": -0.0333,
+          "z": 1.1139
+        },
+        "tail": {
+          "x": -0.2331,
+          "y": -0.0333,
+          "z": 0.873
+        }
+      },
+      "after": {
+        "head": {
+          "x": -0.2664,
+          "y": 0.0,
+          "z": 1.1139
+        },
+        "tail": {
+          "x": -0.2664,
+          "y": 0.0,
+          "z": 0.873
+        }
+      }
+    },
+    "ULNA_R": {
+      "before": {
+        "head": {
+          "x": -0.2331,
+          "y": 0.0333,
+          "z": 1.1139
+        },
+        "tail": {
+          "x": -0.2331,
+          "y": 0.0333,
+          "z": 0.873
+        }
+      },
+      "after": {
+        "head": {
+          "x": -0.1998,
+          "y": 0.0,
+          "z": 1.1139
+        },
+        "tail": {
+          "x": -0.1998,
+          "y": 0.0,
+          "z": 0.873
+        }
+      }
+    }
+  },
+  "applied": true
+}
