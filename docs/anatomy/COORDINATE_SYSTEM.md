@@ -151,6 +151,18 @@
   - 1 radian = 57.2958 degrees
   - 1 degree = 0.0174533 radians
 
+#### Conversion path (Decision 31 / D-11)
+`UnitConverter` (`src/character_engine/domain/anatomy/coordinate_system.py`, singleton
+`UNIT_CONVERTER`) is the **only** unit-conversion path. Conversions happen at the boundaries
+(input parsing, UI, exporters, reports); the domain stores metres and radians and never converts
+inside a calculation. Do not add ad-hoc factors (`* 0.01`, `math.degrees`) elsewhere in the domain.
+
+#### Deferred numeric policies (Decisions 29, 30, 32 / D-09, D-10, D-12)
+- **Point3 vs Vector3**: deferred — `Vector3` is used for both points and directions.
+- **Dimensional validation**: deferred — no runtime unit/dimension checks.
+- **Semantic types** (e.g. `Metres`, `Radians` wrappers): deferred.
+They will be reconsidered when a concrete defect or requirement needs them.
+
 ### Validation Constraints
 
 #### Coordinate Validity
