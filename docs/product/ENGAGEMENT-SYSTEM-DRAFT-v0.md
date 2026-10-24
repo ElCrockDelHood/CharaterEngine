@@ -166,3 +166,22 @@ OPEN / UNSPECIFIED:
   morph targets or bone animation — UNVERIFIED which works best);
 * asset size and performance on the GT 740M with the Compatibility renderer (not measured);
 * the offline physics tool (Blender Bullet / cloth / soft body / particles / geometry nodes, own XPBD, FEM).
+
+### 9.1 Owner clarification (verbatim, 2026-10-24 21:27 UTC) — refines §9, does not replace it
+
+> "En realidad Creo que son Bibliotecas de sistemas de medidas y de experimentos que nos da esa exprecion
+> representativa, quiebres, movimientos de acuerdo a la gravedad, el viento, etc."
+
+Claude's interpretation — **to be confirmed by the owner**: the library behind the baked reactions is not only a
+catalogue of reaction clips but libraries of (a) **measurement systems** (units, standards, measured material
+properties) and (b) **experiments** (reproducible scenarios with controlled conditions — gravity, wind, impact,
+drop, breaking) whose results provide the "representative expression" (breaks, movements) that gets baked. Each
+experiment definition + parameters + results carries a SHA-256 ID and provenance (WORK-SIGNING); measured values
+come from cited sources (PROVEN/DERIVED) or are marked ESTIMATE when they come from our own simulation.
+
+Open questions (owner):
+6. Does the experiment library **replace** or **enrich** the reaction library of Decision 45?
+7. Which measurement systems (units/standards, material property sets) and which experiments come first?
+8. How does an experiment map to a runtime reaction (keying by conditions: state, region, energy, material,
+   gravity, wind…)?
+9. What is the first concrete experiment (e.g. a drop, an impact on a rib, a breaking test)?

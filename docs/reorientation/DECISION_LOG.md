@@ -741,6 +741,17 @@ Still OPEN: reaction keying (state, point/region, energy, material) and blending
 imports glTF, `.blend`, FBX — no Alembic); size/performance on the GT 740M; offline tool inside Blender;
 engagement questions 1 and 5 (scope interpretation, phasing).
 
+**Clarification** (owner, 2026-10-24 21:27 UTC, verbatim — refines, does not replace): "En realidad Creo que son
+Bibliotecas de sistemas de medidas y de experimentos que nos da esa exprecion representativa, quiebres,
+movimientos de acuerdo a la gravedad, el viento, etc."
+Claude's interpretation — **to be confirmed by the owner**: behind the baked reactions there are libraries of
+(a) **measurement systems** (units, standards, measured material properties) and (b) **experiments**
+(reproducible scenarios with controlled conditions: gravity, wind, impact, drop, breaking) whose results give the
+"representative expression" (breaks, movements) that is baked. Each experiment definition + parameters + results
+carries a SHA-256 ID and provenance (WORK-SIGNING); material parameters need cited sources or ESTIMATE marks.
+OPEN: does this replace or enrich the reaction library? Which measurement systems and experiments? How does an
+experiment map to a runtime reaction (keying)? Which experiment first?
+
 **Date**: 2026-10-24 · **Status**: FINAL
 
 ---

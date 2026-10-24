@@ -236,3 +236,4 @@ Update 2026-10-24 21:16 UTC (owner, engagement question 3 answered — draft §9
 the table as a note, not removed. The offline tool inside Blender (Bullet, cloth, soft body, particles, geometry
 nodes, own XPBD, FEM) is still **PENDING**. Godot 4.7.2 scene importers verified: glTF, `.blend`, FBX; no Alembic.
 Confirmed by the owner as **Decision 45** (2026-10-24 21:19 UTC).
+Clarification (owner, verbatim, 21:27 UTC): "En realidad Creo que son Bibliotecas de sistemas de medidas y de experimentos que nos da esa exprecion representativa, quiebres, movimientos de acuerdo a la gravedad, el viento, etc." — Claude's interpretation (to be confirmed): libraries of measurement systems and reproducible experiments (gravity, wind, impact, drop, breaking) feed the baked reactions; each with SHA-256 ID and provenance; material parameters cited or ESTIMATE. Open questions 6–9 in the engagement draft §9.1.
