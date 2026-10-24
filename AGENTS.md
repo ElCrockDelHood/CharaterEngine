@@ -55,6 +55,9 @@ Environment: `CHARACTER_ENGINE_ENV` = `development | test | production`. Tests u
 - Keep diffs surgical; do not run `ruff format` over untouched files.
 - Write commit messages and docs in English; user-facing chat may be in Spanish.
 - Record contract-level decisions in `docs/reorientation/DECISION_LOG.md`.
+- Never run tests or engines silently: use `scripts/test.py`, `scripts/lint.py`, `scripts/engine_tests.py`
+  (live output + `logs/<UTC>_<tool>.log`, see `docs/09_Debug_Consoles.md`) and report the log path and the
+  command to repeat the run by hand.
 
 See `.cursor/rules/` for file-scoped rules and `.cursor/skills/` for runnable workflows
 (test, export glTF, Godot validation, UPBGE/Blender headless validation).

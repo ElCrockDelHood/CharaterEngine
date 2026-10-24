@@ -100,6 +100,6 @@ run, not a change.
 | Verdict of this review | **APPROVED by the owner** (RG-004) |
 | RG-001 / RG-002 | **ACCEPTED by the owner** |
 | Integrator authorisation (R13; R10 #10–#11) + F-1 | **DONE**: Decision 38 corrects the R10 criterion; `tests/math/test_quaternion_convergence.py` (commit 4dfa99c) — case 1 order ≥ 1 (observed 2.0), norm error < 1e-12; case 2 \|r − 2\| < 0.1; measured tolerances recorded. pytest 755 passed, ruff and architecture guard clean |
-| UPBGE 0.50 suite (Phase 4 interoperability) | **PENDIENTE — the owner runs it** on this PC with the window open: `python scripts/engine_tests.py upbge` (from the repository root, project venv) |
+| UPBGE 0.50 suite (Phase 4 interoperability) | Run by the owner on this PC: **26/27 PASS** (UPBGE 0.50 / Blender 5.0.1, Python 3.11.13). Only failure: blenderplayer autoplay smoke — NVIDIA 388.73 cannot compile UPBGE EEVEE shaders (C1317), crash 0xC0000005, reproduced with the pre-change `.blend` and without CE code: **environmental**. **DISPENSED by the owner** (Decision 39). Combat inside UPBGE and CINE-GR-001 checks verified |
 | F-3, F-4, NP-001 legacy degrees | open, non-blocking |
-| **RG-005 (CE-Q4)** | **BLOQUEADO** only by: (1) the UPBGE 0.50 run (or an explicit waiver) and (2) the owner's explicit approval to unblock. Not declared unblocked by this review. |
+| **RG-005 (CE-Q4)** | **BLOQUEADO only by the owner's explicit approval to unblock.** All technical conditions are met (blenderplayer waived, Decision 39). Not declared unblocked by this review. |

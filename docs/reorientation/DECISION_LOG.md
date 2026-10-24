@@ -597,12 +597,32 @@ With R13 "integrator authorised" this closes R10 #10–#11.
 
 ---
 
+## 39. CE-Q4: blenderplayer SMOKE CHECK DISPENSED (HARDWARE / DRIVER LIMIT)
+
+**Finding** (2026-10-24): the UPBGE 0.50 suite on the owner's PC passed 26/27; the only failure is
+"UPBGE blenderplayer: autoplay combat smoke" — `blenderplayer.exe` exits with 0xC0000005 before writing its
+report. `builds/tests/upbge_blenderplayer.log` shows the NVIDIA 388.73 driver (GeForce GT 740M, Kepler)
+rejecting four UPBGE 0.50 EEVEE shaders (`eevee_deferred_light_single/double/triple`,
+`eevee_deferred_combine`, 13 × error C1317). Reproduced read-only with the 2026-09-29 `.blend` (before any
+change of the day) and even without loading Character Engine code (import of `ce_combat` failing): same
+shader errors, same crash. The test path that launches the player did not change since 028c803. The
+2026-09-29 pass ran on another machine (Intel HD 620). The combat itself passes inside UPBGE (component
+and logic bricks: 6 hits, opponent health 67) and all CINE-GR-001 checks pass in UPBGE.
+
+**Decision** (owner, 2026-10-24): the owner explicitly **dispenses** this check for CE-Q4 as an
+environment limitation (GPU driver), not a Character Engine defect. The check stays in the suite and keeps
+reporting FAIL on this PC; a driver update (R470, 474.xx) would allow re-running it.
+
+**Date**: 2026-10-24 · **Status**: FINAL (waiver for CE-Q4; check unchanged)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 38
-**Final Decisions**: 34 (+4 deferred)
+**Total Decisions**: 39
+**Final Decisions**: 35 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)

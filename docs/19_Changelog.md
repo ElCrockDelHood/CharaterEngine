@@ -2,6 +2,20 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-24 (late night) · Debug consoles, blenderplayer waiver
+
+### Added
+- `scripts/_logrun.py`: live console output + `logs/<UTC>_<tool>.log` / `logs/latest_<tool>.log` for
+  `scripts/test.py`, `scripts/lint.py` and every `scripts/engine_tests.py` step (`--verbose` for engine
+  debug output). Guide: `docs/09_Debug_Consoles.md`.
+
+### Decisions
+- Decision 39: blenderplayer smoke check dispensed for CE-Q4 (NVIDIA 388.73 / GT 740M cannot compile UPBGE
+  0.50 EEVEE shaders; environmental). UPBGE suite on this PC: 26/27.
+
+### Test status
+pytest 762 passed; ruff and architecture guard clean; Godot 4.7.2 21/21.
+
 ## [Unreleased] — 2026-10-24 (night) · CE-Q4 gate review
 
 ### Added
