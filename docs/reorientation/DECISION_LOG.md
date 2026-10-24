@@ -560,12 +560,29 @@ pending. Audit: `docs/audit/A11_FOREARM_LAYOUT.md`.
 
 ---
 
+## 37. CINE-GR-001 STEP 1 — EQUIPMENT SOCKETS AND FULL-BODY WORKBENCH PRESET
+
+**Decision** (owner, 2026-10-24): equipment attaches through **sockets**, a control-layer contract like the rig
+(`domain/rigging/sockets.py`, pure data): `SOCKET-sabre_hip.L` on `COXAL_L` and `SOCKET-hand_grip.R` on
+`METACARPAL_3_R`, placement ASSUMED, written in anatomical axes, rotated with the parent and scaled with its
+length. The addon builds them as non-deforming MCH bones; equipment is parented to the socket bone. Until a
+modelled sabre exists, a 0.90 m **PLACEHOLDER** box stands in. The production preset *Cinematic preset: full
+body, Workbench* (floor, key/fill/rim, framed front camera, 1920×1080) is the baseline render for this row.
+
+**Evidence**: headless addon test on Blender 3.6.23 24/24 — (a) 208/208 bones in frame, no occluder;
+(b) sockets and sabre follow the parent in T-pose and anatomical pose (max Δ 8.9e-08); (c) sabre AABB clear of
+192 bone-proxy AABBs; (d) render 2.38 s; pytest 753; canonical data unchanged.
+
+**Date**: 2026-10-24 · **Status**: FINAL (placements ASSUMED, sabre PLACEHOLDER)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 36
-**Final Decisions**: 32 (+4 deferred)
+**Total Decisions**: 37
+**Final Decisions**: 33 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)

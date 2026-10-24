@@ -2,6 +2,18 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-24 (evening) · CINE-GR-001 step 1
+
+### Added
+- Equipment sockets `SOCKET-sabre_hip.L` / `SOCKET-hand_grip.R` (`domain/rigging/sockets.py`, ASSUMED placement),
+  built by the addon as MCH bones; PLACEHOLDER sabre on the hip socket.
+- Addon operators *Add equipment sockets* and *Cinematic preset: full body, Workbench* (floor, 3 lights,
+  framed camera, 1920×1080 render to `builds/renders/`, ignored).
+
+### Test status
+pytest 753 passed; addon headless 24/24 on Blender 3.6.23 (CINE-GR-001 checks (a)–(d), render 2.38 s);
+Godot 4.7.2 21/21.
+
 ## [Unreleased] — 2026-10-24 (late afternoon) · Finding A11: forearm layout
 
 ### Fixed

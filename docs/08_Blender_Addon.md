@@ -34,6 +34,7 @@ Enable *Character Engine* in Preferences → Add-ons; the panel appears in the 3
 | **Mocap** | Import mocap | BVH import (`bpy.ops.import_anim.bvh`) + rest-to-rest retarget through a bone map (`mixamo`, `cmu_bvh`, `rokoko`, `rigify_def`). Optional bake. |
 | **Wounds** | Apply wound (click in viewport), Clear wounds | Raycast → nearest canonical bone → `assess_wound` (type, depth, width, energy). Marker sphere coloured by AIS severity, JSON report in `ce_report`. |
 | **Export** | Export canonical GLB, Export scene GLB | Pure-Python exporter (skeleton contract) or Blender glTF exporter (meshes + active actions). |
+| **Export → Equipment / Cinematic** | Add equipment sockets, Cinematic preset: full body, Workbench | Sockets `SOCKET-sabre_hip.L` / `SOCKET-hand_grip.R` as MCH bones (ASSUMED placement) + PLACEHOLDER sabre; floor, key/fill/rim lights, framed front camera, Workbench 1920×1080, optional render to `builds/renders/`. |
 | **Runtime** | Set up UPBGE scene, Attach runtime logic, Launch game, Open Godot project | Arena + two fighters with `ce_combat.CEFighter` (UPBGE only, UI mode) and game properties; Godot shortcut opens `runtime/godot`. |
 
 ## Provenance in the viewport

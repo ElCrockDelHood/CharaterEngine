@@ -23,7 +23,7 @@ DOMAIN MODEL → IMPLEMENTATION → TEST → EVIDENCE (Toyota: CTQ, quality gate
 | **SCENARIO** | Granadero de pie en reposo, cuerpo completo, fondo neutro (sin entorno histórico todavía) | — | SPECIFIED |
 | **CHARACTER** | Granadero a Caballo (1812–1826), varón adulto; individual (no NPC genérico) but row 1 uses the base template | `human_male_adult` 1.80 m (USER_INPUT stature, Drillis & Contini proportions PROVEN), 206 bones / 208 nodes, left = +X (Decision 17) | PARTIAL |
 | **ACTION** | Static: posición de firmes/descanso militar (weight on both feet, arms at sides, head up) | Only `anatomical`, `tpose`, `apose` poses exist (`domain/anatomy/pose/tpose.py`); no military rest pose, no pose library | PENDING (pose definition needs an owner-approved reference: drill manual / iconography) |
-| **CAMERA** | Full-body, eye level ≈ 1.5 m, ~35–50 mm equivalent, whole figure + base in frame; Workbench render | No camera/scene template for production (only the UPBGE arena camera in `runtime_upbge.py`) | SPECIFIED |
+| **CAMERA** | Full-body, eye level ≈ 1.5 m, ~35–50 mm equivalent, whole figure + base in frame; Workbench render | Step 1: operator *Cinematic preset: full body, Workbench* — front camera 50 mm framed from the armature bounds, 1920×1080; headless test: 208/208 bones in frame, no foreign occluder | IMPLEMENTED (eye-level/lens values not yet owner-approved) |
 | **ANATOMICAL RESOLUTION** | Full body readable at distance: proportions, posture, limb segmentation; no face/hand close-up required | Canonical skeleton with sourced joint heights; hands A10 and forearm A11 fixed (intra-hand proportions PLACEHOLDER) | PARTIAL |
 | **SKELETAL REQUIREMENTS** | 206/208 contract, correct sides, joints at sourced heights, rest pose clean | Implemented and tested (pytest 747; addon headless 20/20 Blender 3.6; Godot 21/21) | IMPLEMENTED |
 | **MUSCLE REQUIREMENTS** | Silhouette-level volumes under the uniform (no deformation visible) | 50 bilateral spindle proxies, attachment topology PROVEN, geometry PLACEHOLDER (`domain/tissue/muscles.py`, addon *Tissues*) | PARTIAL |
@@ -31,17 +31,17 @@ DOMAIN MODEL → IMPLEMENTATION → TEST → EVIDENCE (Toyota: CTQ, quality gate
 | **MESH REQUIREMENTS** | **Parametric base body mesh** (male), clean topology, weighted to the 208-bone armature, stature-driven | **Does not exist** (no `HumanMesh` domain model; Decision 1.2 "mesh-first" never implemented) | PENDING |
 | **DEFORMATION REQUIREMENTS** | None visible in static rest (bind pose only); weights must not tear at shoulders/hips in the rest pose | Proxies 100 % weighted per bone; no skinning of a real mesh | PENDING (depends on mesh) |
 | **PHYSICS** | None for a static shot | — | N/A |
-| **COLLISION** | Boots on ground plane (z = 0), sabre and scabbard not intersecting the body | Ground check exists for the skeleton (Godot/UPBGE validators); no body/equipment collision | PARTIAL |
+| **COLLISION** | Boots on ground plane (z = 0), sabre and scabbard not intersecting the body | Skeleton ground check (Godot/UPBGE); step 1: placeholder sabre AABB clear of all 192 bone-proxy AABBs (test). No boots, no body mesh to collide with yet | PARTIAL |
 | **CLOTHING** | Uniforme de Granaderos: casaca, pantalón, correajes, morrión/kepí — modelled as separate assets bound to the body | **No clothing system / assets**; historical design needs a cited source | DATA REQUIRED |
-| **EQUIPMENT** | **Sable** (with scabbard) attached to a **socket** (hip/hand), boots (botas de montar), belts | **No equipment model, no sockets** in rig or domain | PENDING |
-| **ENVIRONMENT** | Neutral studio: ground plane + 3-point light; historical environment out of scope for row 1 | — | SPECIFIED |
+| **EQUIPMENT** | **Sable** (with scabbard) attached to a **socket** (hip/hand), boots (botas de montar), belts | Step 1: sockets `SOCKET-sabre_hip.L` (COXAL_L) and `SOCKET-hand_grip.R` (METACARPAL_3_R) as domain data (ASSUMED placement) built as MCH bones; **PLACEHOLDER** sabre box parented to the hip socket; tests: follow parent in T-pose and anatomical pose (Δ < 1e-7). No modelled sabre, scabbard, belts or boots | PARTIAL |
+| **ENVIRONMENT** | Neutral studio: ground plane + 3-point light; historical environment out of scope for row 1 | Step 1: floor plane + key/fill/rim lights created by the preset (Workbench ignores scene lights; they are for later EEVEE/Cycles) | PARTIAL |
 | **RUNTIME** | Production only (Blender authoring/render); optional glTF export for Godot preview | Canonical GLB export (byte-reproducible) + scene GLB from the addon | PARTIAL |
-| **PERFORMANCE** | Workbench render ≤ 30 s at 1920×1080 on the baseline PC; viewport ≥ 15 fps with the character | Not measured | PENDING |
+| **PERFORMANCE** | Workbench render ≤ 30 s at 1920×1080 on the baseline PC; viewport ≥ 15 fps with the character | Step 1: Workbench 1920×1080 render **2.38 s** (skeleton proxies + sabre, Blender 3.6.23 background, 2026-10-24). Viewport fps not measured | PARTIAL |
 | **MANIFOLD** | M01 Anatomical, M02 Morphological, M03 Skeletal, M07 Surface, M09 Identity, M10 Historical, M11 Clothing, M12 Equipment, M20 Cinematic | M03 implemented; M01 partial; others not started | PARTIAL |
 | **DEPENDENCIES** | Base mesh (M07) → skinning → clothing (M11) & equipment sockets (M12) → military pose → camera/scene template | — | SPECIFIED |
-| **TEST** | Headless Blender 3.6 test that builds the scene and asserts: 208 bones, mesh bound, boots at z≈0, sabre parented to socket, no body–equipment intersection, camera framing contains the whole figure, render produced | Skeleton-level tests exist; scene-level test does not | PENDING |
+| **TEST** | Headless Blender 3.6 test that builds the scene and asserts: 208 bones, mesh bound, boots at z≈0, sabre parented to socket, no body–equipment intersection, camera framing contains the whole figure, render produced | Step 1 scene checks in `runtime/blender/ce_addon_headless_test.py` (24/24 on Blender 3.6): framing, occlusion, socket follow, sabre clearance, render time. Mesh/boots checks pending | PARTIAL |
 | **ACCEPTANCE CRITERIA** | All TEST checks pass; render image reviewed and accepted by the owner (Jidoka: any failed check stops the row) | — | SPECIFIED |
-| **EVIDENCE** | Rendered PNG + JSON report in `builds/` (ignored) and a versioned summary in `docs/audit/` | — | PENDING |
+| **EVIDENCE** | Rendered PNG + JSON report in `builds/` (ignored) and a versioned summary in `docs/audit/` | Step 1: `builds/renders/<engine>_CINE-GR-001_fullbody.png` + addon report JSON (ignored); summary in DECISION_LOG §37 | PARTIAL |
 | **PRIORITY** | P1 (first cinematic row; unlocks P2 Granadero acceptance test) | — | SPECIFIED |
 
 ### Minimum gaps to satisfy CINE-GR-001
@@ -56,7 +56,11 @@ DOMAIN MODEL → IMPLEMENTATION → TEST → EVIDENCE (Toyota: CTQ, quality gate
 6. **Workbench camera/scene template** (full-body framing, neutral light, ground plane) and a headless
    render test with a performance measurement on the baseline PC.
 
-### Proposed next minimal task — "CINE-GR-001 / step 1: scene template + equipment socket"
+### Step 1 — DONE 2026-10-24 (commit b74327c): scene template + equipment sockets
+
+All acceptance criteria (a)–(f) below passed on Blender 3.6.23; see DECISION_LOG §37.
+
+### (original proposal) "CINE-GR-001 / step 1: scene template + equipment socket"
 
 Scope deliberately avoids anything that needs new anatomical or historical data:
 
