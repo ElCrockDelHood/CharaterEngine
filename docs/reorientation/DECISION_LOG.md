@@ -577,12 +577,32 @@ body, Workbench* (floor, key/fill/rim, framed front camera, 1920×1080) is the b
 
 ---
 
+## 38. INTEGRATOR CONVERGENCE — R10 CRITERION CORRECTED, TOLERANCES MEASURED
+
+**Finding (CE-Q4 review F-1, 2026-10-24)**: R10 §4.3 required first order for the fixed-axis case
+(|r − 2| < 0.1). Explicit Euler + renormalisation on a constant-axis rotation is an exact rotation about
+the right axis by 2·atan(ω·dt/2) instead of ω·dt (O(dt³) local error), so the global error is **second
+order**; the integrator is correct and the criterion was wrong.
+
+**Decision** (owner, 2026-10-24): case 1 (fixed axis) — observed order ≥ 1, norm error < 1e-12;
+case 2 (variable axis ω(t) = (sin t, cos t, 0.5)) — |r − 2| < 0.1. Tests:
+`tests/math/test_quaternion_convergence.py`.
+
+**Measured** (T = 1 s, dt = 0.1 / 0.05 / 0.025 / 0.0125):
+case 1 E_ang = 3.218e-3 / 8.067e-4 / 2.018e-4 / 5.046e-5 rad (ratio 3.99–4.00), E_norm ≤ 1.1e-16;
+case 2 E_ang = 4.351e-2 / 2.175e-2 / 1.087e-2 / 5.433e-3 rad vs dt = 1e-5 reference (ratio 2.00).
+With R13 "integrator authorised" this closes R10 #10–#11.
+
+**Date**: 2026-10-24 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 37
-**Final Decisions**: 33 (+4 deferred)
+**Total Decisions**: 38
+**Final Decisions**: 34 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)

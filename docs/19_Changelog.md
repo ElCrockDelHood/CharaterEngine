@@ -2,6 +2,16 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-24 (night) · CE-Q4 gate review
+
+### Added
+- `docs/audit/CE-Q4-GATE-REVIEW-2026-10-24.md` (read-only review, approved by the owner: RG-001, RG-002,
+  RG-004 accepted).
+- `tests/math/test_quaternion_convergence.py`: integrator convergence, R10 criterion corrected (Decision 38).
+
+### Test status
+pytest 755 passed; ruff and architecture guard clean. UPBGE 0.50 suite pending the owner's run.
+
 ## [Unreleased] — 2026-10-24 (evening) · CINE-GR-001 step 1
 
 ### Added
