@@ -86,14 +86,14 @@ Scope deliberately avoids anything that needs new anatomical or historical data:
 ## Row ENGAGEMENT-001 — Fight engagement system (Godot runtime) — DRAFT
 
 Owner definition (verbatim) and the full inventory are in `docs/product/ENGAGEMENT-SYSTEM-DRAFT-v0.md`.
-Only the owner's words and code facts are filled in. Owner answer 1: all eight areas Q1–Q8 in scope (draft §4); options inside each, T-1 and T-2 still open.
+Only the owner's words and code facts are filled in. Owner answer 1 (verbatim in draft §4): integrate the 8 points; Claude's interpretation awaiting confirmation = every option of Q1–Q8 in scope. Layering L1/L2/L3 (draft §6) and phasing E0–E8 (draft §7) are PROPOSED; open questions in draft §8.
 
 | Column | Requirement | Current state (2026-10-24) | Status |
 |--------|-------------|----------------------------|--------|
 | **ID** | ENGAGEMENT-001 | — | SPECIFIED |
 | **DEFINITION** | "sistema de enfrentamiento determinado … interacciones entre las cápsulas de colisiones" (owner, verbatim in the draft §1) | — | PARTIAL (definition only) |
 | **RUNTIME** | Godot (Decision 42 clarification) | Deterministic 60 Hz frame-data combat (Python domain + GDScript port), arena playable windowed | PARTIAL |
-| **DETERMINISM** | Owner: "determinado" — scope open (Q4) | 7 reference fights replay identically Python ↔ Godot | PARTIAL |
+| **DETERMINISM** | Owner: "determinado"; Q4 a and b both selected → tension T-1; PROPOSED: L1 bit-identical, L2 may vary, L3 baked manifest identical (draft §6) | 7 reference fights replay identically Python ↔ Godot | PARTIAL |
 | **COLLISION CAPSULES** | Capsule–capsule interactions (owner); body reacts physically, complex result refined into the manifestation (owner answer 1, draft §4); determinism vs physics open (T-1) | None in domain/Godot; hit = root-distance ≤ reach; per-bone hit spheres are data only | PENDING |
 | **CONFRONTATION PHASES** | Open (Q1) | Nearest-opponent targeting only | PENDING |
 | **COMBAT SYSTEMS** | "sistemas de combate elaborados" — which ones open (Q8) | 8 moves, guard, throws, cancels, knockdown, wounds | PENDING |

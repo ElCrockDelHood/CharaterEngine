@@ -1,6 +1,6 @@
-# Engagement system (draft v0)
+# Engagement system (draft v1)
 
-**Status:** DRAFT — not a decision. Nothing here is a requirement until the owner answers §3.
+**Status:** DRAFT v1 — not a decision. Scope declared by the owner (§4); layering §6 and phasing §7 are PROPOSALS awaiting approval (§8).
 **Owner:** Mariano Martin Galli · **Date:** 2026-10-24 · **Matrix row:** ENGAGEMENT-001
 **Context:** Decision 42 (production in Blender, gameplay runtime in Godot) and its clarification: the fight
 engagement system lives in Godot; Blender provides models, simulation results and cinematography as baked
@@ -78,8 +78,10 @@ performance targets for the baseline PC.
 > "me gustaria integrar los 8 puntos. por ejemplo en el punto N2 el cuerpo va a reaccionar fisicamente y nos
 > va a dar un resultado complejo que luego lo vamos a intentar pulir para que nos de la manifestacion."
 
-Recorded reading (to be confirmed by the owner, see §5):
-* **All eight areas Q1–Q8 are in scope** of the engagement system (not a choice of one).
+Recorded reading — **Claude's interpretation, awaiting the owner's confirmation**:
+* **All eight areas Q1–Q8 are in scope**, with **every listed option** of each question selected (Q1 a–e,
+  Q2 a–c, Q3 a–f, Q4 a–b, Q5 a–c, Q6 a–d, Q7 a–b, Q8 a–f; the "other" options stay empty). Where options
+  conflict (Q4 a vs b, Q7 a vs b) see §5–§6.
 * **Q2 (capsules):** the body **reacts physically** through its capsules; the raw result is expected to be
   complex and is then **refined ("pulir") into the final manifestation** (the visible reaction). This points
   to per-body-part capsules (Q2 b/c) driving a physical reaction, plus a refinement stage.
@@ -98,3 +100,38 @@ for the visual reaction (the "manifestation" may differ between runs, outcomes d
 spec-before-code rule; a proposed order (owner to accept or change): capsules + body blocking + capsule hit
 detection (Q2/Q3) → physical reaction + refinement (Q2) → phases and lock-on (Q1) → combat systems (Q8) →
 other styles (Q5). Q4, Q6, Q7 are cross-cutting and must be fixed first.
+
+## 6. Layering — PROPOSED (needs owner approval)
+
+| Layer | Content | Determinism guarantee (proposed) | Unspecified |
+|-------|---------|-----------------------------------|-------------|
+| **L1 Combat logic** | States, moves, frame data, phases, lock-on, guard/throw rules, capsule *hit* tests, wounds — as today, extended | **Bit-identical replay from inputs, Python ↔ Godot** (today's reference-fight contract, Q4 a) | capsule geometry format |
+| **L2 Physical reaction** | Capsule/body physics reacting to L1 events (impacts, pushes, falls): raw, complex result | Either (a) own fixed-step XPBD → deterministic, or (b) engine physics (Blender per Decision 42, or Godot) → **may vary** (Q4 b); in both cases the raw result is **recorded** | physics engine choice; recording format |
+| **L3 Curation / polish** | The recorded raw reaction is refined ("pulir") into the final **manifestación** and baked into a canonical file consumed by Godot | The baked manifest is a file → **identical every playback** | bake format; what a "manifestación" contains exactly (pose tracks? per-capsule trajectories? per-region reactions?); who/what polishes (tool, manual, rules) |
+
+With this split, outcomes (who hits, damage, wounds) stay deterministic in L1 while the visible reaction may
+come from non-deterministic physics in L2 and is fixed once baked in L3.
+
+## 7. Phasing — PROPOSAL (not a requirement), ordered by dependency
+
+| Step | Sub-feature | Depends on | Acceptance criteria |
+|------|-------------|------------|---------------------|
+| E0 | Owner decisions: T-1 / layering §6, Q6 data origin, Q7 authority | — | PENDING |
+| E1 | Capsule model in the combat domain (per region/bone, derived from the 208-bone skeleton) + Godot port | E0 | PENDING |
+| E2 | Body blocking + pushback between capsules (L1) | E1 | PENDING |
+| E3 | Capsule-based hit detection: real struck region instead of the fixed bone; guard capsule | E1 | PENDING |
+| E4 | Physical reaction L2 (prototype, raw result recorded) | E0, E3 | PENDING |
+| E5 | Curation/polish L3 + bake to a canonical manifest file + Godot playback | E4 | PENDING |
+| E6 | Confrontation phases + explicit lock-on / target switch, multiple opponents (Q1) | E2 | PENDING |
+| E7 | Combat systems (Q8): stamina, counters, parry, combos/juggles, weapons (sabre sockets), posture/balance — one per step | E3, E6 | PENDING |
+| E8 | Styles souls_like / beat_em_up (Q5) | E6, E7 | PENDING |
+
+## 8. Remaining open questions (owner)
+
+1. Confirm the interpretation of §4 (all options of Q1–Q8) — or remove any option.
+2. T-1 / §6: is the physical reaction allowed to vary between runs before polishing (L2 b), or must it be
+   deterministic too (L2 a)?
+3. Where does the L2 physics run: Blender (XPBD, offline, Decision 42), Godot at runtime, or both?
+4. What exactly is the "manifestación" (the polished result Godot plays): animation/pose tracks, capsule
+   trajectories, region reactions, or something else?
+5. Accept the phasing order E0→E8, or name the step to start with.
