@@ -211,6 +211,24 @@ the tool, scanned drawings, or both? Which assets first (bodies, clothing, equip
 
 ---
 
+## Rows REALISM-UNITS / PRODUCT-VISION-GRANADEROS — DRAFT (owner, 2026-10-24 22:57 UTC)
+
+Owner (verbatim): "quiero que todo ocurra a distancias y con velocidades y movimientos realistas, tengo que realizar
+granaderos en cosas cotidianas, a caballo, realizar las tomas ponerlos a luchar, pense en hacer un juego de los padres
+de la patria san martin y todos los demas tipo AOE2DE."
+
+| ID | Requirement (owner's words) | Notes / current state | Status |
+|----|-----------------------------|------------------------|--------|
+| **REALISM-UNITS** | "que todo ocurra a distancias y con velocidades y movimientos realistas" | Canonical units are already metric (metres, Z-up). Every speed / gait / reach value — human walk/run, horse gaits (walk, trot, canter, gallop), cavalry charge distances, weapon reach — needs a **cited source** or an ESTIMATE mark, never invented; sources **NOT_ACQUIRED**. Today the combat reach/energy values are gameplay constants without source | PENDING (DATA REQUIRED) |
+| **PRODUCT-VISION-GRANADEROS** | "granaderos en cosas cotidianas, a caballo, realizar las tomas ponerlos a luchar, … un juego de los padres de la patria san martin y todos los demas tipo AOE2DE" | Recorded as the owner's **vision/idea**, not a committed requirement. Ties to open items: Granaderos uniform needs a cited historical source (CINE-GR-001); `horse_adult` template has **NO DATA**; animal skeletons pending (ANATOMY-MESH). Neutral note: an RTS (Age of Empires II DE style) differs from the current Shenmue-style fight engagement — many units, top-down camera, different performance demands on the GT 740M; the engine is general and each manifestation is sold separately (MANIFESTATION-LEVELS). No priority is reordered | PENDING |
+
+Acceptance criteria: **not specified**. Open questions: (1) first deliverable — everyday-life cinematic, horseback
+cinematic, fight shots or an RTS prototype? (2) Is the RTS a later manifestation or the flagship? (3) Historical
+scope — period, figures, units? (4) Expected unit counts and camera for the RTS? (5) Where do historical references
+come from — the owner's drawings/documentation, published sources, or both?
+
+---
+
 ## Rows WORKBENCH-LAYOUT / MATERIAL-SWATCHES — DRAFT (owner, 2026-10-24 21:49 UTC)
 
 Owner (verbatim): "estaria bueno poder maquetar muy bien bocetar, pulir bien en worckbrech. y ademas si puedo tener
