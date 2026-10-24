@@ -162,6 +162,18 @@ da el 3D". The owner chose **"only record the idea"**: no research, installs, do
 | **WORK-SIGNING** | "crear NTFS Hashes Id con la manifestacion, como ir firmando la obra" | Term **UNCONFIRMED** ("NTFS" = NFT? or other — not answered). Proposed, **non-binding**: content ID = SHA-256 of each mesh / manifest (exports are already byte-reproducible) + provenance record signed with the owner's key (Ed25519), optionally C2PA later; NFT only later and only with explicit owner authorization. No technology is added until the full flow is validated (dossier rule) | PENDING |
 | **OWNER-DOCS (context)** | "tengo mucha documentación … estuve documentando muchas cosas que tal vez sirven" | Extensive documentation from the owner's audiovisual-simulation work may be shared. Location **UNKNOWN**; confidentiality status **UNKNOWN** | PENDING |
 
+**Clarification (owner, verbatim, 2026-10-24 20:46 UTC)** — applies to WORK-SIGNING and OWNER-DOCS:
+"es porque soy ilustrador y tengo todo el proyecto escrito a mano y se dibujar muy bien. , la verdadera obra de
+arte es ese documento fisico. estaria bueno si hago todo, le saco fotos lo publico y lo vendo."
+Claude's interpretation, **to be confirmed by the owner**: the hand-written, hand-drawn physical project
+document is the primary artwork (and the main owner-authored source, USER_INPUT); the hash ID / signed
+manifestation is meant to authenticate the work and tie photographs of the physical document to the digital
+outputs (drawing → model → simulation → manifestation); the owner may publish and sell the result. Design
+content from the drawings (uniform, poses, characters) is owner design, not measured anatomical data.
+
 Acceptance criteria: **not specified**. Open questions: (1) "NTFS" — NFT or something else? (2) where is the
 documentation and what may be used (confidentiality)? (3) photogrammetry on the owner's hardware — not
-researched (owner did not request it).
+researched (owner did not request it). (4) What exactly is sold: the physical document, photos/prints, the
+digital manifestations, the game/film, or a combination? (5) Licensing of third-party sources in anything sold:
+share-alike sources (CC BY-SA, e.g. Z-Anatomy, older BodyParts3D) could constrain a commercial product — an
+owner decision (not legal advice).
