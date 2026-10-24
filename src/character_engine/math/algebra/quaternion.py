@@ -445,21 +445,23 @@ def nlerp(q1: UnitQuaternion, q2: UnitQuaternion, t: float) -> UnitQuaternion:
     return UnitQuaternion.from_quaternion(result)
 
 
-def angular_velocity_to_quaternion_derivative(q: UnitQuaternion, omega: Vector3) -> Quaternion:
+def angular_velocity_to_quaternion_derivative(q: UnitQuaternion, omega_world: Vector3) -> Quaternion:
     """Compute dq/dt from angular velocity ω.
 
-    Contract: dq/dt = 0.5 * ω * q
-    where ω is treated as pure quaternion (0, ω) in body frame.
+    Contract (Decision 26 / D-06): dq/dt = 0.5 * ω_world * q, where ω_world is the angular
+    velocity in the SPATIAL (world / parent) frame, treated as the pure quaternion (0, ω).
+    Left multiplication matches q_global = q_parent * q_local; a body-frame ω_body would
+    give dq/dt = 0.5 * q * ω_body instead.
 
     Provenance: PROVEN (standard quaternion kinematics)
     """
     if not q.is_finite():
         raise ValueError("Quaternion must be finite")
-    if not omega.is_finite():
+    if not omega_world.is_finite():
         raise ValueError("Angular velocity must be finite")
 
     # Treat ω as pure quaternion (0, ω)
-    omega_quat = Quaternion(0, omega.x, omega.y, omega.z)
+    omega_quat = Quaternion(0, omega_world.x, omega_world.y, omega_world.z)
 
     # Compute dq/dt = 0.5 * ω * q
     dq_dt = omega_quat * Quaternion(q.w, q.x, q.y, q.z)
@@ -470,12 +472,13 @@ def angular_velocity_to_quaternion_derivative(q: UnitQuaternion, omega: Vector3)
 
 def integrate_quaternion_angular_velocity(
     q: UnitQuaternion,
-    omega: Vector3,
+    omega_world: Vector3,
     dt: float
 ) -> UnitQuaternion:
     """Integrate quaternion over time using explicit Euler.
 
-    Contract: q(t + Δt) = normalize(q(t) + Δt * (0.5 * ω * q(t)))
+    Contract: q(t + Δt) = normalize(q(t) + Δt * (0.5 * ω_world * q(t))), ω in the spatial
+    frame (Decision 26 / D-06).
 
     Provenance: PROVEN (standard explicit Euler for quaternion integration)
     """
@@ -485,7 +488,7 @@ def integrate_quaternion_angular_velocity(
         raise ValueError(f"Timestep dt must be non-negative, got {dt}")
 
     # Compute dq/dt
-    dq_dt = angular_velocity_to_quaternion_derivative(q, omega)
+    dq_dt = angular_velocity_to_quaternion_derivative(q, omega_world)
 
     # Explicit Euler integration
     q_next = Quaternion(

@@ -461,6 +461,26 @@ class TestAngularVelocity:
         assert dq_dt.y == pytest.approx(0.0, abs=NORM_TOLERANCE)
         assert dq_dt.z == pytest.approx(math.pi/4, abs=NORM_TOLERANCE)
 
+    def test_angular_velocity_is_spatial_frame(self):
+        """Decision 26 (D-06): ω is in the world frame, so the rotation is applied on the LEFT.
+
+        q = 90° about Z, ω = (1, 0, 0): the body must turn about the WORLD X axis
+        (q' = R_x(θ) * q), not about its own local X axis (q * R_x(θ), which is world Y here).
+        """
+        q0 = UnitQuaternion.from_axis_angle(Vector3(0, 0, 1), math.pi / 2)
+        omega = Vector3(1, 0, 0)
+        steps, dt = 2000, 0.5 / 2000            # θ = 0.5 rad
+        q = q0
+        for _ in range(steps):
+            q = integrate_quaternion_angular_velocity(q, omega, dt)
+        rx = UnitQuaternion.from_axis_angle(Vector3(1, 0, 0), 0.5)
+        spatial, body = rx * q0, q0 * rx
+        assert q.equals(spatial, tolerance=1e-3)
+        assert not q.equals(body, tolerance=1e-2)
+        # Keyword name documents the frame
+        dq = angular_velocity_to_quaternion_derivative(q0, omega_world=omega)
+        assert dq.norm() == pytest.approx(0.5, abs=1e-12)
+
     def test_angular_velocity_finite_check(self):
         """Test that angular_velocity_to_quaternion_derivative rejects non-finite input."""
         q = UnitQuaternion.identity()
