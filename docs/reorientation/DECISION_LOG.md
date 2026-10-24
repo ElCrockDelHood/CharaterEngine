@@ -547,12 +547,25 @@ they can be upgraded (Decision 12). Audit: `docs/audit/A10_HAND_LAYOUT.md`.
 
 ---
 
+## 36. FINDING A11 — RADIUS LATERAL TO ULNA
+
+**Finding**: in the anatomical position the radius was in front of the ulna (Y) instead of lateral to it (X).
+
+**Decision** (owner, 2026-10-24): `scripts/fix_forearm_layout.py` keeps midpoints, lengths and z and moves
+the pre-existing PLACEHOLDER half-separation (0.0333 m) from Y to X with the lateral sign; the hand is
+re-anchored on the radius tail (`rebuild_hand_layout.py`). `FOREARM_INTEROSSEOUS_WIDTH` registered as
+pending. Audit: `docs/audit/A11_FOREARM_LAYOUT.md`.
+
+**Date**: 2026-10-24 · **Status**: FINAL (topology); separation PLACEHOLDER, source pending
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 35
-**Final Decisions**: 31 (+4 deferred)
+**Total Decisions**: 36
+**Final Decisions**: 32 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)

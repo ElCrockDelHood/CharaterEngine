@@ -2,6 +2,17 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-24 (late afternoon) · Finding A11: forearm layout
+
+### Fixed
+- **Forearm** (`scripts/fix_forearm_layout.py`, `docs/audit/A11_FOREARM_LAYOUT.md`): radius and ulna were
+  split antero-posteriorly; the radius is now lateral to the ulna (same midpoint, lengths and z; the
+  pre-existing 0.0333 m half-separation moved from Y to X, PLACEHOLDER). Hand re-anchored on the radius tail.
+
+### Test status
+pytest 747 passed; addon headless 20/20 on Blender 3.6.23 (IK rest deviation 11.8 mm, unchanged);
+Godot 4.7.2 21/21; gameplay table unchanged.
+
 ## [Unreleased] — 2026-10-24 (afternoon) · Finding A10: hand layout
 
 ### Fixed
