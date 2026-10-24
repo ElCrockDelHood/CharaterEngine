@@ -28,11 +28,12 @@ def main() -> int:
     if not targets:
         targets = ["tests"]
 
-    cmd = [venv_python(), "-m", "pytest", *targets, "-q"]
+    # -v -rA: every test and the full summary, live on the console and in logs/<UTC>_pytest.log
+    cmd = [venv_python(), "-m", "pytest", *targets, "-v", "-rA"]
     if args.cov:
         cmd += ["--cov", "--cov-report=term-missing"]
     cmd += extra
-    return run(cmd, check=False, env={"CHARACTER_ENGINE_ENV": "test"})
+    return run(cmd, check=False, env={"CHARACTER_ENGINE_ENV": "test"}, tool="pytest")
 
 
 if __name__ == "__main__":

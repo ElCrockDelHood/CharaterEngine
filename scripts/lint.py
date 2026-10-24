@@ -6,7 +6,7 @@
 import re
 import sys
 
-from _common import ROOT, run, venv_python
+from _common import ROOT, venv_python
 
 DOMAIN_DIRS = [ROOT / "src" / "character_engine" / "domain", ROOT / "src" / "character_engine" / "export",
                ROOT / "src" / "character_engine" / "math", ROOT / "backend"]
@@ -30,9 +30,18 @@ def architecture_guard() -> int:
 
 
 def main() -> int:
-    code = run([venv_python(), "-m", "ruff", "check", "."], check=False)
-    code |= architecture_guard()
-    return code
+    import contextlib
+    import io
+
+    from _logrun import append_log, run_logged
+
+    code, _, log = run_logged([venv_python(), "-m", "ruff", "check", "."], "lint")
+    out = io.StringIO()
+    with contextlib.redirect_stdout(out):
+        guard = architecture_guard()
+    print(out.getvalue(), end="")
+    append_log(log, "lint", out.getvalue())
+    return code | guard
 
 
 if __name__ == "__main__":

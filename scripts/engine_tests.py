@@ -17,6 +17,9 @@ Python components in background mode) and closes itself; that run also launches
 blenderplayer.exe for an autoplay combat smoke test. Godot runs --headless.
 Each engine is closed (process exit) before the next one starts. Reports:
 builds/tests/<engine>_addon_report.json (Blender/UPBGE), builds/tests/godot_report.json.
+
+Every run streams live to the console and is logged to logs/<UTC>_<step>.log + logs/latest_<step>.log
+(scripts/_logrun.py, docs/09_Debug_Consoles.md); builds/tests/<step>.log keeps the plain output.
 """
 
 from __future__ import annotations
@@ -26,10 +29,10 @@ import glob
 import json
 import os
 import shutil
-import subprocess
 import sys
-import time
 from pathlib import Path
+
+from _logrun import run_logged, utf8_console
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "builds" / "tests"
@@ -64,21 +67,14 @@ def find_godot() -> Path | None:
                    shutil.which("godot")])
 
 
+VERBOSE = False   # --verbose: Godot --verbose, Blender/UPBGE --debug-python
+
+
 def run(cmd, timeout: int, log: Path) -> tuple[int, float]:
-    print(f"\n$ {' '.join(str(c) for c in cmd)}")
-    t = time.time()
-    with log.open("w", encoding="utf-8", errors="replace") as fh:
-        try:
-            proc = subprocess.run([str(c) for c in cmd], stdout=fh, stderr=subprocess.STDOUT, timeout=timeout,
-                                  cwd=str(ROOT), env={**os.environ, "CHARACTER_ENGINE_SRC": str(ROOT / "src")})
-            code = proc.returncode
-        except subprocess.TimeoutExpired:
-            fh.write(f"\n!! timeout after {timeout} s\n")
-            code = 124
-    text = log.read_text(encoding="utf-8", errors="replace")
-    tail = "\n".join(text.splitlines()[-40:])
-    print(tail)
-    return code, time.time() - t
+    """Live output on the console + logs/<UTC>_<tool>.log (+ the legacy builds/tests/<log>)."""
+    code, secs, _ = run_logged(cmd, log.stem, env={"CHARACTER_ENGINE_SRC": str(ROOT / "src")},
+                               timeout=timeout, copy_to=log)
+    return code, secs
 
 
 def run_blender_like(engine: str, exe: Path, timeout: int, ui: bool) -> int:
@@ -96,6 +92,8 @@ def run_blender_like(engine: str, exe: Path, timeout: int, ui: bool) -> int:
     if report.exists():
         report.unlink()
     mode = ["--window-geometry", "0", "0", "800", "600"] if ui else ["-b", "--python-exit-code", "1"]
+    if VERBOSE:
+        mode = [*mode, "--debug-python"]
     code, secs = run([exe, *mode, "--factory-startup",
                       "--python", ROOT / "runtime" / "blender" / "ce_addon_headless_test.py", "--",
                       "--engine", engine, "--report", report, "--save", save], timeout, log)
@@ -133,8 +131,9 @@ def run_godot(exe: Path, timeout: int) -> int:
     if code:
         return 1
     # Import pass first (creates .godot cache for GLB / scripts), then the headless test runner.
-    run([exe, "--headless", "--path", project, "--import"], timeout, OUT / "godot_import.log")
-    code, secs = run([exe, "--headless", "--path", project, "--script", "res://tests/ce_test_runner.gd",
+    verbose = ["--verbose"] if VERBOSE else []
+    run([exe, "--headless", *verbose, "--path", project, "--import"], timeout, OUT / "godot_import.log")
+    code, secs = run([exe, "--headless", *verbose, "--path", project, "--script", "res://tests/ce_test_runner.gd",
                       "--", "--report", report], timeout, log)
     if report.exists():
         data = json.loads(report.read_text(encoding="utf-8"))
@@ -155,7 +154,12 @@ def main(argv=None) -> int:
     ap.add_argument("--upbge-background", action="store_true",
                     help="run the UPBGE suite with -b (no window; component/blenderplayer checks are deferred/skipped)")
     ap.add_argument("--blender", default=None, help="Blender executable for the blender suite (overrides CE_BLENDER)")
+    ap.add_argument("--verbose", action="store_true",
+                    help="engine debug output (Godot --verbose, Blender/UPBGE --debug-python)")
     a = ap.parse_args(argv)
+    global VERBOSE
+    VERBOSE = a.verbose
+    utf8_console()
     if not a.engines:
         a.engines = list(ENGINES)
     bad = [e for e in a.engines if e not in ENGINES]

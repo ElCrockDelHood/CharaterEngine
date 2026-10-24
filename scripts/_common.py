@@ -18,10 +18,11 @@ def venv_python() -> Path:
     return Path(sys.executable)
 
 
-def run(cmd, check: bool = True, env: dict | None = None) -> int:
-    """Run a command from the repository root, echoing it first."""
-    printable = " ".join(str(c) for c in cmd)
-    print(f"$ {printable}", flush=True)
+def run(cmd, check: bool = True, env: dict | None = None, tool: str | None = None) -> int:
+    """Run a command from the repository root, echoing it first.
+
+    With ``tool`` the output is also teed live to ``logs/<UTC>_<tool>.log`` (scripts/_logrun.py).
+    """
     merged_env = os.environ.copy()
     # Make `src/` and the repo root importable for every tool we launch.
     merged_env["PYTHONPATH"] = os.pathsep.join(
@@ -29,7 +30,12 @@ def run(cmd, check: bool = True, env: dict | None = None) -> int:
     )
     if env:
         merged_env.update(env)
-    result = subprocess.run([str(c) for c in cmd], cwd=ROOT, env=merged_env)
-    if check and result.returncode != 0:
-        sys.exit(result.returncode)
-    return result.returncode
+    if tool:
+        from _logrun import run_logged
+        code, _, _ = run_logged(cmd, tool, env=merged_env)
+    else:
+        print(f"$ {' '.join(str(c) for c in cmd)}", flush=True)
+        code = subprocess.run([str(c) for c in cmd], cwd=ROOT, env=merged_env).returncode
+    if check and code != 0:
+        sys.exit(code)
+    return code

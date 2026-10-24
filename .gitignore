@@ -33,6 +33,8 @@ env/
 builds/tmp/
 builds/gltf/
 builds/renders/
+# Debug-console run logs (scripts/_logrun.py, docs/09_Debug_Consoles.md)
+logs/
 
 # ---- Godot ----
 .godot/
