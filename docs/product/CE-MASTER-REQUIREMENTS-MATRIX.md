@@ -218,7 +218,7 @@ algunas generadas con AI. en este caso tenemos tambien items y caballo asociado.
 
 | ID | Requirement (owner's words) | Notes | Status |
 |----|-----------------------------|-------|--------|
-| **REFERENCE-IMAGES** | First tests with free, safe internet images and the owner's AI-generated images (items and horse included) | **Rule PROPOSED for the owner's approval:** AI-generated or free internet images are **REFERENCE ONLY** (blocking, silhouette, approximate proportions, item design). Each one is registered (file, SHA-256, origin, licence or generator terms — for AI: generator/date/prompt if known — and status). They are **never** a source of anatomical or historical facts (those need cited published sources) and are **not** included in a sold product unless the licence is verified. Measurements taken from them are ESTIMATE/ASSUMED | PENDING |
+| **REFERENCE-IMAGES** | First tests with free, safe internet images and the owner's AI-generated images (items and horse included) | **Rule PROPOSED for the owner's approval:** AI-generated or free internet images are **REFERENCE ONLY** (blocking, silhouette, approximate proportions, item design). Each one is registered (file, SHA-256, origin, licence or generator terms — for AI: generator/date/prompt if known — and status). They are **never** a source of anatomical or historical facts (those need cited published sources) and are **not** included in a sold product unless the licence is verified. Measurements taken from them are ESTIMATE/ASSUMED. Owner rule (Decision 46): references must bring **no legal and no malware problems** | PENDING |
 
 **First registered reference (outside the repository, not copied):**
 

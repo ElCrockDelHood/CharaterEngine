@@ -756,12 +756,32 @@ experiment map to a runtime reaction (keying)? Which experiment first?
 
 ---
 
+## 46. REFERENCES MUST BE LEGALLY SAFE AND MALWARE-FREE
+
+**Decision** (owner, 2026-10-24 23:53 UTC, verbatim): "tienen que ser referencias que no traigan problemas ni legales
+ni de malware, nada mas." Applies to every external reference (images, videos, documents, models, data).
+Working rules derived from it (Claude's proposal, consistent with REFERENCE-IMAGES):
+* **Legal:** only public domain, CC0, CC BY (with attribution), the owner's own material, or sources whose licence
+  has been read and recorded; AI images under the generator's terms; videos such as YouTube are **viewed** for
+  research, never downloaded or copied (platform terms and copyright). Share-alike or non-commercial licences are
+  flagged before use.
+* **Malware:** only passive formats (PNG, JPG, TIFF, PDF, glTF, OBJ); from reputable origins (Wikimedia Commons,
+  museum open-access collections, official project repositories); no executables, installers or archives of
+  unknown origin; `.blend` files from third parties are opened only with *Auto Run Python Scripts* disabled (Blender
+  default) — or not at all; every downloaded file is hashed (SHA-256) and scanned with Windows Defender before it is
+  opened, and stored outside the repository. Each download still needs the owner's approval (name, origin, licence,
+  size).
+
+**Date**: 2026-10-24 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 45
-**Final Decisions**: 41 (+4 deferred)
+**Total Decisions**: 46
+**Final Decisions**: 42 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)
