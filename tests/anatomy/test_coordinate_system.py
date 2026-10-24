@@ -52,18 +52,18 @@ class TestCoordinateSystem:
     def test_positive_direction_descriptions(self):
         """Test positive direction descriptions are defined."""
         assert "upward" in CANONICAL_COORDINATE_SYSTEM.get_positive_direction(Axis.Z)
-        assert "right" in CANONICAL_COORDINATE_SYSTEM.get_positive_direction(Axis.X)
+        assert "left side" in CANONICAL_COORDINATE_SYSTEM.get_positive_direction(Axis.X)   # Decision 17
         assert "posterior" in CANONICAL_COORDINATE_SYSTEM.get_positive_direction(Axis.Y)
 
     def test_side_determination(self):
-        """Test lateral side determination from X coordinate."""
-        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(1.0) == LateralSide.RIGHT
-        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(-1.0) == LateralSide.LEFT
+        """Test lateral side determination from X coordinate (+X = left, Decision 17)."""
+        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(1.0) == LateralSide.LEFT
+        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(-1.0) == LateralSide.RIGHT
         assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(0.0) == LateralSide.MIDLINE
         assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(0.0005) == LateralSide.MIDLINE
         assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(-0.0005) == LateralSide.MIDLINE
-        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(0.0015) == LateralSide.RIGHT
-        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(-0.0015) == LateralSide.LEFT
+        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(0.0015) == LateralSide.LEFT
+        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(-0.0015) == LateralSide.RIGHT
 
 
 class TestMirrorOperation:

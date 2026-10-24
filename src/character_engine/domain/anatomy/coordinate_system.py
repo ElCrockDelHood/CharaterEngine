@@ -7,7 +7,7 @@ Coordinate System:
 - Handedness: Right-handed
 - Vertical Axis: Z (positive Z points upward)
 - Forward Axis: Negative Y (negative Y points forward/anterior)
-- Bilateral Axis: X (positive X = right side)
+- Bilateral Axis: X (positive X = LEFT side; forward × up = −X is the right, Decision 17)
 - Linear Units: Meters
 - Angular Units: Degrees (interface), Radians (calculations)
 - Ground/Reference Plane: Z = 0
@@ -96,7 +96,7 @@ class CoordinateSystem:
         """Get semantic meaning of positive direction for an axis."""
         descriptions = {
             Axis.Z: "upward (above ground)",
-            Axis.X: "right side of body",
+            Axis.X: "left side of body (right = forward x up = -X, Decision 17)",
             Axis.Y: "posterior (backward), so negative Y is forward/anterior"
         }
         return descriptions.get(axis, "unknown")
@@ -118,12 +118,12 @@ class CoordinateSystem:
         return (0.0, 0.0, 1.0)
 
     def get_right_direction(self) -> Tuple[float, float, float]:
-        """Get the right direction vector.
+        """Get the right direction vector (forward × up).
 
         Returns:
-            (1, 0, 0) - positive X points right
+            (-1, 0, 0) - negative X points to the body's right (Decision 17)
         """
-        return (1.0, 0.0, 0.0)
+        return (-1.0, 0.0, 0.0)
 
     def get_side_from_x(self, x_coordinate: float) -> LateralSide:
         """Determine lateral side from X coordinate."""
@@ -131,9 +131,9 @@ class CoordinateSystem:
         if abs(x_coordinate) < tolerance:
             return LateralSide.MIDLINE
         elif x_coordinate > 0:
-            return LateralSide.RIGHT
-        else:
             return LateralSide.LEFT
+        else:
+            return LateralSide.RIGHT
 
     def mirror_x(self, coordinates: Tuple[float, float, float]) -> Tuple[float, float, float]:
         """Mirror coordinates across X = 0 plane (YZ plane).
@@ -278,8 +278,8 @@ def validate_coordinate_system() -> bool:
         assert CANONICAL_COORDINATE_SYSTEM.is_mirror_involution(test_coords)
 
         # Test side determination
-        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(1.0) == LateralSide.RIGHT
-        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(-1.0) == LateralSide.LEFT
+        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(1.0) == LateralSide.LEFT
+        assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(-1.0) == LateralSide.RIGHT
         assert CANONICAL_COORDINATE_SYSTEM.get_side_from_x(0.0) == LateralSide.MIDLINE
 
         # Test direction vectors
@@ -290,7 +290,7 @@ def validate_coordinate_system() -> bool:
         assert up == (0.0, 0.0, 1.0)
 
         right = CANONICAL_COORDINATE_SYSTEM.get_right_direction()
-        assert right == (1.0, 0.0, 0.0)
+        assert right == (-1.0, 0.0, 0.0)
 
         # Test right-handedness
         assert validate_right_handedness()

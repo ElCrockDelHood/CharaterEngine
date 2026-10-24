@@ -20,12 +20,12 @@
       "name": "Parietal I",
       "parent": "CRANIUM",
       "head": {
-        "x": -0.0533,
+        "x": 0.0533,
         "y": -0.0133,
         "z": 1.7331
       },
       "tail": {
-        "x": -0.0533,
+        "x": 0.0533,
         "y": -0.0133,
         "z": 1.7666
       }
@@ -35,12 +35,12 @@
       "name": "Parietal D",
       "parent": "CRANIUM",
       "head": {
-        "x": 0.0533,
+        "x": -0.0533,
         "y": -0.0133,
         "z": 1.7331
       },
       "tail": {
-        "x": 0.0533,
+        "x": -0.0533,
         "y": -0.0133,
         "z": 1.7666
       }
@@ -50,12 +50,12 @@
       "name": "Temporal I",
       "parent": "CRANIUM",
       "head": {
-        "x": -0.0666,
+        "x": 0.0666,
         "y": -0.0666,
         "z": 1.6663
       },
       "tail": {
-        "x": -0.0666,
+        "x": 0.0666,
         "y": -0.0666,
         "z": 1.7331
       }
@@ -65,12 +65,12 @@
       "name": "Temporal D",
       "parent": "CRANIUM",
       "head": {
-        "x": 0.0666,
+        "x": -0.0666,
         "y": -0.0666,
         "z": 1.6663
       },
       "tail": {
-        "x": 0.0666,
+        "x": -0.0666,
         "y": -0.0666,
         "z": 1.7331
       }
@@ -125,12 +125,12 @@
       "name": "Maxilar I",
       "parent": "CRANIUM",
       "head": {
-        "x": -0.04,
+        "x": 0.04,
         "y": -0.0533,
         "z": 1.6128
       },
       "tail": {
-        "x": -0.04,
+        "x": 0.04,
         "y": -0.0533,
         "z": 1.6462
       }
@@ -140,12 +140,12 @@
       "name": "Maxilar D",
       "parent": "CRANIUM",
       "head": {
-        "x": 0.04,
+        "x": -0.04,
         "y": -0.0533,
         "z": 1.6128
       },
       "tail": {
-        "x": 0.04,
+        "x": -0.04,
         "y": -0.0533,
         "z": 1.6462
       }
@@ -155,12 +155,12 @@
       "name": "Cigomatico I",
       "parent": "CRANIUM",
       "head": {
-        "x": -0.0799,
+        "x": 0.0799,
         "y": -0.04,
         "z": 1.5994
       },
       "tail": {
-        "x": -0.0799,
+        "x": 0.0799,
         "y": -0.04,
         "z": 1.6329
       }
@@ -170,12 +170,12 @@
       "name": "Cigomatico D",
       "parent": "CRANIUM",
       "head": {
-        "x": 0.0799,
+        "x": -0.0799,
         "y": -0.04,
         "z": 1.5994
       },
       "tail": {
-        "x": 0.0799,
+        "x": -0.0799,
         "y": -0.04,
         "z": 1.6329
       }
@@ -185,12 +185,12 @@
       "name": "Nasal I",
       "parent": "CRANIUM",
       "head": {
-        "x": -0.0133,
+        "x": 0.0133,
         "y": -0.0666,
         "z": 1.6997
       },
       "tail": {
-        "x": -0.0133,
+        "x": 0.0133,
         "y": -0.0666,
         "z": 1.7198
       }
@@ -200,12 +200,12 @@
       "name": "Nasal D",
       "parent": "CRANIUM",
       "head": {
-        "x": 0.0133,
+        "x": -0.0133,
         "y": -0.0666,
         "z": 1.6997
       },
       "tail": {
-        "x": 0.0133,
+        "x": -0.0133,
         "y": -0.0666,
         "z": 1.7198
       }
@@ -215,12 +215,12 @@
       "name": "Lagrimal I",
       "parent": "CRANIUM",
       "head": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": -0.0533,
         "z": 1.6663
       },
       "tail": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": -0.0533,
         "z": 1.6797
       }
@@ -230,12 +230,12 @@
       "name": "Lagrimal D",
       "parent": "CRANIUM",
       "head": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": -0.0533,
         "z": 1.6663
       },
       "tail": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": -0.0533,
         "z": 1.6797
       }
@@ -245,12 +245,12 @@
       "name": "Palatino I",
       "parent": "CRANIUM",
       "head": {
-        "x": -0.0266,
+        "x": 0.0266,
         "y": -0.04,
         "z": 1.566
       },
       "tail": {
-        "x": -0.0266,
+        "x": 0.0266,
         "y": -0.04,
         "z": 1.5861
       }
@@ -260,12 +260,12 @@
       "name": "Palatino D",
       "parent": "CRANIUM",
       "head": {
-        "x": 0.0266,
+        "x": -0.0266,
         "y": -0.04,
         "z": 1.566
       },
       "tail": {
-        "x": 0.0266,
+        "x": -0.0266,
         "y": -0.04,
         "z": 1.5861
       }
@@ -275,12 +275,12 @@
       "name": "Concha inf I",
       "parent": "CRANIUM",
       "head": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": -0.0466,
         "z": 1.5994
       },
       "tail": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": -0.0466,
         "z": 1.6128
       }
@@ -290,12 +290,12 @@
       "name": "Concha inf D",
       "parent": "CRANIUM",
       "head": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": -0.0466,
         "z": 1.5994
       },
       "tail": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": -0.0466,
         "z": 1.6128
       }
@@ -335,12 +335,12 @@
       "name": "Martillo I",
       "parent": "CRANIUM",
       "head": {
-        "x": -0.0133,
+        "x": 0.0133,
         "y": -0.0133,
         "z": 1.6329
       },
       "tail": {
-        "x": -0.0133,
+        "x": 0.0133,
         "y": -0.0133,
         "z": 1.6395
       }
@@ -350,12 +350,12 @@
       "name": "Martillo D",
       "parent": "CRANIUM",
       "head": {
-        "x": 0.0133,
+        "x": -0.0133,
         "y": -0.0133,
         "z": 1.6329
       },
       "tail": {
-        "x": 0.0133,
+        "x": -0.0133,
         "y": -0.0133,
         "z": 1.6395
       }
@@ -365,12 +365,12 @@
       "name": "Yunque I",
       "parent": "CRANIUM",
       "head": {
-        "x": -0.0133,
+        "x": 0.0133,
         "y": -0.0133,
         "z": 1.6262
       },
       "tail": {
-        "x": -0.0133,
+        "x": 0.0133,
         "y": -0.0133,
         "z": 1.6329
       }
@@ -380,12 +380,12 @@
       "name": "Yunque D",
       "parent": "CRANIUM",
       "head": {
-        "x": 0.0133,
+        "x": -0.0133,
         "y": -0.0133,
         "z": 1.6262
       },
       "tail": {
-        "x": 0.0133,
+        "x": -0.0133,
         "y": -0.0133,
         "z": 1.6329
       }
@@ -395,12 +395,12 @@
       "name": "Estribo I",
       "parent": "CRANIUM",
       "head": {
-        "x": -0.0133,
+        "x": 0.0133,
         "y": -0.0133,
         "z": 1.6195
       },
       "tail": {
-        "x": -0.0133,
+        "x": 0.0133,
         "y": -0.0133,
         "z": 1.6262
       }
@@ -410,12 +410,12 @@
       "name": "Estribo D",
       "parent": "CRANIUM",
       "head": {
-        "x": 0.0133,
+        "x": -0.0133,
         "y": -0.0133,
         "z": 1.6195
       },
       "tail": {
-        "x": 0.0133,
+        "x": -0.0133,
         "y": -0.0133,
         "z": 1.6262
       }
@@ -845,186 +845,6 @@
       "name": "Costilla01I",
       "parent": "THORACIC_1",
       "head": {
-        "x": -0.0733,
-        "y": 0.0,
-        "z": 1.5012
-      },
-      "tail": {
-        "x": -0.1099,
-        "y": 0.0,
-        "z": 1.4983
-      }
-    },
-    {
-      "canonical_name": "RIB_02_L",
-      "name": "Costilla02I",
-      "parent": "THORACIC_2",
-      "head": {
-        "x": -0.0799,
-        "y": 0.0,
-        "z": 1.4962
-      },
-      "tail": {
-        "x": -0.1199,
-        "y": 0.0,
-        "z": 1.4933
-      }
-    },
-    {
-      "canonical_name": "RIB_03_L",
-      "name": "Costilla03I",
-      "parent": "THORACIC_3",
-      "head": {
-        "x": -0.0866,
-        "y": 0.0,
-        "z": 1.4911
-      },
-      "tail": {
-        "x": -0.1299,
-        "y": 0.0,
-        "z": 1.4882
-      }
-    },
-    {
-      "canonical_name": "RIB_04_L",
-      "name": "Costilla04I",
-      "parent": "THORACIC_4",
-      "head": {
-        "x": -0.0932,
-        "y": 0.0,
-        "z": 1.4861
-      },
-      "tail": {
-        "x": -0.1399,
-        "y": 0.0,
-        "z": 1.4832
-      }
-    },
-    {
-      "canonical_name": "RIB_05_L",
-      "name": "Costilla05I",
-      "parent": "THORACIC_5",
-      "head": {
-        "x": -0.0999,
-        "y": 0.0,
-        "z": 1.481
-      },
-      "tail": {
-        "x": -0.1499,
-        "y": 0.0,
-        "z": 1.4782
-      }
-    },
-    {
-      "canonical_name": "RIB_06_L",
-      "name": "Costilla06I",
-      "parent": "THORACIC_6",
-      "head": {
-        "x": -0.1066,
-        "y": 0.0,
-        "z": 1.476
-      },
-      "tail": {
-        "x": -0.1598,
-        "y": 0.0,
-        "z": 1.4731
-      }
-    },
-    {
-      "canonical_name": "RIB_07_L",
-      "name": "Costilla07I",
-      "parent": "THORACIC_7",
-      "head": {
-        "x": -0.1132,
-        "y": 0.0,
-        "z": 1.4659
-      },
-      "tail": {
-        "x": -0.1698,
-        "y": 0.0,
-        "z": 1.453
-      }
-    },
-    {
-      "canonical_name": "RIB_08_L",
-      "name": "Costilla08I",
-      "parent": "THORACIC_8",
-      "head": {
-        "x": -0.1199,
-        "y": 0.0,
-        "z": 1.4432
-      },
-      "tail": {
-        "x": -0.1798,
-        "y": 0.0,
-        "z": 1.4303
-      }
-    },
-    {
-      "canonical_name": "RIB_09_L",
-      "name": "Costilla09I",
-      "parent": "THORACIC_9",
-      "head": {
-        "x": -0.1265,
-        "y": 0.0,
-        "z": 1.4206
-      },
-      "tail": {
-        "x": -0.1898,
-        "y": 0.0,
-        "z": 1.4076
-      }
-    },
-    {
-      "canonical_name": "RIB_10_L",
-      "name": "Costilla10I",
-      "parent": "THORACIC_10",
-      "head": {
-        "x": -0.1332,
-        "y": 0.0,
-        "z": 1.3979
-      },
-      "tail": {
-        "x": -0.1998,
-        "y": 0.0,
-        "z": 1.3849
-      }
-    },
-    {
-      "canonical_name": "RIB_11_L",
-      "name": "Costilla11I",
-      "parent": "THORACIC_11",
-      "head": {
-        "x": -0.1399,
-        "y": 0.0,
-        "z": 1.3752
-      },
-      "tail": {
-        "x": -0.2098,
-        "y": 0.0,
-        "z": 1.3622
-      }
-    },
-    {
-      "canonical_name": "RIB_12_L",
-      "name": "Costilla12I",
-      "parent": "THORACIC_12",
-      "head": {
-        "x": -0.1465,
-        "y": 0.0,
-        "z": 1.3525
-      },
-      "tail": {
-        "x": -0.2198,
-        "y": 0.0,
-        "z": 1.3396
-      }
-    },
-    {
-      "canonical_name": "RIB_01_R",
-      "name": "Costilla01D",
-      "parent": "THORACIC_1",
-      "head": {
         "x": 0.0733,
         "y": 0.0,
         "z": 1.5012
@@ -1036,8 +856,8 @@
       }
     },
     {
-      "canonical_name": "RIB_02_R",
-      "name": "Costilla02D",
+      "canonical_name": "RIB_02_L",
+      "name": "Costilla02I",
       "parent": "THORACIC_2",
       "head": {
         "x": 0.0799,
@@ -1051,8 +871,8 @@
       }
     },
     {
-      "canonical_name": "RIB_03_R",
-      "name": "Costilla03D",
+      "canonical_name": "RIB_03_L",
+      "name": "Costilla03I",
       "parent": "THORACIC_3",
       "head": {
         "x": 0.0866,
@@ -1066,8 +886,8 @@
       }
     },
     {
-      "canonical_name": "RIB_04_R",
-      "name": "Costilla04D",
+      "canonical_name": "RIB_04_L",
+      "name": "Costilla04I",
       "parent": "THORACIC_4",
       "head": {
         "x": 0.0932,
@@ -1081,8 +901,8 @@
       }
     },
     {
-      "canonical_name": "RIB_05_R",
-      "name": "Costilla05D",
+      "canonical_name": "RIB_05_L",
+      "name": "Costilla05I",
       "parent": "THORACIC_5",
       "head": {
         "x": 0.0999,
@@ -1096,8 +916,8 @@
       }
     },
     {
-      "canonical_name": "RIB_06_R",
-      "name": "Costilla06D",
+      "canonical_name": "RIB_06_L",
+      "name": "Costilla06I",
       "parent": "THORACIC_6",
       "head": {
         "x": 0.1066,
@@ -1111,8 +931,8 @@
       }
     },
     {
-      "canonical_name": "RIB_07_R",
-      "name": "Costilla07D",
+      "canonical_name": "RIB_07_L",
+      "name": "Costilla07I",
       "parent": "THORACIC_7",
       "head": {
         "x": 0.1132,
@@ -1126,8 +946,8 @@
       }
     },
     {
-      "canonical_name": "RIB_08_R",
-      "name": "Costilla08D",
+      "canonical_name": "RIB_08_L",
+      "name": "Costilla08I",
       "parent": "THORACIC_8",
       "head": {
         "x": 0.1199,
@@ -1141,8 +961,8 @@
       }
     },
     {
-      "canonical_name": "RIB_09_R",
-      "name": "Costilla09D",
+      "canonical_name": "RIB_09_L",
+      "name": "Costilla09I",
       "parent": "THORACIC_9",
       "head": {
         "x": 0.1265,
@@ -1156,8 +976,8 @@
       }
     },
     {
-      "canonical_name": "RIB_10_R",
-      "name": "Costilla10D",
+      "canonical_name": "RIB_10_L",
+      "name": "Costilla10I",
       "parent": "THORACIC_10",
       "head": {
         "x": 0.1332,
@@ -1171,8 +991,8 @@
       }
     },
     {
-      "canonical_name": "RIB_11_R",
-      "name": "Costilla11D",
+      "canonical_name": "RIB_11_L",
+      "name": "Costilla11I",
       "parent": "THORACIC_11",
       "head": {
         "x": 0.1399,
@@ -1186,8 +1006,8 @@
       }
     },
     {
-      "canonical_name": "RIB_12_R",
-      "name": "Costilla12D",
+      "canonical_name": "RIB_12_L",
+      "name": "Costilla12I",
       "parent": "THORACIC_12",
       "head": {
         "x": 0.1465,
@@ -1201,38 +1021,188 @@
       }
     },
     {
-      "canonical_name": "CLAVICLE_L",
-      "name": "Clavicula I",
-      "parent": "ROOT_SKELETON",
+      "canonical_name": "RIB_01_R",
+      "name": "Costilla01D",
+      "parent": "THORACIC_1",
       "head": {
-        "x": -0.1665,
-        "y": -0.0666,
-        "z": 1.5156
-      },
-      "tail": {
-        "x": -0.1998,
-        "y": -0.0666,
-        "z": 1.5084
-      }
-    },
-    {
-      "canonical_name": "SCAPULA_L",
-      "name": "Escapula I",
-      "parent": "CLAVICLE_L",
-      "head": {
-        "x": -0.2331,
+        "x": -0.0733,
         "y": 0.0,
         "z": 1.5012
       },
       "tail": {
-        "x": -0.2331,
+        "x": -0.1099,
         "y": 0.0,
-        "z": 1.4796
+        "z": 1.4983
       }
     },
     {
-      "canonical_name": "CLAVICLE_R",
-      "name": "Clavicula D",
+      "canonical_name": "RIB_02_R",
+      "name": "Costilla02D",
+      "parent": "THORACIC_2",
+      "head": {
+        "x": -0.0799,
+        "y": 0.0,
+        "z": 1.4962
+      },
+      "tail": {
+        "x": -0.1199,
+        "y": 0.0,
+        "z": 1.4933
+      }
+    },
+    {
+      "canonical_name": "RIB_03_R",
+      "name": "Costilla03D",
+      "parent": "THORACIC_3",
+      "head": {
+        "x": -0.0866,
+        "y": 0.0,
+        "z": 1.4911
+      },
+      "tail": {
+        "x": -0.1299,
+        "y": 0.0,
+        "z": 1.4882
+      }
+    },
+    {
+      "canonical_name": "RIB_04_R",
+      "name": "Costilla04D",
+      "parent": "THORACIC_4",
+      "head": {
+        "x": -0.0932,
+        "y": 0.0,
+        "z": 1.4861
+      },
+      "tail": {
+        "x": -0.1399,
+        "y": 0.0,
+        "z": 1.4832
+      }
+    },
+    {
+      "canonical_name": "RIB_05_R",
+      "name": "Costilla05D",
+      "parent": "THORACIC_5",
+      "head": {
+        "x": -0.0999,
+        "y": 0.0,
+        "z": 1.481
+      },
+      "tail": {
+        "x": -0.1499,
+        "y": 0.0,
+        "z": 1.4782
+      }
+    },
+    {
+      "canonical_name": "RIB_06_R",
+      "name": "Costilla06D",
+      "parent": "THORACIC_6",
+      "head": {
+        "x": -0.1066,
+        "y": 0.0,
+        "z": 1.476
+      },
+      "tail": {
+        "x": -0.1598,
+        "y": 0.0,
+        "z": 1.4731
+      }
+    },
+    {
+      "canonical_name": "RIB_07_R",
+      "name": "Costilla07D",
+      "parent": "THORACIC_7",
+      "head": {
+        "x": -0.1132,
+        "y": 0.0,
+        "z": 1.4659
+      },
+      "tail": {
+        "x": -0.1698,
+        "y": 0.0,
+        "z": 1.453
+      }
+    },
+    {
+      "canonical_name": "RIB_08_R",
+      "name": "Costilla08D",
+      "parent": "THORACIC_8",
+      "head": {
+        "x": -0.1199,
+        "y": 0.0,
+        "z": 1.4432
+      },
+      "tail": {
+        "x": -0.1798,
+        "y": 0.0,
+        "z": 1.4303
+      }
+    },
+    {
+      "canonical_name": "RIB_09_R",
+      "name": "Costilla09D",
+      "parent": "THORACIC_9",
+      "head": {
+        "x": -0.1265,
+        "y": 0.0,
+        "z": 1.4206
+      },
+      "tail": {
+        "x": -0.1898,
+        "y": 0.0,
+        "z": 1.4076
+      }
+    },
+    {
+      "canonical_name": "RIB_10_R",
+      "name": "Costilla10D",
+      "parent": "THORACIC_10",
+      "head": {
+        "x": -0.1332,
+        "y": 0.0,
+        "z": 1.3979
+      },
+      "tail": {
+        "x": -0.1998,
+        "y": 0.0,
+        "z": 1.3849
+      }
+    },
+    {
+      "canonical_name": "RIB_11_R",
+      "name": "Costilla11D",
+      "parent": "THORACIC_11",
+      "head": {
+        "x": -0.1399,
+        "y": 0.0,
+        "z": 1.3752
+      },
+      "tail": {
+        "x": -0.2098,
+        "y": 0.0,
+        "z": 1.3622
+      }
+    },
+    {
+      "canonical_name": "RIB_12_R",
+      "name": "Costilla12D",
+      "parent": "THORACIC_12",
+      "head": {
+        "x": -0.1465,
+        "y": 0.0,
+        "z": 1.3525
+      },
+      "tail": {
+        "x": -0.2198,
+        "y": 0.0,
+        "z": 1.3396
+      }
+    },
+    {
+      "canonical_name": "CLAVICLE_L",
+      "name": "Clavicula I",
       "parent": "ROOT_SKELETON",
       "head": {
         "x": 0.1665,
@@ -1246,9 +1216,9 @@
       }
     },
     {
-      "canonical_name": "SCAPULA_R",
-      "name": "Escapula D",
-      "parent": "CLAVICLE_R",
+      "canonical_name": "SCAPULA_L",
+      "name": "Escapula I",
+      "parent": "CLAVICLE_L",
       "head": {
         "x": 0.2331,
         "y": 0.0,
@@ -1261,16 +1231,46 @@
       }
     },
     {
+      "canonical_name": "CLAVICLE_R",
+      "name": "Clavicula D",
+      "parent": "ROOT_SKELETON",
+      "head": {
+        "x": -0.1665,
+        "y": -0.0666,
+        "z": 1.5156
+      },
+      "tail": {
+        "x": -0.1998,
+        "y": -0.0666,
+        "z": 1.5084
+      }
+    },
+    {
+      "canonical_name": "SCAPULA_R",
+      "name": "Escapula D",
+      "parent": "CLAVICLE_R",
+      "head": {
+        "x": -0.2331,
+        "y": 0.0,
+        "z": 1.5012
+      },
+      "tail": {
+        "x": -0.2331,
+        "y": 0.0,
+        "z": 1.4796
+      }
+    },
+    {
       "canonical_name": "HUMERUS_L",
       "name": "Húmero I",
       "parent": "SCAPULA_L",
       "head": {
-        "x": -0.2331,
+        "x": 0.2331,
         "y": 0.0,
         "z": 1.4724
       },
       "tail": {
-        "x": -0.2331,
+        "x": 0.2331,
         "y": 0.0,
         "z": 1.1566
       }
@@ -1280,12 +1280,12 @@
       "name": "Radio I",
       "parent": "HUMERUS_L",
       "head": {
-        "x": -0.2331,
+        "x": 0.2331,
         "y": -0.0333,
         "z": 1.1139
       },
       "tail": {
-        "x": -0.2331,
+        "x": 0.2331,
         "y": -0.0333,
         "z": 0.873
       }
@@ -1295,12 +1295,12 @@
       "name": "Cubito I",
       "parent": "HUMERUS_L",
       "head": {
-        "x": -0.2331,
+        "x": 0.2331,
         "y": 0.0333,
         "z": 1.1139
       },
       "tail": {
-        "x": -0.2331,
+        "x": 0.2331,
         "y": 0.0333,
         "z": 0.873
       }
@@ -1310,12 +1310,12 @@
       "name": "Húmero D",
       "parent": "SCAPULA_R",
       "head": {
-        "x": 0.2331,
+        "x": -0.2331,
         "y": 0.0,
         "z": 1.4724
       },
       "tail": {
-        "x": 0.2331,
+        "x": -0.2331,
         "y": 0.0,
         "z": 1.1566
       }
@@ -1325,12 +1325,12 @@
       "name": "Radio D",
       "parent": "HUMERUS_R",
       "head": {
-        "x": 0.2331,
+        "x": -0.2331,
         "y": -0.0333,
         "z": 1.1139
       },
       "tail": {
-        "x": 0.2331,
+        "x": -0.2331,
         "y": -0.0333,
         "z": 0.873
       }
@@ -1340,12 +1340,12 @@
       "name": "Cubito D",
       "parent": "HUMERUS_R",
       "head": {
-        "x": 0.2331,
+        "x": -0.2331,
         "y": 0.0333,
         "z": 1.1139
       },
       "tail": {
-        "x": 0.2331,
+        "x": -0.2331,
         "y": 0.0333,
         "z": 0.873
       }
@@ -1355,12 +1355,12 @@
       "name": "Scaphoid I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.2398,
+        "x": 0.2398,
         "y": -0.0,
         "z": 0.7717
       },
       "tail": {
-        "x": -0.2398,
+        "x": 0.2398,
         "y": -0.0,
         "z": 0.7636
       }
@@ -1370,12 +1370,12 @@
       "name": "Lunate I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.2431,
+        "x": 0.2431,
         "y": -0.0133,
         "z": 0.7697
       },
       "tail": {
-        "x": -0.2431,
+        "x": 0.2431,
         "y": -0.0133,
         "z": 0.7616
       }
@@ -1385,12 +1385,12 @@
       "name": "Triquetrum I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.2464,
+        "x": 0.2464,
         "y": -0.0266,
         "z": 0.7677
       },
       "tail": {
-        "x": -0.2464,
+        "x": 0.2464,
         "y": -0.0266,
         "z": 0.7596
       }
@@ -1400,12 +1400,12 @@
       "name": "Pisiform I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.2498,
+        "x": 0.2498,
         "y": -0.04,
         "z": 0.7657
       },
       "tail": {
-        "x": -0.2498,
+        "x": 0.2498,
         "y": -0.04,
         "z": 0.7576
       }
@@ -1415,12 +1415,12 @@
       "name": "Trapezium I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.2531,
+        "x": 0.2531,
         "y": -0.0533,
         "z": 0.7636
       },
       "tail": {
-        "x": -0.2531,
+        "x": 0.2531,
         "y": -0.0533,
         "z": 0.7555
       }
@@ -1430,12 +1430,12 @@
       "name": "Trapezoid I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.2564,
+        "x": 0.2564,
         "y": -0.0666,
         "z": 0.7616
       },
       "tail": {
-        "x": -0.2564,
+        "x": 0.2564,
         "y": -0.0666,
         "z": 0.7535
       }
@@ -1445,12 +1445,12 @@
       "name": "Capitate I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.2597,
+        "x": 0.2597,
         "y": -0.0799,
         "z": 0.7596
       },
       "tail": {
-        "x": -0.2597,
+        "x": 0.2597,
         "y": -0.0799,
         "z": 0.7515
       }
@@ -1460,12 +1460,12 @@
       "name": "Hamate I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.2631,
+        "x": 0.2631,
         "y": -0.0932,
         "z": 0.7576
       },
       "tail": {
-        "x": -0.2631,
+        "x": 0.2631,
         "y": -0.0932,
         "z": 0.7495
       }
@@ -1475,12 +1475,12 @@
       "name": "Scaphoid D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.2398,
+        "x": -0.2398,
         "y": -0.0,
         "z": 0.7717
       },
       "tail": {
-        "x": 0.2398,
+        "x": -0.2398,
         "y": -0.0,
         "z": 0.7636
       }
@@ -1490,12 +1490,12 @@
       "name": "Lunate D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.2431,
+        "x": -0.2431,
         "y": -0.0133,
         "z": 0.7697
       },
       "tail": {
-        "x": 0.2431,
+        "x": -0.2431,
         "y": -0.0133,
         "z": 0.7616
       }
@@ -1505,12 +1505,12 @@
       "name": "Triquetrum D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.2464,
+        "x": -0.2464,
         "y": -0.0266,
         "z": 0.7677
       },
       "tail": {
-        "x": 0.2464,
+        "x": -0.2464,
         "y": -0.0266,
         "z": 0.7596
       }
@@ -1520,12 +1520,12 @@
       "name": "Pisiform D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.2498,
+        "x": -0.2498,
         "y": -0.04,
         "z": 0.7657
       },
       "tail": {
-        "x": 0.2498,
+        "x": -0.2498,
         "y": -0.04,
         "z": 0.7576
       }
@@ -1535,12 +1535,12 @@
       "name": "Trapezium D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.2531,
+        "x": -0.2531,
         "y": -0.0533,
         "z": 0.7636
       },
       "tail": {
-        "x": 0.2531,
+        "x": -0.2531,
         "y": -0.0533,
         "z": 0.7555
       }
@@ -1550,12 +1550,12 @@
       "name": "Trapezoid D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.2564,
+        "x": -0.2564,
         "y": -0.0666,
         "z": 0.7616
       },
       "tail": {
-        "x": 0.2564,
+        "x": -0.2564,
         "y": -0.0666,
         "z": 0.7535
       }
@@ -1565,12 +1565,12 @@
       "name": "Capitate D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.2597,
+        "x": -0.2597,
         "y": -0.0799,
         "z": 0.7596
       },
       "tail": {
-        "x": 0.2597,
+        "x": -0.2597,
         "y": -0.0799,
         "z": 0.7515
       }
@@ -1580,12 +1580,12 @@
       "name": "Hamate D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.2631,
+        "x": -0.2631,
         "y": -0.0932,
         "z": 0.7576
       },
       "tail": {
-        "x": 0.2631,
+        "x": -0.2631,
         "y": -0.0932,
         "z": 0.7495
       }
@@ -1595,12 +1595,12 @@
       "name": "Metacarpal1 I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.7474
       },
       "tail": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.7313
       }
@@ -1610,12 +1610,12 @@
       "name": "Metacarpal2 I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.7434
       },
       "tail": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.7272
       }
@@ -1625,12 +1625,12 @@
       "name": "Metacarpal3 I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.7394
       },
       "tail": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.7232
       }
@@ -1640,12 +1640,12 @@
       "name": "Metacarpal4 I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.7353
       },
       "tail": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.7191
       }
@@ -1655,12 +1655,12 @@
       "name": "Metacarpal5 I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.0999,
+        "x": 0.0999,
         "y": 0.0,
         "z": 0.7313
       },
       "tail": {
-        "x": -0.0999,
+        "x": 0.0999,
         "y": 0.0,
         "z": 0.715
       }
@@ -1670,12 +1670,12 @@
       "name": "Metacarpal1 D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.7474
       },
       "tail": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.7313
       }
@@ -1685,12 +1685,12 @@
       "name": "Metacarpal2 D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.7434
       },
       "tail": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.7272
       }
@@ -1700,12 +1700,12 @@
       "name": "Metacarpal3 D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.7394
       },
       "tail": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.7232
       }
@@ -1715,12 +1715,12 @@
       "name": "Metacarpal4 D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.7353
       },
       "tail": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.7191
       }
@@ -1730,12 +1730,12 @@
       "name": "Metacarpal5 D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.0999,
+        "x": -0.0999,
         "y": 0.0,
         "z": 0.7313
       },
       "tail": {
-        "x": 0.0999,
+        "x": -0.0999,
         "y": 0.0,
         "z": 0.715
       }
@@ -1745,12 +1745,12 @@
       "name": "THUMB Prox I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": 0.0,
         "z": 0.7313
       },
       "tail": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": 0.0,
         "z": 0.7191
       }
@@ -1760,12 +1760,12 @@
       "name": "THUMB Dist I",
       "parent": "PHALANX_PROXIMAL_1_L",
       "head": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": 0.0,
         "z": 0.7191
       },
       "tail": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": 0.0,
         "z": 0.7069
       }
@@ -1775,12 +1775,12 @@
       "name": "INDEX Prox I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.7272
       },
       "tail": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.715
       }
@@ -1790,12 +1790,12 @@
       "name": "INDEX Inter I",
       "parent": "PHALANX_PROXIMAL_2_L",
       "head": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.715
       },
       "tail": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.7029
       }
@@ -1805,12 +1805,12 @@
       "name": "INDEX Dist I",
       "parent": "PHALANX_INTERMEDIATE_2_L",
       "head": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.7029
       },
       "tail": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.6907
       }
@@ -1820,12 +1820,12 @@
       "name": "MIDDLE Prox I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.7232
       },
       "tail": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.711
       }
@@ -1835,12 +1835,12 @@
       "name": "MIDDLE Inter I",
       "parent": "PHALANX_PROXIMAL_3_L",
       "head": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.711
       },
       "tail": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.6988
       }
@@ -1850,12 +1850,12 @@
       "name": "MIDDLE Dist I",
       "parent": "PHALANX_INTERMEDIATE_3_L",
       "head": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.6988
       },
       "tail": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.6867
       }
@@ -1865,12 +1865,12 @@
       "name": "RING Prox I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.7191
       },
       "tail": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.7069
       }
@@ -1880,12 +1880,12 @@
       "name": "RING Inter I",
       "parent": "PHALANX_PROXIMAL_4_L",
       "head": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.7069
       },
       "tail": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.6948
       }
@@ -1895,12 +1895,12 @@
       "name": "RING Dist I",
       "parent": "PHALANX_INTERMEDIATE_4_L",
       "head": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.6948
       },
       "tail": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.6826
       }
@@ -1910,12 +1910,12 @@
       "name": "LITTLE Prox I",
       "parent": "RADIUS_L",
       "head": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.715
       },
       "tail": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.7029
       }
@@ -1925,12 +1925,12 @@
       "name": "LITTLE Inter I",
       "parent": "PHALANX_PROXIMAL_5_L",
       "head": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.7029
       },
       "tail": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.6907
       }
@@ -1940,12 +1940,12 @@
       "name": "LITTLE Dist I",
       "parent": "PHALANX_INTERMEDIATE_5_L",
       "head": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.6907
       },
       "tail": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.6786
       }
@@ -1955,12 +1955,12 @@
       "name": "THUMB Prox D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": 0.0,
         "z": 0.7313
       },
       "tail": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": 0.0,
         "z": 0.7191
       }
@@ -1970,12 +1970,12 @@
       "name": "THUMB Dist D",
       "parent": "PHALANX_PROXIMAL_1_R",
       "head": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": 0.0,
         "z": 0.7191
       },
       "tail": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": 0.0,
         "z": 0.7069
       }
@@ -1985,12 +1985,12 @@
       "name": "INDEX Prox D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.7272
       },
       "tail": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.715
       }
@@ -2000,12 +2000,12 @@
       "name": "INDEX Inter D",
       "parent": "PHALANX_PROXIMAL_2_R",
       "head": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.715
       },
       "tail": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.7029
       }
@@ -2015,12 +2015,12 @@
       "name": "INDEX Dist D",
       "parent": "PHALANX_INTERMEDIATE_2_R",
       "head": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.7029
       },
       "tail": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.6907
       }
@@ -2030,12 +2030,12 @@
       "name": "MIDDLE Prox D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.7232
       },
       "tail": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.711
       }
@@ -2045,12 +2045,12 @@
       "name": "MIDDLE Inter D",
       "parent": "PHALANX_PROXIMAL_3_R",
       "head": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.711
       },
       "tail": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.6988
       }
@@ -2060,12 +2060,12 @@
       "name": "MIDDLE Dist D",
       "parent": "PHALANX_INTERMEDIATE_3_R",
       "head": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.6988
       },
       "tail": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.6867
       }
@@ -2075,12 +2075,12 @@
       "name": "RING Prox D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.7191
       },
       "tail": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.7069
       }
@@ -2090,12 +2090,12 @@
       "name": "RING Inter D",
       "parent": "PHALANX_PROXIMAL_4_R",
       "head": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.7069
       },
       "tail": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.6948
       }
@@ -2105,12 +2105,12 @@
       "name": "RING Dist D",
       "parent": "PHALANX_INTERMEDIATE_4_R",
       "head": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.6948
       },
       "tail": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.6826
       }
@@ -2120,12 +2120,12 @@
       "name": "LITTLE Prox D",
       "parent": "RADIUS_R",
       "head": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.715
       },
       "tail": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.7029
       }
@@ -2135,12 +2135,12 @@
       "name": "LITTLE Inter D",
       "parent": "PHALANX_PROXIMAL_5_R",
       "head": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.7029
       },
       "tail": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.6907
       }
@@ -2150,12 +2150,12 @@
       "name": "LITTLE Dist D",
       "parent": "PHALANX_INTERMEDIATE_5_R",
       "head": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.6907
       },
       "tail": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.6786
       }
@@ -2165,12 +2165,12 @@
       "name": "Coxal I",
       "parent": "SACRUM",
       "head": {
-        "x": -0.0999,
+        "x": 0.0999,
         "y": 0.0,
         "z": 1.0512
       },
       "tail": {
-        "x": -0.0999,
+        "x": 0.0999,
         "y": 0.0,
         "z": 0.9864
       }
@@ -2180,12 +2180,12 @@
       "name": "Coxal D",
       "parent": "SACRUM",
       "head": {
-        "x": 0.0999,
+        "x": -0.0999,
         "y": 0.0,
         "z": 1.0512
       },
       "tail": {
-        "x": 0.0999,
+        "x": -0.0999,
         "y": 0.0,
         "z": 0.9864
       }
@@ -2195,12 +2195,12 @@
       "name": "Femur I",
       "parent": "COXAL_L",
       "head": {
-        "x": -0.0666,
+        "x": 0.0666,
         "y": 0.0,
         "z": 0.954
       },
       "tail": {
-        "x": -0.0666,
+        "x": 0.0666,
         "y": 0.0,
         "z": 0.5362
       }
@@ -2210,12 +2210,12 @@
       "name": "Femur D",
       "parent": "COXAL_R",
       "head": {
-        "x": 0.0666,
+        "x": -0.0666,
         "y": 0.0,
         "z": 0.954
       },
       "tail": {
-        "x": 0.0666,
+        "x": -0.0666,
         "y": 0.0,
         "z": 0.5362
       }
@@ -2225,12 +2225,12 @@
       "name": "Rotula I",
       "parent": "FEMUR_L",
       "head": {
-        "x": -0.0666,
+        "x": 0.0666,
         "y": -0.0333,
         "z": 0.5362
       },
       "tail": {
-        "x": -0.0666,
+        "x": 0.0666,
         "y": -0.0466,
         "z": 0.5362
       }
@@ -2240,12 +2240,12 @@
       "name": "Rotula D",
       "parent": "FEMUR_R",
       "head": {
-        "x": 0.0666,
+        "x": -0.0666,
         "y": -0.0333,
         "z": 0.5362
       },
       "tail": {
-        "x": 0.0666,
+        "x": -0.0666,
         "y": -0.0466,
         "z": 0.5362
       }
@@ -2255,12 +2255,12 @@
       "name": "Tibia I",
       "parent": "FEMUR_L",
       "head": {
-        "x": -0.0666,
+        "x": 0.0666,
         "y": 0.0,
         "z": 0.487
       },
       "tail": {
-        "x": -0.0666,
+        "x": 0.0666,
         "y": 0.0,
         "z": 0.0702
       }
@@ -2270,12 +2270,12 @@
       "name": "Perone I",
       "parent": "FEMUR_L",
       "head": {
-        "x": -0.0666,
+        "x": 0.0666,
         "y": -0.0333,
         "z": 0.487
       },
       "tail": {
-        "x": -0.0666,
+        "x": 0.0666,
         "y": -0.0333,
         "z": 0.0702
       }
@@ -2285,12 +2285,12 @@
       "name": "Tibia D",
       "parent": "FEMUR_R",
       "head": {
-        "x": 0.0666,
+        "x": -0.0666,
         "y": 0.0,
         "z": 0.487
       },
       "tail": {
-        "x": 0.0666,
+        "x": -0.0666,
         "y": 0.0,
         "z": 0.0702
       }
@@ -2300,12 +2300,12 @@
       "name": "Perone D",
       "parent": "FEMUR_R",
       "head": {
-        "x": 0.0666,
+        "x": -0.0666,
         "y": -0.0333,
         "z": 0.487
       },
       "tail": {
-        "x": 0.0666,
+        "x": -0.0666,
         "y": -0.0333,
         "z": 0.0702
       }
@@ -2315,12 +2315,12 @@
       "name": "Talus I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.0999,
+        "x": 0.0999,
         "y": -0.0,
         "z": 0.0517
       },
       "tail": {
-        "x": -0.0999,
+        "x": 0.0999,
         "y": -0.0,
         "z": 0.0462
       }
@@ -2330,12 +2330,12 @@
       "name": "Calcaneus I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.1032,
+        "x": 0.1032,
         "y": -0.0133,
         "z": 0.0499
       },
       "tail": {
-        "x": -0.1032,
+        "x": 0.1032,
         "y": -0.0133,
         "z": 0.0443
       }
@@ -2345,12 +2345,12 @@
       "name": "Navicular I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.1066,
+        "x": 0.1066,
         "y": -0.0266,
         "z": 0.048
       },
       "tail": {
-        "x": -0.1066,
+        "x": 0.1066,
         "y": -0.0266,
         "z": 0.0425
       }
@@ -2360,12 +2360,12 @@
       "name": "Cuboid I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.1099,
+        "x": 0.1099,
         "y": -0.04,
         "z": 0.0462
       },
       "tail": {
-        "x": -0.1099,
+        "x": 0.1099,
         "y": -0.04,
         "z": 0.0406
       }
@@ -2375,12 +2375,12 @@
       "name": "Cuneiform_Medial I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.1132,
+        "x": 0.1132,
         "y": -0.0533,
         "z": 0.0443
       },
       "tail": {
-        "x": -0.1132,
+        "x": 0.1132,
         "y": -0.0533,
         "z": 0.0388
       }
@@ -2390,12 +2390,12 @@
       "name": "Cuneiform_Intermediate I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.1166,
+        "x": 0.1166,
         "y": -0.0666,
         "z": 0.0425
       },
       "tail": {
-        "x": -0.1166,
+        "x": 0.1166,
         "y": -0.0666,
         "z": 0.0369
       }
@@ -2405,12 +2405,12 @@
       "name": "Cuneiform_Lateral I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.1199,
+        "x": 0.1199,
         "y": -0.0799,
         "z": 0.0406
       },
       "tail": {
-        "x": -0.1199,
+        "x": 0.1199,
         "y": -0.0799,
         "z": 0.0351
       }
@@ -2420,12 +2420,12 @@
       "name": "Talus D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.0999,
+        "x": -0.0999,
         "y": -0.0,
         "z": 0.0517
       },
       "tail": {
-        "x": 0.0999,
+        "x": -0.0999,
         "y": -0.0,
         "z": 0.0462
       }
@@ -2435,12 +2435,12 @@
       "name": "Calcaneus D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.1032,
+        "x": -0.1032,
         "y": -0.0133,
         "z": 0.0499
       },
       "tail": {
-        "x": 0.1032,
+        "x": -0.1032,
         "y": -0.0133,
         "z": 0.0443
       }
@@ -2450,12 +2450,12 @@
       "name": "Navicular D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.1066,
+        "x": -0.1066,
         "y": -0.0266,
         "z": 0.048
       },
       "tail": {
-        "x": 0.1066,
+        "x": -0.1066,
         "y": -0.0266,
         "z": 0.0425
       }
@@ -2465,12 +2465,12 @@
       "name": "Cuboid D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.1099,
+        "x": -0.1099,
         "y": -0.04,
         "z": 0.0462
       },
       "tail": {
-        "x": 0.1099,
+        "x": -0.1099,
         "y": -0.04,
         "z": 0.0406
       }
@@ -2480,12 +2480,12 @@
       "name": "Cuneiform_Medial D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.1132,
+        "x": -0.1132,
         "y": -0.0533,
         "z": 0.0443
       },
       "tail": {
-        "x": 0.1132,
+        "x": -0.1132,
         "y": -0.0533,
         "z": 0.0388
       }
@@ -2495,12 +2495,12 @@
       "name": "Cuneiform_Intermediate D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.1166,
+        "x": -0.1166,
         "y": -0.0666,
         "z": 0.0425
       },
       "tail": {
-        "x": 0.1166,
+        "x": -0.1166,
         "y": -0.0666,
         "z": 0.0369
       }
@@ -2510,12 +2510,12 @@
       "name": "Cuneiform_Lateral D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.1199,
+        "x": -0.1199,
         "y": -0.0799,
         "z": 0.0406
       },
       "tail": {
-        "x": 0.1199,
+        "x": -0.1199,
         "y": -0.0799,
         "z": 0.0351
       }
@@ -2525,12 +2525,12 @@
       "name": "Metatarsal1 I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.0314
       },
       "tail": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.0222
       }
@@ -2540,12 +2540,12 @@
       "name": "Metatarsal2 I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.0296
       },
       "tail": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.0203
       }
@@ -2555,12 +2555,12 @@
       "name": "Metatarsal3 I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.0277
       },
       "tail": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.0185
       }
@@ -2570,12 +2570,12 @@
       "name": "Metatarsal4 I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.0259
       },
       "tail": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.0166
       }
@@ -2585,12 +2585,12 @@
       "name": "Metatarsal5 I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.0999,
+        "x": 0.0999,
         "y": 0.0,
         "z": 0.024
       },
       "tail": {
-        "x": -0.0999,
+        "x": 0.0999,
         "y": 0.0,
         "z": 0.0148
       }
@@ -2600,12 +2600,12 @@
       "name": "Metatarsal1 D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.0314
       },
       "tail": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.0222
       }
@@ -2615,12 +2615,12 @@
       "name": "Metatarsal2 D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.0296
       },
       "tail": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.0203
       }
@@ -2630,12 +2630,12 @@
       "name": "Metatarsal3 D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.0277
       },
       "tail": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.0185
       }
@@ -2645,12 +2645,12 @@
       "name": "Metatarsal4 D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.0259
       },
       "tail": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.0166
       }
@@ -2660,12 +2660,12 @@
       "name": "Metatarsal5 D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.0999,
+        "x": -0.0999,
         "y": 0.0,
         "z": 0.024
       },
       "tail": {
-        "x": 0.0999,
+        "x": -0.0999,
         "y": 0.0,
         "z": 0.0148
       }
@@ -2675,12 +2675,12 @@
       "name": "HALLUX Prox I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": 0.0,
         "z": 0.024
       },
       "tail": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": 0.0,
         "z": 0.0185
       }
@@ -2690,12 +2690,12 @@
       "name": "HALLUX Dist I",
       "parent": "TOE_PHALANX_PROXIMAL_1_L",
       "head": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": 0.0,
         "z": 0.0185
       },
       "tail": {
-        "x": -0.0333,
+        "x": 0.0333,
         "y": 0.0,
         "z": 0.0129
       }
@@ -2705,12 +2705,12 @@
       "name": "SECOND Prox I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.0222
       },
       "tail": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.0166
       }
@@ -2720,12 +2720,12 @@
       "name": "SECOND Inter I",
       "parent": "TOE_PHALANX_PROXIMAL_2_L",
       "head": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.0166
       },
       "tail": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.0111
       }
@@ -2735,12 +2735,12 @@
       "name": "SECOND Dist I",
       "parent": "TOE_PHALANX_INTERMEDIATE_2_L",
       "head": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.0111
       },
       "tail": {
-        "x": -0.0466,
+        "x": 0.0466,
         "y": 0.0,
         "z": 0.0055
       }
@@ -2750,12 +2750,12 @@
       "name": "THIRD Prox I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.0203
       },
       "tail": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.0148
       }
@@ -2765,12 +2765,12 @@
       "name": "THIRD Inter I",
       "parent": "TOE_PHALANX_PROXIMAL_3_L",
       "head": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.0148
       },
       "tail": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.0092
       }
@@ -2780,12 +2780,12 @@
       "name": "THIRD Dist I",
       "parent": "TOE_PHALANX_INTERMEDIATE_3_L",
       "head": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.0092
       },
       "tail": {
-        "x": -0.0599,
+        "x": 0.0599,
         "y": 0.0,
         "z": 0.0037
       }
@@ -2795,12 +2795,12 @@
       "name": "FOURTH Prox I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.0185
       },
       "tail": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.0129
       }
@@ -2810,12 +2810,12 @@
       "name": "FOURTH Inter I",
       "parent": "TOE_PHALANX_PROXIMAL_4_L",
       "head": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.0129
       },
       "tail": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.0074
       }
@@ -2825,12 +2825,12 @@
       "name": "FOURTH Dist I",
       "parent": "TOE_PHALANX_INTERMEDIATE_4_L",
       "head": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.0074
       },
       "tail": {
-        "x": -0.0733,
+        "x": 0.0733,
         "y": 0.0,
         "z": 0.0018
       }
@@ -2840,12 +2840,12 @@
       "name": "FIFTH Prox I",
       "parent": "TIBIA_L",
       "head": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.0166
       },
       "tail": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.0111
       }
@@ -2855,12 +2855,12 @@
       "name": "FIFTH Inter I",
       "parent": "TOE_PHALANX_PROXIMAL_5_L",
       "head": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.0111
       },
       "tail": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.0055
       }
@@ -2870,12 +2870,12 @@
       "name": "FIFTH Dist I",
       "parent": "TOE_PHALANX_INTERMEDIATE_5_L",
       "head": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.0055
       },
       "tail": {
-        "x": -0.0866,
+        "x": 0.0866,
         "y": 0.0,
         "z": 0.0
       }
@@ -2885,12 +2885,12 @@
       "name": "HALLUX Prox D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": 0.0,
         "z": 0.024
       },
       "tail": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": 0.0,
         "z": 0.0185
       }
@@ -2900,12 +2900,12 @@
       "name": "HALLUX Dist D",
       "parent": "TOE_PHALANX_PROXIMAL_1_R",
       "head": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": 0.0,
         "z": 0.0185
       },
       "tail": {
-        "x": 0.0333,
+        "x": -0.0333,
         "y": 0.0,
         "z": 0.0129
       }
@@ -2915,12 +2915,12 @@
       "name": "SECOND Prox D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.0222
       },
       "tail": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.0166
       }
@@ -2930,12 +2930,12 @@
       "name": "SECOND Inter D",
       "parent": "TOE_PHALANX_PROXIMAL_2_R",
       "head": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.0166
       },
       "tail": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.0111
       }
@@ -2945,12 +2945,12 @@
       "name": "SECOND Dist D",
       "parent": "TOE_PHALANX_INTERMEDIATE_2_R",
       "head": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.0111
       },
       "tail": {
-        "x": 0.0466,
+        "x": -0.0466,
         "y": 0.0,
         "z": 0.0055
       }
@@ -2960,12 +2960,12 @@
       "name": "THIRD Prox D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.0203
       },
       "tail": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.0148
       }
@@ -2975,12 +2975,12 @@
       "name": "THIRD Inter D",
       "parent": "TOE_PHALANX_PROXIMAL_3_R",
       "head": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.0148
       },
       "tail": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.0092
       }
@@ -2990,12 +2990,12 @@
       "name": "THIRD Dist D",
       "parent": "TOE_PHALANX_INTERMEDIATE_3_R",
       "head": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.0092
       },
       "tail": {
-        "x": 0.0599,
+        "x": -0.0599,
         "y": 0.0,
         "z": 0.0037
       }
@@ -3005,12 +3005,12 @@
       "name": "FOURTH Prox D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.0185
       },
       "tail": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.0129
       }
@@ -3020,12 +3020,12 @@
       "name": "FOURTH Inter D",
       "parent": "TOE_PHALANX_PROXIMAL_4_R",
       "head": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.0129
       },
       "tail": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.0074
       }
@@ -3035,12 +3035,12 @@
       "name": "FOURTH Dist D",
       "parent": "TOE_PHALANX_INTERMEDIATE_4_R",
       "head": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.0074
       },
       "tail": {
-        "x": 0.0733,
+        "x": -0.0733,
         "y": 0.0,
         "z": 0.0018
       }
@@ -3050,12 +3050,12 @@
       "name": "FIFTH Prox D",
       "parent": "TIBIA_R",
       "head": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.0166
       },
       "tail": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.0111
       }
@@ -3065,12 +3065,12 @@
       "name": "FIFTH Inter D",
       "parent": "TOE_PHALANX_PROXIMAL_5_R",
       "head": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.0111
       },
       "tail": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.0055
       }
@@ -3080,12 +3080,12 @@
       "name": "FIFTH Dist D",
       "parent": "TOE_PHALANX_INTERMEDIATE_5_R",
       "head": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.0055
       },
       "tail": {
-        "x": 0.0866,
+        "x": -0.0866,
         "y": 0.0,
         "z": 0.0
       }

@@ -64,7 +64,7 @@ class RigDefinition:
 
 def _limb_chains() -> List[IKChain]:
     chains: List[IKChain] = []
-    for side, sx in (("L", -1.0), ("R", 1.0)):
+    for side, sx in (("L", 1.0), ("R", -1.0)):   # left = +X (Decision 17)
         chains.append(IKChain(
             chain_id=f"arm_{side}", bones=(f"HUMERUS_{side}", f"RADIUS_{side}"), target_bone=f"CAPITATE_{side}",
             pole_offset_m=(0.0, 0.40, 0.0),      # elbow pole behind (+Y is backwards in canonical frame)

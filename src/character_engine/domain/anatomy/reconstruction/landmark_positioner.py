@@ -307,7 +307,7 @@ class LandmarkPositioner:
                 left_shoulder = LandmarkPosition(
                     name="left_shoulder",
                     canonical_name="left_shoulder_joint",
-                    position=(-half_width, base_y, 0.0),
+                    position=(half_width, base_y, 0.0),   # left = +X (Decision 17)
                     unit="meters",
                     confidence="LOW",
                     provenance="DERIVED",
@@ -322,7 +322,7 @@ class LandmarkPositioner:
                 right_shoulder = LandmarkPosition(
                     name="right_shoulder",
                     canonical_name="right_shoulder_joint",
-                    position=(half_width, base_y, 0.0),
+                    position=(-half_width, base_y, 0.0),   # right = -X (Decision 17)
                     unit="meters",
                     confidence="LOW",
                     provenance="DERIVED",

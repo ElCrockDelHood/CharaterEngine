@@ -1,0 +1,145 @@
+{
+  "decision": "Decision 17 / D-13 (option A: mirror X, keep -Y forward)",
+  "file": "src/character_engine/data/anatomy/human_adult_206.json",
+  "bones": 206,
+  "containers": 2,
+  "sha256_before": "9761cbc10b1c226bb733ad008b588b1a3205fa1e9a48f806da753dfa06fb69b8",
+  "sha256_after": "e10f55d582390ebf75509538f9ac8a16bf506c9030eb4d90951770d3199d1017",
+  "involution_restores_original_bytes": true,
+  "left_bones_x_positive": true,
+  "right_bones_x_negative": true,
+  "unchanged": "names, parents, y, z, containers, formatting",
+  "samples": {
+    "HUMERUS_L": {
+      "before": {
+        "head": {
+          "x": -0.2331,
+          "y": 0.0,
+          "z": 1.4724
+        },
+        "tail": {
+          "x": -0.2331,
+          "y": 0.0,
+          "z": 1.1566
+        }
+      },
+      "after": {
+        "head": {
+          "x": 0.2331,
+          "y": 0.0,
+          "z": 1.4724
+        },
+        "tail": {
+          "x": 0.2331,
+          "y": 0.0,
+          "z": 1.1566
+        }
+      }
+    },
+    "HUMERUS_R": {
+      "before": {
+        "head": {
+          "x": 0.2331,
+          "y": 0.0,
+          "z": 1.4724
+        },
+        "tail": {
+          "x": 0.2331,
+          "y": 0.0,
+          "z": 1.1566
+        }
+      },
+      "after": {
+        "head": {
+          "x": -0.2331,
+          "y": 0.0,
+          "z": 1.4724
+        },
+        "tail": {
+          "x": -0.2331,
+          "y": 0.0,
+          "z": 1.1566
+        }
+      }
+    },
+    "FEMUR_L": {
+      "before": {
+        "head": {
+          "x": -0.0666,
+          "y": 0.0,
+          "z": 0.954
+        },
+        "tail": {
+          "x": -0.0666,
+          "y": 0.0,
+          "z": 0.5362
+        }
+      },
+      "after": {
+        "head": {
+          "x": 0.0666,
+          "y": 0.0,
+          "z": 0.954
+        },
+        "tail": {
+          "x": 0.0666,
+          "y": 0.0,
+          "z": 0.5362
+        }
+      }
+    },
+    "NASAL_R": {
+      "before": {
+        "head": {
+          "x": 0.0133,
+          "y": -0.0666,
+          "z": 1.6997
+        },
+        "tail": {
+          "x": 0.0133,
+          "y": -0.0666,
+          "z": 1.7198
+        }
+      },
+      "after": {
+        "head": {
+          "x": -0.0133,
+          "y": -0.0666,
+          "z": 1.6997
+        },
+        "tail": {
+          "x": -0.0133,
+          "y": -0.0666,
+          "z": 1.7198
+        }
+      }
+    },
+    "STERNUM": {
+      "before": {
+        "head": {
+          "x": 0.0,
+          "y": -0.0666,
+          "z": 1.4868
+        },
+        "tail": {
+          "x": 0.0,
+          "y": -0.0666,
+          "z": 1.44
+        }
+      },
+      "after": {
+        "head": {
+          "x": 0.0,
+          "y": -0.0666,
+          "z": 1.4868
+        },
+        "tail": {
+          "x": 0.0,
+          "y": -0.0666,
+          "z": 1.44
+        }
+      }
+    }
+  },
+  "applied": true
+}

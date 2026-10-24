@@ -40,10 +40,10 @@ def _length(b):
 
 def test_tpose_arms_horizontal_and_lateral(canonical):
     posed = _index(apply_tpose(canonical))
-    for side, sign in (("L", -1.0), ("R", 1.0)):
+    for side, sign in (("L", 1.0), ("R", -1.0)):   # left = +X (Decision 17)
         hum = posed[f"HUMERUS_{side}"]
         assert hum["tail"]["z"] == pytest.approx(hum["head"]["z"], abs=1e-3), "humerus must be horizontal"
-        assert sign * (hum["tail"]["x"] - hum["head"]["x"]) > 0.25, "arm must point laterally (+X right, -X left)"
+        assert sign * (hum["tail"]["x"] - hum["head"]["x"]) > 0.25, "arm must point laterally (+X left, -X right)"
         rad = posed[f"RADIUS_{side}"]
         assert sign * (rad["tail"]["x"] - rad["head"]["x"]) > 0.2
         fingertip = posed[f"PHALANX_DISTAL_3_{side}"]["tail"]

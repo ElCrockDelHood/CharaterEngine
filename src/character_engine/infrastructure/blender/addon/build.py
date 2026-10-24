@@ -629,7 +629,10 @@ def build_control_rig(context, armature, rig: RigDefinition, ik_default: float =
 def import_mocap(filepath: Path, bone_map: BoneMap):
     """Import a BVH (or FBX) and return the created armature."""
     before = set(bpy.data.objects)
-    fwd = {"+Z": "Z", "-Z": "-Z", "+Y": "Y", "-Y": "-Y"}[bone_map.forward_axis]
+    # bone_map.forward_axis is where the character FACES in its file; Blender's BVH importer
+    # maps ``axis_forward`` to +Y, so pass the opposite axis to make the character face −Y with
+    # its left at +X like the canonical skeleton (Decision 17).
+    fwd = {"+Z": "-Z", "-Z": "Z", "+Y": "-Y", "-Y": "Y"}[bone_map.forward_axis]
     up = {"+Y": "Y", "+Z": "Z"}[bone_map.up_axis]
     if filepath.suffix.lower() == ".bvh":
         bpy.ops.import_anim.bvh(filepath=str(filepath), global_scale=bone_map.scale_to_m,

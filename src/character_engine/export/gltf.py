@@ -24,8 +24,8 @@ What is exported
 
 Coordinate conversion
 ---------------------
-Canonical: Z-up, right-handed, -Y forward, +X right (metres).
-glTF:      Y-up, right-handed, +Z forward,  +X right (metres).
+Canonical: Z-up, right-handed, -Y forward, +X = character's left (metres; Decision 17).
+glTF:      Y-up, right-handed, +Z forward,  +X = character's left (metres).
 Conversion used (same as Blender's exporter): ``(x, y, z) -> (x, z, -y)``.
 
 Containers

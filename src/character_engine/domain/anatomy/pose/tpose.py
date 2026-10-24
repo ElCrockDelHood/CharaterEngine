@@ -5,7 +5,7 @@ forward). Game and mocap pipelines expect a **T-pose**: arms horizontal along ±
 palms down. A pose is a pure rigid transform of subtrees about joint centres, so
 bone lengths, hierarchy and provenance are untouched.
 
-Canonical frame: Z-up, -Y forward, +X = right side (left bones have x < 0).
+Canonical frame: Z-up, -Y forward, +X = LEFT side (left bones have x > 0; Decision 17).
 """
 
 from __future__ import annotations
@@ -85,7 +85,7 @@ def apply_tpose(bones: Sequence[dict], palms: str = "down", abduction_deg: float
     """
     out = [dict(b, head=dict(b["head"]), tail=dict(b["tail"])) for b in bones]
     by_name = {b["canonical_name"]: b for b in out}
-    for side, sign in (("L", -1.0), ("R", +1.0)):
+    for side, sign in (("L", +1.0), ("R", -1.0)):
         hum = by_name.get(f"HUMERUS_{side}")
         if hum is None:
             continue

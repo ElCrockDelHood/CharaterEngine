@@ -149,7 +149,7 @@ def main(reset: bool = True) -> int:
         assert abs(min(zs)) < 2e-3, min(zs)
         hum = arm.data.bones["HUMERUS_L"]
         assert abs(hum.tail_local.z - hum.head_local.z) < 2e-3, "T-pose humerus not horizontal"
-        assert hum.tail_local.x < hum.head_local.x - 0.25, "left arm must point to -X"
+        assert hum.tail_local.x > hum.head_local.x + 0.25, "left arm must point to +X (Decision 17)"
         assert arm["ce_template"] == "human_male_adult" and arm["ce_pose"] == "tpose"
         return f"208 bones, vertex {max(zs):.3f} m"
     check("generate body (male 1.80 T-pose)", _body)
@@ -373,7 +373,22 @@ def main(reset: bool = True) -> int:
         scene.frame_set(int(act.frame_range[1]))
         ctx.view_layer.update()
         t2 = (arm.matrix_world @ hum.tail).copy()
+        # Decision 17: sides must not cross. The source LeftArm and the canonical HUMERUS_L must be
+        # on the same side (+X) and point the same way at the start and end of the clip.
+        src = next(o for o in bpy.data.objects if o.type == "ARMATURE" and o is not arm and "LeftArm" in o.pose.bones)
+        sarm = src.pose.bones["LeftArm"]
+        dirs = []
+        for f in (1, int(act.frame_range[1])):
+            scene.frame_set(f)
+            ctx.view_layer.update()
+            sd = ((src.matrix_world @ sarm.tail) - (src.matrix_world @ sarm.head)).normalized()
+            dd = ((arm.matrix_world @ hum.tail) - (arm.matrix_world @ hum.head)).normalized()
+            dirs.append((sd, dd))
         scene.frame_set(1)
+        assert (arm.matrix_world @ hum.head).x > 0 and (src.matrix_world @ sarm.head).x > 0, \
+            f"left arm sides differ: HUMERUS_L x={(arm.matrix_world @ hum.head).x:.3f}, LeftArm x={(src.matrix_world @ sarm.head).x:.3f}"
+        for sd, dd in dirs:
+            assert sd.dot(dd) > 0.9, f"HUMERUS_L direction {tuple(round(c, 2) for c in dd)} != LeftArm {tuple(round(c, 2) for c in sd)}"
         assert (t1 - t2).length > 0.05, f"humerus did not follow mocap ({(t1 - t2).length:.4f})"
         assert t2.z < t1.z, "left arm should swing downwards"
         arm["arm_ik_L"] = arm["arm_ik_R"] = 1.0
