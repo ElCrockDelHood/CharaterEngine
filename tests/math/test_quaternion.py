@@ -10,6 +10,7 @@ import pytest
 
 from character_engine.math.algebra.quaternion import (
     NORM_TOLERANCE,
+    DegenerateQuaternionError,
     Quaternion,
     UnitQuaternion,
     angular_velocity_to_quaternion_derivative,
@@ -54,10 +55,9 @@ class TestQuaternion:
         assert qn.norm() == pytest.approx(1.0, abs=NORM_TOLERANCE)
         assert qn == Quaternion(1, 0, 0, 0)
 
-        # Zero quaternion normalizes to identity
-        q = Quaternion.zero()
-        qn = q.normalize()
-        assert qn == Quaternion.identity()
+        # Decision 22 (D-02): a zero quaternion is degenerate, never a silent identity
+        with pytest.raises(DegenerateQuaternionError):
+            Quaternion.zero().normalize()
 
     def test_conjugate(self):
         """Test conjugate."""
@@ -550,10 +550,22 @@ class TestNumericalValidation:
     """Tests for numerical validation and edge cases."""
 
     def test_zero_quaternion_handling(self):
-        """Test zero quaternion normalization."""
-        q = Quaternion.zero()
-        qn = q.normalize()
-        assert qn == Quaternion.identity()
+        """Decision 22 (D-02): degenerate quaternions raise in every operation that needs ||q|| > 0."""
+        for q in (Quaternion.zero(), Quaternion(1e-12, 0, 0, 0)):
+            with pytest.raises(DegenerateQuaternionError):
+                q.normalize()
+            with pytest.raises(DegenerateQuaternionError):
+                q.inverse()
+            with pytest.raises(DegenerateQuaternionError):
+                q.rotate(Vector3(1, 0, 0))
+            with pytest.raises(DegenerateQuaternionError):
+                UnitQuaternion.from_quaternion(q)
+        with pytest.raises(DegenerateQuaternionError):
+            UnitQuaternion(0, 0, 0, 0)
+
+    def test_degenerate_error_is_value_error(self):
+        """Callers catching ValueError keep working."""
+        assert issubclass(DegenerateQuaternionError, ValueError)
 
     def test_nan_propagation(self):
         """Test NaN detection."""

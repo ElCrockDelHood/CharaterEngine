@@ -14,9 +14,15 @@ from .vector3 import Vector3
 
 # Numerical tolerances (CE-Q1 contract)
 # Provenance: DERIVED from FLOAT_COMPARISON in coordinate_system.py
-NORM_TOLERANCE = 1e-9  # Tolerance for unit quaternion norm check
+NORM_TOLERANCE = 1e-9  # Unit-norm check; ||q|| below this is degenerate (Decision 22 / D-02)
 EQUALITY_TOLERANCE = 1e-9  # Tolerance for quaternion equality
-RENORMALIZATION_TRIGGER = 1e-6  # Trigger renormalization when ||q|| - 1 > this value
+
+
+class DegenerateQuaternionError(ValueError):
+    """Raised when an operation needs a non-zero quaternion and ||q|| < NORM_TOLERANCE.
+
+    Decision 22 (D-02): degenerate input is an error, never a silent identity.
+    """
 
 
 @dataclass(frozen=True)
@@ -43,13 +49,13 @@ class Quaternion:
     def normalize(self) -> 'Quaternion':
         """Normalize quaternion to unit norm.
 
-        For zero quaternion, returns identity quaternion.
+        Raises DegenerateQuaternionError when ||q|| < NORM_TOLERANCE (Decision 22).
 
         Provenance: PROVEN (standard normalization)
         """
         n = self.norm()
-        if n == 0:
-            return Quaternion(1, 0, 0, 0)
+        if n < NORM_TOLERANCE:
+            raise DegenerateQuaternionError(f"cannot normalize a degenerate quaternion (||q|| = {n:.3e})")
         return Quaternion(self.w/n, self.x/n, self.y/n, self.z/n)
 
     def conjugate(self) -> 'Quaternion':
@@ -62,7 +68,7 @@ class Quaternion:
     def inverse(self) -> 'Quaternion':
         """Compute inverse: q⁻¹ = q* / ||q||.
 
-        For zero quaternion, returns identity quaternion.
+        Raises DegenerateQuaternionError when ||q|| < NORM_TOLERANCE (Decision 22).
 
         Provenance: PROVEN (standard definition)
         """
@@ -90,7 +96,7 @@ class Quaternion:
     def rotate(self, v: Vector3) -> Vector3:
         """Rotate vector v by quaternion: q ⊙ v = q * (0, v) * q⁻¹.
 
-        For zero quaternion, returns v unchanged.
+        Raises DegenerateQuaternionError for a degenerate quaternion (Decision 22).
 
         Provenance: PROVEN (standard quaternion rotation)
         """
@@ -175,9 +181,9 @@ class UnitQuaternion:
         # Compute norm
         norm = math.sqrt(self.w**2 + self.x**2 + self.y**2 + self.z**2)
 
-        # Check zero quaternion
-        if norm == 0:
-            raise ValueError("Cannot create UnitQuaternion from zero quaternion")
+        # Check degenerate quaternion
+        if norm < NORM_TOLERANCE:
+            raise DegenerateQuaternionError("Cannot create UnitQuaternion from a degenerate quaternion")
 
         # Check unit norm tolerance
         if abs(norm - 1.0) > NORM_TOLERANCE:
