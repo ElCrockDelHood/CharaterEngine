@@ -725,12 +725,32 @@ with Decision 4.2: anatomical geometry is **received from cited sources/speciali
 
 ---
 
+## 45. SIMULATION OFFLINE IN BLENDER, GAMEPLAY RUNTIME IN GODOT (ENGAGEMENT L2/L3)
+
+**Decision** (owner, 2026-10-24 21:19 UTC, verbatim): "Ok simulamos en Blender y Runtime Gameplay Godot." —
+confirming the interpretation in `docs/product/ENGAGEMENT-SYSTEM-DRAFT-v0.md` §9:
+1. L2 physics (collision, fracture/breaking, particle systems) runs **offline in Blender**; its emergent result
+   is the manifestation;
+2. manifestations are extracted as **meshes**, retouched or joined in Blender, and reused for cinematics;
+3. Godot **does not simulate** them: the deterministic L1 state machine plays a **baked reaction** from a library
+   when a state changes or a collision happens at a point;
+4. runtime determinism holds although the offline simulation need not be deterministic; each baked manifestation
+   records its generation parameters/seed and a SHA-256 ID (WORK-SIGNING).
+Runtime physics (Jolt / GodotPhysics3D) is not needed for L2 (PHYSICS-BACKENDS row, kept as a note).
+Still OPEN: reaction keying (state, point/region, energy, material) and blending; baked format (Godot 4.7.2
+imports glTF, `.blend`, FBX — no Alembic); size/performance on the GT 740M; offline tool inside Blender;
+engagement questions 1 and 5 (scope interpretation, phasing).
+
+**Date**: 2026-10-24 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 44
-**Final Decisions**: 40 (+4 deferred)
+**Total Decisions**: 45
+**Final Decisions**: 41 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)

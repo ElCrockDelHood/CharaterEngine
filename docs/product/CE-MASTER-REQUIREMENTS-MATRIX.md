@@ -107,7 +107,7 @@ open questions of the draft §8 remain open.
 
 Update 2026-10-24 21:16 UTC: open question 3 **ANSWERED** by the owner (verbatim in the draft §9) — L2 physics
 runs **offline in Blender**; manifestations are extracted as meshes, retouched/joined in Blender for cinematics;
-the game reacts by state and collision point with baked reactions (Claude's interpretation, to be confirmed; keying,
+the game reacts by state and collision point with baked reactions (interpretation CONFIRMED by the owner, Decision 45; keying,
 baked format, performance and offline tool OPEN — draft §9).
 
 ---

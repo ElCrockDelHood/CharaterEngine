@@ -148,7 +148,8 @@ Question 1 is still open; question 2 is moot under the reading below (offline L2
 
 **Q3 (§8): ANSWERED — L2 physics runs OFFLINE in Blender.**
 
-Claude's interpretation — **to be confirmed by the owner**:
+Claude's interpretation — **CONFIRMED by the owner** 2026-10-24 21:19 UTC ("Ok simulamos en Blender y Runtime
+Gameplay Godot.", DECISION_LOG §45):
 1. L2 runs **offline in Blender** (collision, fracture/breaking, particle systems) and produces emergent results.
 2. Those results are extracted as **mesh-type manifestations**, retouched or joined in Blender, and are usable
    for cinematics.
