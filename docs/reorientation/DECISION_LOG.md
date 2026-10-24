@@ -688,12 +688,27 @@ is **NOT yet specified** (pending decision), and the fight engagement system has
 
 ---
 
+## 43. GODOT 4.7 PROJECT FILE AND ARENA AS MAIN SCENE
+
+**Decision** (owner, 2026-10-24): keep the rewrite of `runtime/godot/project.godot` made by the Godot 4.7.2
+editor when the owner saved the arena scene — `config/features` 4.3 → **4.7** (version change explicitly
+authorized), header comments removed, explicit `physics/common/physics_ticks_per_second=60` dropped (60 is the
+engine default, behaviour unchanged), `animation/compatibility/default_parent_skeleton_in_mesh_instance_3d=true`
+added. `res://arena_play.tscn` (Node3D + `CEArena`, autoplay 180 frames) is committed and set as
+`run/main_scene`, so F5 (or launching the project without a scene argument) plays the arena directly.
+The headless suite (`res://tests/ce_test_runner.gd`) does not depend on the main scene. Godot 4.3 stays
+installed but is no longer the project's declared version; tests use 4.7.2.
+
+**Date**: 2026-10-24 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 42
-**Final Decisions**: 38 (+4 deferred)
+**Total Decisions**: 43
+**Final Decisions**: 39 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)

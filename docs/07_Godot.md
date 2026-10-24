@@ -74,7 +74,7 @@ Enabled in `project.godot`. The **Character Engine** dock (right panel) offers:
 | Asset (T-pose / anatomical) + stature | *Add character to scene* → `CECharacter` node: loads the GLB at runtime (`GLTFDocument`), scales to stature, installs `CEBreathing` (`SkeletonModifier3D`, sternum/ribs sinusoid), exposes `bone_global_position()` and `add_wound_marker()`. |
 | *Validate skeleton GLB* | Runs `ce_skeleton_validator.gd` on the selected asset. |
 | Gameplay style | `shenmue` (Shenmue-style free battle: J punch, K kick, L throw, Space guard, W/S move; `F,F+J` Elbow Assault, `F+K` Crescent Kick, `F+L` Vortex Throw). `souls_like` / `beat_em_up` are listed as *planned* (disabled). |
-| *Create arena in scene* (+ autoplay) | `CEArena`: floor, two `CECharacter`s, camera, HUD, `CEFighterController`s (player keyboard / opponent AI), `CEShenmueCombat` stepped at 60 Hz in `_physics_process`. Landed hits attach severity-coloured wound markers. Press F6 to play. |
+| *Create arena in scene* (+ autoplay) | `CEArena`: floor, two `CECharacter`s, camera, HUD, `CEFighterController`s (player keyboard / opponent AI), `CEShenmueCombat` stepped at 60 Hz in `_physics_process`. Landed hits attach severity-coloured wound markers. Press F6 to play. The committed `res://arena_play.tscn` (autoplay 180 frames) is the project's main scene (Decision 43): F5 plays it, or `godot --path runtime/godot` from the command line. |
 | *Replay reference fights* | Replays the 7 scripted fights from the gameplay table and reports whether the GDScript port matches the Python simulation. |
 
 Data flow: Godot never imports Python. `scripts/export_gameplay_data.py` writes

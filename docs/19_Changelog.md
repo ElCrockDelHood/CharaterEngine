@@ -16,6 +16,8 @@ All notable changes to Character Engine. Dates are ISO 8601.
   simulation bake/export format not yet specified.
 - Decision 41 follow-up done: Godot arena played windowed on the GT 740M (OpenGL 3.3 Compatibility, 0 errors,
   autoplay to frame 180).
+- Decision 43: Godot project file accepted as written by Godot 4.7 (features 4.3 → 4.7, owner-authorized);
+  `runtime/godot/arena_play.tscn` is the main scene (F5 plays the arena).
 - Decision 40: Godot 4 is the primary runtime and the only one that gates CE-Q4 and later phases; UPBGE stays
   supported but optional and non-blocking (no code or tests removed).
 - Decision 39: blenderplayer smoke check dispensed for CE-Q4 (NVIDIA 388.73 / GT 740M cannot compile UPBGE
