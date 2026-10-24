@@ -211,6 +211,19 @@ the tool, scanned drawings, or both? Which assets first (bodies, clothing, equip
 
 ---
 
+## Row DELIVERABLE-1 — Granaderos fight (first deliverable) — DRAFT
+
+Owner choice 2026-10-24: "Pelea de Granaderos" is the **first deliverable**. Full draft (goal, inventory,
+PROPOSED steps D1-0…D1-8, owner decisions): `docs/product/DELIVERABLE-1-GRANADEROS-FIGHT.md`.
+
+| Column | State | Status |
+|--------|-------|--------|
+| **REUSABLE** | combat L1 (Python + GDScript), wounds, sockets + placeholder sabre, Workbench preset, solver benchmark, Godot arena, mocap retarget | IMPLEMENTED |
+| **BLOCKED BY** | uniform source; base-mesh decision; sabre source; realistic reach/speed sources; engagement Q10–Q14; first experiment (Q9); baked format; material parameters; armed-move spec | PENDING |
+| **ACCEPTANCE** | per step, PROPOSED only (draft §3) | PENDING |
+
+---
+
 ## Rows REALISM-UNITS / PRODUCT-VISION-GRANADEROS — DRAFT (owner, 2026-10-24 22:57 UTC)
 
 Owner (verbatim): "quiero que todo ocurra a distancias y con velocidades y movimientos realistas, tengo que realizar
