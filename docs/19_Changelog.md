@@ -2,6 +2,23 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-24 (afternoon) · Decision 17 closed: left is +X
+
+### Changed
+- **Canonical skeleton mirrored across X** (`scripts/mirror_canonical_x.py`, report
+  `docs/audit/A09_D17_MIRROR_X_REPORT.json`): `*_L` bones now at +X, `*_R` at −X, front still −Y.
+  Same convention as Blender, glTF/Godot and Mixamo. `human_adult_206_backup.json` (frozen fixture)
+  is not migrated.
+- Side signs (`tpose.py`, `rig_definition.py`, legacy `landmark_positioner.py`), `coordinate_system.py`
+  (`get_right_direction() = (-1,0,0)`, `get_side_from_x(+x) = LEFT`).
+- Blender addon mocap import: `axis_forward` is now the opposite of the clip's facing axis, so
+  Mixamo/CMU/Rokoko clips face −Y with their left at +X (they used to be imported turned round).
+
+### Test status
+pytest 734 passed; new `test_left_right_convention.py`; addon headless 20/20 on Blender 3.6.23 with a new
+mocap side/direction check; Godot 4.7.2 21/21 (left arm now spreads to +X). `builds/tests/validation.blend`
+(versioned, old labels) was not regenerated.
+
 ## [Unreleased] — 2026-10-24 · Blender addon on Blender 3.6 LTS (reference) and 4.x
 
 ### Changed

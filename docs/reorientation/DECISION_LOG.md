@@ -418,7 +418,7 @@ not mixed with 1952. Audit: `docs/audit/A08_OSTEOMETRY_TISSUES_TPOSE.md`.
 
 ---
 
-## 17. LEFT/RIGHT LABELLING VERSUS −Y FORWARD (OPEN)
+## 17. LEFT/RIGHT LABELLING VERSUS −Y FORWARD (CLOSED — Decision 33)
 
 **Finding**: with Z-up, right-handed axes and the character facing **−Y**, the anatomical right
 is `forward × up = (0,−1,0) × (0,0,1) = (−1,0,0)`, i.e. **−X**. The canonical data places every
@@ -436,7 +436,17 @@ it touches every landmark, muscle attachment and hitbox side.
 right-hand jab reaching the opponent's left jaw) is consistent *within* the engine but may be
 mirrored relative to a photo reference.
 
-**Date**: 2026-09-29 · **Status**: OPEN
+**Resolution (2026-10-24, owner decision D-13, option A)**: mirror X and keep −Y forward, so `*_L` bones
+are at **+X** and `*_R` at −X (Blender / glTF / Mixamo convention). The anatomy confirmed −Y as the
+front (nasal, sternum, patella at y < 0). Migration with `scripts/mirror_canonical_x.py`
+(deterministic, reversible; report `docs/audit/A09_D17_MIRROR_X_REPORT.json`); side signs fixed in
+`pose/tpose.py`, `rigging/rig_definition.py`, `coordinate_system.py`, `reconstruction/landmark_positioner.py`;
+the addon's BVH import now passes the opposite of the clip's facing axis (it had imported Mixamo-style
+clips turned round to face +Y, which only matched the mirrored labels by reversing front/back).
+`human_adult_206_backup.json` is a frozen audit fixture and keeps the old labels.
+Tests: `tests/unit/test_left_right_convention.py`, addon mocap side/direction check.
+
+**Date**: 2026-09-29 · **Status**: CLOSED 2026-10-24 (Decision 33 / D-13)
 
 ---
 
@@ -511,7 +521,7 @@ undid the negation (slerp t=0.5 between rotations 0.399 rad apart landed 2.94 ra
 | 30 | D-10 | NP-004 | Dimensional validation: deferred. | DEFERRED |
 | 31 | D-11 | NP-005 | Unit conversion: `UnitConverter` (`domain/anatomy/coordinate_system.py`) is the only conversion path and is used at the boundaries. | DEFERRED (rule recorded) |
 | 32 | D-12 | NP-006 | Semantic types: deferred. | DEFERRED |
-| 33 | D-13 | Decision 17 | Left/right vs −Y forward: an impact analysis of mirroring X is prepared before any data change. | OPEN (analysis only) |
+| 33 | D-13 | Decision 17 | Left/right vs −Y forward: option A — mirror X, `*_L` at +X (see §17 resolution). | FINAL (applied 2026-10-24) |
 | 34 | D-14 | Q-010 (new) | SLERP/NLERP must take the shortest path; the negation is never undone by canonicalisation. | FINAL |
 
 **Evidence**: each code decision lands in its own commit with tests that distinguish the cases
@@ -526,8 +536,8 @@ undid the negation (slerp t=0.5 between rotations 0.399 rad apart landed 2.94 ra
 ### 14.1 Decision Summary
 
 **Total Decisions**: 34
-**Final Decisions**: 28 (+4 deferred, 1 open analysis, Decision 17 open)
-**Open Decisions**: 2 (Decision 17, left/right labelling vs −Y forward; Decision 33, its impact analysis)
+**Final Decisions**: 30 (+4 deferred)
+**Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)
 **Critical Decisions**: 6 (Source of Truth, Architecture Direction, Backend Priority, Provenance System, Mesh Generation, Data Invention Rule)

@@ -9,12 +9,13 @@ alwaysApply: false
 Canonical frame (domain and JSON): **Z-up, right-handed, -Y forward (+Y is the back),
 metres, origin at foot midline on the ground.**
 
-**Left/right labelling (Decision 17, OPEN):** the data and `domain/anatomy/coordinate_system.py`
-put every `*_R` bone at **+X** ("+X = right"). Geometrically, facing −Y with Z up, the right side is
-`forward × up = −X`, so the labels are mirrored with respect to the stated forward axis (Blender's
-own convention is `.L` at +X). Do **not** flip X anywhere to "fix" this; keep the labels as they are,
-treat `*_L`/`*_R` as the data's names, and record any side-dependent assumption explicitly.
-Resolution requires an owner decision and a forensic pass (`docs/reorientation/DECISION_LOG.md` §17).
+**Left/right (Decision 17, CLOSED 2026-10-24):** facing −Y with Z up, the body's right is
+`forward × up = −X`, so **`*_L` bones are at +X and `*_R` at −X** — the same as Blender (`.L` at
++X), glTF/Godot and Mixamo. `domain/anatomy/coordinate_system.py`: `get_right_direction() = (-1,0,0)`,
+`get_side_from_x(x > 0) = LEFT`. Side signs in code: `L = +1`, `R = -1`
+(`pose/tpose.py`, `rigging/rig_definition.py`). Mocap import passes Blender the **opposite** of the
+character's facing axis (`bone_map.forward_axis`), because the BVH importer maps `axis_forward` to +Y.
+Never mirror data ad hoc; `scripts/mirror_canonical_x.py` is the only, reversible, migration tool.
 
 Conversions happen only at the boundary, never inside the domain:
 

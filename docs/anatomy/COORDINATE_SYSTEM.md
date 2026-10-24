@@ -28,11 +28,12 @@
 - **Negative:** Below ground (not used for standard anatomy)
 
 #### X-Axis (Lateral)
-- **Direction:** Positive X points from left to right
-- **Semantic:** Left-right anatomical axis
-- **Positive:** Right side of body
-- **Negative:** Left side of body
+- **Direction:** Positive X points towards the body's LEFT (Decision 17, closed 2026-10-24)
+- **Semantic:** Left-right anatomical axis; right = forward × up = (0,−1,0) × (0,0,1) = −X
+- **Positive:** Left side of body
+- **Negative:** Right side of body
 - **Midline:** X = 0
+- Same convention as Blender (`.L` at +X), glTF/Godot (model faces +Z, left at +X) and Mixamo.
 
 #### Y-Axis (Anterior/Posterior)
 - **Direction:** Positive Y points posterior (backward)
@@ -44,10 +45,15 @@
 ### Left/Right Convention
 
 #### Standard Convention
-- **Right side:** Positive X coordinates
-- **Left side:** Negative X coordinates
+- **Left side:** Positive X coordinates (`*_L` bones have x > 0)
+- **Right side:** Negative X coordinates (`*_R` bones have x < 0)
 - **Midline structures:** X = 0
 - **Bilateral pairs:** Mirror across X = 0 plane
+- Enforced by `tests/unit/test_left_right_convention.py`. Until 2026-10-24 the data used the
+  opposite labels (a mirror image of a −Y-facing body); `scripts/mirror_canonical_x.py` migrated
+  `human_adult_206.json` (report `docs/audit/A09_D17_MIRROR_X_REPORT.json`).
+  `human_adult_206_backup.json` is a frozen audit fixture (pre-A07, Y-up, old labels) and is
+  intentionally not migrated.
 
 #### Naming Convention
 - Left structures: `{STRUCTURE}_L` or `LEFT_{STRUCTURE}`
