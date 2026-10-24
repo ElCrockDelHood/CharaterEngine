@@ -72,3 +72,29 @@ replays proven equal) (b) Godot only (c) other: ___
 
 Not specified yet (pending decision): units and tolerances, capsule data format, acceptance criteria,
 performance targets for the baseline PC.
+
+## 4. Owner answer 1 (verbatim, 2026-10-24 19:50 UTC)
+
+> "me gustaria integrar los 8 puntos. por ejemplo en el punto N2 el cuerpo va a reaccionar fisicamente y nos
+> va a dar un resultado complejo que luego lo vamos a intentar pulir para que nos de la manifestacion."
+
+Recorded reading (to be confirmed by the owner, see §5):
+* **All eight areas Q1–Q8 are in scope** of the engagement system (not a choice of one).
+* **Q2 (capsules):** the body **reacts physically** through its capsules; the raw result is expected to be
+  complex and is then **refined ("pulir") into the final manifestation** (the visible reaction). This points
+  to per-body-part capsules (Q2 b/c) driving a physical reaction, plus a refinement stage.
+* Which option(s) inside each question, and the order of delivery, are **not yet stated**.
+
+## 5. Tension to resolve before specifying (no decision taken)
+
+**T-1 Determinism vs physical reaction.** The owner asks for a *determined* confrontation (Q4) and for a
+*physical* body reaction (Q2). Godot's built-in physics is not guaranteed to replay bit-identically across
+runs/machines, while today's combat replays identically in Python and Godot. Options for the owner:
+(a) own fixed-step, deterministic capsule physics in the combat domain (Python, ported to GDScript like
+today), so the whole fight still replays from inputs; (b) deterministic combat logic + engine physics only
+for the visual reaction (the "manifestation" may differ between runs, outcomes do not); (c) other.
+
+**T-2 Order of delivery.** Integrating Q1–Q8 at once is large for the baseline PC and the
+spec-before-code rule; a proposed order (owner to accept or change): capsules + body blocking + capsule hit
+detection (Q2/Q3) → physical reaction + refinement (Q2) → phases and lock-on (Q1) → combat systems (Q8) →
+other styles (Q5). Q4, Q6, Q7 are cross-cutting and must be fixed first.

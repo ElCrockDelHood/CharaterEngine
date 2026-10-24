@@ -86,7 +86,7 @@ Scope deliberately avoids anything that needs new anatomical or historical data:
 ## Row ENGAGEMENT-001 — Fight engagement system (Godot runtime) — DRAFT
 
 Owner definition (verbatim) and the full inventory are in `docs/product/ENGAGEMENT-SYSTEM-DRAFT-v0.md`.
-Only the owner's words and code facts are filled in; every other cell waits for the answers to Q1–Q8 there.
+Only the owner's words and code facts are filled in. Owner answer 1: all eight areas Q1–Q8 in scope (draft §4); options inside each, T-1 and T-2 still open.
 
 | Column | Requirement | Current state (2026-10-24) | Status |
 |--------|-------------|----------------------------|--------|
@@ -94,7 +94,7 @@ Only the owner's words and code facts are filled in; every other cell waits for 
 | **DEFINITION** | "sistema de enfrentamiento determinado … interacciones entre las cápsulas de colisiones" (owner, verbatim in the draft §1) | — | PARTIAL (definition only) |
 | **RUNTIME** | Godot (Decision 42 clarification) | Deterministic 60 Hz frame-data combat (Python domain + GDScript port), arena playable windowed | PARTIAL |
 | **DETERMINISM** | Owner: "determinado" — scope open (Q4) | 7 reference fights replay identically Python ↔ Godot | PARTIAL |
-| **COLLISION CAPSULES** | Capsule–capsule interactions (owner) — granularity and behaviours open (Q2, Q3) | None in domain/Godot; hit = root-distance ≤ reach; per-bone hit spheres are data only | PENDING |
+| **COLLISION CAPSULES** | Capsule–capsule interactions (owner); body reacts physically, complex result refined into the manifestation (owner answer 1, draft §4); determinism vs physics open (T-1) | None in domain/Godot; hit = root-distance ≤ reach; per-bone hit spheres are data only | PENDING |
 | **CONFRONTATION PHASES** | Open (Q1) | Nearest-opponent targeting only | PENDING |
 | **COMBAT SYSTEMS** | "sistemas de combate elaborados" — which ones open (Q8) | 8 moves, guard, throws, cancels, knockdown, wounds | PENDING |
 | **STYLES** | Open (Q5) | shenmue implemented; souls_like / beat_em_up planned | PENDING |
