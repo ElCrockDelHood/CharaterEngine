@@ -57,6 +57,46 @@ message of 22:57 UTC).
 | D1-7 | Base mesh + uniform on the fighters | mesh decision, uniform source, owner drawings | mesh bound to the 208-bone rig; no tearing in rest pose (CINE-GR-001 criteria) | Mariano (art) + Claude (pipeline) |
 | D1-8 | Fight shot (toma) render in Workbench, reviewed by the owner | D1-2…D1-7 | owner accepts the render (Jidoka: any failed check stops the row) | Mariano |
 
+## 3.1 D1-2 plan — "maqueta de pelea en Workbench" with reference sheets (PREPARED, not implemented)
+
+**Reference folder (outside the repository):** `C:\DEV\Referencias\` with one sub-folder per subject and file names
+`<subject>_<view>_<source>_<nn>.png`, e.g.:
+
+```
+C:\DEV\Referencias\granadero\granadero_front_ai_01.png
+C:\DEV\Referencias\granadero\granadero_side_ai_01.png
+C:\DEV\Referencias\caballo\caballo-criollo_side_ai_01.png
+C:\DEV\Referencias\items\sable_side_ai_01.png
+C:\DEV\Referencias\laminas\estudio-paisano-1810_sheet_ai_01.png
+```
+
+`<view>` = front / side / back / three-quarter / sheet; `<source>` = ai / pd (public domain) / own (owner's drawing or
+photo). Each file gets a register entry (SHA-256, origin, licence/generator, status) per REFERENCE-IMAGES.
+
+**Scene (Blender 3.6, Workbench, headless-buildable):**
+1. Two canonical skeletons (1.80 m) facing each other at a configurable distance, sabre placeholders on the hand
+   socket, full-body Workbench camera preset.
+2. Reference image planes (front/side) scaled so the drawn figure height matches 1.80 m (scale = ESTIMATE),
+   placed behind/next to each skeleton; the sheet as a board for item references.
+3. Item proxies (boxes/cylinders) sized from the sheet → all sizes ESTIMATE/ASSUMED.
+4. One strike keyed by hand; collision check sabre proxy ↔ bone proxies; Workbench renders front and side.
+
+**Item → rig/asset map:**
+
+| Item on the sheet | Target in the rig / assets | State |
+|-------------------|----------------------------|-------|
+| sable de granadero | `SOCKET-sabre_hip.L` (carried), `SOCKET-hand_grip.R` (in hand) | sockets exist; sabre = PLACEHOLDER box |
+| cuchillo verijero / facón | new socket at the waist (e.g. on SACRUM / COXAL) | not defined |
+| faja, cinturón | clothing asset bound to pelvis/lumbar | no clothing system |
+| botas de potro | clothing asset on TIBIA/TALUS/feet | none |
+| espuelas | small socket on the heel (CALCANEUS) | not defined |
+| lazo, maneador, rebenque | hand socket / saddle socket | not defined |
+| sombrero / morrión | socket on CRANIUM / FRONTAL | not defined; headwear UNVERIFIED |
+| casaca / levita | clothing asset on the torso and arms | none; colours UNVERIFIED |
+| montura gaucha | saddle socket on the horse | horse has no skeleton |
+| caballo criollo | `horse_adult` template | **NO DATA** (no equine skeleton) — image plane only |
+| tero, perro cimarrón | environment / `dog_adult` template | **NO DATA** |
+
 ## 4. What Mariano must provide or decide first
 
 1. Base mesh origin: artist-made (by you, from your drawings) or generated (MPFB2/other) — and licence policy

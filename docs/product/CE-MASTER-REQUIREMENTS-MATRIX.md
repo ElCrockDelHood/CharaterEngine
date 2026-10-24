@@ -211,6 +211,30 @@ the tool, scanned drawings, or both? Which assets first (bodies, clothing, equip
 
 ---
 
+## Row REFERENCE-IMAGES — DRAFT (owner, 2026-10-24 23:08 UTC)
+
+Owner (verbatim): "1ero podriamos hacer pruebas con referencias de imagenes gratis de internet que sean seguras tengo
+algunas generadas con AI. en este caso tenemos tambien items y caballo asociado."
+
+| ID | Requirement (owner's words) | Notes | Status |
+|----|-----------------------------|-------|--------|
+| **REFERENCE-IMAGES** | First tests with free, safe internet images and the owner's AI-generated images (items and horse included) | **Rule PROPOSED for the owner's approval:** AI-generated or free internet images are **REFERENCE ONLY** (blocking, silhouette, approximate proportions, item design). Each one is registered (file, SHA-256, origin, licence or generator terms — for AI: generator/date/prompt if known — and status). They are **never** a source of anatomical or historical facts (those need cited published sources) and are **not** included in a sold product unless the licence is verified. Measurements taken from them are ESTIMATE/ASSUMED | PENDING |
+
+**First registered reference (outside the repository, not copied):**
+
+| Field | Value |
+|-------|-------|
+| File | `Generated Image September 03 2026 - 3_31AM 1.png` (sent by the owner in the project thread) |
+| SHA-256 | `a71a90987862ab6a664a3b91d8f6b7544b09ea292bb59b30514ac1125935545a` |
+| Size | 1408 × 768 px, 2 395 800 bytes |
+| Title on the sheet | "Estudio antropológico y del reino animal: el paisano criollo, soldado y gaucho (1810)" |
+| Provenance | USER_INPUT + AI_GENERATED (generator, date and prompt not recorded) |
+| Content | face; hands with mate; gaucho hat with cockade; Granadero a Caballo levita/casaca with red collar and cuffs; faja; cuchillo verijero / facón; sabre de granadero; botas de potro; espuelas; maneador; lazo; rebenque; montura gaucha; caballo criollo saddled (side view); tero; perro cimarrón |
+| Known issues | garbled text (AI artefacts); mismatched labels ("Montura Gaucha" points at a jacket); date 1810 on the sheet (regiment created 1812 — to be cited); hat/uniform combination and colours **UNVERIFIED** |
+| Use allowed | blocking, silhouettes, item list, approximate proportions (ESTIMATE) |
+
+---
+
 ## Row DELIVERABLE-1 — Granaderos fight (first deliverable) — DRAFT
 
 Owner choice 2026-10-24: "Pelea de Granaderos" is the **first deliverable**. Full draft (goal, inventory,
