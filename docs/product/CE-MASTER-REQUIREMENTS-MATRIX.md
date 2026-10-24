@@ -9,6 +9,9 @@ DOMAIN MODEL → IMPLEMENTATION → TEST → EVIDENCE (Toyota: CTQ, quality gate
 `SPECIFIED` = written requirement, no code · `PENDING` = needs a decision or source first ·
 `DATA REQUIRED` = cannot be done without a cited source (Decision 12).
 
+**Runtime gating (all rows, Decision 40):** Godot 4 is the primary runtime and the only one that gates a
+row's RUNTIME / TEST / ACCEPTANCE cells; UPBGE checks are optional and informative (non-blocking).
+
 **Performance baseline (all rows):** this PC — ASUS N56VB, i3-3120M 2c/4t, 16 GB, GeForce GT 740M 2 GB
 (driver 388.73) / Intel HD 4000 — Blender **3.6.23** (reference, Decision 20), viewport/render **Workbench**.
 
@@ -31,7 +34,7 @@ DOMAIN MODEL → IMPLEMENTATION → TEST → EVIDENCE (Toyota: CTQ, quality gate
 | **MESH REQUIREMENTS** | **Parametric base body mesh** (male), clean topology, weighted to the 208-bone armature, stature-driven | **Does not exist** (no `HumanMesh` domain model; Decision 1.2 "mesh-first" never implemented) | PENDING |
 | **DEFORMATION REQUIREMENTS** | None visible in static rest (bind pose only); weights must not tear at shoulders/hips in the rest pose | Proxies 100 % weighted per bone; no skinning of a real mesh | PENDING (depends on mesh) |
 | **PHYSICS** | None for a static shot | — | N/A |
-| **COLLISION** | Boots on ground plane (z = 0), sabre and scabbard not intersecting the body | Skeleton ground check (Godot/UPBGE); step 1: placeholder sabre AABB clear of all 192 bone-proxy AABBs (test). No boots, no body mesh to collide with yet | PARTIAL |
+| **COLLISION** | Boots on ground plane (z = 0), sabre and scabbard not intersecting the body | Skeleton ground check (Godot gating; UPBGE optional); step 1: placeholder sabre AABB clear of all 192 bone-proxy AABBs (test). No boots, no body mesh to collide with yet | PARTIAL |
 | **CLOTHING** | Uniforme de Granaderos: casaca, pantalón, correajes, morrión/kepí — modelled as separate assets bound to the body | **No clothing system / assets**; historical design needs a cited source | DATA REQUIRED |
 | **EQUIPMENT** | **Sable** (with scabbard) attached to a **socket** (hip/hand), boots (botas de montar), belts | Step 1: sockets `SOCKET-sabre_hip.L` (COXAL_L) and `SOCKET-hand_grip.R` (METACARPAL_3_R) as domain data (ASSUMED placement) built as MCH bones; **PLACEHOLDER** sabre box parented to the hip socket; tests: follow parent in T-pose and anatomical pose (Δ < 1e-7). No modelled sabre, scabbard, belts or boots | PARTIAL |
 | **ENVIRONMENT** | Neutral studio: ground plane + 3-point light; historical environment out of scope for row 1 | Step 1: floor plane + key/fill/rim lights created by the preset (Workbench ignores scene lights; they are for later EEVEE/Cycles) | PARTIAL |

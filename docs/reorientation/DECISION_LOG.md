@@ -617,12 +617,30 @@ reporting FAIL on this PC; a driver update (R470, 474.xx) would allow re-running
 
 ---
 
+## 40. GODOT IS THE PRIMARY RUNTIME; UPBGE IS OPTIONAL
+
+**Decision** (owner, 2026-10-24): **Godot 4** is the primary runtime and the **only runtime that gates CE-Q4
+and later phases**. UPBGE remains supported but **optional and non-blocking**: its code
+(`runtime/upbge/`, addon `runtime_upbge.py`) and its tests (`engine_tests.py upbge`, the UPBGE branches of
+`runtime/blender/ce_addon_headless_test.py`) stay untouched and are re-run when another machine or GPU
+driver allows it (Decision 39: blenderplayer cannot run on the GT 740M / NVIDIA 388.73). This supersedes the
+"UPBGE remains the game runtime" wording of Decision 20 for gating purposes; Blender 3.6 stays the authoring
+reference and the addon keeps 3.6 + 4.x support.
+
+**Follow-up (not done yet)**: verify Godot **windowed** play on the GT 740M. The Godot project already
+requests the Compatibility renderer (`runtime/godot/project.godot`: `rendering_method="gl_compatibility"`);
+the automated suite runs `--headless`, so on-screen rendering on this GPU is still unverified.
+
+**Date**: 2026-10-24 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 39
-**Final Decisions**: 35 (+4 deferred)
+**Total Decisions**: 40
+**Final Decisions**: 36 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)
