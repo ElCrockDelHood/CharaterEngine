@@ -80,3 +80,24 @@ Scope deliberately avoids anything that needs new anatomical or historical data:
   does not intersect the skeleton proxies; Workbench render produced in ≤ 30 s at 1920×1080 on the
   baseline PC (time logged); pytest and ruff stay green; no change to canonical data.
 - Out of scope (need owner decisions / sources first): base mesh, uniform, boots, military pose.
+
+---
+
+## Row ENGAGEMENT-001 — Fight engagement system (Godot runtime) — DRAFT
+
+Owner definition (verbatim) and the full inventory are in `docs/product/ENGAGEMENT-SYSTEM-DRAFT-v0.md`.
+Only the owner's words and code facts are filled in; every other cell waits for the answers to Q1–Q8 there.
+
+| Column | Requirement | Current state (2026-10-24) | Status |
+|--------|-------------|----------------------------|--------|
+| **ID** | ENGAGEMENT-001 | — | SPECIFIED |
+| **DEFINITION** | "sistema de enfrentamiento determinado … interacciones entre las cápsulas de colisiones" (owner, verbatim in the draft §1) | — | PARTIAL (definition only) |
+| **RUNTIME** | Godot (Decision 42 clarification) | Deterministic 60 Hz frame-data combat (Python domain + GDScript port), arena playable windowed | PARTIAL |
+| **DETERMINISM** | Owner: "determinado" — scope open (Q4) | 7 reference fights replay identically Python ↔ Godot | PARTIAL |
+| **COLLISION CAPSULES** | Capsule–capsule interactions (owner) — granularity and behaviours open (Q2, Q3) | None in domain/Godot; hit = root-distance ≤ reach; per-bone hit spheres are data only | PENDING |
+| **CONFRONTATION PHASES** | Open (Q1) | Nearest-opponent targeting only | PENDING |
+| **COMBAT SYSTEMS** | "sistemas de combate elaborados" — which ones open (Q8) | 8 moves, guard, throws, cancels, knockdown, wounds | PENDING |
+| **STYLES** | Open (Q5) | shenmue implemented; souls_like / beat_em_up planned | PENDING |
+| **BLENDER → GODOT DATA** | Canonical files only (Decision 42); content open (Q6) | GLB skeleton + gameplay JSON from the Python domain | PENDING |
+| **TEST / ACCEPTANCE** | Not specified (no invented criteria) | — | PENDING |
+| **PRIORITY** | Not set by the owner | — | PENDING |
