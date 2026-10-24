@@ -145,3 +145,23 @@ Acceptance criteria for all rows: **not specified** (no invented criteria; the o
 | MakeHuman / MPFB2 (Blender add-on) | Parametric human base mesh (hm08) of any size, auto-rig incl. Rigify | Assets CC0, code GPLv3; face rig coverage **unconfirmed** |
 | Univ. of Edinburgh R(D)SVS (Open.Ed, Sketchfab) | CT-derived animal skeletons and skulls incl. a horse | "openly licensed" — exact licence per model **unverified** |
 | LSU / JoVE 62276 | CT-based whole-body rigged horse skeleton (research) | Release and licence **unknown** |
+
+---
+
+## Rows PHOTO-TO-3D / WORK-SIGNING — DRAFT (owner idea, recorded only, 2026-10-24)
+
+Owner message (verbatim): "tal vez puedo crear algún tipo de programa para crear meshes, tengo mucha
+documentación porque trabaje mucho tiempo en una empresa audiovisual para un modelista resolviendo sistemas
+audiovisuales de simulación. para poder agregarle algun sistema que me permita crear NTFS Hashes Id con la
+manifestacion, como ir firmando la obra. estuve documentanco muchas cosas que tal vez sirven. le doy fotos y me
+da el 3D". The owner chose **"only record the idea"**: no research, installs, downloads or code.
+
+| ID | Requirement (owner's words) | Notes / current state | Status |
+|----|-----------------------------|------------------------|--------|
+| **PHOTO-TO-3D** | "algún tipo de programa para crear meshes … le doy fotos y me da el 3D" | Photos give the **surface only** (no muscles, tendons, fasciae). Any scan the owner makes is provenance **USER_INPUT** (own data, no third-party licence). A mesh generator must start from **measured data** — no invented geometry (Decision 4.2). Today: the addon can fit a real per-bone mesh from `assets/anatomy/meshes/` (empty) | PENDING |
+| **WORK-SIGNING** | "crear NTFS Hashes Id con la manifestacion, como ir firmando la obra" | Term **UNCONFIRMED** ("NTFS" = NFT? or other — not answered). Proposed, **non-binding**: content ID = SHA-256 of each mesh / manifest (exports are already byte-reproducible) + provenance record signed with the owner's key (Ed25519), optionally C2PA later; NFT only later and only with explicit owner authorization. No technology is added until the full flow is validated (dossier rule) | PENDING |
+| **OWNER-DOCS (context)** | "tengo mucha documentación … estuve documentando muchas cosas que tal vez sirven" | Extensive documentation from the owner's audiovisual-simulation work may be shared. Location **UNKNOWN**; confidentiality status **UNKNOWN** | PENDING |
+
+Acceptance criteria: **not specified**. Open questions: (1) "NTFS" — NFT or something else? (2) where is the
+documentation and what may be used (confidentiality)? (3) photogrammetry on the owner's hardware — not
+researched (owner did not request it).
