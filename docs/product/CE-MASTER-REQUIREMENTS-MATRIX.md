@@ -233,6 +233,60 @@ algunas generadas con AI. en este caso tenemos tambien items y caballo asociado.
 | Known issues | garbled text (AI artefacts); mismatched labels ("Montura Gaucha" points at a jacket); date 1810 on the sheet (regiment created 1812 — to be cited); hat/uniform combination and colours **UNVERIFIED** |
 | Use allowed | blocking, silhouettes, item list, approximate proportions (ESTIMATE) |
 
+**Reference folder (owner, 2026-10-24 23:33 UTC):** `C:\DEV\Assets\Imagenes Para Libertadores, Bocetar y dibujar\`
+(outside the repository; read-only for Claude). Inventory — all 1408 × 768 px PNG, provenance USER_INPUT +
+AI_GENERATED (generator/prompt not recorded), historical details **UNVERIFIED**, garbled text in places:
+
+| File | Bytes | SHA-256 | Content (as drawn) |
+|------|-------|---------|--------------------|
+| `Generated Image September 03, 2026 - 3_31AM (1).png` | 2 395 800 | `a71a9098…935545a` | the sheet above (paisano criollo, soldado y gaucho; caballo criollo, tero, perro) |
+| `Generated Image September 03, 2026 - 3_31AM (2).png` | 2 572 419 | `84b76a71…1cd37` | mujer criolla — paisana, granadera, gaucha; items (mate, lazo, rebenque, sable, carabina), caballo criollo, perro, tero, vizcacha |
+| `Generated Image September 03, 2026 - 3_31AM (3).png` | 2 439 894 | `47588811…eb6a6b` | San Martín — equipment and campaign fauna (uniform, epaulettes, sable corvo, bicornio, montura, pistolas de arzón, catalejo, mule, condor, guanaco) |
+| `Generated Image September 03, 2026 - 3_31AM.png` | 2 571 228 | `ba27a743…341b` | Ejército Libertador — ethnic groups and fauna (several figures, llama, vicuña, mule, condor) |
+| `Generated Image September 03, 2026 - 3_44AM.png` | 2 516 448 | `5b711365…913b` | San Martín — tailoring (levita, bicornio, chaleco, faja, camisa/corbatín, boots) |
+| `Generated Image September 03, 2026 - 5_19AM.png` | 2 463 579 | `bcea5ef7…7e04` | levita de Granadero a Caballo — **back, front and side views**, collar, cuff, epaulette, grenade button, lining |
+
+Full hashes: run `Get-FileHash -Algorithm SHA256` on the folder (values above truncated for readability).
+
+---
+
+## Rows STORYBOARD-TO-SHOT / LOCOMOTION-STANDALONE — DRAFT (owner, 2026-10-24 23:33 UTC)
+
+Owner (verbatim): "C:\DEV\Assets lo guarde ahi, claro mi trabajo es dejar todo lo mejor posible, siguiendo el guion de
+la historia las tomas que quiero privilegiar contando la historias. toda la experiencia cinematografica del guion sale de
+mis bocetos, despues buscamos un modelo de boceto que te quede bien para anotar movimientos de camara y detalles de la
+escena para intentar recrearlas, elegir escenario con todos sus elementos, ese es nuestro ejemplo, que nuestro
+character no solo pelee sino que camine bien que tenga buenos momentos de standalone."
+
+| ID | Requirement (owner's words) | Notes | Status |
+|----|-----------------------------|-------|--------|
+| **STORYBOARD-TO-SHOT** | "toda la experiencia cinematografica del guion sale de mis bocetos … un modelo de boceto … para anotar movimientos de camara y detalles de la escena para intentar recrearlas, elegir escenario con todos sus elementos" | The script (guion) and the shots the owner wants to privilege drive the cinematography; each sketch is annotated so the shot can be recreated in Blender. Shot-list and set schemas below are **PROPOSED** | PENDING |
+| **LOCOMOTION-STANDALONE** | "que nuestro character no solo pelee sino que camine bien que tenga buenos momentos de standalone" | Today: rig with IK legs and foot roll, mocap retarget; no walk cycle, no idle/standalone animations. Realistic walking speeds need cited sources (REALISM-UNITS) | PENDING |
+
+**Shot-list schema — PROPOSED (one record per sketch/shot):**
+
+| Field | Meaning |
+|-------|---------|
+| `shot_id` | e.g. `SC01-SH03` (scene, shot) |
+| `sketch_file` | path + SHA-256 of the owner's sketch (scan/photo) |
+| `scene` / `location` | scene name and escenario id |
+| `shot_size` | framing: extreme wide / wide / full / medium / close-up / detail |
+| `camera_move` | static / pan / tilt / dolly / truck / crane / handheld / follow, with direction |
+| `duration_s` | planned duration |
+| `subject_action` | who does what (characters, animals, items) |
+| `lens_mm` / `fov_deg` | ESTIMATE from the sketch |
+| `engagement` | proximity / direction cues if it is a fight (draft engagement §10) |
+| `notes` | lighting, mood, sound, transitions |
+| `provenance` | USER_INPUT (owner sketch); any AI or internet reference listed with its register entry |
+
+**Set / escenario element list — PROPOSED:** `set_id`, `location`, `period`, `terrain` (size m, slope), `structures`
+(e.g. rancho, tents), `props` (with sockets/assets), `animals`, `extras` (count, roles), `lighting`/`time_of_day`,
+`weather`, `references` (register entries), `provenance`.
+
+Open questions: (1) is the written guion available, and where? (2) which scene is the pilot? (3) sketch format —
+paper scans, tablet drawings, storyboard panels? (4) what exactly are the "standalone moments" (idle, walking, mounting,
+drinking mate…)? (5) what must the walk satisfy (speeds, gait, terrain) — realistic values need cited sources.
+
 ---
 
 ## Row DELIVERABLE-1 — Granaderos fight (first deliverable) — DRAFT

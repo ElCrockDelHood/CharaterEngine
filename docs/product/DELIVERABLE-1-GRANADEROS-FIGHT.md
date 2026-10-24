@@ -59,8 +59,11 @@ message of 22:57 UTC).
 
 ## 3.1 D1-2 plan — "maqueta de pelea en Workbench" with reference sheets (PREPARED, not implemented)
 
-**Reference folder (outside the repository):** `C:\DEV\Referencias\` with one sub-folder per subject and file names
-`<subject>_<view>_<source>_<nn>.png`, e.g.:
+**Reference folder (outside the repository) — owner's choice 2026-10-24:** `C:\DEV\Assets\` (current sheets in
+`C:\DEV\Assets\Imagenes Para Libertadores, Bocetar y dibujar\`, 6 AI sheets registered in the matrix
+REFERENCE-IMAGES; the levita sheet `…5_19AM.png` has back/front/side views). The scene reads files in place, never
+copies or modifies them. Optional naming for new files (the existing names are kept as they are)
+`<subject>_<view>_<source>_<nn>.png`, e.g. (originally proposed under `C:\DEV\Referencias\`):
 
 ```
 C:\DEV\Referencias\granadero\granadero_front_ai_01.png
