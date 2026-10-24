@@ -1,0 +1,154 @@
+{
+  "finding": "A10 hand layout (metacarpals/phalanges detached from the wrist)",
+  "file": "src/character_engine/data/anatomy/human_adult_206.json",
+  "sha256_before": "909b9c9cc0071144678593aa94fa9f11afd5d0895296397a6eeb64e580e3e5ae",
+  "sha256_after": "223f4660150e99ba7b2e6e29c0a2e59c2dbaf7d499e4b4c4d565cbb9bbeb9e0c",
+  "bones": 206,
+  "changed_bones": 54,
+  "parameters": {
+    "stature_m": 1.8,
+    "fingertip_z_m": 0.6786,
+    "ray_spacing_m": 0.0133,
+    "pisiform_palmar_offset_m": 0.0133,
+    "sides": {
+      "L": {
+        "wrist_anchor_radius_tail_m": [
+          0.2331,
+          -0.0333,
+          0.873
+        ],
+        "unit_m": 0.011435,
+        "hand_length_m": 0.1944
+      },
+      "R": {
+        "wrist_anchor_radius_tail_m": [
+          -0.2331,
+          -0.0333,
+          0.873
+        ],
+        "unit_m": 0.011435,
+        "hand_length_m": 0.1944
+      }
+    }
+  },
+  "provenance": {
+    "wrist_and_fingertip_heights": "DERIVED from PROVEN DRILLIS_CONTINI_1966 ratios (0.485 H, 0.377 H)",
+    "carpal_rows_order_articulations_and_parents": "PROVEN topology (anatomy atlas)",
+    "segment_split_2_4_3_ray_spacing_palmar_offset": "PLACEHOLDER — existing data values, pending HAND_SEGMENT_PROPORTIONS source"
+  },
+  "samples": {
+    "CAPITATE_L": {
+      "before": {
+        "parent": "RADIUS_L",
+        "head": {
+          "x": 0.2597,
+          "y": -0.0799,
+          "z": 0.7596
+        },
+        "tail": {
+          "x": 0.2597,
+          "y": -0.0799,
+          "z": 0.7515
+        }
+      },
+      "after": {
+        "parent": "RADIUS_L",
+        "head": {
+          "x": 0.2331,
+          "y": -0.0333,
+          "z": 0.8501
+        },
+        "tail": {
+          "x": 0.2331,
+          "y": -0.0333,
+          "z": 0.8273
+        }
+      }
+    },
+    "METACARPAL_3_L": {
+      "before": {
+        "parent": "RADIUS_L",
+        "head": {
+          "x": 0.0733,
+          "y": 0.0,
+          "z": 0.7394
+        },
+        "tail": {
+          "x": 0.0733,
+          "y": 0.0,
+          "z": 0.7232
+        }
+      },
+      "after": {
+        "parent": "CAPITATE_L",
+        "head": {
+          "x": 0.2331,
+          "y": -0.0333,
+          "z": 0.8273
+        },
+        "tail": {
+          "x": 0.2331,
+          "y": -0.0333,
+          "z": 0.7815
+        }
+      }
+    },
+    "PHALANX_PROXIMAL_3_R": {
+      "before": {
+        "parent": "RADIUS_R",
+        "head": {
+          "x": -0.0599,
+          "y": 0.0,
+          "z": 0.7232
+        },
+        "tail": {
+          "x": -0.0599,
+          "y": 0.0,
+          "z": 0.711
+        }
+      },
+      "after": {
+        "parent": "METACARPAL_3_R",
+        "head": {
+          "x": -0.2331,
+          "y": -0.0333,
+          "z": 0.7815
+        },
+        "tail": {
+          "x": -0.2331,
+          "y": -0.0333,
+          "z": 0.7472
+        }
+      }
+    },
+    "PHALANX_DISTAL_3_L": {
+      "before": {
+        "parent": "PHALANX_INTERMEDIATE_3_L",
+        "head": {
+          "x": 0.0599,
+          "y": 0.0,
+          "z": 0.6988
+        },
+        "tail": {
+          "x": 0.0599,
+          "y": 0.0,
+          "z": 0.6867
+        }
+      },
+      "after": {
+        "parent": "PHALANX_INTERMEDIATE_3_L",
+        "head": {
+          "x": 0.2331,
+          "y": -0.0333,
+          "z": 0.7129
+        },
+        "tail": {
+          "x": 0.2331,
+          "y": -0.0333,
+          "z": 0.6786
+        }
+      }
+    }
+  },
+  "applied": true
+}
