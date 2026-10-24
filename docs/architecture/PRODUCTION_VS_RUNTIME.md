@@ -10,7 +10,7 @@ work in one never leaks into the others:
 |-------|------|---------|------|
 | **Canonical core** | Python (`src/character_engine`) | Truth: anatomy, parameters, provenance | JSON data, domain, exporters |
 | **Production** | Blender (3.6 reference) — the whole production line | Modelling, sculpt, appearance, rig, animation, mocap clean-up, cinematography, final render | `.blend` files, control rigs, shaders, render |
-| **Runtime** | Godot 4 (primary, gating) | Gameplay, procedural IK, physics simulation | Scenes, gameplay code, simulation caches |
+| **Runtime** | Godot 4 (primary, gating) | Gameplay, procedural IK; plays baked simulation results (no offline-grade simulation at runtime, Decision 45) | Scenes, gameplay code, baked reaction library |
 
 Owner decision 2026-10-24 (DECISION_LOG §40, §42): production happens in Blender, gameplay runtime in Godot.
 UPBGE (authoring + game mode) remains supported but optional and non-blocking.
@@ -18,6 +18,9 @@ Clarification (owner, 2026-10-24, DECISION_LOG §42): modelling, **simulation** 
 cinematography are done in Blender; the results pass to Godot, where the **fight engagement system**
 (gameplay runtime) lives. Only canonical files (glTF / JSON, baked results) travel from Blender to Godot;
 the bake/export format for simulation results is **not yet specified** (pending decision).
+Decision 45 (owner, 2026-10-24): simulation (collision, fracture/breaking, particles) runs **offline in Blender**;
+its emergent results are extracted as mesh-type manifestations; Godot only plays baked reactions triggered by the
+deterministic state machine (state change / collision at a point).
 
 The two engines only ever talk to each other through **neutral files** produced or consumed by
 the core. Nothing in production depends on runtime code and vice versa.

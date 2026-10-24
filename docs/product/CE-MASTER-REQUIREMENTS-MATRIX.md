@@ -235,3 +235,4 @@ Update 2026-10-24 21:16 UTC (owner, engagement question 3 answered — draft §9
 (owner decision). With this design, runtime physics (Jolt / GodotPhysics3D) is **not needed for L2**; kept in
 the table as a note, not removed. The offline tool inside Blender (Bullet, cloth, soft body, particles, geometry
 nodes, own XPBD, FEM) is still **PENDING**. Godot 4.7.2 scene importers verified: glTF, `.blend`, FBX; no Alembic.
+Confirmed by the owner as **Decision 45** (2026-10-24 21:19 UTC).
