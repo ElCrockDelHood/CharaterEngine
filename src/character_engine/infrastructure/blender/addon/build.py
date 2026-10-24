@@ -19,7 +19,7 @@ from mathutils import Matrix, Quaternion, Vector
 from character_engine.domain.anatomy.osteometry import LONG_BONES, load_osteometry
 from character_engine.domain.anatomy.reference.source import ProvenanceState
 from character_engine.domain.animation import BoneMap
-from character_engine.domain.rigging import RigDefinition
+from character_engine.domain.rigging import EquipmentSocket, RigDefinition, socket_points
 from character_engine.domain.tissue import MUSCLES, BodyRegion, TissueLayer, region_of_bone, tissue_profile
 from character_engine.domain.trauma import Wound, WoundAssessment, WoundType, assess_wound
 
@@ -151,7 +151,8 @@ def clear_character(context, name: str) -> int:
         if obj.get("ce_character") == name:
             bpy.data.objects.remove(obj, do_unlink=True)
             removed += 1
-    for coll_name in (f"{name}", f"{name}_Tissues", f"{name}_Wounds", f"{name}_Mocap"):
+    for coll_name in (f"{name}", f"{name}_Tissues", f"{name}_Wounds", f"{name}_Mocap", f"{name}_Equipment",
+                      f"{name}_Cinematic"):
         coll = bpy.data.collections.get(coll_name)
         if coll and not coll.objects and not coll.children:
             bpy.data.collections.remove(coll)
@@ -805,3 +806,134 @@ def apply_wound(context, armature, point_world: Vector, wound_type: str, depth_m
 
 def quaternion_from_axis_angle(axis: Vec3, angle_deg: float) -> Quaternion:  # small utility for tests
     return Quaternion(Vector(axis), math.radians(angle_deg))
+
+
+# --------------------------------------------------------------------------- equipment -----
+
+# PLACEHOLDER geometry for the sabre (blade + hilt envelope) until a modelled asset exists.
+SABRE_PLACEHOLDER_LENGTH_M = 0.90
+SABRE_PLACEHOLDER_WIDTH_M = 0.035
+
+
+def build_equipment_sockets(context, armature, sockets: Sequence[EquipmentSocket],
+                            reference_bones: Sequence[dict]) -> List[str]:
+    """Add one non-deforming bone per socket (MCH layer), parented to its canonical bone."""
+    bones = [{"canonical_name": b.name, "head": tuple(b.head_local), "tail": tuple(b.tail_local)}
+             for b in armature.data.bones if b.get("ce_canonical")]
+    placed = {s.name: socket_points(s, bones, reference_bones) for s in sockets}
+    context.view_layer.objects.active = armature
+    bpy.ops.object.mode_set(mode="EDIT")
+    eb = armature.data.edit_bones
+    for s in sockets:
+        e = eb.get(s.name) or eb.new(s.name)
+        e.head, e.tail = Vector(placed[s.name][0]), Vector(placed[s.name][1])
+        e.parent = eb[s.parent_bone]
+        e.use_connect = False
+        e.use_deform = False
+    bpy.ops.object.mode_set(mode="OBJECT")
+    for s in sockets:
+        bone = armature.data.bones[s.name]
+        assign_bone_layer(armature.data, bone, "MCH")
+        bone["ce_role"] = "socket"
+        bone["ce_provenance"] = s.provenance.value
+    return [s.name for s in sockets]
+
+
+def build_placeholder_sabre(context, armature, socket_name: str = "SOCKET-sabre_hip.L"):
+    """Box hanging from the socket along its axis, parented to the socket bone (PLACEHOLDER)."""
+    name = armature["ce_character"]
+    bone = armature.data.bones[socket_name]
+    mw = armature.matrix_world
+    head, tail = mw @ bone.head_local, mw @ bone.tail_local
+    d = (tail - head).normalized()
+    u = d.cross(Vector((1.0, 0.0, 0.0)))
+    u = u.normalized() if u.length > 1e-6 else d.cross(Vector((0.0, 1.0, 0.0))).normalized()
+    v = d.cross(u).normalized()
+    h = SABRE_PLACEHOLDER_WIDTH_M / 2
+    bm = bmesh.new()
+    verts = [bm.verts.new(head + d * (SABRE_PLACEHOLDER_LENGTH_M * t) + u * (h * a) + v * (h * b))
+             for t in (0.0, 1.0) for a in (-1, 1) for b in (-1, 1)]
+    for f in ((0, 1, 3, 2), (4, 6, 7, 5), (0, 4, 5, 1), (2, 3, 7, 6), (0, 2, 6, 4), (1, 5, 7, 3)):
+        bm.faces.new([verts[i] for i in f])
+    obj = _mesh_object(context, f"{name}_Sabre_PLACEHOLDER", bm, f"{name}_Equipment", {
+        "ce_character": name, "ce_role": "equipment", "ce_socket": socket_name,
+        "ce_provenance": ProvenanceState.PLACEHOLDER.value.upper(),
+        "ce_note": "Placeholder box for a cavalry sabre; replace with a modelled asset."})
+    obj.data.materials.append(_material("CE_Equipment_Placeholder", (0.55, 0.55, 0.6, 1.0)))
+    obj.parent = armature
+    obj.parent_type = "BONE"
+    obj.parent_bone = socket_name
+    pbone = armature.pose.bones[socket_name]
+    obj.matrix_parent_inverse = (mw @ pbone.matrix @ Matrix.Translation((0, pbone.length, 0))).inverted()
+    return obj
+
+
+# --------------------------------------------------------------------------- cinematic -----
+
+def armature_points_world(armature, canonical_only: bool = True) -> List[Vector]:
+    mw = armature.matrix_world
+    pts = []
+    for pb in armature.pose.bones:
+        if canonical_only and not pb.bone.get("ce_canonical"):
+            continue
+        pts += [mw @ pb.head, mw @ pb.tail]
+    return pts
+
+
+def setup_fullbody_workbench(context, armature, resolution=(1920, 1080), lens_mm: float = 50.0,
+                             margin: float = 1.10, extra_objects: Sequence = ()):
+    """Floor, key/fill/rim lights and a front camera framing the armature (+ extra objects)."""
+    scene = context.scene
+    name = armature["ce_character"]
+    coll = f"{name}_Cinematic"
+    pts = armature_points_world(armature)
+    for o in extra_objects:
+        pts += [o.matrix_world @ Vector(c) for c in o.bound_box]
+    lo = Vector((min(p.x for p in pts), min(p.y for p in pts), min(p.z for p in pts)))
+    hi = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
+    centre, size = (lo + hi) / 2, hi - lo
+
+    bm = bmesh.new()
+    bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=2.0)
+    _mesh_object(context, f"{name}_Floor", bm, coll, {"ce_character": name, "ce_role": "cinematic"})
+
+    for label, kind, loc, energy in (("Key", "AREA", (2.0, -3.0, 3.0), 400.0),
+                                     ("Fill", "AREA", (-2.5, -2.5, 2.0), 150.0),
+                                     ("Rim", "SPOT", (0.0, 3.0, 3.0), 300.0)):
+        data = bpy.data.lights.new(f"{name}_{label}", kind)
+        data.energy = energy
+        light = bpy.data.objects.new(f"{name}_{label}", data)
+        _link(context, light, coll)
+        light.location = centre + Vector(loc)
+        direction = centre - light.location
+        light.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
+        light["ce_character"], light["ce_role"] = name, "cinematic"
+
+    cam_data = bpy.data.cameras.new(f"{name}_Camera")
+    cam_data.lens = lens_mm
+    cam_data.sensor_fit = "HORIZONTAL"
+    cam = bpy.data.objects.new(f"{name}_Camera", cam_data)
+    _link(context, cam, coll)
+    half_h = math.atan(cam_data.sensor_width / 2 / lens_mm)               # horizontal half-FOV
+    half_v = math.atan(math.tan(half_h) * resolution[1] / resolution[0])  # vertical half-FOV
+    dist = max(size.z * margin / 2 / math.tan(half_v), size.x * margin / 2 / math.tan(half_h)) + size.y / 2
+    cam.location = Vector((centre.x, lo.y - dist + size.y / 2, centre.z))
+    cam.rotation_euler = (math.radians(90.0), 0.0, 0.0)                    # look along +Y, up = +Z
+    cam["ce_character"], cam["ce_role"] = name, "cinematic"
+    scene.camera = cam
+
+    scene.render.engine = "BLENDER_WORKBENCH"
+    scene.render.resolution_x, scene.render.resolution_y = resolution
+    scene.render.resolution_percentage = 100
+    scene.render.image_settings.file_format = "PNG"
+    return cam
+
+
+def render_still(context, filepath: Path) -> float:
+    """Render the active camera to ``filepath``; returns the wall time in seconds."""
+    import time
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+    context.scene.render.filepath = str(filepath)
+    t = time.perf_counter()
+    bpy.ops.render.render(write_still=True)
+    return time.perf_counter() - t

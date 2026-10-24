@@ -153,6 +153,9 @@ class CE_PT_export(_CEPanel, bpy.types.Panel):
         layout.operator("character_engine.export_gltf", icon="EXPORT")
         layout.operator("character_engine.export_scene_gltf", icon="SCENE_DATA")
         layout.operator("character_engine.dump_report", icon="TEXT")
+        layout.separator()
+        layout.operator("character_engine.add_equipment_sockets", icon="BONE_DATA")
+        layout.operator("character_engine.cinematic_fullbody", icon="CAMERA_DATA")
 
 
 class CE_PT_runtime(_CEPanel, bpy.types.Panel):

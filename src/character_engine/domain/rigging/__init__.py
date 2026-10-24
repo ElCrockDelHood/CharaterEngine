@@ -8,12 +8,17 @@ from .rig_definition import (
     SplineChain,
     validate_rig_against_bones,
 )
+from .sockets import EQUIPMENT_SOCKETS, EquipmentSocket, socket_points, validate_sockets
 
 __all__ = [
+    "EQUIPMENT_SOCKETS",
     "HUMANOID_RIG",
     "ControlBone",
+    "EquipmentSocket",
     "IKChain",
     "RigDefinition",
     "SplineChain",
+    "socket_points",
     "validate_rig_against_bones",
+    "validate_sockets",
 ]

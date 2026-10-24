@@ -552,6 +552,107 @@ def main(reset: bool = True) -> int:
                     f"opponent health {data['fighters']['opponent']['health']}")
         check("UPBGE blenderplayer: autoplay combat smoke", _blenderplayer_game)
 
+    # ------------------------------------------------- CINE-GR-001 step 1: sockets + cinematic ---
+    import math
+
+    from bpy_extras.object_utils import world_to_camera_view
+    from mathutils import Quaternion, Vector
+
+    sockets = (("SOCKET-sabre_hip.L", "COXAL_L"), ("SOCKET-hand_grip.R", "METACARPAL_3_R"))
+
+    def _socket_follow(pose):
+        if bpy.context.object and bpy.context.object.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode="OBJECT")
+        for o in list(scene.objects):             # clean stage (earlier checks leave arena/fighters)
+            bpy.data.objects.remove(o, do_unlink=True)
+        props.template, props.use_template_stature, props.pose = "human_male_adult", True, pose
+        assert bpy.ops.character_engine.generate_body() == {"FINISHED"}
+        assert bpy.ops.character_engine.add_equipment_sockets(with_sabre=True) == {"FINISHED"}
+        arm = bpy.data.objects[props.armature_name]
+        sabre = bpy.data.objects[f"{arm.name}_Sabre_PLACEHOLDER"]
+        assert sabre["ce_provenance"] == "PLACEHOLDER" and sabre.parent_bone == "SOCKET-sabre_hip.L"
+        ctx.view_layer.objects.active = arm
+        bpy.ops.object.mode_set(mode="POSE")
+        worst = 0.0
+        for sname, parent in sockets:
+            bone = arm.data.bones[sname]
+            assert bone.parent.name == parent and bone["ce_layer"] == "MCH" and not bone.use_deform
+            sb, pb = arm.pose.bones[sname], arm.pose.bones[parent]
+            s0, p0, o0 = arm.matrix_world @ sb.matrix, arm.matrix_world @ pb.matrix, sabre.matrix_world.copy()
+            pb.rotation_mode = "QUATERNION"
+            pb.rotation_quaternion = Quaternion((1, 0, 0), math.radians(25)) @ Quaternion((0, 0, 1), math.radians(-15))
+            ctx.view_layer.update()
+            s1, p1, o1 = arm.matrix_world @ sb.matrix, arm.matrix_world @ pb.matrix, sabre.matrix_world.copy()
+            dp, ds = p1 @ p0.inverted(), s1 @ s0.inverted()
+            mats = [ds] + ([o1 @ o0.inverted()] if sname == "SOCKET-sabre_hip.L" else [])
+            for m in mats:
+                worst = max(worst, max(abs(dp[i][j] - m[i][j]) for i in range(4) for j in range(4)))
+            pb.rotation_quaternion = (1, 0, 0, 0)
+            ctx.view_layer.update()
+        bpy.ops.object.mode_set(mode="OBJECT")
+        assert worst < 1e-5, f"socket/sabre delta differs from parent delta by {worst:.2e}"
+        return f"{pose}: sockets on MCH, max |Δsocket − Δparent| = {worst:.1e} (sabre included)"
+
+    if not skipped(args, "cinematic"):
+        check("CINE-GR-001 (b) sockets follow parents — T-pose", lambda: _socket_follow("tpose"))
+        check("CINE-GR-001 (b) sockets follow parents — anatomical", lambda: _socket_follow("anatomical"))
+
+    def _sabre_clear():
+        props.tissue_bones, props.tissue_muscles, props.tissue_tendons, props.tissue_skin = True, False, False, False
+        assert bpy.ops.character_engine.generate_tissues() == {"FINISHED"}
+        arm = bpy.data.objects[props.armature_name]
+        bones, sabre = bpy.data.objects[f"{arm.name}_Bones"], bpy.data.objects[f"{arm.name}_Sabre_PLACEHOLDER"]
+        sw = [sabre.matrix_world @ Vector(c) for c in sabre.bound_box]
+        slo = [min(p[k] for p in sw) for k in range(3)]
+        shi = [max(p[k] for p in sw) for k in range(3)]
+        groups = {}
+        mw = bones.matrix_world
+        for v in bones.data.vertices:
+            p = mw @ v.co
+            for g in v.groups:
+                groups.setdefault(g.group, []).append(p)
+        overlaps = []
+        for gi, pts in groups.items():
+            lo = [min(p[k] for p in pts) for k in range(3)]
+            hi = [max(p[k] for p in pts) for k in range(3)]
+            if all(lo[k] <= shi[k] and hi[k] >= slo[k] for k in range(3)):
+                overlaps.append(bones.vertex_groups[gi].name)
+        assert not overlaps, f"sabre AABB overlaps bone proxies: {overlaps}"
+        return (f"sabre AABB x[{slo[0]:.3f},{shi[0]:.3f}] y[{slo[1]:.3f},{shi[1]:.3f}] z[{slo[2]:.3f},{shi[2]:.3f}] "
+                f"clear of {len(groups)} bone proxy AABBs")
+
+    def _cinematic():
+        out = ROOT / "builds" / "renders" / f"{args.engine}_CINE-GR-001_fullbody.png"
+        res = bpy.ops.character_engine.cinematic_fullbody(render=True, filepath=str(out))
+        assert res == {"FINISHED"}, res
+        arm, cam = bpy.data.objects[props.armature_name], scene.camera
+        canonical = [b for b in arm.pose.bones if b.bone.get("ce_canonical")]
+        outside = []
+        for b in canonical:
+            for p in (arm.matrix_world @ b.head, arm.matrix_world @ b.tail):
+                c = world_to_camera_view(scene, cam, p)
+                if not (0.0 <= c.x <= 1.0 and 0.0 <= c.y <= 1.0 and c.z > 0.0):
+                    outside.append(b.name)
+        assert len(canonical) == 208 and not outside, (len(canonical), outside[:10])
+        # nothing that is not part of this character may stand between the camera and its bones
+        depsgraph, origin, occluders = ctx.evaluated_depsgraph_get(), cam.matrix_world.translation, set()
+        for b in canonical:
+            target = arm.matrix_world @ b.head
+            ray = target - origin
+            hit, _loc, _n, _i, obj, _m = scene.ray_cast(depsgraph, origin, ray.normalized(), distance=ray.length)
+            if hit and obj.get("ce_character") != arm.name:
+                occluders.add(obj.name)
+        assert not occluders, f"camera view occluded by {sorted(occluders)}"
+        info = json.loads(arm["ce_last_render"])
+        assert out.exists() and out.stat().st_size > 10_000, out
+        assert info["seconds"] <= 30.0, f"render took {info['seconds']} s"
+        return (f"(a) 208/208 bones in frame; (d) Workbench {scene.render.resolution_x}x{scene.render.resolution_y} "
+                f"render {info['seconds']} s -> {out}")
+
+    if not skipped(args, "cinematic"):
+        check("CINE-GR-001 (c) placeholder sabre clear of skeleton proxies", _sabre_clear)
+        check("CINE-GR-001 (a)+(d) full-body Workbench camera and render", _cinematic)
+
     if args.save:
         def _save():
             args.save.parent.mkdir(parents=True, exist_ok=True)

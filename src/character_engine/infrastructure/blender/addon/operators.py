@@ -17,7 +17,7 @@ from character_engine.domain.character import (
     get_template,
     load_canonical_bones,
 )
-from character_engine.domain.rigging import HUMANOID_RIG
+from character_engine.domain.rigging import EQUIPMENT_SOCKETS, HUMANOID_RIG
 
 from . import _bootstrap, build
 
@@ -340,9 +340,64 @@ class CE_OT_dump_report(bpy.types.Operator):
         return {"FINISHED"}
 
 
+class CE_OT_add_equipment_sockets(bpy.types.Operator):
+    """Add the equipment sockets (MCH bones) and a PLACEHOLDER sabre on the left hip"""
+
+    bl_idname = "character_engine.add_equipment_sockets"
+    bl_label = "Add equipment sockets"
+    bl_options = {"REGISTER", "UNDO"}
+
+    with_sabre: bpy.props.BoolProperty(name="Placeholder sabre", default=True)
+
+    def execute(self, context):
+        arm = _armature(context)
+        if arm is None:
+            self.report({"ERROR"}, "Generate a body first")
+            return {"CANCELLED"}
+        try:
+            names = build.build_equipment_sockets(context, arm, EQUIPMENT_SOCKETS, load_canonical_bones()[0])
+            if self.with_sabre:
+                build.build_placeholder_sabre(context, arm)
+            self.report({"INFO"}, f"sockets: {', '.join(names)}" + (" + placeholder sabre" if self.with_sabre else ""))
+            return {"FINISHED"}
+        except Exception as exc:  # noqa: BLE001
+            return _report_exc(self, exc)
+
+
+class CE_OT_cinematic_fullbody(bpy.types.Operator):
+    """Cinematic preset: full body, Workbench (floor, key/fill/rim lights, framed camera, optional render)"""
+
+    bl_idname = "character_engine.cinematic_fullbody"
+    bl_label = "Cinematic preset: full body, Workbench"
+    bl_options = {"REGISTER", "UNDO"}
+
+    render: bpy.props.BoolProperty(name="Render still", default=False)
+    filepath: bpy.props.StringProperty(name="Output", subtype="FILE_PATH", default="")
+
+    def execute(self, context):
+        arm = _armature(context)
+        if arm is None:
+            self.report({"ERROR"}, "Generate a body first")
+            return {"CANCELLED"}
+        try:
+            extra = [o for o in bpy.data.objects if o.get("ce_character") == arm.name and o.get("ce_role") == "equipment"]
+            cam = build.setup_fullbody_workbench(context, arm, extra_objects=extra)
+            msg = f"camera {cam.name}"
+            if self.render:
+                out = Path(self.filepath) if self.filepath else _bootstrap.repo_root() / "builds" / "renders" / "CINE-GR-001_fullbody.png"
+                secs = build.render_still(context, out)
+                arm["ce_last_render"] = json.dumps({"path": str(out), "seconds": round(secs, 2)})
+                msg += f", render {out.name} in {secs:.1f} s"
+            self.report({"INFO"}, msg)
+            return {"FINISHED"}
+        except Exception as exc:  # noqa: BLE001
+            return _report_exc(self, exc)
+
+
 CLASSES = (
     CE_OT_generate_body, CE_OT_generate_tissues, CE_OT_build_rig, CE_OT_set_ik_fk, CE_OT_import_mocap,
     CE_OT_apply_wound, CE_OT_clear_wounds, CE_OT_export_gltf, CE_OT_export_scene_gltf, CE_OT_dump_report,
+    CE_OT_add_equipment_sockets, CE_OT_cinematic_fullbody,
 )
 
 

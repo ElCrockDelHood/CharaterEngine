@@ -32,6 +32,7 @@ env/
 *.blend@
 builds/tmp/
 builds/gltf/
+builds/renders/
 
 # ---- Godot ----
 .godot/
