@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://d2o6lb5v1vde8"]
+
+[ext_resource type="Script" uid="uid://d1nwt636w3dpv" path="res://addons/character_engine/gameplay/ce_arena.gd" id="1_tno16"]
+
+[node name="Node3D" type="Node3D" unique_id=1705538019]
+
+[node name="CEArena" type="Node3D" parent="." unique_id=1511959731]
+script = ExtResource("1_tno16")
+autoplay_frames = 180
