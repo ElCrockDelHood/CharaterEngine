@@ -13,7 +13,9 @@
 - **Handedness:** Right-handed
 - **Vertical Axis:** Z (positive Z points upward)
 - **Linear Units:** Meters
-- **Angular Units:** Degrees (internal calculations), Radians (where required by math functions)
+- **Angular Units:** Radians everywhere in the domain (internal calculations, quaternions, kinematics).
+  Degrees only at interfaces (UI, Euler input/output, reports), with a `_deg` suffix
+  (Decision 27 / D-07).
 - **Ground/Reference Plane:** Z = 0
 
 ### Axis Definitions
@@ -138,8 +140,13 @@
   - 1 meter = 39.3701 inches
 
 #### Angular Units
-- **Primary:** Degrees (°) for human interface
-- **Secondary:** Radians (rad) for mathematical calculations
+- **Domain (canonical):** Radians (rad) — all internal angles and calculations
+- **Interfaces only:** Degrees (°), named with a `_deg` suffix (e.g. `from_euler_zyx(roll_deg, …)`,
+  `apply_tpose(abduction_deg=…)`)
+- **Legacy, to migrate when touched** (degrees without `_deg`, interface-facing):
+  `coordinate_system.py` Euler helpers (`rotation` tuples, `parent_rotation`/`child_rotation`) and
+  angular tolerances; `hands/model.py`, `feet/model.py` `orientation`, `thumb_orientation`;
+  `spine/model.py` `angle`, `sacral_orientation`.
 - **Conversion factors:**
   - 1 radian = 57.2958 degrees
   - 1 degree = 0.0174533 radians
