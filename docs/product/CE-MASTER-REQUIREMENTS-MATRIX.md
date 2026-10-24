@@ -289,6 +289,16 @@ drinking mate…)? (5) what must the walk satisfy (speeds, gait, terrain) — re
 
 ---
 
+## Row PILOT-SAN-LORENZO — DRAFT (owner, 2026-10-24 23:41–23:44 UTC)
+
+Owner: "voy a tomar este video para el guion y ya lo tenemos" (https://www.youtube.com/watch?v=j6slbLEUA3c,
+"San Martín y la Batalla de San Lorenzo", EducaciónSantaFe) and "El piloto es una mezcla de momeno de entrenamiento,
+con previos a la batalla con cotidianos de la epoca y entrenamiento y de la batalla". Draft structure (acts A–F,
+facts to verify, empty shot list, sets): `docs/product/PILOT-SAN-LORENZO.md`. The video is a **research reference**
+(standard licence assumed, not verified); the script and sketches are the owner's. Status: **PENDING**.
+
+---
+
 ## Row DELIVERABLE-1 — Granaderos fight (first deliverable) — DRAFT
 
 Owner choice 2026-10-24: "Pelea de Granaderos" is the **first deliverable**. Full draft (goal, inventory,
