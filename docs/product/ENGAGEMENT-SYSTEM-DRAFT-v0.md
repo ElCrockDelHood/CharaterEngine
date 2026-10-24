@@ -135,3 +135,33 @@ come from non-deterministic physics in L2 and is fixed once baked in L3.
 4. What exactly is the "manifestación" (the polished result Godot plays): animation/pose tracks, capsule
    trajectories, region reactions, or something else?
 5. Accept the phasing order E0→E8, or name the step to start with.
+
+Question 1 is still open; question 2 is moot under the reading below (offline L2 need not be deterministic);
+**question 3 is ANSWERED** (§9); question 4 is partly answered (§9); question 5 is still open.
+
+## 9. Owner answer 2 — where L2 runs (verbatim, 2026-10-24 21:16 UTC)
+
+> "la simulacion Fuera de linea para trabajar el emegente de manifestacion de colicion rotura sistema de
+> particulas, extraigo esa manifescaion tipo mesh a blender  para darle retoque o unirla para crear
+> cinematografias, porque el video juego responde a estados de acuerdo a las coliciones, asi que cuando cambia de
+> estados o es colisionado en el punto resulta reaccion, se entiende?."
+
+**Q3 (§8): ANSWERED — L2 physics runs OFFLINE in Blender.**
+
+Claude's interpretation — **to be confirmed by the owner**:
+1. L2 runs **offline in Blender** (collision, fracture/breaking, particle systems) and produces emergent results.
+2. Those results are extracted as **mesh-type manifestations**, retouched or joined in Blender, and are usable
+   for cinematics.
+3. In the game, Godot does **not** simulate them: it runs the deterministic state machine (L1). When a state
+   changes or a collision happens at a point, the resulting reaction is a **baked manifestation chosen and played
+   from a library**.
+4. Runtime determinism therefore holds even though the offline simulation need not be deterministic, provided
+   each baked manifestation records its generation parameters/seed and a SHA-256 ID (ties to WORK-SIGNING).
+
+OPEN / UNSPECIFIED:
+* how reactions are keyed (state, collision point/region, energy, material) and blending between variants;
+* baked format — verified on the baseline PC: Godot 4.7.2 scene importers are glTF, `.blend`, FBX (ufbx and
+  FBX2glTF); **no Alembic importer class** exists (mesh-sequence caches would need conversion, e.g. glTF
+  morph targets or bone animation — UNVERIFIED which works best);
+* asset size and performance on the GT 740M with the Compatibility renderer (not measured);
+* the offline physics tool (Blender Bullet / cloth / soft body / particles / geometry nodes, own XPBD, FEM).

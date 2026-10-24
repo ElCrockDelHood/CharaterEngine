@@ -105,6 +105,11 @@ Only the owner's words and code facts are filled in. Owner answer 1 (verbatim in
 Update 2026-10-24: the three-layer design L1/L2/L3 is **CONFIRMED** by the owner (Decision 44). The other
 open questions of the draft §8 remain open.
 
+Update 2026-10-24 21:16 UTC: open question 3 **ANSWERED** by the owner (verbatim in the draft §9) — L2 physics
+runs **offline in Blender**; manifestations are extracted as meshes, retouched/joined in Blender for cinematics;
+the game reacts by state and collision point with baked reactions (Claude's interpretation, to be confirmed; keying,
+baked format, performance and offline tool OPEN — draft §9).
+
 ---
 
 ## Rows ANATOMY / RIG / TISSUE / TREATMENTS / FK — DRAFT (owner request, Decision 44)
@@ -225,3 +230,8 @@ question 3: where does L2 physics run):
 Rules: no new technology before a validated full flow (dossier); mechanical material parameters (density, Young's
 modulus, Poisson ratio, damping, fracture thresholds) need cited sources or ESTIMATE/PLACEHOLDER marking
 (Decision 12). Acceptance criteria: **not specified**. Status: **PENDING**.
+
+Update 2026-10-24 21:16 UTC (owner, engagement question 3 answered — draft §9): **L2 = offline in Blender**
+(owner decision). With this design, runtime physics (Jolt / GodotPhysics3D) is **not needed for L2**; kept in
+the table as a note, not removed. The offline tool inside Blender (Bullet, cloth, soft body, particles, geometry
+nodes, own XPBD, FEM) is still **PENDING**. Godot 4.7.2 scene importers verified: glTF, `.blend`, FBX; no Alembic.
