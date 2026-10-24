@@ -1,0 +1,29 @@
+---
+description: Anatomy domain must stay pure Python (no bpy, no engine, no backend, no I/O)
+globs: src/character_engine/domain/**/*.py
+alwaysApply: false
+---
+
+# Domain Purity
+
+The domain layer is the canonical, engine-agnostic core. It is imported by Blender/UPBGE,
+Godot exporters and the backend, so it must depend on nothing but the stdlib and itself.
+
+- Never import `bpy`, `mathutils`, `godot`, `fastapi`, `sqlalchemy`, or `backend.*`.
+- No file/network I/O in the domain: loading JSON belongs to `character_engine.loader`,
+  writing artifacts belongs to `character_engine.export` or `infrastructure/`.
+- Prefer frozen `@dataclass` value objects and explicit exceptions from
+  `character_engine.domain.anatomy.osteology.exceptions` / `character_engine.exceptions`.
+- Coordinates are `tuple[float, float, float]` in the canonical frame (Z-up, -Y forward, metres).
+
+```python
+# ❌ BAD — engine leak into the domain
+import bpy
+def build(skeleton): bpy.data.armatures.new(skeleton.name)
+
+# ✅ GOOD — domain produces data; infrastructure/blender consumes it
+def build(skeleton) -> list[BoneSpec]: ...
+```
+
+`python scripts/lint.py` fails the build if `bpy` is imported outside
+`src/character_engine/infrastructure/` or `runtime/`.

@@ -1,19 +1,19 @@
 """Anatomical parameters package."""
 
 from .parameter import (
-    ParameterStatus,
-    ParameterType,
-    ParameterConstraint,
-    DerivationMetadata,
     AnatomicalParameter,
+    Confidence,
+    DerivationMetadata,
+    ParameterConstraint,
     ParameterSet,
     ParameterSetBuilder,
-    create_unknown_parameter,
+    ParameterStatus,
+    ParameterType,
+    SubjectProfile,
     create_assumed_parameter,
     create_derived_parameter,
     create_direct_reference_parameter,
-    Confidence,
-    SubjectProfile
+    create_unknown_parameter,
 )
 
 __all__ = [

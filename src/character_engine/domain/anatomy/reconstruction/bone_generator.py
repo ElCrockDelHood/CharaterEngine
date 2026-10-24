@@ -4,16 +4,16 @@ This module generates bone geometries based on anatomical parameters,
 landmark positions, and reference data.
 """
 
-from dataclasses import dataclass
-from typing import Dict, Any, Optional, List
-from enum import Enum
 import math
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, Optional
 
 from ..coordinate_system import CoordinateSystem, LateralSide
 from ..reference import ReferenceDataManager
-from .parameter_normalizer import ParameterNormalizer, NormalizedParameter
-from .proportion_calculator import ProportionCalculator, CalculatedProportion
-from .landmark_positioner import LandmarkPositioner, LandmarkPosition
+from .landmark_positioner import LandmarkPosition, LandmarkPositioner
+from .parameter_normalizer import NormalizedParameter, ParameterNormalizer
+from .proportion_calculator import CalculatedProportion, ProportionCalculator
 
 
 class BoneGenerationMethod(Enum):
@@ -27,7 +27,7 @@ class BoneGenerationMethod(Enum):
 @dataclass
 class BoneGeometry:
     """Geometric representation of a bone.
-    
+
     Attributes:
         name: Bone name
         canonical_name: Canonical bone name
@@ -45,7 +45,7 @@ class BoneGeometry:
         side: Lateral side if bilateral
         metadata: Additional metadata
     """
-    
+
     name: str
     canonical_name: str
     bone_type: str
@@ -61,23 +61,23 @@ class BoneGeometry:
     bilateral: bool = False
     side: Optional[LateralSide] = None
     metadata: Dict[str, Any] = None
-    
+
     def __post_init__(self):
         if self.metadata is None:
             self.metadata = {}
-    
+
     def get_midpoint(self) -> tuple:
         """Calculate the midpoint of the bone."""
         x = (self.start_position[0] + self.end_position[0]) / 2
         y = (self.start_position[1] + self.end_position[1]) / 2
         z = (self.start_position[2] + self.end_position[2]) / 2
         return (x, y, z)
-    
+
     def get_volume(self) -> float:
         """Calculate approximate bone volume (simplified cylinder model)."""
         radius = self.diameter / 2.0
         return math.pi * radius * radius * self.length
-    
+
     def get_surface_area(self) -> float:
         """Calculate approximate bone surface area (simplified cylinder model)."""
         radius = self.diameter / 2.0
@@ -88,7 +88,7 @@ class BoneGeometry:
 
 class BoneGenerator:
     """Generates bone geometries for anatomical reconstruction."""
-    
+
     def __init__(self,
                  reference_manager: ReferenceDataManager,
                  normalizer: ParameterNormalizer,
@@ -96,7 +96,7 @@ class BoneGenerator:
                  positioner: LandmarkPositioner,
                  coordinate_system: CoordinateSystem):
         """Initialize bone generator.
-        
+
         Args:
             reference_manager: Reference data manager
             normalizer: Parameter normalizer
@@ -110,65 +110,65 @@ class BoneGenerator:
         self.positioner = positioner
         self.coordinate_system = coordinate_system
         self.cache: Dict[str, BoneGeometry] = {}
-    
+
     def generate_skeleton(self, profile) -> Dict[str, BoneGeometry]:
         """Generate complete skeleton for a subject.
-        
+
         Args:
             profile: Subject profile
-            
+
         Returns:
             Dictionary of bone geometries by canonical name
         """
         # Get normalized parameters and proportions
         normalized = self.normalizer.normalize_profile(profile)
         proportions = self.calculator.calculate_proportions(profile)
-        
+
         # Get landmark positions
         landmarks = self.positioner.position_landmarks(profile)
-        
+
         bones = {}
-        
+
         # Generate axial skeleton bones
         bones.update(self._generate_axial_skeleton(normalized, proportions, landmarks))
-        
+
         # Generate appendicular skeleton bones
         bones.update(self._generate_appendicular_skeleton(normalized, proportions, landmarks))
-        
+
         return bones
-    
+
     def _generate_axial_skeleton(self,
                                  normalized: Dict[str, NormalizedParameter],
                                  proportions: Dict[str, CalculatedProportion],
                                  landmarks: Dict[str, LandmarkPosition]) -> Dict[str, BoneGeometry]:
         """Generate axial skeleton bones (spine, skull, ribs).
-        
+
         Args:
             normalized: Normalized parameters
             proportions: Calculated proportions
             landmarks: Landmark positions
-            
+
         Returns:
             Dictionary of axial bone geometries
         """
         bones = {}
-        
+
         # Get height value
         height = normalized.get('height')
         if height is None:
             return bones
-        
+
         h = height.value
-        
+
         # Generate simplified spine (as a single bone for now)
         # In production, would generate individual vertebrae and intervertebral discs
-        
+
         spine_length = h * 0.40  # Spine is ~40% of total height
         spine_diameter = h * 0.08  # Spine diameter (simplified)
-        
+
         spine_start = (0.0, h * 0.10, 0.0)  # Sacrum area
         spine_end = (0.0, h * 0.50, 0.0)   # Cervical spine area
-        
+
         spine = BoneGeometry(
             name="spine",
             canonical_name="spine",
@@ -185,15 +185,15 @@ class BoneGenerator:
             metadata={"simplified": True, "height_ratio": 0.40}
         )
         bones["spine"] = spine
-        
+
         # Generate simplified skull
         if 'head_height' in proportions:
             head_height = proportions['head_height'].value
             skull_diameter = head_height * 0.75  # Skull diameter (simplified)
-            
+
             skull_start = (0.0, h * 0.50, 0.0)  # Base of skull
             skull_end = (0.0, h, 0.0)           # Top of skull
-            
+
             skull = BoneGeometry(
                 name="skull",
                 canonical_name="skull",
@@ -210,40 +210,40 @@ class BoneGenerator:
                 metadata={"simplified": True}
             )
             bones["skull"] = skull
-        
+
         return bones
-    
+
     def _generate_appendicular_skeleton(self,
                                         normalized: Dict[str, NormalizedParameter],
                                         proportions: Dict[str, CalculatedProportion],
                                         landmarks: Dict[str, LandmarkPosition]) -> Dict[str, BoneGeometry]:
         """Generate appendicular skeleton bones (limbs).
-        
+
         Args:
             normalized: Normalized parameters
             proportions: Calculated proportions
             landmarks: Landmark positions
-            
+
         Returns:
             Dictionary of appendicular bone geometries
         """
         bones = {}
-        
+
         # Get height value
         height = normalized.get('height')
         if height is None:
             return bones
-        
+
         h = height.value
-        
+
         # Generate simplified femur (thigh bone)
         femur_length = h * 0.25  # Femur is ~25% of height
         femur_diameter = femur_length * 0.15  # Diameter proportional to length
-        
+
         if 'hip_joint_center' in landmarks and 'knee_joint_center' in landmarks:
             hip = landmarks['hip_joint_center']
             knee = landmarks['knee_joint_center']
-            
+
             femur = BoneGeometry(
                 name="femur",
                 canonical_name="femur",
@@ -262,17 +262,17 @@ class BoneGenerator:
                 metadata={"height_ratio": 0.25}
             )
             bones["femur"] = femur
-        
+
         # Generate simplified humerus (upper arm bone)
         humerus_length = h * 0.18  # Humerus is ~18% of height
         humerus_diameter = humerus_length * 0.12
-        
+
         if 'shoulder_joint_center' in landmarks:
             shoulder = landmarks['shoulder_joint_center']
             # Elbow would be at approximately 70% of shoulder height
             elbow_height = shoulder.get_y() - humerus_length
             elbow_position = (shoulder.get_x(), elbow_height, shoulder.get_z())
-            
+
             humerus = BoneGeometry(
                 name="humerus",
                 canonical_name="humerus",
@@ -291,16 +291,16 @@ class BoneGenerator:
                 metadata={"height_ratio": 0.18}
             )
             bones["humerus"] = humerus
-        
+
         return bones
-    
+
     def generate_bone(self, canonical_name: str, profile) -> Optional[BoneGeometry]:
         """Generate a specific bone geometry.
-        
+
         Args:
             canonical_name: Canonical bone name
             profile: Subject profile
-            
+
         Returns:
             Bone geometry if found, None otherwise
         """
@@ -308,35 +308,35 @@ class BoneGenerator:
         cache_key = f"{canonical_name}_{profile.height}_{profile.gender}"
         if cache_key in self.cache:
             return self.cache[cache_key]
-        
+
         # Generate all bones
         bones = self.generate_skeleton(profile)
-        
+
         # Get specific bone
         bone = bones.get(canonical_name)
-        
+
         # Cache result
         if bone:
             self.cache[cache_key] = bone
-        
+
         return bone
-    
+
     def calculate_bone_proportions(self, profile) -> Dict[str, float]:
         """Calculate bone proportions relative to total height.
-        
+
         Args:
             profile: Subject profile
-            
+
         Returns:
             Dictionary of bone proportions (bone_length / total_height)
         """
         bones = self.generate_skeleton(profile)
         proportions = {}
-        
+
         height = profile.height if profile.height else 1.75  # Default height
-        
+
         for bone_name, bone in bones.items():
             proportion = bone.length / height
             proportions[bone_name] = proportion
-        
+
         return proportions

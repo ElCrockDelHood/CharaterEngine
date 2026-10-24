@@ -8,13 +8,13 @@ src_path = project_root / 'src'
 if str(src_path) not in sys.path:
     sys.path.insert(0, str(src_path))
 
-from character_engine.loader import JsonLoader
+import bpy
+
 from character_engine.domain.anatomy.osteology.builder import SkeletonBuilder
 from character_engine.domain.anatomy.osteology.validator import SkeletonValidator
 from character_engine.infrastructure.blender import BlenderImporter
 from character_engine.infrastructure.blender.state_auditor import StateAuditor
-
-import bpy
+from character_engine.loader import JsonLoader
 
 print("=" * 60)
 print("VALIDACIÓN HEADLESS DE BLENDER")

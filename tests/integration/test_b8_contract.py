@@ -1,10 +1,11 @@
 ﻿"""Tests de aceptación para el Bloque 8.0 – Contrato de Integración."""
 
-import pytest
 from pathlib import Path
-from character_engine.loader import JsonLoader
+
+import pytest
+
 from character_engine.domain.anatomy.osteology.builder import SkeletonBuilder
-from character_engine.domain.anatomy.osteology.validator import SkeletonValidator
+from character_engine.loader import JsonLoader
 
 
 class TestB8Integration:

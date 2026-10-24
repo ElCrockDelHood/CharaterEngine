@@ -4,13 +4,13 @@ Coordina las etapas: Loader → Builder → Serializer → BlenderImporter.
 """
 
 from pathlib import Path
-from typing import Optional, Tuple, Dict, Any
+from typing import Any, Dict, Optional, Tuple
 
-from ..loader import JsonLoader
-from ..dto import AssetDTO, SkeletonDTO
 from ..domain.anatomy.osteology.builder import SkeletonBuilder
 from ..domain.anatomy.osteology.skeleton import Skeleton
 from ..domain.anatomy.osteology.validator import SkeletonValidator
+from ..dto import AssetDTO, SkeletonDTO
+from ..loader import JsonLoader
 from ..serialization import SkeletonSerializer
 
 
@@ -62,26 +62,31 @@ class Pipeline:
 
     def _dto_to_spec(self, skeleton_dto: SkeletonDTO) -> Dict[str, Any]:
         """Convierte SkeletonDTO a la especificación que espera SkeletonBuilder."""
-        return {
-            "name": skeleton_dto.name,
-            "canonical_name": skeleton_dto.canonical_name,
-            "metadata": skeleton_dto.metadata,
-            "bones": [
-                {
-                    "canonical_name": b.canonical_name,
-                    "name": b.name,
-                    "parent": b.parent,
-                    "head": b.head,
-                    "tail": b.tail
-                }
-                for b in skeleton_dto.bones
-            ],
-            "containers": [
-                {
-                    "canonical_name": c.canonical_name,
-                    "name": c.name,
-                    "parent": c.parent
-                }
-                for c in skeleton_dto.containers
-            ]
-        }
+        return dto_to_spec(skeleton_dto)
+
+
+def dto_to_spec(skeleton_dto: SkeletonDTO) -> Dict[str, Any]:
+    """Mapeo único DTO → especificación de `SkeletonBuilder` (reutilizado por exportadores)."""
+    return {
+        "name": skeleton_dto.name,
+        "canonical_name": skeleton_dto.canonical_name,
+        "metadata": skeleton_dto.metadata,
+        "bones": [
+            {
+                "canonical_name": b.canonical_name,
+                "name": b.name,
+                "parent": b.parent,
+                "head": b.head,
+                "tail": b.tail
+            }
+            for b in skeleton_dto.bones
+        ],
+        "containers": [
+            {
+                "canonical_name": c.canonical_name,
+                "name": c.name,
+                "parent": c.parent
+            }
+            for c in skeleton_dto.containers
+        ]
+    }

@@ -1,0 +1,126 @@
+﻿7. MANUAL DE ESPECIFICACIONES Y DE USO
+======================================
+
+7.1 Especificación mínima del personaje humano
+----------------------------------------------
+
+    Nodos                 208 (206 huesos + ROOT_SKELETON + CRANIUM)
+    Unidades              metros
+    Eje                   Z arriba, −Y adelante, origen en los pies
+    Estatura base         1,80 m (varón adulto de proyecto)
+    Pose de rig y juego   T (brazos horizontales, palmas abajo)
+    Pose anatómica        brazos colgando; sigue en el JSON maestro
+    Articulaciones        Drillis y Contini 1966 / Winter 2009 fig. 4.1
+    Malla de hueso largo  Trotter 1970 o Trotter y Gleser 1952
+    Piel y músculo        geometría proxy, ESTIMATE
+    Heridas               severidad 1–6 y letalidad de juego, ESTIMATE
+    Combate jugable       shenmue, 8 movimientos, 60 Hz
+    Export                glTF 2.0 .glb, Y arriba
+
+7.2 Preparar el entorno Python
+------------------------------
+
+    python scripts/bootstrap.py
+    python scripts/test.py
+    python scripts/lint.py
+    python scripts/export_gltf.py
+    python scripts/export_gltf.py --pose tpose -o builds/gltf/human_adult_206_tpose.glb
+    python scripts/engine_tests.py
+
+    export_gltf.py  sin --pose escribe la pose anatómica. Para el rig y para
+la arena de Godot hace falta --pose tpose. --template y --stature cambian la
+estatura antes de exportar. La salida por defecto es
+builds/gltf/human_adult_206.glb y no se versiona.
+
+7.3 Blender o UPBGE: activar el addon
+-------------------------------------
+
+    En  esta  máquina  el  addon  ya está copiado en la carpeta de addons de
+Blender 5.0. Si hace falta reinstalarlo: python
+scripts/install_blender_addon.py, o Instalar desde archivo con
+builds/character_engine_blender.zip. En Preferencias, Add-ons, categoría
+Rigging,  activar  Character  Engine.  El  panel queda en la vista 3D, barra
+lateral (tecla N), pestaña Character Engine.
+
+    Body.  Elegir  plantilla,  dejar  la estatura de la plantilla o escribir
+otra, elegir pose (T por defecto) y pulsar Generate body. Deben aparecer 208
+huesos. Horse y Dog se niegan, y el panel lo dice.
+
+    Tissues.  Activar  bones,  tendons,  muscles  y  skin, y pulsar Generate
+tissues.  El fémur del varón de 1,80 m mide unos 0,498 m de punta a punta de
+la  malla, no de articulación a articulación. Para una malla propia, guardar
+FEMUR.glb (o HUMERUS.glb, TIBIA.glb, etc.) en assets/anatomy/meshes/, marcar
+Prefer asset meshes y volver a generar.
+
+    Rig.  Build  IK/FK  rig crea las colecciones DEF, MCH y CTRL, cadenas de
+brazo  y  de  pierna, polos, foot roll y respiración. All IK y All FK mueven
+todos los interruptores. Cada cadena tiene un slider de 0 (FK) a 1 (IK). Los
+controles no forman parte del glTF canónico.
+
+    Mocap.  Elegir  mapa  (Mixamo,  CMU, Rokoko o Rigify), un archivo BVH, e
+Import  and retarget. El mapa traduce nombres de origen a nombres canónicos.
+Lo que no está en el mapa no se inventa.
+
+    Wounds.  Elegir  tipo, profundidad en milímetros, ancho y energía. Apply
+wound  y hacer clic sobre el personaje, o indicar el hueso. El reporte lista
+capas, severidad de juego y letalidad. Clear wounds borra los marcadores.
+
+    Export.  Export  canonical  GLB  pasa  por  el exportador Python, con el
+contrato  de  208  nodos.  Export  scene  GLB usa el exportador de Blender e
+incluye  mallas  y la acción activa. En Runtime, con UPBGE, se arma la arena
+de dos luchadores. Attach runtime logic ata el componente si la ventana está
+abierta. Play lanza el juego embebido.
+
+7.4 Godot
+---------
+
+    Abrir  runtime/godot/project.godot  con Godot 4.7.2. El proyecto ya pide
+renderer  Compatibility,  que  es el que conviene a la HD 620. Si el dock no
+aparece, activar el plugin Character Engine. Queda a la derecha.
+
+    En  el dock: elegir el GLB en T o el anatómico, la estatura y el estilo.
+Hoy  solo  Shenmue  tiene  movimientos.  Add character to scene instancia el
+esqueleto.  Validate  skeleton  GLB  corre  el  contrato: 208 huesos, suelo,
+altura. Create arena in scene arma dos personajes, controles y, si se marca,
+una  demo  automática.  Replay  reference  fights compara la pelea contra la
+tabla generada desde Python.
+
+    La  entrada  de  la arena usa las acciones ce_forward, ce_back, ce_left,
+ce_right, ce_punch, ce_kick, ce_throw y ce_guard. Son acciones del InputMap,
+no teclas fijas: se reasignan en los ajustes de proyecto de Godot.
+
+    Para  probar  sin abrir el editor: python scripts/engine_tests.py godot.
+Eso  regenera  los  GLB,  la  tabla de gameplay, importa el proyecto y corre
+runtime/godot/tests/ce_test_runner.gd.
+
+7.5 UPBGE
+---------
+
+    Abrir el mismo addon dentro de
+C:\Tools\UPBGE\upbge-0.50-windows-x64\blender.exe. La pestaña Runtime
+detecta  si  el  proceso  es  UPBGE. Set up UPBGE gameplay scene crea suelo,
+cámara,  jugador  y  oponente  con  el  estilo  elegido.  En  modo juego, el
+componente ce_combat lee las propiedades fighter_id, is_player y style.
+
+    La  validación  del  esqueleto  neutro,  sin addon, sigue siendo: python
+scripts/export_gltf.py y después blender.exe -b --python
+runtime/upbge/ce_import_and_validate.py -- --glb
+builds/gltf/human_adult_206.glb.  Tiene  que  reportar 208 huesos, una raíz,
+suelo cerca de z = 0 y colas reconstruidas.
+
+7.6 Usos previstos y límites
+----------------------------
+
+    Sirve para tener un esqueleto humano común entre Blender, UPBGE y Godot,
+con  nombres  estables, para riggear, para retargetear el mocap que entre en
+los  mapas,  para probar un combate cuerpo a cuerpo y para marcar heridas de
+juego sobre capas. Sirve como base de un editor de estatura y de plantilla.
+
+    Todavía  no  es una escultura final de piel, ni una simulación de tela o
+de pelo, ni un archivo clínico, ni un generador de etnias, ni una biblioteca
+de animales. Esas piezas tienen sitio en la arquitectura
+(docs/architecture/PRODUCTION_VS_RUNTIME.md,  fases  P1  a  P6)  y no tienen
+contenido cerrado.
+
+    Cualquier  número  nuevo entra con fuente o con etiqueta. Este manual no
+autoriza a rellenar a ojo lo que el archivo deja como PLACEHOLDER.

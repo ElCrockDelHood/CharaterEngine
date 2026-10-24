@@ -1,0 +1,33 @@
+---
+description: Never invent anatomical data; every value needs provenance; canonical JSON is protected
+globs: src/character_engine/data/**/*.json, src/character_engine/domain/anatomy/reference/**/*.py, src/character_engine/domain/anatomy/reconstruction/**/*.py, src/character_engine/domain/anatomy/proportions/**/*.py, docs/audit/**/*
+alwaysApply: false
+---
+
+# Anatomical Provenance
+
+This project is a forensic-grade canonical model. Wrong-but-plausible numbers are worse
+than missing numbers.
+
+- Every measurement, ratio or coordinate carries a `ProvenanceState`:
+  `PROVEN` (cited source) > `DERIVED` (computed from PROVEN, method recorded) >
+  `ESTIMATE` > `ASSUMED` > `PLACEHOLDER` > `UNKNOWN`.
+- If you cannot cite a source, use `UNKNOWN` or `PLACEHOLDER` and say so in the docstring
+  and in `docs/audit/`. Do not "fill in" a typical value from memory.
+- `ReferenceValue.is_reconstruction_eligible` depends on provenance only; derivation
+  method (`CALCULATED`, `DERIVED`, `COMPUTED`) flags `is_derived()` but never upgrades eligibility.
+- `src/character_engine/data/anatomy/human_adult_206.json` is the canonical skeleton
+  (206 bones + `ROOT_SKELETON` + `CRANIUM` = 208 nodes). Changing a head/tail, parent or
+  name requires: a reason in `docs/reorientation/DECISION_LOG.md`, an updated audit in
+  `docs/audit/`, and passing `tests/anatomy`.
+- `human_adult_206_backup.json` is a frozen snapshot: never edit it.
+
+```python
+# ❌ BAD — invented value
+femur_length = 0.45  # "average adult"
+
+# ✅ GOOD — sourced or explicitly unknown
+ReferenceValue(value=0.4489, unit="m", source_id="anthro_2019_tbl3",
+               provenance_state=ProvenanceState.PROVEN)
+ReferenceValue(value=None, provenance_state=ProvenanceState.UNKNOWN)
+```

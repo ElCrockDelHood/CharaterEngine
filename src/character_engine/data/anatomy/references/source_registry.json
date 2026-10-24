@@ -1,12 +1,23 @@
 {
   "source_registry": {
-    "version": "1.0.0",
-    "registry_date": "2026-08-20",
-    "status": "PLACEHOLDER",
+    "version": "1.1.0",
+    "registry_date": "2026-09-29",
+    "status": "PARTIAL",
     "description": "Registry of anatomical reference data sources for deterministic reconstruction",
     "conventions": {
-      "provenance_status": ["PROVEN", "DERIVED", "ASSUMPTION", "PLACEHOLDER", "UNKNOWN"],
-      "confidence_levels": ["HIGH", "MEDIUM", "LOW", "UNKNOWN"],
+      "provenance_status": [
+        "PROVEN",
+        "DERIVED",
+        "ASSUMPTION",
+        "PLACEHOLDER",
+        "UNKNOWN"
+      ],
+      "confidence_levels": [
+        "HIGH",
+        "MEDIUM",
+        "LOW",
+        "UNKNOWN"
+      ],
       "unit_system": "METERS"
     }
   },
@@ -18,7 +29,12 @@
         "type": "ANTHROPOMETRIC_DATABASE",
         "coverage": "US population anthropometric data",
         "status": "NOT_ACQUIRED",
-        "required_for": ["height_data", "segment_length_data", "body_width_data", "body_depth_data"],
+        "required_for": [
+          "height_data",
+          "segment_length_data",
+          "body_width_data",
+          "body_depth_data"
+        ],
         "notes": "Primary source for US anthropometric data. Publicly available."
       },
       "who_database": {
@@ -27,8 +43,30 @@
         "type": "ANTHROPOMETRIC_DATABASE",
         "coverage": "International anthropometric data",
         "status": "NOT_ACQUIRED",
-        "required_for": ["height_data", "proportion_data"],
+        "required_for": [
+          "height_data",
+          "proportion_data"
+        ],
         "notes": "International anthropometric reference data."
+      },
+      "drillis_contini_1966": {
+        "id": "DRILLIS_CONTINI_1966",
+        "name": "Body Segment Parameters",
+        "authors": "Drillis, R.; Contini, R.",
+        "year": 1966,
+        "type": "PRIMARY_RESEARCH",
+        "publisher": "New York University, School of Engineering and Science, Technical Report 1166.03",
+        "reproduced_in": "Winter, D.A. (2009). Biomechanics and Motor Control of Human Movement, 4th ed., Wiley, Fig. 4.1",
+        "coverage": "Segment lengths and joint heights as fractions of stature H",
+        "population": "Healthy American males, 20-40 y",
+        "status": "ACQUIRED",
+        "confidence": "MEDIUM",
+        "required_for": [
+          "segment_length_data",
+          "joint_height_data",
+          "stature_retarget"
+        ],
+        "notes": "Population means; body-dimension definitions were not formalised by the authors. The 1972 Part II report (Contini) quotes slightly different arm ratios (0.189/0.145/0.128H); this project uses the Winter Fig. 4.1 set (0.186/0.146/0.108H) consistently."
       }
     },
     "biomechanical_data": {
@@ -38,19 +76,43 @@
         "type": "BIOMECHANICAL_STANDARDS",
         "coverage": "Biomechanical standardization",
         "status": "NOT_ACQUIRED",
-        "required_for": ["joint_center_data", "joint_axis_data"],
+        "required_for": [
+          "joint_center_data",
+          "joint_axis_data"
+        ],
         "notes": "Standard recommendations for joint centers and coordinate systems."
       }
     },
     "osteometric_data": {
+      "trotter_1970": {
+        "id": "TROTTER_1970",
+        "name": "Estimation of stature from intact long limb bones",
+        "authors": "Trotter, M.",
+        "year": 1970,
+        "type": "PRIMARY_RESEARCH",
+        "coverage": "Male white long-bone stature regressions (WWII / Korean War)",
+        "status": "ACQUIRED",
+        "required_for": ["bone_mesh_extents"]
+      },
+      "trotter_gleser_1952": {
+        "id": "TROTTER_GLESER_1952",
+        "name": "Estimation of stature from long bones of American Whites and Negroes",
+        "authors": "Trotter, M.; Gleser, G.C.",
+        "year": 1952,
+        "doi": "10.1002/ajpa.1330100407",
+        "type": "PRIMARY_RESEARCH",
+        "coverage": "Female (and male 1952) long-bone stature regressions, Terry Collection",
+        "status": "ACQUIRED",
+        "required_for": ["bone_mesh_extents", "female_long_bones"]
+      },
       "forensic_anthropology": {
         "id": "FORENSIC",
         "name": "Forensic Anthropology Reference Collections",
         "type": "OSTEOMETRIC_DATABASE",
-        "coverage": "Bone dimension and landmark data",
+        "coverage": "Per-bone diameters, landmarks (Terry / Hamann-Todd)",
         "status": "NOT_ACQUIRED",
-        "required_for": ["bone_dimension_data", "landmark_data"],
-        "notes": "Reference collections for osteometric measurements."
+        "required_for": ["shaft_diameters", "landmark_data"],
+        "notes": "Needed to replace ESTIMATE midshaft diameters used only for proxy meshes."
       }
     },
     "proportion_data": {
@@ -60,34 +122,39 @@
         "type": "HISTORICAL_REFERENCE",
         "coverage": "Vitruvian, Leonardo, Egyptian canon proportions",
         "status": "PARTIALLY_AVAILABLE",
-        "required_for": ["proportion_validation"],
+        "required_for": [
+          "proportion_validation"
+        ],
         "notes": "Historical proportion systems for validation reference."
       }
     }
   },
   "placeholder_data": {
     "anthropometric_averages": {
-      "status": "PLACEHOLDER",
+      "status": "PARTIAL",
       "description": "Placeholder anthropometric averages for reconstruction testing",
       "population": "UNDEFINED",
       "values": {
         "height": {
-          "mean": 1.75,
+          "mean": 1.8,
           "unit": "meters",
-          "confidence": "LOW",
-          "provenance": "ASSUMPTION"
+          "confidence": "HIGH",
+          "provenance": "USER_INPUT",
+          "notes": "Canonical base stature (project decision)"
         },
         "shoulder_width": {
-          "mean": 0.40,
+          "mean": 0.4662,
           "unit": "meters",
-          "confidence": "LOW",
-          "provenance": "ASSUMPTION"
+          "confidence": "MEDIUM",
+          "provenance": "DERIVED",
+          "source_id": "DRILLIS_CONTINI_1966"
         },
         "hip_width": {
-          "mean": 0.35,
+          "mean": 0.3438,
           "unit": "meters",
-          "confidence": "LOW",
-          "provenance": "ASSUMPTION"
+          "confidence": "MEDIUM",
+          "provenance": "DERIVED",
+          "source_id": "DRILLIS_CONTINI_1966"
         }
       }
     },
@@ -96,14 +163,14 @@
       "description": "Placeholder joint center offsets for reconstruction testing",
       "values": {
         "shoulder_offset": {
-          "value": 0.020,
+          "value": 0.02,
           "unit": "meters",
           "direction": "inferior_and_medial",
           "confidence": "LOW",
           "provenance": "ASSUMPTION"
         },
         "elbow_offset": {
-          "value": 0.000,
+          "value": 0.0,
           "unit": "meters",
           "direction": "inferior",
           "confidence": "LOW",
@@ -117,14 +184,14 @@
           "provenance": "ASSUMPTION"
         },
         "knee_offset": {
-          "value": 0.000,
+          "value": 0.0,
           "unit": "meters",
           "direction": "inferior",
           "confidence": "LOW",
           "provenance": "ASSUMPTION"
         },
         "ankle_offset": {
-          "value": 0.000,
+          "value": 0.0,
           "unit": "meters",
           "direction": "inferior",
           "confidence": "LOW",
@@ -146,9 +213,10 @@
       "Population-specific characteristics"
     ],
     "missing": [
-      "All reference data currently marked as NOT_ACQUIRED or PLACEHOLDER",
-      "Population profile undefined",
-      "Target demographic parameters undefined"
+      "Population profile beyond adult male 20-40 y",
+      "Per-vertebra and per-bone dimensions (osteometric)",
+      "Joint-centre offsets (ISB)",
+      "Depth/width data other than shoulder and hip breadth"
     ]
   },
   "acquisition_plan": {

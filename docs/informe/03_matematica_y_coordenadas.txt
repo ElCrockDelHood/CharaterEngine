@@ -1,0 +1,76 @@
+﻿3. MATEMÁTICA, COORDENADAS Y OSTEOMETRÍA
+========================================
+
+3.1 Marco canónico
+------------------
+
+    Un punto del dominio es una terna (x, y, z) en metros. Z es la vertical.
+El  suelo  es z = 0. El personaje mira hacia −Y. +Y es la espalda. El origen
+está en la línea media de los pies.
+
+    Para  glTF y para Godot, que usan Y hacia arriba, la frontera aplica (x,
+y, z) → (x, z, −y). Blender y UPBGE comparten el marco canónico, así que ahí
+no  hay conversión. La inversa de las matrices de bind es una traslación: en
+reposo el hueso no lleva rotación.
+
+3.2 Retarget de estatura
+------------------------
+
+    Dada  una  estatura H, cada landmark publicado cumple z = ratio × H. Los
+ratios  usados,  como fracción de H, son: vértex 1,000; mentón 0,870; hombro
+0,818;  codo 0,630; cadera 0,530; muñeca 0,485; punta de dedo 0,377; rodilla
+0,285; tobillo 0,039; suelo 0. El ancho de hombros es 0,259 H.
+
+    Esos  puntos  son  anclas.  Entre dos anclas, la Z de un hueso que no es
+landmark  se  obtiene por interpolación lineal a trozos, monótona. El brazo,
+la  pierna  y el eje (cráneo, columna, costillas, pelvis, cintura escapular)
+tienen  mapas distintos, porque en el placeholder de 3,08 m esas regiones no
+compartían la misma escala.
+
+    Comprobación  interna  del  conjunto  de ratios: 0,818 menos 0,186 da el
+codo; 0,630 menos 0,146 da la muñeca; 0,530 menos 0,245 da la rodilla; 0,285
+menos  0,246  da el tobillo. Para H = 1,80 m el vértex queda en 1,800 m y el
+hombro en 1,472 m.
+
+    X  e  Y se multiplican por un solo factor: el que lleva la separación de
+las  cabezas  de  húmero al ancho biacromial. Sobre el esqueleto previo, ese
+factor fue 0,666. Queda como ESTIMATE porque el centro glenohumeral no es el
+acromion.
+
+3.3 T-pose
+----------
+
+    El  JSON  canónico  está en posición anatómica: de pie, brazos colgando,
+palmas  al  frente.  La T-pose rota el subárbol de cada húmero alrededor del
+hombro,  unos  90  grados  sobre Y, hasta dejar el brazo horizontal. Después
+prona  antebrazo  y mano 90 grados sobre el eje del brazo, para que la palma
+mire hacia abajo. Es una rotación rígida: las distancias dentro del brazo se
+conservan. La A-pose es el mismo giro a 45 grados, sin esa pronación.
+
+3.4 Longitud ósea de Trotter
+----------------------------
+
+    La regresión publicada tiene la forma estatura_cm = a × longitud_cm + b.
+El  proyecto  la invierte: longitud_cm = (estatura_cm − b) / a. El resultado
+es  la  longitud  máxima  en  tabla osteométrica, más larga que la distancia
+entre  centros  articulares.  Por  eso  alimenta  la  malla  y no el JSON de
+articulaciones.
+
+    Varones blancos, Trotter 1970, a 1,80 m: fémur 0,4983 m, tibia 0,4023 m,
+fíbula  0,4038  m, húmero 0,3557 m, radio 0,2672 m, cúbito 0,2864 m. Mujeres
+blancas,  Trotter  y  Gleser 1952, a 1,65 m: fémur 0,4490 m, tibia 0,3568 m,
+fíbula  0,3597  m, húmero 0,3185 m, radio 0,2322 m, cúbito 0,2511 m. Hay una
+serie  separada  para  mujeres  negras  de  la  misma  tabla de 1952. Es una
+etiqueta forense histórica, no un preset de apariencia.
+
+    La  corrección de edad de Trotter y Gleser (1951) resta 0,06 cm por cada
+año  después  de  los  30.  El anciano de 75 años parte de 1,80 m y queda en
+1,773 m. La cifosis y la flexión de cadera no están modeladas.
+
+3.5 Lo que esta fórmula no dice
+-------------------------------
+
+    Los  ratios  de Drillis y Contini son medias de varones de 20 a 40 años.
+Un  individuo  no  es  la  media.  Los autores no formalizaron la definición
+exacta  de  cada  landmark.  Por  eso  la  confianza es MEDIA y el uso es de
+esqueleto canónico de proyecto, no de diseño ergonómico de un sujeto real.

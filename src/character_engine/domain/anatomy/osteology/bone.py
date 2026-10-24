@@ -1,14 +1,16 @@
 ﻿"""Entidad Bone – inmutable, con soporte para contenedores lógicos."""
 
-from dataclasses import dataclass, field
-from typing import Optional, FrozenSet, Any, Mapping, MutableMapping, MutableSequence
-from types import MappingProxyType
-from uuid import UUID, uuid4
-from datetime import datetime
 import math
-from .constants import BoneState, BoneType
-from .transform import Transform, BonePivot
+from dataclasses import dataclass, field
+from datetime import datetime
+from types import MappingProxyType
+from typing import Any, FrozenSet, Mapping, MutableMapping, MutableSequence, Optional
+from uuid import UUID, uuid4
+
 from ....math.algebra.vector3 import Vector3
+from .constants import BoneState, BoneType
+from .transform import BonePivot, Transform
+
 
 def _deep_freeze(value):
     """Convierte recursivamente estructuras mutables en inmutables."""
@@ -102,9 +104,9 @@ class Bone:
 
     @classmethod
     def from_dict(cls, data: dict) -> 'Bone':
-        from .transform import Transform, BonePivot
-        from ....math.algebra.vector3 import Vector3
         from ....math.algebra.quaternion import Quaternion
+        from ....math.algebra.vector3 import Vector3
+        from .transform import BonePivot, Transform
         head_data = data.get("head", {"x":0,"y":0,"z":0})
         tail_data = data.get("tail", {"x":0,"y":0.1,"z":0})
         transform_data = data.get("transform", {})

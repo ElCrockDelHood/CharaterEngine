@@ -1,0 +1,106 @@
+{
+  "osteometric_data": {
+    "version": "1.1.0",
+    "date": "2026-09-29",
+    "status": "PARTIAL",
+    "description": "Long-bone maximum lengths as a function of stature via published forensic regression equations (stature = a * bone_length + b, cm). Inverted to obtain bone length for a given stature.",
+    "unit": "centimeters",
+    "metadata": {
+      "primary_source": "TROTTER_1970",
+      "notes": "Male white equations from Trotter (1970), a revision of Trotter & Gleser (1952, 1958). Female white and female Black equations from Trotter & Gleser (1952:495), verified 2026-09-29. Coefficients are for maximum bone length (osteometric board), which is longer than the joint-centre distance used by human_adult_206.json; therefore these values drive bone MESH extents, not joint positions. Historical forensic series labels are not character-appearance presets."
+    },
+    "regressions": {
+      "male_white": {
+        "source_id": "TROTTER_1970",
+        "population": "US white males, 18-30 y (WWII / Korean War casualties)",
+        "provenance": "PROVEN",
+        "confidence": "HIGH",
+        "bones": {
+          "FEMUR":   {"a": 2.38, "b": 61.41, "see_cm": 3.27},
+          "TIBIA":   {"a": 2.52, "b": 78.62, "see_cm": 3.37},
+          "FIBULA":  {"a": 2.68, "b": 71.78, "see_cm": 3.29},
+          "HUMERUS": {"a": 3.08, "b": 70.45, "see_cm": 4.05},
+          "RADIUS":  {"a": 3.78, "b": 79.01, "see_cm": 4.32},
+          "ULNA":    {"a": 3.70, "b": 74.05, "see_cm": 4.32}
+        },
+        "combined": {"FEMUR_PLUS_TIBIA": {"a": 1.30, "b": 63.29, "see_cm": 2.99}}
+      },
+      "female_white": {
+        "source_id": "TROTTER_GLESER_1952",
+        "population": "US white females (Terry Collection); Trotter & Gleser 1952 Table p.495",
+        "provenance": "PROVEN",
+        "confidence": "HIGH",
+        "notes": "Verified 2026-09-29 against Trotter & Gleser 1952 as tabulated in osteology textbooks (e.g. GVSU Intro to Human Osteology, citing 1952:495 / 1977:355). These are forensic stature-from-bone equations for a historical series, not appearance or ethnicity parameters. Trotter (1970) revised *male* equations; female formulae remain the 1952 set.",
+        "bones": {
+          "FEMUR":   {"a": 2.47, "b": 54.10, "see_cm": 3.72, "provenance": "PROVEN"},
+          "TIBIA":   {"a": 2.90, "b": 61.53, "see_cm": 3.66, "provenance": "PROVEN"},
+          "FIBULA":  {"a": 2.93, "b": 59.61, "see_cm": 3.57, "provenance": "PROVEN"},
+          "HUMERUS": {"a": 3.36, "b": 57.97, "see_cm": 4.45, "provenance": "PROVEN"},
+          "RADIUS":  {"a": 4.74, "b": 54.93, "see_cm": 4.45, "provenance": "PROVEN"},
+          "ULNA":    {"a": 4.27, "b": 57.76, "see_cm": 4.30, "provenance": "PROVEN"}
+        }
+      },
+      "female_black": {
+        "source_id": "TROTTER_GLESER_1952",
+        "population": "US Black females (Terry Collection); Trotter & Gleser 1952 Table p.495",
+        "provenance": "PROVEN",
+        "confidence": "HIGH",
+        "notes": "Same table as female_white. Historical forensic series labels; not a character-appearance preset. Used only if osteometric_population is set to female_black.",
+        "bones": {
+          "FEMUR":   {"a": 2.28, "b": 59.76, "see_cm": 3.41, "provenance": "PROVEN"},
+          "TIBIA":   {"a": 2.45, "b": 72.65, "see_cm": 3.70, "provenance": "PROVEN"},
+          "FIBULA":  {"a": 2.49, "b": 70.90, "see_cm": 3.80, "provenance": "PROVEN"},
+          "HUMERUS": {"a": 3.08, "b": 64.67, "see_cm": 4.25, "provenance": "PROVEN"},
+          "RADIUS":  {"a": 3.67, "b": 71.79, "see_cm": 4.59, "provenance": "PROVEN"},
+          "ULNA":    {"a": 3.31, "b": 75.38, "see_cm": 4.83, "provenance": "PROVEN"}
+        }
+      }
+    },
+    "derived_lengths_m": {
+      "male_white_180": {
+        "provenance": "DERIVED",
+        "derivation": "bone_length = (stature_cm - b) / a, male_white, stature 180 cm",
+        "stature_m": 1.80,
+        "FEMUR": 0.4983,
+        "TIBIA": 0.4023,
+        "FIBULA": 0.4038,
+        "HUMERUS": 0.3557,
+        "RADIUS": 0.2672,
+        "ULNA": 0.2864
+      },
+      "female_white_165": {
+        "provenance": "DERIVED",
+        "derivation": "bone_length = (stature_cm - b) / a, female_white, stature 165 cm",
+        "stature_m": 1.65,
+        "FEMUR": 0.4490,
+        "TIBIA": 0.3568,
+        "FIBULA": 0.3597,
+        "HUMERUS": 0.3185,
+        "RADIUS": 0.2322,
+        "ULNA": 0.2511
+      }
+    },
+    "shaft_diameters": {
+      "provenance": "ESTIMATE",
+      "confidence": "LOW",
+      "notes": "Midshaft diameters used only for proxy bone meshes. Not sourced; replace with osteometric tables (e.g. Terry/Hamann-Todd collections) when acquired.",
+      "unit": "meters",
+      "FEMUR": 0.028, "TIBIA": 0.024, "FIBULA": 0.012, "HUMERUS": 0.022, "RADIUS": 0.014, "ULNA": 0.014
+    },
+    "sources": {
+      "TROTTER_1970": {
+        "citation": "Trotter, M. (1970). Estimation of stature from intact long limb bones. In T.D. Stewart (Ed.), Personal Identification in Mass Disasters (pp. 71-83). Smithsonian Institution.",
+        "type": "PRIMARY_RESEARCH"
+      },
+      "TROTTER_GLESER_1952": {
+        "citation": "Trotter, M. & Gleser, G.C. (1952). Estimation of stature from long bones of American Whites and Negroes. American Journal of Physical Anthropology, 10(4), 463-514.",
+        "doi": "10.1002/ajpa.1330100407",
+        "type": "PRIMARY_RESEARCH"
+      },
+      "TROTTER_GLESER_1958": {
+        "citation": "Trotter, M. & Gleser, G.C. (1958). A re-evaluation of estimation of stature based on measurements of stature taken during life and of long bones after death. American Journal of Physical Anthropology, 16(1), 79-123.",
+        "type": "PRIMARY_RESEARCH"
+      }
+    }
+  }
+}

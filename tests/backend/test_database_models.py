@@ -1,29 +1,31 @@
 """Tests for database models."""
 
-import pytest
 from datetime import datetime, timezone
 from uuid import uuid4
+
+import pytest
+
 from backend.database.models import (
-    User,
     Account,
-    Identity,
-    Session,
+    AccountStatus,
+    AuditEntry,
     Credential,
     Event,
+    IdempotencyRecord,
+    Identity,
     RewardDefinition,
     RewardGrant,
-    AuditEntry,
-    IdempotencyRecord,
-    UserStatus,
-    AccountStatus,
+    RewardGrantStatus,
+    Session,
     SessionStatus,
-    RewardGrantStatus
+    User,
+    UserStatus,
 )
 
 
 class TestUserStatus:
     """Test UserStatus enum."""
-    
+
     def test_status_values(self):
         """Test status enum values."""
         assert UserStatus.ACTIVE.value == "active"
@@ -34,7 +36,7 @@ class TestUserStatus:
 
 class TestAccountStatus:
     """Test AccountStatus enum."""
-    
+
     def test_status_values(self):
         """Test status enum values."""
         assert AccountStatus.ACTIVE.value == "active"
@@ -45,7 +47,7 @@ class TestAccountStatus:
 
 class TestSessionStatus:
     """Test SessionStatus enum."""
-    
+
     def test_status_values(self):
         """Test status enum values."""
         assert SessionStatus.ACTIVE.value == "active"
@@ -55,7 +57,7 @@ class TestSessionStatus:
 
 class TestRewardGrantStatus:
     """Test RewardGrantStatus enum."""
-    
+
     def test_status_values(self):
         """Test status enum values."""
         assert RewardGrantStatus.PENDING.value == "pending"
@@ -67,7 +69,7 @@ class TestRewardGrantStatus:
 
 class TestUser:
     """Test User model."""
-    
+
     def test_user_creation(self):
         """Test user creation with required fields."""
         user = User(
@@ -82,7 +84,7 @@ class TestUser:
         assert user.id is None
         assert user.created_at is None
         assert user.updated_at is None
-    
+
     def test_user_required_fields(self):
         """Test user creation requires email."""
         # SQLAlchemy doesn't validate at Python level by default
@@ -94,7 +96,7 @@ class TestUser:
 
 class TestAccount:
     """Test Account model."""
-    
+
     def test_account_creation(self):
         """Test account creation."""
         user_id = str(uuid4())
@@ -112,7 +114,7 @@ class TestAccount:
 
 class TestIdentity:
     """Test Identity model."""
-    
+
     def test_identity_creation(self):
         """Test identity creation."""
         user_id = str(uuid4())
@@ -138,7 +140,7 @@ class TestIdentity:
 
 class TestSession:
     """Test Session model."""
-    
+
     def test_session_creation(self):
         """Test session creation."""
         account_id = str(uuid4())
@@ -156,7 +158,7 @@ class TestSession:
 
 class TestCredential:
     """Test Credential model."""
-    
+
     def test_credential_creation(self):
         """Test credential creation."""
         account_id = str(uuid4())
@@ -174,7 +176,7 @@ class TestCredential:
 
 class TestEvent:
     """Test Event model."""
-    
+
     def test_event_creation(self):
         """Test event creation."""
         actor_id = str(uuid4())
@@ -200,7 +202,7 @@ class TestEvent:
 
 class TestRewardDefinition:
     """Test RewardDefinition model."""
-    
+
     def test_reward_definition_creation(self):
         """Test reward definition creation."""
         reward = RewardDefinition(
@@ -221,13 +223,13 @@ class TestRewardDefinition:
 
 class TestRewardGrant:
     """Test RewardGrant model."""
-    
+
     def test_reward_grant_creation(self):
         """Test reward grant creation."""
         user_id = str(uuid4())
         reward_def_id = str(uuid4())
         event_id = str(uuid4())
-        
+
         grant = RewardGrant(
             user_id=user_id,
             reward_definition_id=reward_def_id,
@@ -242,7 +244,7 @@ class TestRewardGrant:
 
 class TestAuditEntry:
     """Test AuditEntry model."""
-    
+
     def test_audit_entry_creation(self):
         """Test audit entry creation."""
         actor_id = str(uuid4())
@@ -263,7 +265,7 @@ class TestAuditEntry:
 
 class TestIdempotencyRecord:
     """Test IdempotencyRecord model."""
-    
+
     def test_idempotency_record_creation(self):
         """Test idempotency record creation."""
         record = IdempotencyRecord(

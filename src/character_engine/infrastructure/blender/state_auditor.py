@@ -9,13 +9,13 @@ Versión R1.3 FINAL:
 - Modifiers detallados
 """
 
-import sys
+import datetime
 import json
 import math
-from pathlib import Path
-from typing import Dict, Any, Optional, List, Set, Tuple
+import sys
 from dataclasses import dataclass, field
-import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 # ================================================================
 # CONSTANTES Y CÓDIGOS DE ERROR
@@ -181,7 +181,7 @@ class StateAuditor:
         if not json_path.exists():
             raise FileNotFoundError(f"Canonical JSON not found: {json_path}")
         import json
-        with open(json_path, "r", encoding="utf-8") as f:
+        with open(json_path, encoding="utf-8") as f:
             data = json.load(f)
         self._canonical_data = data
         return data

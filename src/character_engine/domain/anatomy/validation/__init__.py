@@ -1,19 +1,15 @@
 """Anatomical validation package."""
 
+from .anatomical_validator import AnatomicalValidator, create_anatomical_validator
 from .result import (
-    AnatomicalValidationStatus,
-    AnatomicalValidationResult,
     AnatomicalValidationReport,
     AnatomicalValidationReportBuilder,
-    create_pass_result,
+    AnatomicalValidationResult,
+    AnatomicalValidationStatus,
     create_fail_result,
+    create_pass_result,
+    create_unknown_result,
     create_warning_result,
-    create_unknown_result
-)
-
-from .anatomical_validator import (
-    AnatomicalValidator,
-    create_anatomical_validator
 )
 
 __all__ = [

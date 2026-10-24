@@ -4,7 +4,7 @@ Este modelo refleja el contrato público, no la implementación interna.
 """
 
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
 
 @dataclass

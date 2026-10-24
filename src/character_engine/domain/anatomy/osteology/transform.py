@@ -1,13 +1,186 @@
-﻿"""Transform y BonePivot – inmutables."""
+﻿"""Transform, GlobalTransform, LocalJointTransform y BonePivot – inmutables.
+
+Contract: CE-Q1 CANONICAL QUATERNION AND MANIFOLD CONTRACT
+Contract: CE-Q3 GLOBAL AND LOCAL MANIFOLD TRANSFORM SYSTEM
+
+This module defines:
+- GlobalTransform: Character's global configuration (p ∈ ℝ³, q ∈ S³)
+- LocalJointTransform: Joint's local configuration relative to parent
+- Transform: General transform with scale (backward compatibility)
+- BonePivot: Local pivot for bones
+
+All orientations use UnitQuaternion (S³ manifold).
+NO Euler angles for internal calculations.
+"""
 
 from dataclasses import dataclass, field
-from typing import Dict, Any
-from ....math.algebra.vector3 import Vector3
-from ....math.algebra.quaternion import Quaternion
+from typing import Any, Dict, Optional
+
 from ....math.algebra.matrix4 import Matrix4
+from ....math.algebra.quaternion import Quaternion, UnitQuaternion
+from ....math.algebra.vector3 import Vector3
+
+
+@dataclass(frozen=True)
+class GlobalTransform:
+    """Global character transform: position ∈ ℝ³, orientation ∈ S³.
+
+    Represents the global configuration of a character or joint in world space.
+
+    Contract: CE-Q1
+    - Position: p ∈ ℝ³ (Cartesian space)
+    - Orientation: q ∈ S³ (unit quaternion)
+    - No Euler angles for internal calculations
+
+    Provenance: PROVEN (CE-Q1 contract)
+    """
+    position: Vector3 = field(default_factory=Vector3.zero)
+    orientation: UnitQuaternion = field(default_factory=UnitQuaternion.identity)
+
+    def __post_init__(self):
+        """Validate components are finite."""
+        if not self.position.is_finite():
+            raise ValueError(f"Position must be finite: {self.position}")
+        # UnitQuaternion already validates finiteness and unit norm
+
+    @staticmethod
+    def identity() -> 'GlobalTransform':
+        """Identity global transform (origin, no rotation).
+
+        Provenance: PROVEN (standard definition)
+        """
+        return GlobalTransform(Vector3.zero(), UnitQuaternion.identity())
+
+    def compose(self, local: 'LocalJointTransform') -> 'GlobalTransform':
+        """Compose global transform with local joint transform.
+
+        Formula:
+        q_global = q_parent * q_local
+        p_global = p_parent + q_parent ⊙ p_local
+
+        Provenance: PROVEN (standard kinematic composition)
+        """
+        # Compose orientations: q_global = q_parent * q_local
+        new_orientation = self.orientation * local.orientation
+
+        # Compose positions: p_global = p_parent + q_parent ⊙ p_local
+        rotated_local_pos = self.orientation.rotate(local.position)
+        new_position = self.position + rotated_local_pos
+
+        return GlobalTransform(new_position, new_orientation)
+
+    def inverse(self) -> 'GlobalTransform':
+        """Compute inverse global transform.
+
+        Formula:
+        q_inv = q⁻¹
+        p_inv = -q⁻¹ ⊙ p
+
+        Provenance: PROVEN (standard inverse)
+        """
+        inv_orientation = self.orientation.inverse()
+        inv_position = inv_orientation.rotate(-self.position)
+        return GlobalTransform(inv_position, inv_orientation)
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize to dictionary.
+
+        Provenance: PROVEN (standard serialization)
+        """
+        return {
+            "position": {"x": self.position.x, "y": self.position.y, "z": self.position.z},
+            "orientation": {"w": self.orientation.w, "x": self.orientation.x, "y": self.orientation.y, "z": self.orientation.z}
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'GlobalTransform':
+        """Deserialize from dictionary.
+
+        Provenance: PROVEN (standard deserialization)
+        """
+        pos = data.get("position", {})
+        rot = data.get("orientation", {})
+
+        position = Vector3(pos.get("x", 0.0), pos.get("y", 0.0), pos.get("z", 0.0))
+        orientation = UnitQuaternion.from_quaternion(Quaternion(
+            rot.get("w", 1.0),
+            rot.get("x", 0.0),
+            rot.get("y", 0.0),
+            rot.get("z", 0.0)
+        ))
+
+        return cls(position, orientation)
+
+
+@dataclass(frozen=True)
+class LocalJointTransform:
+    """Local joint transform relative to parent frame.
+
+    Represents the configuration of a joint in its parent's local frame.
+
+    Contract: CE-Q1
+    - Local position: p_local ∈ ℝ³ (relative to parent)
+    - Local orientation: q_local ∈ S³ (relative to parent)
+    - Frame explicit: all transformations are explicit
+
+    Provenance: PROVEN (CE-Q1 contract)
+    """
+    position: Vector3 = field(default_factory=Vector3.zero)
+    orientation: UnitQuaternion = field(default_factory=UnitQuaternion.identity)
+
+    def __post_init__(self):
+        """Validate components are finite."""
+        if not self.position.is_finite():
+            raise ValueError(f"Position must be finite: {self.position}")
+        # UnitQuaternion already validates finiteness and unit norm
+
+    @staticmethod
+    def identity() -> 'LocalJointTransform':
+        """Identity local transform (no offset, no rotation).
+
+        Provenance: PROVEN (standard definition)
+        """
+        return LocalJointTransform(Vector3.zero(), UnitQuaternion.identity())
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize to dictionary.
+
+        Provenance: PROVEN (standard serialization)
+        """
+        return {
+            "position": {"x": self.position.x, "y": self.position.y, "z": self.position.z},
+            "orientation": {"w": self.orientation.w, "x": self.orientation.x, "y": self.orientation.y, "z": self.orientation.z}
+        }
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'LocalJointTransform':
+        """Deserialize from dictionary.
+
+        Provenance: PROVEN (standard deserialization)
+        """
+        pos = data.get("position", {})
+        rot = data.get("orientation", {})
+
+        position = Vector3(pos.get("x", 0.0), pos.get("y", 0.0), pos.get("z", 0.0))
+        orientation = UnitQuaternion.from_quaternion(Quaternion(
+            rot.get("w", 1.0),
+            rot.get("x", 0.0),
+            rot.get("y", 0.0),
+            rot.get("z", 0.0)
+        ))
+
+        return cls(position, orientation)
+
 
 @dataclass(frozen=True)
 class Transform:
+    """General transform with scale (backward compatibility).
+
+    NOTE: This class uses Quaternion (not UnitQuaternion) for backward compatibility.
+    New code should use GlobalTransform or LocalJointTransform instead.
+
+    Provenance: PROVEN (legacy transform for backward compatibility)
+    """
     position: Vector3 = field(default_factory=Vector3.zero)
     rotation: Quaternion = field(default_factory=Quaternion.identity)
     scale: Vector3 = field(default_factory=lambda: Vector3(1.0, 1.0, 1.0))
@@ -53,8 +226,16 @@ class Transform:
     def identity() -> 'Transform':
         return Transform()
 
+
 @dataclass(frozen=True)
 class BonePivot:
+    """Local pivot for bones (backward compatibility).
+
+    NOTE: This class uses Quaternion (not UnitQuaternion) for backward compatibility.
+    New code should use LocalJointTransform instead.
+
+    Provenance: PROVEN (legacy pivot for backward compatibility)
+    """
     local_position: Vector3 = field(default_factory=Vector3.zero)
     local_rotation: Quaternion = field(default_factory=Quaternion.identity)
 

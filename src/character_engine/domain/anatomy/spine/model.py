@@ -4,9 +4,9 @@ This module defines the parameterized spine model with natural curvatures.
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import Optional, Dict, Any, Tuple, List
 from datetime import date
+from enum import Enum
+from typing import Dict, List, Optional, Tuple
 
 from ..reference import Confidence
 
@@ -31,7 +31,7 @@ class CurvatureType(Enum):
 @dataclass(frozen=True)
 class VertebralParameter:
     """Parameter for a single vertebra.
-    
+
     Attributes:
         vertebra_id: Unique identifier (e.g., "C1", "T5", "L3")
         region: Spine region
@@ -44,7 +44,7 @@ class VertebralParameter:
         confidence: Confidence in values
         notes: Additional context
     """
-    
+
     vertebra_id: str
     region: SpineRegion
     position: Tuple[float, float, float]
@@ -55,7 +55,7 @@ class VertebralParameter:
     source_id: Optional[str] = None
     confidence: Confidence = Confidence.UNKNOWN
     notes: str = ""
-    
+
     def is_known(self) -> bool:
         """Check if vertebra parameters are known."""
         return self.position != (0.0, 0.0, 0.0) or self.source_id is not None
@@ -64,7 +64,7 @@ class VertebralParameter:
 @dataclass(frozen=True)
 class CurvatureParameter:
     """Parameter for spinal curvature.
-    
+
     Attributes:
         region: Spine region
         curvature_type: Type of curvature
@@ -76,7 +76,7 @@ class CurvatureParameter:
         confidence: Confidence in values
         notes: Additional context
     """
-    
+
     region: SpineRegion
     curvature_type: CurvatureType
     angle: float
@@ -86,7 +86,7 @@ class CurvatureParameter:
     source_id: Optional[str] = None
     confidence: Confidence = Confidence.UNKNOWN
     notes: str = ""
-    
+
     def is_known(self) -> bool:
         """Check if curvature parameters are known."""
         return self.angle != 0.0 or self.source_id is not None
@@ -95,7 +95,7 @@ class CurvatureParameter:
 @dataclass(frozen=True)
 class SpineModel:
     """Parameterized spine model.
-    
+
     Attributes:
         model_id: Unique identifier for the spine model
         version: Version of the spine model
@@ -107,7 +107,7 @@ class SpineModel:
         source_id: Reference source ID
         created_at: Creation timestamp
     """
-    
+
     model_id: str
     version: str
     vertebrae: Dict[str, VertebralParameter]
@@ -117,19 +117,19 @@ class SpineModel:
     sacral_orientation: float
     source_id: Optional[str] = None
     created_at: date = field(default_factory=date.today)
-    
+
     def get_vertebra(self, vertebra_id: str) -> Optional[VertebralParameter]:
         """Get vertebra by ID."""
         return self.vertebrae.get(vertebra_id)
-    
+
     def get_vertebrae_by_region(self, region: SpineRegion) -> List[VertebralParameter]:
         """Get all vertebrae in a specific region."""
         return [v for v in self.vertebrae.values() if v.region == region]
-    
+
     def get_curvature(self, region: SpineRegion) -> Optional[CurvatureParameter]:
         """Get curvature for a region."""
         return self.curvatures.get(region)
-    
+
     def has_natural_curvatures(self) -> bool:
         """Check if spine has natural curvatures (not straight)."""
         # Natural spine should have lordosis in cervical and lumbar regions
@@ -137,13 +137,13 @@ class SpineModel:
         cervical = self.get_curvature(SpineRegion.CERVICAL)
         thoracic = self.get_curvature(SpineRegion.THORACIC)
         lumbar = self.get_curvature(SpineRegion.LUMBAR)
-        
+
         has_cervical_lordosis = cervical and cervical.curvature_type == CurvatureType.LORDOSIS
         has_thoracic_kyphosis = thoracic and thoracic.curvature_type == CurvatureType.KYPHOSIS
         has_lumbar_lordosis = lumbar and lumbar.curvature_type == CurvatureType.LORDOSIS
-        
+
         return has_cervical_lordosis and has_thoracic_kyphosis and has_lumbar_lordosis
-    
+
     def is_straight(self) -> bool:
         """Check if spine is straight (abnormal)."""
         for curvature in self.curvatures.values():
@@ -154,7 +154,7 @@ class SpineModel:
 
 class SpineModelBuilder:
     """Builder for creating spine models."""
-    
+
     def __init__(self, model_id: str, version: str):
         self.model_id = model_id
         self.version = version
@@ -164,37 +164,37 @@ class SpineModelBuilder:
         self.intervertebral_spacing = 0.0
         self.sacral_orientation = 0.0
         self.source_id: Optional[str] = None
-    
+
     def add_vertebra(self, vertebra: VertebralParameter) -> "SpineModelBuilder":
         """Add a vertebra to the model."""
         self.vertebrae[vertebra.vertebra_id] = vertebra
         return self
-    
+
     def add_curvature(self, curvature: CurvatureParameter) -> "SpineModelBuilder":
         """Add a curvature to the model."""
         self.curvatures[curvature.region] = curvature
         return self
-    
+
     def set_total_height(self, height: float) -> "SpineModelBuilder":
         """Set total spine height."""
         self.total_height = height
         return self
-    
+
     def set_intervertebral_spacing(self, spacing: float) -> "SpineModelBuilder":
         """Set intervertebral spacing."""
         self.intervertebral_spacing = spacing
         return self
-    
+
     def set_sacral_orientation(self, angle: float) -> "SpineModelBuilder":
         """Set sacral orientation angle."""
         self.sacral_orientation = angle
         return self
-    
+
     def set_source_id(self, source_id: str) -> "SpineModelBuilder":
         """Set reference source ID."""
         self.source_id = source_id
         return self
-    
+
     def build(self) -> SpineModel:
         """Build the spine model."""
         return SpineModel(

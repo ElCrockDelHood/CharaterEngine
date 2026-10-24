@@ -1,22 +1,105 @@
-"""Role service for CHARACTER ENGINE backend.
+"""Role service for CHARACTER ENGINE backend (C6).
 
-This module implements role management including assignment, revocation, and bootstrap.
+Implements role management: creation, bootstrap, assignment, revocation and
+current-role queries, following the append-only ``UserRole`` history model
+(spec section 4.4).
+
+Persistence notes
+-----------------
+``UserRole.role_id`` is a FOREIGN KEY to ``roles.id`` (the surrogate UUID),
+NOT to the human readable ``roles.role_id`` (``"user"`` / ``"admin"``). All
+public methods of this service accept the human readable identifier and
+resolve it internally, so callers never deal with surrogate keys.
 """
 
-from datetime import datetime
-from typing import Optional, List
-from sqlalchemy.orm import Session
-from sqlalchemy import select
+from datetime import datetime, timezone
+from typing import List, Optional
 from uuid import uuid4
 
-from backend.database.models import Role as RoleModel, UserRole as UserRoleModel, User as UserModel
-from backend.authorization.authorization_domain import Role
-from backend.authorization.permission_service import PermissionService
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session
+
+from backend.authorization.authorization_domain import (
+    AuthorizationError,
+    LastAdminError,
+    Role,
+    RoleAlreadyExistsError,
+    RoleAssignment,
+    RoleAssignmentError,
+    RoleNotFoundError,
+)
+from backend.database.models import Role as RoleModel
+from backend.database.models import UserRole as UserRoleModel
+
+VALID_ROLE_IDS = ("user", "admin")
+USER_ROLE_ID = "user"
+ADMIN_ROLE_ID = "admin"
+
+
+def _utcnow() -> datetime:
+    """Naive UTC timestamp compatible with the DateTime columns used by the models."""
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
 class RoleService:
     """Role service for role management."""
-    
+
+    # ------------------------------------------------------------------
+    # Internal helpers
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _validate_role_id(role_id: str) -> None:
+        if role_id not in VALID_ROLE_IDS:
+            raise RoleAssignmentError(
+                f"Invalid role_id: {role_id!r}. Must be one of {VALID_ROLE_IDS}."
+            )
+
+    @staticmethod
+    def _get_role_model(db: Session, role_id: str) -> Optional[RoleModel]:
+        return db.execute(
+            select(RoleModel).where(RoleModel.role_id == role_id)
+        ).scalar_one_or_none()
+
+    @staticmethod
+    def _require_role_model(db: Session, role_id: str) -> RoleModel:
+        role_model = RoleService._get_role_model(db, role_id)
+        if role_model is None:
+            raise RoleNotFoundError(f"Role {role_id!r} not found. Run bootstrap_roles first.")
+        return role_model
+
+    @staticmethod
+    def _to_domain(role_model: RoleModel) -> Role:
+        return Role(
+            role_id=role_model.role_id,
+            role_name=role_model.role_name,
+            description=role_model.description,
+            created_at=role_model.created_at,
+        )
+
+    @staticmethod
+    def _assignment_to_domain(user_role: UserRoleModel, role_id: str) -> RoleAssignment:
+        return RoleAssignment(
+            assignment_id=user_role.id,
+            user_id=user_role.user_id,
+            role_id=role_id,
+            assigned_by=user_role.assigned_by,
+            assigned_at=user_role.assigned_at,
+            revoked_at=user_role.revoked_at,
+        )
+
+    @staticmethod
+    def _get_active_assignment(db: Session, user_id: str, role_pk: str) -> Optional[UserRoleModel]:
+        return db.execute(
+            select(UserRoleModel).where(
+                UserRoleModel.user_id == user_id,
+                UserRoleModel.role_id == role_pk,
+                UserRoleModel.revoked_at.is_(None),
+            )
+        ).scalar_one_or_none()
+
+    # ------------------------------------------------------------------
+    # Roles
+    # ------------------------------------------------------------------
     @staticmethod
     def create_role(
         db: Session,
@@ -25,271 +108,213 @@ class RoleService:
         description: Optional[str] = None
     ) -> Role:
         """Create a new role.
-        
-        Args:
-            db: Database session
-            role_id: Role identifier (e.g., "user", "admin")
-            role_name: Human-readable role name
-            description: Role description
-            
-        Returns:
-            Created role domain entity
-            
+
         Raises:
-            ValueError: If role_id is invalid
+            RoleAssignmentError: If role_id is not a known role identifier.
+            RoleAlreadyExistsError: If the role already exists.
         """
-        # Validate role_id
-        if role_id not in ["user", "admin"]:
-            raise ValueError(f"Invalid role_id: {role_id}. Must be 'user' or 'admin'.")
-        
-        # Check if role already exists
-        existing_role = db.execute(
-            select(RoleModel).where(RoleModel.role_id == role_id)
-        ).scalar_one_or_none()
-        
-        if existing_role:
-            raise ValueError(f"Role with role_id '{role_id}' already exists")
-        
-        # Create role
+        RoleService._validate_role_id(role_id)
+
+        if RoleService._get_role_model(db, role_id) is not None:
+            raise RoleAlreadyExistsError(f"Role with role_id {role_id!r} already exists")
+
         role_model = RoleModel(
             id=str(uuid4()),
             role_id=role_id,
             role_name=role_name,
             description=description,
-            created_at=datetime.utcnow()
+            created_at=_utcnow(),
         )
-        
-        db.add(role_model)
-        db.commit()
-        db.refresh(role_model)
-        
-        return Role(
-            role_id=role_model.role_id,
-            role_name=role_model.role_name,
-            description=role_model.description,
-            created_at=role_model.created_at
-        )
-    
+
+        try:
+            db.add(role_model)
+            db.commit()
+            db.refresh(role_model)
+        except Exception as exc:  # pragma: no cover - defensive
+            db.rollback()
+            raise AuthorizationError("Failed to persist role") from exc
+
+        return RoleService._to_domain(role_model)
+
     @staticmethod
     def get_role(db: Session, role_id: str) -> Optional[Role]:
-        """Get role by ID.
-        
-        Args:
-            db: Database session
-            role_id: Role identifier
-            
-        Returns:
-            Role domain entity or None if not found
+        """Get role by human readable identifier, or None if not found."""
+        role_model = RoleService._get_role_model(db, role_id)
+        return RoleService._to_domain(role_model) if role_model else None
+
+    @staticmethod
+    def bootstrap_roles(db: Session) -> None:
+        """Bootstrap initial roles (USER and ADMIN). Idempotent-safe: fails loudly if run twice.
+
+        Raises:
+            RoleAlreadyExistsError: If any role already exists.
         """
-        role_model = db.execute(
-            select(RoleModel).where(RoleModel.role_id == role_id)
-        ).scalar_one_or_none()
-        
-        if not role_model:
-            return None
-        
-        return Role(
-            role_id=role_model.role_id,
-            role_name=role_model.role_name,
-            description=role_model.description,
-            created_at=role_model.created_at
+        if RoleService._get_role_model(db, USER_ROLE_ID) or RoleService._get_role_model(db, ADMIN_ROLE_ID):
+            raise RoleAlreadyExistsError("Roles already exist. Bootstrap can only be run once.")
+
+        RoleService.create_role(
+            db=db,
+            role_id=USER_ROLE_ID,
+            role_name="User",
+            description="Standard user role with self-permissions",
         )
-    
+        RoleService.create_role(
+            db=db,
+            role_id=ADMIN_ROLE_ID,
+            role_name="Administrator",
+            description="System administrator with system-permissions",
+        )
+
+    # ------------------------------------------------------------------
+    # Assignments (append-only history)
+    # ------------------------------------------------------------------
     @staticmethod
     def assign_role(
         db: Session,
         user_id: str,
         role_id: str,
-        assigned_by: str
-    ) -> UserRoleModel:
+        assigned_by: Optional[str]
+    ) -> RoleAssignment:
         """Assign a role to a user.
-        
+
         Args:
             db: Database session
-            user_id: User ID
-            role_id: Role identifier
-            assigned_by: User ID of the user assigning the role
-            
-        Returns:
-            Created UserRole model
-            
+            user_id: Target user ID
+            role_id: Human readable role identifier ("user" / "admin")
+            assigned_by: User ID of the actor performing the assignment
+                (``None`` only for SYSTEM assignments such as user creation)
+
         Raises:
-            ValueError: If role_id is invalid or user already has active role
+            RoleAssignmentError: invalid role, duplicate active assignment,
+                or admin self-assignment.
+            RoleNotFoundError: role has not been bootstrapped.
         """
-        # Validate role_id
-        if role_id not in ["user", "admin"]:
-            raise ValueError(f"Invalid role_id: {role_id}. Must be 'user' or 'admin'.")
-        
-        # Check if user already has active role
-        existing_assignment = db.execute(
-            select(UserRoleModel).where(
-                UserRoleModel.user_id == user_id,
-                UserRoleModel.role_id == role_id,
-                UserRoleModel.revoked_at.is_(None)
-            )
-        ).scalar_one_or_none()
-        
-        if existing_assignment:
-            raise ValueError(f"User already has active role '{role_id}'")
-        
-        # Assign role
+        RoleService._validate_role_id(role_id)
+        if not user_id:
+            raise RoleAssignmentError("user_id must be a non-empty string")
+
+        # Spec 4.2: self-assignment of the admin role is prohibited.
+        if role_id == ADMIN_ROLE_ID and assigned_by is not None and assigned_by == user_id:
+            raise RoleAssignmentError("Self-assignment of the admin role is prohibited")
+
+        role_model = RoleService._require_role_model(db, role_id)
+
+        if RoleService._get_active_assignment(db, user_id, role_model.id) is not None:
+            raise RoleAssignmentError(f"User already has active role {role_id!r}")
+
         user_role = UserRoleModel(
             id=str(uuid4()),
             user_id=user_id,
-            role_id=role_id,
+            role_id=role_model.id,
             assigned_by=assigned_by,
-            assigned_at=datetime.utcnow(),
-            revoked_at=None
+            assigned_at=_utcnow(),
+            revoked_at=None,
         )
-        
-        db.add(user_role)
-        db.commit()
-        db.refresh(user_role)
-        
-        return user_role
-    
+
+        try:
+            db.add(user_role)
+            db.commit()
+            db.refresh(user_role)
+        except Exception as exc:
+            db.rollback()
+            raise RoleAssignmentError("Failed to persist role assignment") from exc
+
+        return RoleService._assignment_to_domain(user_role, role_id)
+
     @staticmethod
     def revoke_role(
         db: Session,
         user_id: str,
         role_id: str,
-        revoked_by: str
-    ) -> Optional[UserRoleModel]:
-        """Revoke a role from a user.
-        
-        Args:
-            db: Database session
-            user_id: User ID
-            role_id: Role identifier
-            revoked_by: User ID of the user revoking the role
-            
+        revoked_by: Optional[str]
+    ) -> Optional[RoleAssignment]:
+        """Revoke a role from a user (append-only: sets ``revoked_at``).
+
         Returns:
-            Updated UserRole model or None if no active assignment found
-            
+            The revoked assignment, or ``None`` if the user had no active assignment.
+
         Raises:
-            ValueError: If attempting to revoke last admin role
+            RoleAssignmentError: attempting to revoke the USER role (spec 4.1)
+                or admin self-revocation (spec 4.2).
+            LastAdminError: attempting to revoke the last active admin.
         """
-        # Check if user has active role
-        user_role = db.execute(
-            select(UserRoleModel).where(
-                UserRoleModel.user_id == user_id,
-                UserRoleModel.role_id == role_id,
-                UserRoleModel.revoked_at.is_(None)
-            )
-        ).scalar_one_or_none()
-        
-        if not user_role:
+        RoleService._validate_role_id(role_id)
+
+        if role_id == USER_ROLE_ID:
+            raise RoleAssignmentError("The USER role cannot be revoked")
+
+        if role_id == ADMIN_ROLE_ID and revoked_by is not None and revoked_by == user_id:
+            raise RoleAssignmentError("Self-revocation of the admin role is prohibited")
+
+        role_model = RoleService._require_role_model(db, role_id)
+        user_role = RoleService._get_active_assignment(db, user_id, role_model.id)
+        if user_role is None:
             return None
-        
-        # Check if this is the last admin role
-        if role_id == "admin":
+
+        if role_id == ADMIN_ROLE_ID:
             admin_count = db.execute(
-                select(UserRoleModel).where(
-                    UserRoleModel.role_id == "admin",
-                    UserRoleModel.revoked_at.is_(None)
+                select(func.count()).select_from(UserRoleModel).where(
+                    UserRoleModel.role_id == role_model.id,
+                    UserRoleModel.revoked_at.is_(None),
                 )
-            ).count()
-            
+            ).scalar_one()
             if admin_count <= 1:
-                raise ValueError("Cannot revoke last admin role in system")
-        
-        # Revoke role (append-only: set revoked_at)
-        user_role.revoked_at = datetime.utcnow()
-        db.commit()
-        db.refresh(user_role)
-        
-        return user_role
-    
+                raise LastAdminError("Cannot revoke the last admin role in the system")
+
+        user_role.revoked_at = _utcnow()
+        try:
+            db.commit()
+            db.refresh(user_role)
+        except Exception as exc:
+            db.rollback()
+            raise RoleAssignmentError("Failed to persist role revocation") from exc
+
+        return RoleService._assignment_to_domain(user_role, role_id)
+
     @staticmethod
     def get_user_roles(db: Session, user_id: str) -> List[str]:
-        """Get active roles for a user.
-        
-        Args:
-            db: Database session
-            user_id: User ID
-            
-        Returns:
-            List of role IDs for the user
-        """
-        user_roles = db.execute(
-            select(UserRoleModel).where(
+        """Get the ACTIVE role identifiers of a user (``revoked_at IS NULL``)."""
+        rows = db.execute(
+            select(RoleModel.role_id)
+            .join(UserRoleModel, UserRoleModel.role_id == RoleModel.id)
+            .where(
                 UserRoleModel.user_id == user_id,
-                UserRoleModel.revoked_at.is_(None)
+                UserRoleModel.revoked_at.is_(None),
             )
+            .order_by(RoleModel.role_id)
         ).scalars().all()
-        
-        role_ids = []
-        for user_role in user_roles:
-            role = db.execute(
-                select(RoleModel).where(RoleModel.id == user_role.role_id)
-            ).scalar_one_or_none()
-            if role:
-                role_ids.append(role.role_id)
-        
-        return role_ids
-    
+        return list(rows)
+
     @staticmethod
-    def bootstrap_roles(db: Session) -> None:
-        """Bootstrap initial roles (USER and ADMIN).
-        
-        Args:
-            db: Database session
-            
-        Raises:
-            ValueError: If roles already exist
-        """
-        # Check if roles already exist
-        existing_user_role = db.execute(
-            select(RoleModel).where(RoleModel.role_id == "user")
-        ).scalar_one_or_none()
-        
-        existing_admin_role = db.execute(
-            select(RoleModel).where(RoleModel.role_id == "admin")
-        ).scalar_one_or_none()
-        
-        if existing_user_role or existing_admin_role:
-            raise ValueError("Roles already exist. Bootstrap can only be run once.")
-        
-        # Create USER role
-        RoleService.create_role(
-            db=db,
-            role_id="user",
-            role_name="User",
-            description="Standard user role with self-permissions"
-        )
-        
-        # Create ADMIN role
-        RoleService.create_role(
-            db=db,
-            role_id="admin",
-            role_name="Administrator",
-            description="System administrator with system-permissions"
-        )
-    
+    def get_role_history(db: Session, user_id: str) -> List[RoleAssignment]:
+        """Get the complete (active + revoked) assignment history of a user."""
+        rows = db.execute(
+            select(UserRoleModel, RoleModel.role_id)
+            .join(RoleModel, RoleModel.id == UserRoleModel.role_id)
+            .where(UserRoleModel.user_id == user_id)
+            .order_by(UserRoleModel.assigned_at)
+        ).all()
+        return [RoleService._assignment_to_domain(user_role, role_id) for user_role, role_id in rows]
+
     @staticmethod
-    def assign_user_role_on_creation(db: Session, user_id: str) -> None:
-        """Assign USER role to a user on user creation.
-        
-        Args:
-            db: Database session
-            user_id: User ID
-        """
-        # Get USER role
-        user_role = RoleService.get_role(db, "user")
-        
-        if not user_role:
-            raise ValueError("USER role not found. Run bootstrap first.")
-        
-        # Assign USER role (system assignment, no assigned_by)
-        # Use None for system assignments
-        user_role_assignment = UserRoleModel(
-            id=str(uuid4()),
-            user_id=user_id,
-            role_id=user_role.role_id,
-            assigned_by=None,  # System assignment
-            assigned_at=datetime.utcnow(),
-            revoked_at=None
-        )
-        
-        db.add(user_role_assignment)
-        db.commit()
+    def has_role(db: Session, user_id: str, role_id: str) -> bool:
+        """Check whether the user currently holds the given role."""
+        return role_id in RoleService.get_user_roles(db, user_id)
+
+    @staticmethod
+    def count_active_admins(db: Session) -> int:
+        """Number of users currently holding the ADMIN role."""
+        role_model = RoleService._get_role_model(db, ADMIN_ROLE_ID)
+        if role_model is None:
+            return 0
+        return db.execute(
+            select(func.count()).select_from(UserRoleModel).where(
+                UserRoleModel.role_id == role_model.id,
+                UserRoleModel.revoked_at.is_(None),
+            )
+        ).scalar_one()
+
+    @staticmethod
+    def assign_user_role_on_creation(db: Session, user_id: str) -> RoleAssignment:
+        """Assign the USER role to a newly created user (SYSTEM assignment, ``assigned_by=None``)."""
+        return RoleService.assign_role(db, user_id=user_id, role_id=USER_ROLE_ID, assigned_by=None)

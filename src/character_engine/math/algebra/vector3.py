@@ -1,7 +1,8 @@
 ﻿"""Vector3 – matemáticas puras."""
 
-from dataclasses import dataclass
 import math
+from dataclasses import dataclass
+
 
 @dataclass(frozen=True)
 class Vector3:
@@ -44,3 +45,10 @@ class Vector3:
     @staticmethod
     def zero() -> 'Vector3':
         return Vector3(0, 0, 0)
+
+    def is_finite(self) -> bool:
+        """Check if all components are finite (no NaN or Inf).
+
+        Provenance: PROVEN (standard finite check)
+        """
+        return all(math.isfinite(c) for c in (self.x, self.y, self.z))

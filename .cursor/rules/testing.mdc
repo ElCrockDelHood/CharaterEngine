@@ -1,0 +1,27 @@
+---
+description: How to write and run tests in Character Engine (pytest layout, fixtures, environment, speed)
+globs: tests/**/*.py, scripts/test.py, pyproject.toml
+alwaysApply: false
+---
+
+# Testing
+
+- Run everything: `python scripts/test.py` (or `python -m pytest tests -q`). Target: 0 failures.
+- Subsets: `tests/anatomy` (canonical data contracts), `tests/unit`, `tests/integration`,
+  `tests/export` (glTF), `tests/backend` (C1–C6).
+- `tests/conftest.py` sets `CHARACTER_ENGINE_ENV=test` and adds `src/` to `sys.path`;
+  do not add `sys.path` hacks or `PYTHONPATH` juggling in individual tests.
+- Backend tests must stay fast: in-memory SQLite + test Argon2 params (whole backend < 30 s).
+  Never hit a real database or the network.
+- Test the contract, not the implementation: assert on provenance states, decision reasons
+  (`DenialReason`), node counts (208/206), coordinates in the canonical frame.
+- When fixing a bug, add a regression test in the same module that failed.
+- Blender/UPBGE/Godot are **not** available in CI: keep engine checks in `runtime/` and
+  `scripts/validate_blender_headless.py`, guarded by `try: import bpy`.
+
+```python
+# ✅ pattern for a canonical-data test
+def test_skeleton_has_208_nodes(canonical_skeleton):
+    assert len(canonical_skeleton.bones) == 208
+    assert sum(1 for b in canonical_skeleton.bones if not b.is_container) == 206
+```

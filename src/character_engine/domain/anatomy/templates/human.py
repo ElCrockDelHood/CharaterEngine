@@ -2,7 +2,8 @@
 
 import json
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Any, Dict
+
 
 class HumanTemplate:
     """Plantilla del esqueleto humano – 206 huesos anatómicos canónicos."""
@@ -15,7 +16,7 @@ class HumanTemplate:
                 f"Human skeleton template not found at: {json_path}\n"
                 "Please run: python scripts/generate_human_template.py"
             )
-        with open(json_path, 'r', encoding='utf-8') as f:
+        with open(json_path, encoding='utf-8') as f:
             data = json.load(f)
         return {
             "name": "HumanSkeleton",

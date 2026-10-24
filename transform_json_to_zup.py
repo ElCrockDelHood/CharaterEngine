@@ -2,8 +2,8 @@
 """Transforma el archivo human_adult_206.json de Y-up a Z-up (con pies en Z=0)."""
 
 import json
-from pathlib import Path
 import shutil
+from pathlib import Path
 
 # Rutas
 project_root = Path(__file__).parent
@@ -16,7 +16,7 @@ if not json_path.exists():
     exit(1)
 
 # 1. Cargar el JSON
-with open(json_path, 'r', encoding='utf-8') as f:
+with open(json_path, encoding='utf-8') as f:
     data = json.load(f)
 
 bones = data.get("bones", [])

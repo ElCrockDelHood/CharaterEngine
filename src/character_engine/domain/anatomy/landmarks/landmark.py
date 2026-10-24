@@ -5,12 +5,11 @@ with bilateral support and coordinate-space management.
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import Optional, Dict, Any, Tuple
-from uuid import UUID, uuid4
 from datetime import date
+from enum import Enum
+from typing import Any, Dict, Optional, Tuple
 
-from ..coordinate_system import LateralSide, CoordinateSystem, CANONICAL_COORDINATE_SYSTEM
+from ..coordinate_system import CANONICAL_COORDINATE_SYSTEM, CoordinateSystem, LateralSide
 from ..reference import Confidence
 
 
@@ -42,7 +41,7 @@ class CoordinateSpace(Enum):
 @dataclass(frozen=True)
 class Landmark:
     """Anatomical landmark with full coordinate and provenance information.
-    
+
     Attributes:
         id: Unique identifier for the landmark
         name: Human-readable landmark name
@@ -60,7 +59,7 @@ class Landmark:
         version: Landmark version
         created_at: Creation timestamp
     """
-    
+
     id: str
     name: str
     canonical_name: str
@@ -76,43 +75,43 @@ class Landmark:
     metadata: Dict[str, Any] = field(default_factory=dict)
     version: str = "1.0.0"
     created_at: date = field(default_factory=date.today)
-    
+
     def is_midline(self) -> bool:
         """Check if landmark is midline (not bilateral)."""
         return not self.bilateral
-    
+
     def is_bilateral(self) -> bool:
         """Check if landmark is bilateral."""
         return self.bilateral
-    
+
     def is_left(self) -> bool:
         """Check if landmark is on left side."""
         return self.side == LateralSide.LEFT
-    
+
     def is_right(self) -> bool:
         """Check if landmark is on right side."""
         return self.side == LateralSide.RIGHT
-    
+
     def get_x(self) -> float:
         """Get X coordinate."""
         return self.coordinate[0]
-    
+
     def get_y(self) -> float:
         """Get Y coordinate."""
         return self.coordinate[1]
-    
+
     def get_z(self) -> float:
         """Get Z coordinate."""
         return self.coordinate[2]
-    
+
     def is_world_space(self) -> bool:
         """Check if coordinate is in world-space."""
         return self.coordinate_space == CoordinateSpace.WORLD
-    
+
     def is_known(self) -> bool:
         """Check if landmark coordinate is known (not None)."""
         return self.coordinate != (0.0, 0.0, 0.0) or self.source_id is not None
-    
+
     def get_side(self) -> Optional[LateralSide]:
         """Get lateral side."""
         return self.side
@@ -121,7 +120,7 @@ class Landmark:
 @dataclass(frozen=True)
 class LandmarkSet:
     """Collection of anatomical landmarks.
-    
+
     Attributes:
         set_id: Unique identifier for the landmark set
         name: Name of the landmark set
@@ -130,75 +129,75 @@ class LandmarkSet:
         coordinate_system: Coordinate system used
         created_at: Creation timestamp
     """
-    
+
     set_id: str
     name: str
     version: str
     landmarks: Dict[str, Landmark]
     coordinate_system: CoordinateSystem = field(default_factory=lambda: CANONICAL_COORDINATE_SYSTEM)
     created_at: date = field(default_factory=date.today)
-    
+
     def get_landmark(self, landmark_id: str) -> Optional[Landmark]:
         """Get landmark by ID."""
         return self.landmarks.get(landmark_id)
-    
+
     def get_landmark_by_canonical_name(self, canonical_name: str) -> Optional[Landmark]:
         """Get landmark by canonical name."""
         for landmark in self.landmarks.values():
             if landmark.canonical_name == canonical_name:
                 return landmark
         return None
-    
+
     def get_bilateral_pair(self, landmark_name: str) -> tuple[Optional[Landmark], Optional[Landmark]]:
         """Get left and right versions of a bilateral landmark."""
         left = self.get_landmark_by_canonical_name(f"{landmark_name}_L")
         right = self.get_landmark_by_canonical_name(f"{landmark_name}_R")
         return left, right
-    
+
     def get_landmarks_by_region(self, region: LandmarkRegion) -> list[Landmark]:
         """Get all landmarks in a specific region."""
         return [l for l in self.landmarks.values() if l.region == region]
-    
+
     def get_midline_landmarks(self) -> list[Landmark]:
         """Get all midline landmarks."""
         return [l for l in self.landmarks.values() if l.is_midline()]
-    
+
     def get_bilateral_landmarks(self) -> list[Landmark]:
         """Get all bilateral landmarks."""
         return [l for l in self.landmarks.values() if l.is_bilateral()]
-    
+
     def get_left_landmarks(self) -> list[Landmark]:
         """Get all left-side landmarks."""
         return [l for l in self.landmarks.values() if l.is_left()]
-    
+
     def get_right_landmarks(self) -> list[Landmark]:
         """Get all right-side landmarks."""
         return [l for l in self.landmarks.values() if l.is_right()]
-    
+
     def get_known_landmarks(self) -> list[Landmark]:
         """Get all landmarks with known coordinates."""
         return [l for l in self.landmarks.values() if l.is_known()]
-    
+
     def mirror_landmark(self, landmark: Landmark) -> Landmark:
         """Mirror a landmark across X = 0 plane.
-        
+
         Args:
             landmark: Landmark to mirror
-            
+
         Returns:
             New landmark with mirrored coordinate
         """
         if landmark.is_midline():
             # Midline landmarks don't change
             return landmark
-        
+
         # Mirror coordinate
         mirrored_coord = self.coordinate_system.mirror_x(landmark.coordinate)
-        
+
         # Determine new side
         current_side = landmark.get_side()
         new_side = LateralSide.RIGHT if current_side == LateralSide.LEFT else LateralSide.LEFT
-        
+
         # Create new landmark with mirrored coordinate
         return Landmark(
             id=f"{landmark.id}_MIRRORED",
@@ -217,55 +216,55 @@ class LandmarkSet:
             version=landmark.version,
             created_at=landmark.created_at
         )
-    
+
     def validate_bilateral_symmetry(self, tolerance: float = 0.002) -> Dict[str, bool]:
         """Validate bilateral landmark symmetry.
-        
+
         Args:
             tolerance: Tolerance in meters for coordinate comparison
-            
+
         Returns:
             Dictionary mapping landmark names to symmetry results
         """
         results = {}
-        
+
         for landmark in self.get_bilateral_landmarks():
             canonical_base = landmark.canonical_name.replace("_L", "").replace("_R", "")
             left, right = self.get_bilateral_pair(canonical_base)
-            
+
             if left is None or right is None:
                 continue
-            
+
             # Mirror left to right and compare
             mirrored_left = self.mirror_landmark(left)
-            
+
             # Compare coordinates
             matches = all(
                 abs(a - b) <= tolerance
                 for a, b in zip(mirrored_left.coordinate, right.coordinate)
             )
-            
+
             results[canonical_base] = matches
-        
+
         return results
 
 
 class LandmarkSetBuilder:
     """Builder for creating landmark sets."""
-    
-    def __init__(self, set_id: str, name: str, version: str, 
+
+    def __init__(self, set_id: str, name: str, version: str,
                  coordinate_system: CoordinateSystem = None):
         self.set_id = set_id
         self.name = name
         self.version = version
         self.coordinate_system = coordinate_system or CANONICAL_COORDINATE_SYSTEM
         self.landmarks: Dict[str, Landmark] = {}
-    
+
     def add_landmark(self, landmark: Landmark) -> "LandmarkSetBuilder":
         """Add a landmark to the set."""
         self.landmarks[landmark.id] = landmark
         return self
-    
+
     def build(self) -> LandmarkSet:
         """Build the landmark set."""
         return LandmarkSet(
@@ -340,14 +339,14 @@ def create_bilateral_landmark_pair(canonical_name: str, region: LandmarkRegion,
                                    right_coordinate: Tuple[float, float, float],
                                    source_id: str) -> tuple[Landmark, Landmark]:
     """Create a bilateral landmark pair.
-    
+
     Args:
         canonical_name: Base name (without _L/_R suffix)
         region: Anatomical region
         left_coordinate: Left side coordinate
         right_coordinate: Right side coordinate
         source_id: Reference source ID
-        
+
     Returns:
         Tuple of (left_landmark, right_landmark)
     """
@@ -363,7 +362,7 @@ def create_bilateral_landmark_pair(canonical_name: str, region: LandmarkRegion,
         source_id=source_id,
         confidence=Confidence.HIGH
     )
-    
+
     right = Landmark(
         id=f"{canonical_name}_R",
         name=f"Right {canonical_name}",
@@ -376,5 +375,5 @@ def create_bilateral_landmark_pair(canonical_name: str, region: LandmarkRegion,
         source_id=source_id,
         confidence=Confidence.HIGH
     )
-    
+
     return left, right

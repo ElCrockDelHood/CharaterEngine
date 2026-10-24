@@ -2,9 +2,9 @@
 
 import json
 from pathlib import Path
-from typing import Dict, Any, Tuple
+from typing import Any, Dict, Tuple
 
-from ..dto import SkeletonDTO, BoneDTO, ContainerDTO, AssetDTO
+from ..dto import AssetDTO, BoneDTO, ContainerDTO, SkeletonDTO
 
 
 class JsonLoader:
@@ -32,9 +32,16 @@ class JsonLoader:
         if not json_path.exists():
             raise FileNotFoundError(f"Archivo no encontrado: {json_path}")
 
-        with open(json_path, "r", encoding="utf-8") as f:
+        with open(json_path, encoding="utf-8") as f:
             data = json.load(f)
+        return self.load_data_to_dto(data)
 
+    def load_data_to_dto(self, data: Dict[str, Any]) -> Tuple[AssetDTO, SkeletonDTO]:
+        """Igual que ``load_to_dto`` pero a partir de un diccionario ya cargado.
+
+        Permite aplicar transformaciones puras (retarget de estatura, T-pose,
+        plantillas) antes de la validación de schema y la construcción de DTO.
+        """
         # Normalizar: el JSON canónico actual tiene bones y containers en la raíz.
         # El schema espera asset y skeleton.
         normalized = self._normalize(data)
@@ -78,7 +85,7 @@ class JsonLoader:
         try:
             import jsonschema
             if self._schema_data is None:
-                with open(self.schema_path, "r", encoding="utf-8") as f:
+                with open(self.schema_path, encoding="utf-8") as f:
                     self._schema_data = json.load(f)
             jsonschema.validate(data, self._schema_data)
         except ImportError:

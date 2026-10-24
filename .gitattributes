@@ -1,0 +1,17 @@
+# Normalise line endings
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary assets
+*.blend binary
+*.blend1 binary
+*.glb binary
+*.bin binary
+*.png binary
+*.jpg binary
+*.db binary
+
+# Canonical data: show diffs but never merge automatically
+src/character_engine/data/anatomy/*.json merge=binary

@@ -1,0 +1,82 @@
+﻿2. DECISIONES Y CONTRATOS LÓGICOS
+=================================
+
+    El  registro  completo  está en docs/reorientation/DECISION_LOG.md. Aquí
+van  las  que gobiernan el uso diario del proyecto. Una decisión FINAL no se
+rompe en un script suelto. La única abierta es la 17.
+
+2.1 Contratos que no se negocian
+--------------------------------
+
+    La  fuente  de  verdad  es el dato, el esquema y la procedencia. Blender
+produce, visualiza y exporta. No es el archivo maestro.
+
+    El  dominio,  en  src/character_engine/domain,  no  importa  bpy, Godot,
+FastAPI ni SQLAlchemy. El único lugar donde bpy está permitido es
+infrastructure/blender y runtime/.
+
+    No  se  rellena  un  hueco  científico  con  un  número verosímil. Es la
+decisión 12. Si falta la cita, el estado es UNKNOWN, PLACEHOLDER o ESTIMATE.
+
+    El  esqueleto tiene 208 nodos: 206 huesos anatómicos más ROOT_SKELETON y
+CRANIUM. Nombres canónicos únicos, una sola raíz, jerarquía sin ciclos.
+
+    El  marco  canónico  es Z hacia arriba, mano derecha, −Y hacia adelante,
+metros, origen en la línea media de los pies sobre el suelo.
+
+2.2 Contratos de dato anatómico
+-------------------------------
+
+    Decisión  15.  La  estatura  base es 1,80 m (USER_INPUT). Las alturas de
+hombro,  codo,  cadera,  rodilla, tobillo, muñeca y mentón son los ratios de
+Drillis  y  Contini  por  esa  estatura  (DERIVED).  El resto de los huesos,
+interpolados, es ESTIMATE.
+
+    Decisión  16.  La  osteometría  de Trotter dimensiona la malla del hueso
+largo.  No  desplaza  la  articulación.  Mezclar  la  longitud  de una tabla
+osteométrica  con  la  distancia  entre  centros  articulares corrompería el
+retarget.
+
+    Decisión  18.  El  grosor  de  las  capas,  la  energía de un golpe y la
+letalidad  son  constantes de juego (ESTIMATE). La unión origen-inserción de
+un  músculo  es  anatomía  de  atlas. La forma del músculo en pantalla es un
+proxy.
+
+2.3 Contratos de backend
+------------------------
+
+    Las  fases  C1  a  C6  cubren  configuración, modelos, usuario, cuenta e
+identidad,  autenticación  y autorización. La contraseña es Argon2id. En los
+tests los parámetros son rápidos. En producción son los de OWASP.
+
+    La autorización es una decisión determinista de siete pasos. El
+historial  de  roles se revoca y no se borra. Un recurso ajeno responde 404,
+no  403,  para  no filtrar que existe. No hay un usuario SYSTEM que se salte
+las reglas.
+
+    Los tests de backend usan SQLite en memoria. No tocan una base real.
+
+2.4 Contratos entre motores
+---------------------------
+
+    Decisión  19.  Godot  no importa Python. Recibe un glTF y una tabla JSON
+generada  por  scripts/export_gameplay_data.py. El combate en GDScript tiene
+que  repetir,  golpe  a  golpe,  la  simulación  Python de los escenarios de
+referencia.
+
+    UPBGE  sí  ejecuta  el  módulo  Python  de combate, porque su runtime es
+Python.  En  modo  background,  UPBGE 0.50 no puede registrar componentes ni
+bricks  de lógica. Por eso la suite de UPBGE corre con ventana, y el humo de
+partida usa blenderplayer.exe.
+
+    glTF  guarda la cabeza del hueso como traslación del nodo. La cola viaja
+en  extras.ce_tail,  porque glTF no tiene cola. La conversión es (x, y, z) a
+(x, z, −y). La T-pose se hornea en las posiciones, no en rotaciones de nodo.
+
+2.5 Lo que está abierto
+-----------------------
+
+    Decisión  17.  Etiquetas izquierda y derecha frente al eje −Y. Hasta que
+el  dueño  del  proyecto elija, nadie invierte X por su cuenta. El contenido
+simétrico  no  cambia.  Un  golpe  de  la mano derecha puede quedar espejado
+respecto de una foto de referencia, aunque sea coherente dentro del motor.

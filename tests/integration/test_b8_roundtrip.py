@@ -1,11 +1,13 @@
 ﻿"""Tests de ida y vuelta exhaustivos para el Serializer."""
 
 import json
-import pytest
 from pathlib import Path
+
+import pytest
+
+from character_engine.domain.anatomy.osteology.builder import SkeletonBuilder
 from character_engine.loader import JsonLoader
 from character_engine.serialization import SkeletonSerializer
-from character_engine.domain.anatomy.osteology.builder import SkeletonBuilder
 
 
 class TestB8RoundTripComplete:

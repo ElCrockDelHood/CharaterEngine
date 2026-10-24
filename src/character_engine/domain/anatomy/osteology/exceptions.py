@@ -2,6 +2,7 @@
 
 from character_engine.exceptions.domain_error import DomainError
 
+
 class SkeletonError(DomainError):
     pass
 

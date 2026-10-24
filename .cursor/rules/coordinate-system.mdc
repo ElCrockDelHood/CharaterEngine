@@ -1,0 +1,39 @@
+---
+description: Canonical Z-up coordinate frame and per-engine conversion rules for exporters and runtimes
+globs: src/character_engine/export/**/*.py, src/character_engine/infrastructure/**/*.py, runtime/**/*, src/character_engine/domain/anatomy/coordinate_system.py, transform_json_to_zup.py
+alwaysApply: false
+---
+
+# Coordinate System
+
+Canonical frame (domain and JSON): **Z-up, right-handed, -Y forward (+Y is the back),
+metres, origin at foot midline on the ground.**
+
+**Left/right labelling (Decision 17, OPEN):** the data and `domain/anatomy/coordinate_system.py`
+put every `*_R` bone at **+X** ("+X = right"). Geometrically, facing −Y with Z up, the right side is
+`forward × up = −X`, so the labels are mirrored with respect to the stated forward axis (Blender's
+own convention is `.L` at +X). Do **not** flip X anywhere to "fix" this; keep the labels as they are,
+treat `*_L`/`*_R` as the data's names, and record any side-dependent assumption explicitly.
+Resolution requires an owner decision and a forensic pass (`docs/reorientation/DECISION_LOG.md` §17).
+
+Conversions happen only at the boundary, never inside the domain:
+
+| Target | Up | Forward of the canonical −Y | Conversion from canonical `(x, y, z)` |
+|--------|----|------------------------------|----------------------------------------|
+| glTF 2.0 / Godot 4 | +Y | **+Z** (glTF's nominal forward is −Z, so the model faces +Z; `CEArena` uses `look_at(..., use_model_front=true)`) | `(x, z, -y)` — implemented in `export/gltf.py` |
+| Blender / UPBGE | +Z | −Y | identity (same frame) |
+
+- glTF stores bone **heads** as node translations (local = head − parent head); tails
+  live in `extras.ce_tail` because glTF has no tail concept. `runtime/upbge` rebuilds tails
+  from extras; Godot only needs heads (`Skeleton3D` rests).
+- Distances/units: never scale to centimetres in exporters; Godot and Blender both use metres.
+- `inverseBindMatrices` = inverse of the global rest transform; no rotation is applied
+  to bones (rest = pure translation), so IBMs are translations only. This also holds for
+  `--pose tpose`: the T-pose is baked into head/tail positions (`domain/anatomy/pose/tpose.py`),
+  not into node rotations.
+- Ground check: lowest bone head within `0.05 m` of `y = 0` (Godot) / `z = 0` (Blender).
+
+```python
+# ✅ canonical → glTF
+def to_gltf(v): x, y, z = v; return (x, z, -y)
+```

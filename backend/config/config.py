@@ -7,12 +7,12 @@ This module provides configuration management with support for:
 - Configuration validation
 """
 
-import os
 import json
-from pathlib import Path
+import os
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any
 from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, Optional
 
 
 class Environment(Enum):
@@ -76,28 +76,28 @@ class Config:
     security: SecurityConfig = field(default_factory=SecurityConfig)
     rate_limit: RateLimitConfig = field(default_factory=RateLimitConfig)
     api: APIConfig = field(default_factory=APIConfig)
-    
+
     def __post_init__(self):
         """Validate configuration after initialization."""
         self._validate()
-    
+
     def _validate(self) -> None:
         """Validate configuration."""
         # Validate environment
         if not isinstance(self.environment, Environment):
             raise ValueError(f"Invalid environment: {self.environment}")
-        
+
         # Validate required secrets in production
         if self.environment == Environment.PRODUCTION:
             if not self.database.password:
                 raise ValueError("Database password must be set in production")
             if not self.security.secret_key:
                 raise ValueError("SECRET_KEY must be set in production")
-        
+
         # Validate port
         if not (1 <= self.api.port <= 65535):
             raise ValueError(f"Invalid port: {self.api.port}")
-        
+
         # Validate rate limits
         if self.rate_limit.registration_requests_per_minute < 1:
             raise ValueError("Registration rate limit must be at least 1")
@@ -107,10 +107,10 @@ class Config:
 
 class ConfigManager:
     """Configuration manager for loading and validating configuration."""
-    
+
     def __init__(self, config_dir: Optional[Path] = None):
         """Initialize configuration manager.
-        
+
         Args:
             config_dir: Configuration directory path
         """
@@ -118,9 +118,9 @@ class ConfigManager:
             config_dir = Path(__file__).parent / "config"
         self.config_dir = config_dir
         self.config_dir.mkdir(parents=True, exist_ok=True)
-        
+
         self._environment = self._detect_environment()
-    
+
     def _detect_environment(self) -> Environment:
         """Detect current environment from environment variable."""
         env_str = os.getenv("CHARACTER_ENGINE_ENV", "development")
@@ -128,83 +128,83 @@ class ConfigManager:
             return Environment(env_str.lower())
         except ValueError:
             return Environment.DEVELOPMENT
-    
+
     def load_config(self) -> Config:
         """Load configuration from files and environment variables.
-        
+
         Returns:
             Validated configuration object
         """
         # Load base configuration
         base_config = self._load_base_config()
-        
+
         # Load environment-specific configuration
         env_config = self._load_environment_config()
-        
+
         # Load secrets
         secrets = self._load_secrets()
-        
+
         # Merge configurations
         config = self._merge_configs(base_config, env_config, secrets)
-        
+
         return config
-    
+
     def _load_base_config(self) -> Dict[str, Any]:
         """Load base configuration file."""
         base_config_path = self.config_dir / "base.json"
-        
+
         if base_config_path.exists():
-            with open(base_config_path, 'r') as f:
+            with open(base_config_path) as f:
                 return json.load(f)
-        
+
         # Return default configuration if file doesn't exist
         return {}
-    
+
     def _load_environment_config(self) -> Dict[str, Any]:
         """Load environment-specific configuration."""
         env_config_path = self.config_dir / f"{self._environment.value}.json"
-        
+
         if env_config_path.exists():
-            with open(env_config_path, 'r') as f:
+            with open(env_config_path) as f:
                 return json.load(f)
-        
+
         return {}
-    
+
     def _load_secrets(self) -> Dict[str, str]:
         """Load secrets from environment variables."""
         secrets = {}
-        
+
         # Database password
         if db_password := os.getenv("DATABASE_PASSWORD"):
             secrets["database_password"] = db_password
-        
+
         # Secret key
         if secret_key := os.getenv("SECRET_KEY"):
             secrets["secret_key"] = secret_key
-        
+
         return secrets
-    
-    def _merge_configs(self, base_config: Dict[str, Any], 
+
+    def _merge_configs(self, base_config: Dict[str, Any],
                         env_config: Dict[str, Any],
                         secrets: Dict[str, str]) -> Config:
         """Merge configuration sources in priority order.
-        
+
         Priority: Environment > Base > Defaults > Secrets
         """
         merged = {}
-        
+
         # Start with base configuration
         merged.update(base_config)
-        
+
         # Override with environment configuration
         merged.update(env_config)
-        
+
         # Apply secrets
         if "database_password" in secrets:
             merged["database_password"] = secrets["database_password"]
         if "secret_key" in secrets:
             merged["secret_key"] = secrets["secret_key"]
-        
+
         # Create configuration objects
         config = Config(
             environment=self._environment,
@@ -240,16 +240,16 @@ class ConfigManager:
                 max_request_size=merged.get("max_request_size", 10 * 1024 * 1024)
             )
         )
-        
+
         return config
 
 
 def get_config(config_dir: Optional[Path] = None) -> Config:
     """Get configuration instance.
-    
+
     Args:
         config_dir: Configuration directory path
-        
+
     Returns:
         Validated configuration object
     """

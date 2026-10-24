@@ -1,7 +1,6 @@
 ﻿"""Resultado estructurado de una validación."""
 
 from dataclasses import dataclass, field
-from typing import Any
 
 
 @dataclass

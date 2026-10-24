@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Character Engine Skeleton Schema v1.0",
   "description": "Formato de intercambio para esqueletos anatómicos",

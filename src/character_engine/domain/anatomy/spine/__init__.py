@@ -1,16 +1,16 @@
 """Spine model package."""
 
 from .model import (
-    SpineRegion,
-    CurvatureType,
-    VertebralParameter,
     CurvatureParameter,
+    CurvatureType,
     SpineModel,
     SpineModelBuilder,
-    create_unknown_vertebra,
+    SpineRegion,
+    VertebralParameter,
+    create_measured_curvature,
     create_measured_vertebra,
     create_unknown_curvature,
-    create_measured_curvature
+    create_unknown_vertebra,
 )
 
 __all__ = [

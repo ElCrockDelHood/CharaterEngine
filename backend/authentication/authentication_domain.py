@@ -4,10 +4,10 @@ This module defines the domain layer for authentication, separate from
 the database persistence layer.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
 from enum import Enum
+from typing import Optional
 
 
 class CredentialType(str, Enum):
@@ -36,9 +36,9 @@ class AuthenticationResult(str, Enum):
 @dataclass(frozen=True)
 class Credential:
     """Credential domain entity.
-    
+
     Represents authentication credentials for an account.
-    
+
     Invariants:
     - credential_id is a valid UUID string
     - account_id is a valid UUID string
@@ -55,24 +55,24 @@ class Credential:
     created_at: datetime
     expires_at: Optional[datetime]
     invalidated_at: Optional[datetime]
-    
+
     def __post_init__(self):
         """Validate credential invariants."""
         if not self.credential_id or not isinstance(self.credential_id, str):
             raise ValueError("credential_id must be a non-empty string")
-        
+
         if not self.account_id or not isinstance(self.account_id, str):
             raise ValueError("account_id must be a non-empty string")
-        
+
         if not isinstance(self.credential_type, CredentialType):
             raise ValueError(f"credential_type must be CredentialType, got {type(self.credential_type)}")
-        
+
         if not self.credential_hash or not isinstance(self.credential_hash, str):
             raise ValueError("credential_hash must be a non-empty string")
-        
+
         if not isinstance(self.is_active, bool):
             raise ValueError("is_active must be boolean")
-        
+
         if not isinstance(self.created_at, datetime):
             raise ValueError("created_at must be datetime")
 
@@ -80,9 +80,9 @@ class Credential:
 @dataclass(frozen=True)
 class Session:
     """Session domain entity.
-    
+
     Represents an authenticated session for an account.
-    
+
     Invariants:
     - session_id is a valid UUID string
     - account_id is a valid UUID string
@@ -100,24 +100,24 @@ class Session:
     status: SessionStatus
     expires_at: datetime
     created_at: datetime
-    
+
     def __post_init__(self):
         """Validate session invariants."""
         if not self.session_id or not isinstance(self.session_id, str):
             raise ValueError("session_id must be a non-empty string")
-        
+
         if not self.account_id or not isinstance(self.account_id, str):
             raise ValueError("account_id must be a non-empty string")
-        
+
         if not self.token_hash or not isinstance(self.token_hash, str):
             raise ValueError("token_hash must be a non-empty string")
-        
+
         if not isinstance(self.status, SessionStatus):
             raise ValueError(f"status must be SessionStatus, got {type(self.status)}")
-        
+
         if not isinstance(self.expires_at, datetime):
             raise ValueError("expires_at must be datetime")
-        
+
         if not isinstance(self.created_at, datetime):
             raise ValueError("created_at must be datetime")
 
@@ -125,9 +125,9 @@ class Session:
 @dataclass
 class CreateCredentialRequest:
     """Credential creation request schema.
-    
+
     This schema defines the contract for credential creation.
-    
+
     Security:
     - credential_id is NOT accepted from client (server-generated)
     - credential_hash is NOT accepted from client (server-generated from password)
@@ -137,15 +137,15 @@ class CreateCredentialRequest:
     account_id: str
     credential_type: CredentialType = CredentialType.PASSWORD
     password: Optional[str] = None  # Plain text password (will be hashed)
-    
+
     def __post_init__(self):
         """Validate request invariants."""
         if not self.account_id or not isinstance(self.account_id, str):
             raise ValueError("account_id must be a non-empty string")
-        
+
         if not isinstance(self.credential_type, CredentialType):
             raise ValueError(f"credential_type must be CredentialType, got {type(self.credential_type)}")
-        
+
         if self.credential_type == CredentialType.PASSWORD and not self.password:
             raise ValueError("password is required for password credentials")
 
@@ -153,9 +153,9 @@ class CreateCredentialRequest:
 @dataclass
 class AuthenticateRequest:
     """Authentication request schema.
-    
+
     This schema defines the contract for authentication.
-    
+
     Security:
     - account_id is accepted (identifier)
     - password is accepted (plain text, will be hashed for verification)
@@ -166,12 +166,12 @@ class AuthenticateRequest:
     device_id: Optional[str] = None
     ip_address: Optional[str] = None
     user_agent: Optional[str] = None
-    
+
     def __post_init__(self):
         """Validate request invariants."""
         if not self.account_id or not isinstance(self.account_id, str):
             raise ValueError("account_id must be a non-empty string")
-        
+
         if not self.password or not isinstance(self.password, str):
             raise ValueError("password must be a non-empty string")
 
@@ -179,9 +179,9 @@ class AuthenticateRequest:
 @dataclass
 class AuthenticationResponse:
     """Authentication response schema.
-    
+
     This schema defines the contract for authentication response.
-    
+
     Security:
     - token is the plain text session token (returned only on success)
     - session_id is server-generated
@@ -198,7 +198,7 @@ class AuthenticationResponse:
 @dataclass(frozen=True)
 class CredentialDTO:
     """Credential data transfer object.
-    
+
     Safe representation of credential data for external systems.
     """
     credential_id: str
@@ -213,7 +213,7 @@ class CredentialDTO:
 @dataclass(frozen=True)
 class SessionDTO:
     """Session data transfer object.
-    
+
     Safe representation of session data for external systems.
     """
     session_id: str
@@ -228,7 +228,7 @@ class SessionDTO:
 
 class AuthenticationError(Exception):
     """Base exception for authentication-related errors."""
-    
+
     def __init__(self, message: str, error_code: str):
         self.message = message
         self.error_code = error_code
@@ -237,14 +237,14 @@ class AuthenticationError(Exception):
 
 class CredentialError(AuthenticationError):
     """Exception raised when credential operations fail."""
-    
+
     def __init__(self, message: str):
         super().__init__(message, error_code="CREDENTIAL_ERROR")
 
 
 class CredentialNotFoundError(AuthenticationError):
     """Exception raised when credential is not found."""
-    
+
     def __init__(self, message: str, credential_id: Optional[str] = None):
         self.credential_id = credential_id
         super().__init__(message, error_code="CREDENTIAL_NOT_FOUND_ERROR")
@@ -252,7 +252,7 @@ class CredentialNotFoundError(AuthenticationError):
 
 class AuthenticationFailedError(AuthenticationError):
     """Exception raised when authentication fails."""
-    
+
     def __init__(self, message: str, result: AuthenticationResult):
         self.result = result
         super().__init__(message, error_code="AUTHENTICATION_FAILED_ERROR")
@@ -260,14 +260,14 @@ class AuthenticationFailedError(AuthenticationError):
 
 class SessionError(AuthenticationError):
     """Exception raised when session operations fail."""
-    
+
     def __init__(self, message: str):
         super().__init__(message, error_code="SESSION_ERROR")
 
 
 class SessionNotFoundError(AuthenticationError):
     """Exception raised when session is not found."""
-    
+
     def __init__(self, message: str, session_id: Optional[str] = None):
         self.session_id = session_id
         super().__init__(message, error_code="SESSION_NOT_FOUND_ERROR")
@@ -275,13 +275,13 @@ class SessionNotFoundError(AuthenticationError):
 
 class SessionExpiredError(AuthenticationError):
     """Exception raised when session is expired."""
-    
+
     def __init__(self, message: str):
         super().__init__(message, error_code="SESSION_EXPIRED_ERROR")
 
 
 class SessionRevokedError(AuthenticationError):
     """Exception raised when session is revoked."""
-    
+
     def __init__(self, message: str):
         super().__init__(message, error_code="SESSION_REVOKED_ERROR")

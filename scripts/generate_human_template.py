@@ -4,6 +4,7 @@
 import json
 from pathlib import Path
 
+
 def generate_206_bones():
     bones = []
     containers = []

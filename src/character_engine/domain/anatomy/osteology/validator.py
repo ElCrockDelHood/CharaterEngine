@@ -1,16 +1,18 @@
 ﻿"""SkeletonValidator – 5 niveles de validación."""
 
 import math
-from typing import Mapping
-from uuid import UUID
+
 from ....validation.result import ValidationResult
 from ....validation.validator import Validator
-from .skeleton import Skeleton
-from .bone import Bone
 from .exceptions import (
-    CyclicHierarchyError, MissingRootError, MultipleRootsError,
-    InvalidParentError, InvalidGeometryError, InvalidChildError
+    CyclicHierarchyError,
+    InvalidChildError,
+    InvalidGeometryError,
+    InvalidParentError,
+    MissingRootError,
+    MultipleRootsError,
 )
+from .skeleton import Skeleton
 
 DOMAIN_TOLERANCE = 1e-6
 BLENDER_TOLERANCE = 1e-4

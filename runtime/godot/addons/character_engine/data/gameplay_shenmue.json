@@ -1,0 +1,2923 @@
+{
+  "fallback_bone": "STERNUM",
+  "frame_rate": 60,
+  "hitboxes_1p80": {
+    "CRANIUM": 0.1,
+    "FEMUR_L": 0.08,
+    "FEMUR_R": 0.08,
+    "HUMERUS_L": 0.06,
+    "HUMERUS_R": 0.06,
+    "LUMBAR_3": 0.11,
+    "MANDIBLE": 0.06,
+    "RADIUS_L": 0.045,
+    "RADIUS_R": 0.045,
+    "RIB_08_L": 0.09,
+    "RIB_08_R": 0.09,
+    "RIB_10_L": 0.09,
+    "RIB_10_R": 0.09,
+    "SACRUM": 0.1,
+    "SCAPULA_L": 0.08,
+    "SCAPULA_R": 0.08,
+    "STERNUM": 0.12,
+    "TEMPORAL_L": 0.06,
+    "TEMPORAL_R": 0.06,
+    "TIBIA_L": 0.05,
+    "TIBIA_R": 0.05
+  },
+  "knockdown_frames": 60,
+  "moves": {
+    "crescent_kick": {
+      "active": 4,
+      "cancel_into": [],
+      "command": [
+        "F",
+        "K"
+      ],
+      "contact_radius_m": 0.06,
+      "energy_j": 220.0,
+      "hitstun": 28,
+      "impacts": {
+        "CRANIUM": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": true,
+          "is_lethal": false,
+          "lethality": 0.018,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 2
+        },
+        "FEMUR_L": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.058,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "FEMUR_R": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.058,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "HUMERUS_L": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.038,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "HUMERUS_R": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.038,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "LUMBAR_3": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 9.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.016,
+          "provenance": "estimate",
+          "region": "abdomen",
+          "severity": 1
+        },
+        "MANDIBLE": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": true,
+          "is_lethal": false,
+          "lethality": 0.018,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 2
+        },
+        "RADIUS_L": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.024,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RADIUS_R": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.024,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RIB_08_L": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.033,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "RIB_08_R": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.033,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "RIB_10_L": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.033,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "RIB_10_R": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.033,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "SACRUM": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.049,
+          "provenance": "estimate",
+          "region": "pelvis",
+          "severity": 2
+        },
+        "SCAPULA_L": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.033,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "SCAPULA_R": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.033,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "STERNUM": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.033,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "TEMPORAL_L": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": true,
+          "is_lethal": false,
+          "lethality": 0.018,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 2
+        },
+        "TEMPORAL_R": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": true,
+          "is_lethal": false,
+          "lethality": 0.018,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 2
+        },
+        "TIBIA_L": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.023,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        },
+        "TIBIA_R": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 13.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.023,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        }
+      },
+      "kind": "kick",
+      "knockdown": true,
+      "label": "Crescent Kick",
+      "move_id": "crescent_kick",
+      "reach_m": 1.15,
+      "recovery": 20,
+      "startup": 12,
+      "striking_bone": "TIBIA_R",
+      "target_region_bone": "TEMPORAL_L"
+    },
+    "elbow_assault": {
+      "active": 4,
+      "cancel_into": [],
+      "command": [
+        "F",
+        "F",
+        "P"
+      ],
+      "contact_radius_m": 0.05,
+      "energy_j": 170.0,
+      "hitstun": 24,
+      "impacts": {
+        "CRANIUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 8.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "FEMUR_L": {
+          "bleeding_rate": 7.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.045,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "FEMUR_R": {
+          "bleeding_rate": 7.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.045,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "HUMERUS_L": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.03,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "HUMERUS_R": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.03,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "LUMBAR_3": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 8.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.012,
+          "provenance": "estimate",
+          "region": "abdomen",
+          "severity": 1
+        },
+        "MANDIBLE": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 8.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "RADIUS_L": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.018,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RADIUS_R": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.018,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RIB_08_L": {
+          "bleeding_rate": 7.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.026,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "RIB_08_R": {
+          "bleeding_rate": 7.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.026,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "RIB_10_L": {
+          "bleeding_rate": 7.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.026,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "RIB_10_R": {
+          "bleeding_rate": 7.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.026,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "SACRUM": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.038,
+          "provenance": "estimate",
+          "region": "pelvis",
+          "severity": 2
+        },
+        "SCAPULA_L": {
+          "bleeding_rate": 7.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.026,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "SCAPULA_R": {
+          "bleeding_rate": 7.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.026,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "STERNUM": {
+          "bleeding_rate": 7.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.026,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "TEMPORAL_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 8.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TEMPORAL_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 8.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TIBIA_L": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.018,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        },
+        "TIBIA_R": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 12.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.018,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        }
+      },
+      "kind": "punch",
+      "knockdown": false,
+      "label": "Elbow Assault",
+      "move_id": "elbow_assault",
+      "reach_m": 0.75,
+      "recovery": 16,
+      "startup": 8,
+      "striking_bone": "ULNA_R",
+      "target_region_bone": "STERNUM"
+    },
+    "front_kick": {
+      "active": 4,
+      "cancel_into": [
+        "crescent_kick"
+      ],
+      "command": [
+        "K"
+      ],
+      "contact_radius_m": 0.06,
+      "energy_j": 150.0,
+      "hitstun": 20,
+      "impacts": {
+        "CRANIUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.006,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "FEMUR_L": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.039,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "FEMUR_R": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.039,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "HUMERUS_L": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.026,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "HUMERUS_R": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.026,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "LUMBAR_3": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "abdomen",
+          "severity": 1
+        },
+        "MANDIBLE": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.006,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "RADIUS_L": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.016,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RADIUS_R": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.016,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RIB_08_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_08_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_10_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_10_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "SACRUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.017,
+          "provenance": "estimate",
+          "region": "pelvis",
+          "severity": 1
+        },
+        "SCAPULA_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "SCAPULA_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "STERNUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "TEMPORAL_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.006,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TEMPORAL_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.006,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TIBIA_L": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.016,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        },
+        "TIBIA_R": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.75,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.016,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        }
+      },
+      "kind": "kick",
+      "knockdown": false,
+      "label": "Front kick",
+      "move_id": "front_kick",
+      "reach_m": 1.1,
+      "recovery": 16,
+      "startup": 9,
+      "striking_bone": "METATARSAL_3_R",
+      "target_region_bone": "RIB_10_L"
+    },
+    "hook": {
+      "active": 3,
+      "cancel_into": [],
+      "command": [
+        "F",
+        "P"
+      ],
+      "contact_radius_m": 0.05,
+      "energy_j": 130.0,
+      "hitstun": 20,
+      "impacts": {
+        "CRANIUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "FEMUR_L": {
+          "bleeding_rate": 7.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.034,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "FEMUR_R": {
+          "bleeding_rate": 7.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.034,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "HUMERUS_L": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.023,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "HUMERUS_R": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.023,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "LUMBAR_3": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.009,
+          "provenance": "estimate",
+          "region": "abdomen",
+          "severity": 1
+        },
+        "MANDIBLE": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "RADIUS_L": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.014,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RADIUS_R": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.014,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RIB_08_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.01,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_08_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.01,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_10_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.01,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_10_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.01,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "SACRUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.014,
+          "provenance": "estimate",
+          "region": "pelvis",
+          "severity": 1
+        },
+        "SCAPULA_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.01,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "SCAPULA_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.01,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "STERNUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.01,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "TEMPORAL_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TEMPORAL_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TIBIA_L": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.013,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        },
+        "TIBIA_R": {
+          "bleeding_rate": 3.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.013,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        }
+      },
+      "kind": "punch",
+      "knockdown": false,
+      "label": "Pit Blow",
+      "move_id": "hook",
+      "reach_m": 0.8,
+      "recovery": 15,
+      "startup": 9,
+      "striking_bone": "PHALANX_PROXIMAL_3_R",
+      "target_region_bone": "RIB_08_L"
+    },
+    "jab": {
+      "active": 3,
+      "cancel_into": [
+        "straight",
+        "hook",
+        "elbow_assault"
+      ],
+      "command": [
+        "P"
+      ],
+      "contact_radius_m": 0.045,
+      "energy_j": 60.0,
+      "hitstun": 14,
+      "impacts": {
+        "CRANIUM": {
+          "bleeding_rate": 0.2,
+          "deepest_layer": "skin",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.002,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "FEMUR_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.008,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 1
+        },
+        "FEMUR_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.008,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 1
+        },
+        "HUMERUS_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 1
+        },
+        "HUMERUS_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 1
+        },
+        "LUMBAR_3": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.004,
+          "provenance": "estimate",
+          "region": "abdomen",
+          "severity": 1
+        },
+        "MANDIBLE": {
+          "bleeding_rate": 0.2,
+          "deepest_layer": "skin",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.002,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "RADIUS_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.003,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 1
+        },
+        "RADIUS_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.003,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 1
+        },
+        "RIB_08_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_08_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_10_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_10_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "SACRUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "pelvis",
+          "severity": 1
+        },
+        "SCAPULA_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "SCAPULA_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "STERNUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "TEMPORAL_L": {
+          "bleeding_rate": 0.2,
+          "deepest_layer": "skin",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.002,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TEMPORAL_R": {
+          "bleeding_rate": 0.2,
+          "deepest_layer": "skin",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.002,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TIBIA_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.003,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 1
+        },
+        "TIBIA_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 5.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.003,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 1
+        }
+      },
+      "kind": "punch",
+      "knockdown": false,
+      "label": "Straight punch",
+      "move_id": "jab",
+      "reach_m": 0.85,
+      "recovery": 9,
+      "startup": 5,
+      "striking_bone": "PHALANX_PROXIMAL_3_R",
+      "target_region_bone": "MANDIBLE"
+    },
+    "shoulder_throw": {
+      "active": 2,
+      "cancel_into": [],
+      "command": [
+        "F",
+        "T"
+      ],
+      "contact_radius_m": 0.1,
+      "energy_j": 260.0,
+      "hitstun": 40,
+      "impacts": {
+        "CRANIUM": {
+          "bleeding_rate": 5.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": true,
+          "is_lethal": false,
+          "lethality": 0.021,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 2
+        },
+        "FEMUR_L": {
+          "bleeding_rate": 12.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.068,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "FEMUR_R": {
+          "bleeding_rate": 12.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.068,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "HUMERUS_L": {
+          "bleeding_rate": 5.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.045,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "HUMERUS_R": {
+          "bleeding_rate": 5.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.045,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "LUMBAR_3": {
+          "bleeding_rate": 12.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.037,
+          "provenance": "estimate",
+          "region": "abdomen",
+          "severity": 2
+        },
+        "MANDIBLE": {
+          "bleeding_rate": 5.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": true,
+          "is_lethal": false,
+          "lethality": 0.021,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 2
+        },
+        "RADIUS_L": {
+          "bleeding_rate": 5.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.028,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RADIUS_R": {
+          "bleeding_rate": 5.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.028,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RIB_08_L": {
+          "bleeding_rate": 12.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.039,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "RIB_08_R": {
+          "bleeding_rate": 12.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.039,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "RIB_10_L": {
+          "bleeding_rate": 12.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.039,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "RIB_10_R": {
+          "bleeding_rate": 12.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.039,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "SACRUM": {
+          "bleeding_rate": 5.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.057,
+          "provenance": "estimate",
+          "region": "pelvis",
+          "severity": 2
+        },
+        "SCAPULA_L": {
+          "bleeding_rate": 12.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.039,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "SCAPULA_R": {
+          "bleeding_rate": 12.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.039,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "STERNUM": {
+          "bleeding_rate": 12.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.039,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 2
+        },
+        "TEMPORAL_L": {
+          "bleeding_rate": 5.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": true,
+          "is_lethal": false,
+          "lethality": 0.021,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 2
+        },
+        "TEMPORAL_R": {
+          "bleeding_rate": 5.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": true,
+          "is_lethal": false,
+          "lethality": 0.021,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 2
+        },
+        "TIBIA_L": {
+          "bleeding_rate": 5.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.027,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        },
+        "TIBIA_R": {
+          "bleeding_rate": 5.0,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 14.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.027,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        }
+      },
+      "kind": "throw",
+      "knockdown": true,
+      "label": "Vortex Throw",
+      "move_id": "shoulder_throw",
+      "reach_m": 0.6,
+      "recovery": 30,
+      "startup": 8,
+      "striking_bone": "HUMERUS_R",
+      "target_region_bone": "SCAPULA_L"
+    },
+    "straight": {
+      "active": 3,
+      "cancel_into": [
+        "hook"
+      ],
+      "command": [
+        "P",
+        "P"
+      ],
+      "contact_radius_m": 0.045,
+      "energy_j": 90.0,
+      "hitstun": 16,
+      "impacts": {
+        "CRANIUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.004,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "FEMUR_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.012,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 1
+        },
+        "FEMUR_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.012,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 1
+        },
+        "HUMERUS_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.008,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 1
+        },
+        "HUMERUS_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.008,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 1
+        },
+        "LUMBAR_3": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.006,
+          "provenance": "estimate",
+          "region": "abdomen",
+          "severity": 1
+        },
+        "MANDIBLE": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.004,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "RADIUS_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 1
+        },
+        "RADIUS_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 1
+        },
+        "RIB_08_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_08_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_10_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_10_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "SACRUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.01,
+          "provenance": "estimate",
+          "region": "pelvis",
+          "severity": 1
+        },
+        "SCAPULA_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "SCAPULA_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "STERNUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.007,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "TEMPORAL_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.004,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TEMPORAL_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.004,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TIBIA_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 1
+        },
+        "TIBIA_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 6.25,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.005,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 1
+        }
+      },
+      "kind": "punch",
+      "knockdown": false,
+      "label": "Twin Blades",
+      "move_id": "straight",
+      "reach_m": 0.9,
+      "recovery": 12,
+      "startup": 7,
+      "striking_bone": "PHALANX_PROXIMAL_3_L",
+      "target_region_bone": "STERNUM"
+    },
+    "sweep": {
+      "active": 4,
+      "cancel_into": [],
+      "command": [
+        "D",
+        "K"
+      ],
+      "contact_radius_m": 0.06,
+      "energy_j": 140.0,
+      "hitstun": 22,
+      "impacts": {
+        "CRANIUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.006,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "FEMUR_L": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.037,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "FEMUR_R": {
+          "bleeding_rate": 8.5,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.037,
+          "provenance": "estimate",
+          "region": "thigh",
+          "severity": 2
+        },
+        "HUMERUS_L": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.024,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "HUMERUS_R": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.024,
+          "provenance": "estimate",
+          "region": "upper_arm",
+          "severity": 2
+        },
+        "LUMBAR_3": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.01,
+          "provenance": "estimate",
+          "region": "abdomen",
+          "severity": 1
+        },
+        "MANDIBLE": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.006,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "RADIUS_L": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.015,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RADIUS_R": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.015,
+          "provenance": "estimate",
+          "region": "forearm",
+          "severity": 2
+        },
+        "RIB_08_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_08_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_10_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "RIB_10_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "SACRUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.015,
+          "provenance": "estimate",
+          "region": "pelvis",
+          "severity": 1
+        },
+        "SCAPULA_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "SCAPULA_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "STERNUM": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.011,
+          "provenance": "estimate",
+          "region": "thorax",
+          "severity": 1
+        },
+        "TEMPORAL_L": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.006,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TEMPORAL_R": {
+          "bleeding_rate": 0.0,
+          "deepest_layer": "fat",
+          "fracture": false,
+          "health_cost": 7.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.006,
+          "provenance": "estimate",
+          "region": "head",
+          "severity": 1
+        },
+        "TIBIA_L": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.014,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        },
+        "TIBIA_R": {
+          "bleeding_rate": 3.4,
+          "deepest_layer": "muscle",
+          "fracture": false,
+          "health_cost": 11.5,
+          "incapacitating": false,
+          "is_lethal": false,
+          "lethality": 0.014,
+          "provenance": "estimate",
+          "region": "leg",
+          "severity": 2
+        }
+      },
+      "kind": "kick",
+      "knockdown": true,
+      "label": "Trample / sweep",
+      "move_id": "sweep",
+      "reach_m": 1.0,
+      "recovery": 22,
+      "startup": 10,
+      "striking_bone": "TIBIA_R",
+      "target_region_bone": "TIBIA_L"
+    }
+  },
+  "notes": "Generated by character_engine.domain.gameplay.runtime_table; do not edit by hand. Energy values are gameplay tuning constants; wound assessments are ESTIMATE provenance.",
+  "reference_scenarios": [
+    {
+      "expected": {
+        "events": [
+          {
+            "detail": "jab",
+            "fighter": "player",
+            "frame": 0,
+            "kind": "move_start"
+          },
+          {
+            "detail": "jab->MANDIBLE sev1",
+            "fighter": "opponent",
+            "frame": 6,
+            "kind": "hit"
+          }
+        ],
+        "fighters": {
+          "opponent": {
+            "health": 94.5,
+            "state": "idle",
+            "wounds": 1
+          },
+          "player": {
+            "health": 100.0,
+            "state": "idle",
+            "wounds": 0
+          }
+        },
+        "frames": 40,
+        "hits": [
+          {
+            "attacker": "player",
+            "blocked": false,
+            "bone_hit": "MANDIBLE",
+            "defender": "opponent",
+            "frame": 6,
+            "knockdown": false,
+            "move_id": "jab",
+            "severity": 1
+          }
+        ],
+        "scenario_id": "jab_lands"
+      },
+      "spec": {
+        "distance_m": 0.7,
+        "frames": 40,
+        "scenario_id": "jab_lands",
+        "script": {
+          "1": {
+            "player": {
+              "punch": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "events": [
+          {
+            "detail": "jab",
+            "fighter": "player",
+            "frame": 0,
+            "kind": "move_start"
+          },
+          {
+            "detail": "jab",
+            "fighter": "opponent",
+            "frame": 6,
+            "kind": "blocked"
+          }
+        ],
+        "fighters": {
+          "opponent": {
+            "health": 100.0,
+            "state": "idle",
+            "wounds": 0
+          },
+          "player": {
+            "health": 100.0,
+            "state": "idle",
+            "wounds": 0
+          }
+        },
+        "frames": 40,
+        "hits": [
+          {
+            "attacker": "player",
+            "blocked": true,
+            "bone_hit": "MANDIBLE",
+            "defender": "opponent",
+            "frame": 6,
+            "knockdown": false,
+            "move_id": "jab",
+            "severity": 0
+          }
+        ],
+        "scenario_id": "guard_blocks_jab"
+      },
+      "spec": {
+        "distance_m": 0.7,
+        "frames": 40,
+        "scenario_id": "guard_blocks_jab",
+        "script": {
+          "1": {
+            "opponent": {
+              "guard": true
+            },
+            "player": {
+              "punch": true
+            }
+          },
+          "2": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "3": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "4": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "5": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "6": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "7": {
+            "opponent": {
+              "guard": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "events": [
+          {
+            "detail": "shoulder_throw",
+            "fighter": "player",
+            "frame": 1,
+            "kind": "move_start"
+          },
+          {
+            "detail": "shoulder_throw->SCAPULA_L sev2",
+            "fighter": "opponent",
+            "frame": 10,
+            "kind": "hit"
+          },
+          {
+            "detail": "shoulder_throw",
+            "fighter": "opponent",
+            "frame": 10,
+            "kind": "knockdown"
+          }
+        ],
+        "fighters": {
+          "opponent": {
+            "health": 85.5,
+            "state": "knockdown",
+            "wounds": 1
+          },
+          "player": {
+            "health": 100.0,
+            "state": "idle",
+            "wounds": 0
+          }
+        },
+        "frames": 60,
+        "hits": [
+          {
+            "attacker": "player",
+            "blocked": false,
+            "bone_hit": "SCAPULA_L",
+            "defender": "opponent",
+            "frame": 10,
+            "knockdown": true,
+            "move_id": "shoulder_throw",
+            "severity": 2
+          }
+        ],
+        "scenario_id": "throw_beats_guard"
+      },
+      "spec": {
+        "distance_m": 0.5,
+        "frames": 60,
+        "scenario_id": "throw_beats_guard",
+        "script": {
+          "1": {
+            "opponent": {
+              "guard": true
+            },
+            "player": {
+              "direction": "F"
+            }
+          },
+          "10": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "11": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "12": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "13": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "14": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "2": {
+            "opponent": {
+              "guard": true
+            },
+            "player": {
+              "throw": true
+            }
+          },
+          "3": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "4": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "5": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "6": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "7": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "8": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "9": {
+            "opponent": {
+              "guard": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "events": [
+          {
+            "detail": "elbow_assault",
+            "fighter": "player",
+            "frame": 4,
+            "kind": "move_start"
+          },
+          {
+            "detail": "elbow_assault->STERNUM sev2",
+            "fighter": "opponent",
+            "frame": 13,
+            "kind": "hit"
+          }
+        ],
+        "fighters": {
+          "opponent": {
+            "health": 87.75,
+            "state": "idle",
+            "wounds": 1
+          },
+          "player": {
+            "health": 100.0,
+            "state": "idle",
+            "wounds": 0
+          }
+        },
+        "frames": 60,
+        "hits": [
+          {
+            "attacker": "player",
+            "blocked": false,
+            "bone_hit": "STERNUM",
+            "defender": "opponent",
+            "frame": 13,
+            "knockdown": false,
+            "move_id": "elbow_assault",
+            "severity": 2
+          }
+        ],
+        "scenario_id": "elbow_command"
+      },
+      "spec": {
+        "distance_m": 0.6,
+        "frames": 60,
+        "scenario_id": "elbow_command",
+        "script": {
+          "1": {
+            "player": {
+              "direction": "F"
+            }
+          },
+          "3": {
+            "player": {
+              "direction": "F"
+            }
+          },
+          "5": {
+            "player": {
+              "punch": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "events": [
+          {
+            "detail": "crescent_kick",
+            "fighter": "player",
+            "frame": 1,
+            "kind": "move_start"
+          },
+          {
+            "detail": "crescent_kick->TEMPORAL_L sev2",
+            "fighter": "opponent",
+            "frame": 14,
+            "kind": "hit"
+          },
+          {
+            "detail": "crescent_kick",
+            "fighter": "opponent",
+            "frame": 14,
+            "kind": "knockdown"
+          }
+        ],
+        "fighters": {
+          "opponent": {
+            "health": 86.5,
+            "state": "idle",
+            "wounds": 1
+          },
+          "player": {
+            "health": 100.0,
+            "state": "idle",
+            "wounds": 0
+          }
+        },
+        "frames": 120,
+        "hits": [
+          {
+            "attacker": "player",
+            "blocked": false,
+            "bone_hit": "TEMPORAL_L",
+            "defender": "opponent",
+            "frame": 14,
+            "knockdown": true,
+            "move_id": "crescent_kick",
+            "severity": 2
+          }
+        ],
+        "scenario_id": "crescent_knockdown"
+      },
+      "spec": {
+        "distance_m": 1.0,
+        "frames": 120,
+        "scenario_id": "crescent_knockdown",
+        "script": {
+          "1": {
+            "player": {
+              "direction": "F"
+            }
+          },
+          "2": {
+            "player": {
+              "kick": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "events": [
+          {
+            "detail": "jab",
+            "fighter": "player",
+            "frame": 0,
+            "kind": "move_start"
+          },
+          {
+            "detail": "jab",
+            "fighter": "player",
+            "frame": 6,
+            "kind": "whiff"
+          }
+        ],
+        "fighters": {
+          "opponent": {
+            "health": 100.0,
+            "state": "idle",
+            "wounds": 0
+          },
+          "player": {
+            "health": 100.0,
+            "state": "idle",
+            "wounds": 0
+          }
+        },
+        "frames": 30,
+        "hits": [],
+        "scenario_id": "whiff_out_of_reach"
+      },
+      "spec": {
+        "distance_m": 2.5,
+        "frames": 30,
+        "scenario_id": "whiff_out_of_reach",
+        "script": {
+          "1": {
+            "player": {
+              "punch": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "expected": {
+        "events": [
+          {
+            "detail": "jab",
+            "fighter": "player",
+            "frame": 0,
+            "kind": "move_start"
+          },
+          {
+            "detail": "jab->MANDIBLE sev1",
+            "fighter": "opponent",
+            "frame": 6,
+            "kind": "hit"
+          },
+          {
+            "detail": "front_kick",
+            "fighter": "player",
+            "frame": 20,
+            "kind": "move_start"
+          },
+          {
+            "detail": "front_kick->RIB_10_L sev1",
+            "fighter": "opponent",
+            "frame": 30,
+            "kind": "hit"
+          },
+          {
+            "detail": "front_kick",
+            "fighter": "player",
+            "frame": 60,
+            "kind": "move_start"
+          },
+          {
+            "detail": "front_kick->RIB_10_L sev1",
+            "fighter": "opponent",
+            "frame": 70,
+            "kind": "hit"
+          },
+          {
+            "detail": "front_kick",
+            "fighter": "player",
+            "frame": 100,
+            "kind": "move_start"
+          },
+          {
+            "detail": "front_kick->RIB_10_L sev1",
+            "fighter": "opponent",
+            "frame": 110,
+            "kind": "hit"
+          },
+          {
+            "detail": "front_kick",
+            "fighter": "player",
+            "frame": 140,
+            "kind": "move_start"
+          },
+          {
+            "detail": "front_kick->RIB_10_L sev1",
+            "fighter": "opponent",
+            "frame": 150,
+            "kind": "hit"
+          }
+        ],
+        "fighters": {
+          "opponent": {
+            "health": 63.5,
+            "state": "idle",
+            "wounds": 5
+          },
+          "player": {
+            "health": 100.0,
+            "state": "idle",
+            "wounds": 0
+          }
+        },
+        "frames": 180,
+        "hits": [
+          {
+            "attacker": "player",
+            "blocked": false,
+            "bone_hit": "MANDIBLE",
+            "defender": "opponent",
+            "frame": 6,
+            "knockdown": false,
+            "move_id": "jab",
+            "severity": 1
+          },
+          {
+            "attacker": "player",
+            "blocked": false,
+            "bone_hit": "RIB_10_L",
+            "defender": "opponent",
+            "frame": 30,
+            "knockdown": false,
+            "move_id": "front_kick",
+            "severity": 1
+          },
+          {
+            "attacker": "player",
+            "blocked": false,
+            "bone_hit": "RIB_10_L",
+            "defender": "opponent",
+            "frame": 70,
+            "knockdown": false,
+            "move_id": "front_kick",
+            "severity": 1
+          },
+          {
+            "attacker": "player",
+            "blocked": false,
+            "bone_hit": "RIB_10_L",
+            "defender": "opponent",
+            "frame": 110,
+            "knockdown": false,
+            "move_id": "front_kick",
+            "severity": 1
+          },
+          {
+            "attacker": "player",
+            "blocked": false,
+            "bone_hit": "RIB_10_L",
+            "defender": "opponent",
+            "frame": 150,
+            "knockdown": false,
+            "move_id": "front_kick",
+            "severity": 1
+          }
+        ],
+        "scenario_id": "autoplay_180"
+      },
+      "spec": {
+        "distance_m": 0.7,
+        "frames": 180,
+        "scenario_id": "autoplay_180",
+        "script": {
+          "1": {
+            "player": {
+              "kick": false,
+              "punch": true
+            }
+          },
+          "101": {
+            "player": {
+              "kick": true,
+              "punch": false
+            }
+          },
+          "121": {
+            "player": {
+              "kick": false,
+              "punch": true
+            }
+          },
+          "141": {
+            "player": {
+              "kick": true,
+              "punch": false
+            }
+          },
+          "161": {
+            "player": {
+              "kick": false,
+              "punch": true
+            }
+          },
+          "21": {
+            "player": {
+              "kick": true,
+              "punch": false
+            }
+          },
+          "41": {
+            "player": {
+              "kick": false,
+              "punch": true
+            }
+          },
+          "61": {
+            "player": {
+              "kick": true,
+              "punch": false
+            }
+          },
+          "81": {
+            "player": {
+              "kick": false,
+              "punch": true
+            }
+          }
+        }
+      }
+    }
+  ],
+  "schema": "ce-gameplay/1",
+  "styles": {
+    "beat_em_up": {
+      "frame_rate": 60,
+      "guard_absorbs": [],
+      "input_buffer_frames": 6,
+      "label": "Side-scroll beat 'em up (planned)",
+      "lock_on": false,
+      "moves": []
+    },
+    "shenmue": {
+      "frame_rate": 60,
+      "guard_absorbs": [
+        "punch",
+        "kick"
+      ],
+      "input_buffer_frames": 12,
+      "label": "Shenmue-style free battle",
+      "lock_on": true,
+      "moves": [
+        "jab",
+        "straight",
+        "hook",
+        "elbow_assault",
+        "front_kick",
+        "crescent_kick",
+        "sweep",
+        "shoulder_throw"
+      ]
+    },
+    "souls_like": {
+      "frame_rate": 60,
+      "guard_absorbs": [
+        "punch",
+        "kick"
+      ],
+      "input_buffer_frames": 8,
+      "label": "Stamina / lock-on melee (planned)",
+      "lock_on": true,
+      "moves": []
+    }
+  }
+}

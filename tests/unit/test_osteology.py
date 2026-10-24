@@ -1,13 +1,15 @@
 ﻿"""Tests completos del dominio osteológico (grupos A–E)."""
 
-import pytest
 from uuid import uuid4
+
+import pytest
+
 from character_engine.domain.anatomy.osteology.bone import Bone
-from character_engine.domain.anatomy.osteology.skeleton import Skeleton
 from character_engine.domain.anatomy.osteology.builder import SkeletonBuilder
-from character_engine.domain.anatomy.osteology.validator import SkeletonValidator
-from character_engine.domain.anatomy.osteology.exceptions import *
+from character_engine.domain.anatomy.osteology.exceptions import CyclicHierarchyError, InvalidParentError
+from character_engine.domain.anatomy.osteology.skeleton import Skeleton
 from character_engine.math.algebra.vector3 import Vector3
+
 
 # ====================================================================
 # GRUPO A – Bone

@@ -1,0 +1,34 @@
+---
+description: Backend contracts (C1-C6) for config, DB models, authentication and RBAC authorization
+globs: backend/**/*.py, tests/backend/**/*.py
+alwaysApply: false
+---
+
+# Backend Contracts
+
+Contracts live in `docs/audit/C*_*.md` and `docs/reorientation/PHASE_C_EVIDENCE.md`.
+Read the matching contract before changing semantics.
+
+## Data layer
+- SQLAlchemy 2 style (`select()`, `session.scalars()`, `func.count()`); never `.count()` on a `Result`.
+- UUIDs as `str` primary keys; timestamps `datetime.now(timezone.utc)` — never `utcnow()`.
+- Foreign keys reference **ids**, never labels (`UserRole.role_id -> roles.id`).
+- Soft history over deletion: `UserRole` rows are revoked (`revoked_at`), never deleted.
+  Uniqueness is the partial index `uq_user_role_active` (`revoked_at IS NULL`).
+
+## Authentication (C5)
+- Argon2id via `PasswordService`; params come from `Environment` (`_TEST_PARAMS` in tests).
+- Sessions/tokens are opaque; store only hashes. Domain `Session` ≠ SQLAlchemy `Session`
+  (`from sqlalchemy.orm import Session as DbSession`).
+
+## Authorization (C6)
+- `AuthorizationService.decide()` is the only decision path: 7 deterministic steps,
+  first denial wins, result is an `AuthorizationDecision` with `DenialReason`.
+- Not-found and forbidden on owned resources both map to **404** (IDOR protection).
+- No SYSTEM/global bypass; admins get permissions through roles like everyone else.
+- Last admin cannot be revoked (`LastAdminError`).
+- Every decision may be audited via `record_audit()`; never log secrets or password hashes.
+
+## Tests
+- Use `tests/backend/conftest.py` fixtures (in-memory SQLite, `StaticPool`).
+- Config tests must `monkeypatch.delenv("CHARACTER_ENGINE_ENV")` when asserting defaults.

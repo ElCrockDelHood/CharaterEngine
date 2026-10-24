@@ -1,25 +1,24 @@
 """Database models and connection management for CHARACTER ENGINE backend."""
 
+from .connection import DatabaseManager, get_db_manager, get_session
 from .models import (
-    Base,
-    User,
     Account,
-    Identity,
-    Session,
+    AccountStatus,
+    AuditEntry,
+    Base,
+    Credential,
     Event,
+    IdempotencyRecord,
+    Identity,
     RewardDefinition,
     RewardGrant,
-    AuditEntry,
-    IdempotencyRecord,
-    UserStatus,
-    AccountStatus,
+    RewardGrantStatus,
+    Role,
+    Session,
     SessionStatus,
-    RewardGrantStatus
-)
-from .connection import (
-    DatabaseManager,
-    get_db_manager,
-    get_session
+    User,
+    UserRole,
+    UserStatus,
 )
 
 __all__ = [
@@ -34,6 +33,9 @@ __all__ = [
     "RewardGrant",
     "AuditEntry",
     "IdempotencyRecord",
+    "Credential",
+    "Role",
+    "UserRole",
     # Enums
     "UserStatus",
     "AccountStatus",

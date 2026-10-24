@@ -1,0 +1,106 @@
+﻿1. INFORME DE LA EXPERIENCIA
+============================
+
+1.1 De qué se trata el proyecto
+-------------------------------
+
+    Character  Engine  es  un  sistema  canónico  de  anatomía humana que no
+depende  de  un programa de animación concreto. El núcleo es Python puro: un
+esqueleto  de 206 huesos más dos contenedores (ROOT_SKELETON y CRANIUM), con
+jerarquía,  nombres  únicos y un marco de coordenadas fijo. Blender, UPBGE y
+Godot  consumen  ese  núcleo  por archivos neutros (JSON y glTF). Ninguno de
+esos motores es la fuente de verdad.
+
+    La  regla  que ordena el trabajo es no inventar un número anatómico para
+que  el  sistema  cierre.  Si  falta  la  fuente,  el  valor  queda UNKNOWN,
+PLACEHOLDER o ESTIMATE, y el archivo dice cuál de los tres es.
+
+1.2 Cómo empezó
+---------------
+
+    El  repositorio llegó con el dominio anatómico y las fases de backend C1
+a  C5  ya  escritos,  y  con  una deuda concreta: unos trece tests fallaban,
+cuatro  archivos  de  backend  ni  siquiera  importaban,  el entorno virtual
+apuntaba  a  otra  máquina, y el esqueleto canónico medía 3,08 m. Esa altura
+estaba auditada en A02 como placeholder geométrico, no como estatura humana.
+
+    La  primera pasada dejó la suite en verde, separó el código de motor del
+dominio,  agregó  el exportador glTF, los validadores de Godot y de UPBGE, y
+la  guía para agentes. En la máquina de trabajo (Lenovo T470s, gráfica Intel
+HD  620)  se  instalaron Godot 4.7.2 estable y UPBGE 0.50, basado en Blender
+5.0.1. Esas versiones son las que esa placa puede correr: renderer
+Compatibility en Godot y OpenGL en UPBGE.
+
+1.3 La estatura de 1,80 m
+-------------------------
+
+    Después  se  pidió  un  humano  base  de 1,80 m con datos publicados. La
+estatura  es  un  parámetro  de proyecto (USER_INPUT), no una estadística de
+población.  Las  alturas  de articulación salen de Drillis y Contini (1966),
+tal como las reproduce Winter (2009), figura 4.1. El script
+scripts/retarget_stature.py  aplica  tres  mapas  lineales  por tramos (eje,
+brazo  y  pierna) y un escalado uniforme en X e Y hasta el ancho biacromial,
+0,259 de la estatura. La topología no cambió: siguen siendo 206 huesos y 208
+nodos.
+
+    Los ratios publicados son PROVEN. Las alturas en metros de los landmarks
+son  DERIVED.  El  resto  de  las  posiciones,  interpoladas desde el layout
+anterior, es ESTIMATE. Eso está escrito en
+docs/audit/A07_STATURE_RETARGET_180.md  y  en  la  decisión 15. El esqueleto
+previo a ese retarget quedó congelado en human_adult_206_backup.json y no se
+edita.
+
+1.4 Cuerpo, tejidos, rig y motores
+----------------------------------
+
+    El  pedido  siguiente  fue  osteometría,  malla  de esqueleto, tendones,
+músculos,  piel,  heridas de distinta profundidad y letalidad, pose en T, un
+addon  de  Blender,  paneles  de  Godot  y  de UPBGE, y un combate al estilo
+Shenmue para poder probar.
+
+    Eso  se  construyó  como  capas con procedencia distinta. Las longitudes
+máximas  de  fémur,  tibia,  fíbula, húmero, radio y cúbito salen de Trotter
+(1970)  para  varones  blancos  y  de  Trotter  y Gleser (1952) para mujeres
+blancas  y mujeres negras de la colección Terry. Esas longitudes dimensionan
+la  malla  del  hueso.  No  mueven los centros articulares. Los diámetros de
+diáfisis  siguen  siendo  ESTIMATE.  La  forma  de  la  malla proxy (cono de
+diáfisis y epífisis) también es ESTIMATE. Una malla esculpida o escaneada se
+puede  dejar  en assets/anatomy/meshes/ con el nombre canónico del hueso; el
+addon la encaja si existe. No se inventó un cuerpo fotográfico.
+
+    Hay  veinticinco  músculos  definidos  de a pares, cincuenta piezas, por
+hueso  de  origen  e  inserción.  La unión es anatomía de atlas (PROVEN como
+topología).  La geometría del huso es PLACEHOLDER. La piel es una envolvente
+de  radios  por  región,  ESTIMATE. El modelo de herida recorre piel, grasa,
+músculo,  tendón,  hueso y vísceras, asigna una severidad de 1 a 6 al estilo
+AIS  y una letalidad de juego. La decisión 18 lo fija como capa de gameplay,
+no como modelo clínico.
+
+    La  pose de reposo para rig y juego es la T: brazos horizontales, palmas
+hacia abajo, rotación rígida del subárbol del brazo. Las longitudes de hueso
+no cambian. Hombres, mujeres, niños y ancianos reutilizan el mismo esqueleto
+humano con distinta estatura. Las proporciones de niño siguen siendo las del
+adulto  y están marcadas PLACEHOLDER. Caballo y perro aparecen en el panel y
+se  niegan  a  generar  huesos:  no  hay  osteología publicada cargada en el
+repositorio.
+
+    El  addon de Blender (vista 3D, barra lateral, pestaña Character Engine)
+genera  el  cuerpo,  los tejidos, el rig IK/FK, importa BVH y lo retargetea,
+aplica  heridas y exporta glTF. Godot tiene un dock con el mismo contrato de
+gameplay.  UPBGE embebe el combate en Python. El estilo jugable hoy es el de
+Shenmue:  ocho  movimientos, 60 Hz. souls_like y beat_em_up están listados y
+deshabilitados, sin movimientos.
+
+1.5 Qué queda abierto a propósito
+---------------------------------
+
+    La  decisión 17 está abierta. Con el personaje mirando hacia −Y, el lado
+derecho  geométrico  es  −X,  pero los huesos marcados _R están en +X. No se
+invirtió  el  esqueleto  en  silencio,  porque  eso toca cada landmark, cada
+músculo y cada golpe.
+
+    Siguen  sin  fuente:  diámetros  reales de diáfisis, centros articulares
+ISB,  proporciones  infantiles, osteología de animales, mallas de superficie
+esculpidas, y un modelo clínico de trauma. El backend de eventos,
+recompensas  y  la  capa  HTTP tampoco están cerrados; el inventario está en
+docs/reorientation/OPEN_GAPS.md.

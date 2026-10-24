@@ -1,7 +1,9 @@
 ﻿"""Tests de integración del Pipeline."""
 
-import pytest
 from pathlib import Path
+
+import pytest
+
 from character_engine.pipeline import Pipeline
 
 

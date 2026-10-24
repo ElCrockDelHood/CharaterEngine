@@ -1,0 +1,65 @@
+﻿6. RESULTADOS MEDIDOS
+=====================
+
+    Las  cifras  de abajo son las de la pasada completa de motores del 29 de
+septiembre de 2026, más la actualización de osteometría femenina que dejó la
+suite de Python en 628 pruebas. No son una proyección.
+
+6.1 Python
+----------
+
+    pytest sobre tests/: 628 passed, 0 failed, alrededor de 10 segundos, con
+Argon2  de  test  y  SQLite en memoria. Antes de los arreglos de backend, la
+misma zona tardaba del orden de unos minutos y había fallos de importación.
+
+    ruff  check  sobre  el  árbol: sin hallazgos en los archivos tocados. El
+guardia  de  arquitectura  (scripts/lint.py)  confirma  que  bpy no entra al
+dominio, al exportador, a math ni al backend.
+
+    El desglose de la suite estable anterior al bloque de tejidos era 282 de
+anatomía,  unidad  e  integración,  23  de  export glTF y 261 de backend. El
+bloque A08 sumó osteometría, T-pose, plantillas, tejidos, trauma, rig, mapas
+de animación y la tabla de gameplay.
+
+6.2 Motores, en orden
+---------------------
+
+    Blender,  headless,  con  el ejecutable de UPBGE 0.50 (Blender 5.0.1; no
+hay un Blender de fundación instalado aparte): 23 passed, 0 failed, unos 5 a
+7  segundos. Cubre el alta del addon, varón de 1,80 m en T, mujer de 1,65 m,
+niño  de  1,10 m, rechazo del caballo, tejidos, fémur proxy en 0,4983 m, rig
+IK/FK,  cambio  de  IK  a  FK,  mocap BVH sintético, tres heridas, escena de
+runtime y el dominio de combate dentro del Python del motor.
+
+    UPBGE  0.50  con  ventana  de  800  por 600, y después blenderplayer: 23
+passed,  0  failed,  unos  50 a 60 segundos. El humo de partida recorrió 180
+fotogramas,  7 golpes, vida del oponente 61,5, y el proceso salió con código
+0. UPBGE se cerró antes de abrir Godot.
+
+    Godot  4.7.2  headless:  21  passed, 0 failed, alrededor de 1 segundo de
+runner después del import. El GLB anatómico y el GLB en T tienen 208 huesos.
+La  altura medida en cabezas de hueso es 1,761 m: el vértex de 1,800 m es la
+cola  del  frontal,  no  una  cabeza de hueso. El suelo queda a 0,0055 m. El
+húmero  izquierdo queda horizontal y el brazo se abre en X. Al pedir 1,65 m,
+la altura medida pasa a 1,614 m, en la proporción 1,65/1,80. Los combates de
+referencia coinciden con Python. La arena de 240 fotogramas registra golpes,
+baja la vida y cuelga marcadores de herida.
+
+6.3 Instalación local usada en esas pruebas
+-------------------------------------------
+
+    Godot   C:\Tools\Godot\Godot_v4.7.2-stable_win64_console.exe
+    UPBGE   C:\Tools\UPBGE\upbge-0.50-windows-x64\blender.exe
+    Addon   %APPDATA%\Blender Foundation\Blender\5.0\scripts\addons\character_engine_blender
+    Zip     builds\character_engine_blender.zip
+
+    UPBGE  0.50  imprime,  al  arrancar  en  background,  un error del addon
+empaquetado  bge_netlogic  (la  clase  LogicNodeTree ya está registrada). No
+cambia el código de salida de las pruebas de Character Engine.
+
+6.4 Lo que estas cifras no cubren
+---------------------------------
+
+    No  hay  una  prueba  de render con Cycles, ni de tela, ni de un clip de
+mocap comercial, ni de un modelo infantil con proporciones propias, ni de un
+animal. Esas piezas no tienen dato cerrado, y la suite no finge que sí.

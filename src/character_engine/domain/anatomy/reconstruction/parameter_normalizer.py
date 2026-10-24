@@ -5,11 +5,11 @@ applying gender-specific, age-specific, and height-based adjustments.
 """
 
 from dataclasses import dataclass
-from typing import Dict, Any, Optional
 from enum import Enum
+from typing import Any, Dict, Optional
 
-from ..reference import ReferenceDataManager, ReferenceData, Confidence
-from ..parameters import SubjectProfile, AnatomicalParameter, ParameterType
+from ..parameters import AnatomicalParameter, ParameterType, SubjectProfile
+from ..reference import Confidence, ReferenceDataManager
 
 
 class NormalizationMethod(Enum):
@@ -24,7 +24,7 @@ class NormalizationMethod(Enum):
 @dataclass
 class NormalizedParameter:
     """Normalized anatomical parameter with provenance."""
-    
+
     name: str
     value: float
     unit: str
@@ -38,49 +38,49 @@ class NormalizedParameter:
 
 class ParameterNormalizer:
     """Normalizes anatomical parameters based on reference data."""
-    
+
     def __init__(self, reference_manager: ReferenceDataManager):
         """Initialize parameter normalizer.
-        
+
         Args:
             reference_manager: Reference data manager
         """
         self.reference_manager = reference_manager
         self.cache: Dict[str, NormalizedParameter] = {}
-    
+
     def normalize_profile(self, profile: SubjectProfile) -> Dict[str, NormalizedParameter]:
         """Normalize all parameters in a subject profile.
-        
+
         Args:
             profile: Subject profile with raw parameters
-            
+
         Returns:
             Dictionary of normalized parameters by name
         """
         normalized = {}
-        
+
         # Normalize global parameters
         normalized.update(self._normalize_global_parameters(profile))
-        
+
         # Normalize body proportions
         normalized.update(self._normalize_body_proportions(profile))
-        
+
         # Normalize joint positions
         normalized.update(self._normalize_joint_positions(profile))
-        
+
         return normalized
-    
+
     def _normalize_global_parameters(self, profile: SubjectProfile) -> Dict[str, NormalizedParameter]:
         """Normalize global subject parameters.
-        
+
         Args:
             profile: Subject profile
-            
+
         Returns:
             Dictionary of normalized global parameters
         """
         normalized = {}
-        
+
         # Height - keep as-is if provided, otherwise use reference
         if profile.height is not None:
             height = profile.height
@@ -97,7 +97,7 @@ class ParameterNormalizer:
                 height = 1.75
                 method = NormalizationMethod.DIRECT
                 provenance = "DEFAULT"
-        
+
         normalized['height'] = NormalizedParameter(
             name='height',
             value=height,
@@ -107,7 +107,7 @@ class ParameterNormalizer:
             normalization_method=method,
             metadata={'source': 'global_normalization'}
         )
-        
+
         # Normalize weight if provided
         if profile.weight is not None:
             normalized['weight'] = NormalizedParameter(
@@ -119,29 +119,29 @@ class ParameterNormalizer:
                 normalization_method=NormalizationMethod.DIRECT,
                 metadata={'source': 'global_normalization'}
             )
-        
+
         # Apply gender adjustments if gender is specified
         if profile.gender is not None:
             normalized.update(self._apply_gender_adjustments(profile.gender, normalized))
-        
+
         # Apply age adjustments if age is specified
         if profile.age is not None:
             normalized.update(self._apply_age_adjustments(profile.age, normalized))
-        
+
         return normalized
-    
+
     def _normalize_body_proportions(self, profile: SubjectProfile) -> Dict[str, NormalizedParameter]:
         """Normalize body proportion parameters.
-        
+
         Args:
             profile: Subject profile
-            
+
         Returns:
             Dictionary of normalized proportion parameters
         """
         normalized = {}
         height = self._get_height_value(profile)
-        
+
         # Standard proportions to normalize
         proportions = [
             'head_height_ratio',
@@ -154,15 +154,15 @@ class ParameterNormalizer:
             'lower_leg_ratio',
             'foot_ratio'
         ]
-        
+
         for prop_name in proportions:
             try:
                 ref_data = self.reference_manager.get_anthropometric_parameter(prop_name)
                 ratio = ref_data.value
-                
+
                 # Calculate absolute value from height
                 absolute_value = height * ratio
-                
+
                 normalized[prop_name] = NormalizedParameter(
                     name=prop_name,
                     value=absolute_value,
@@ -180,21 +180,21 @@ class ParameterNormalizer:
             except ValueError:
                 # Skip if parameter not found
                 continue
-        
+
         return normalized
-    
+
     def _normalize_joint_positions(self, profile: SubjectProfile) -> Dict[str, NormalizedParameter]:
         """Normalize joint position parameters.
-        
+
         Args:
             profile: Subject profile
-            
+
         Returns:
             Dictionary of normalized joint position parameters
         """
         normalized = {}
         height = self._get_height_value(profile)
-        
+
         # Joint height ratios
         joint_ratios = [
             'shoulder_joint_height_ratio',
@@ -204,15 +204,15 @@ class ParameterNormalizer:
             'knee_joint_height_ratio',
             'ankle_joint_height_ratio'
         ]
-        
+
         for ratio_name in joint_ratios:
             try:
                 ref_data = self.reference_manager.get_anthropometric_parameter(ratio_name)
                 ratio = ref_data.value
-                
+
                 # Calculate absolute height from ratio
                 absolute_height = height * ratio
-                
+
                 normalized[ratio_name] = NormalizedParameter(
                     name=ratio_name,
                     value=absolute_height,
@@ -230,33 +230,33 @@ class ParameterNormalizer:
             except ValueError:
                 # Skip if parameter not found
                 continue
-        
+
         return normalized
-    
-    def _apply_gender_adjustments(self, gender: str, 
+
+    def _apply_gender_adjustments(self, gender: str,
                                    normalized: Dict[str, NormalizedParameter]) -> Dict[str, NormalizedParameter]:
         """Apply gender-specific adjustments to normalized parameters.
-        
+
         Args:
             gender: Gender (e.g., 'male', 'female')
             normalized: Already normalized parameters
-            
+
         Returns:
             Dictionary of gender-adjusted parameters
         """
         adjusted = {}
-        
+
         # Gender-specific adjustments to apply
         gender_adjustments = [
             'shoulder_to_hip_ratio',
             'head_to_body_ratio'
         ]
-        
+
         for adj_name in gender_adjustments:
             try:
                 ref_data = self.reference_manager.get_gender_adjustment(gender, adj_name)
                 adjustment_factor = ref_data.value
-                
+
                 # Apply adjustment to relevant parameters
                 if adj_name == 'shoulder_to_hip_ratio':
                     # Adjust shoulder width relative to hip width
@@ -278,7 +278,7 @@ class ParameterNormalizer:
                                 'source': 'gender_adjustment'
                             }
                         )
-                
+
                 elif adj_name == 'head_to_body_ratio':
                     # Adjust head height
                     if 'head_height_ratio' in normalized:
@@ -302,25 +302,25 @@ class ParameterNormalizer:
             except ValueError:
                 # Skip if adjustment not found
                 continue
-        
+
         return adjusted
-    
+
     def _apply_age_adjustments(self, age: int,
                               normalized: Dict[str, NormalizedParameter]) -> Dict[str, NormalizedParameter]:
         """Apply age-related adjustments to normalized parameters.
-        
+
         Args:
             age: Subject age in years
             normalized: Already normalized parameters
-            
+
         Returns:
             Dictionary of age-adjusted parameters
         """
         adjusted = {}
-        
+
         # Simple age-based adjustments (placeholder logic)
         # In production, this would use age-specific reference data
-        
+
         if age > 60:
             # Elderly: slight height reduction, increased kyphosis
             if 'height' in normalized:
@@ -343,35 +343,35 @@ class ParameterNormalizer:
                         'source': 'age_adjustment'
                     }
                 )
-        
+
         return adjusted
-    
+
     def _get_height_value(self, profile: SubjectProfile) -> float:
         """Get height value from profile or reference.
-        
+
         Args:
             profile: Subject profile
-            
+
         Returns:
             Height in meters
         """
         if profile.height is not None:
             return profile.height
-        
+
         try:
             height_ref = self.reference_manager.get_anthropometric_parameter('height')
             return height_ref.value
         except ValueError:
             return 1.75  # Default fallback
-    
+
     def normalize_parameter(self, parameter: AnatomicalParameter,
                           profile: SubjectProfile) -> NormalizedParameter:
         """Normalize a single anatomical parameter.
-        
+
         Args:
             parameter: Anatomical parameter to normalize
             profile: Subject profile for context
-            
+
         Returns:
             Normalized parameter
         """
@@ -379,7 +379,7 @@ class ParameterNormalizer:
         cache_key = f"{parameter.name}_{profile.gender}_{profile.age}"
         if cache_key in self.cache:
             return self.cache[cache_key]
-        
+
         # Normalize based on parameter type
         if parameter.parameter_type == ParameterType.RATIO:
             # Ratio parameters use height-based normalization
@@ -393,16 +393,16 @@ class ParameterNormalizer:
             value = parameter.value
             method = NormalizationMethod.DIRECT
             unit = parameter.unit
-        
+
         # Extract provenance from metadata or use default
         provenance = parameter.metadata.get('provenance', 'UNKNOWN')
-        
+
         # Convert confidence string to enum if needed
         if isinstance(parameter.confidence, str):
             confidence = Confidence(parameter.confidence.upper())
         else:
             confidence = parameter.confidence
-        
+
         normalized = NormalizedParameter(
             name=parameter.name,
             value=value,
@@ -413,8 +413,8 @@ class ParameterNormalizer:
             original_value=parameter.value,
             metadata={'parameter': parameter.metadata}
         )
-        
+
         # Cache result
         self.cache[cache_key] = normalized
-        
+
         return normalized

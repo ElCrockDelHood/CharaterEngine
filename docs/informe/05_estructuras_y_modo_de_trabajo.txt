@@ -1,0 +1,76 @@
+﻿5. ESTRUCTURAS Y MODALIDAD DE TRABAJO
+=====================================
+
+5.1 Tres mundos
+---------------
+
+    El  núcleo  canónico vive en src/character_engine. Ahí están el dominio,
+los  datos,  el  cargador,  el  exportador  glTF y los esquemas. No sabe que
+existe una ventana.
+
+    La  producción vive en Blender y en el modo de autor de UPBGE: esculpir,
+apariencia,  rig de controles, limpieza de mocap, render. El código bpy está
+en src/character_engine/infrastructure/blender, incluido el addon.
+
+    El  runtime  vive  en Godot y en el modo de juego de UPBGE: gameplay, IK
+procedural, simulación, grabación. Godot está en runtime/godot. El
+componente de UPBGE está en runtime/upbge.
+
+    Entre estos mundos solo circulan archivos. El núcleo no llama a un motor
+en  caliente.  El  runtime  no  escribe  un .blend. El rig de controles (IK,
+polos, widgets) no se exporta. Se exportan los huesos de deformación, que se
+llaman igual que en el JSON.
+
+5.2 Mapa corto del repositorio
+------------------------------
+
+    src/character_engine/domain/anatomy/     osteología, pose, osteometría
+    src/character_engine/domain/tissue/      capas y músculos
+    src/character_engine/domain/trauma/      heridas
+    src/character_engine/domain/character/   plantillas de cuerpo
+    src/character_engine/domain/rigging/     definición IK/FK
+    src/character_engine/domain/animation/   mapas de huesos de mocap
+    src/character_engine/domain/gameplay/    combate
+    src/character_engine/data/anatomy/       human_adult_206.json y references/
+    src/character_engine/export/gltf.py      glTF 2.0, biblioteca estándar
+    backend/                                 C1–C6, FastAPI y SQLAlchemy
+    runtime/godot/                           validador, addon, arena
+    runtime/upbge/                           importación del GLB y combate
+    runtime/blender/                         prueba headless del addon
+    docs/audit/                              auditorías A02 a A08
+    docs/reorientation/DECISION_LOG.md       decisiones
+    scripts/                                 tests, export, install, motores
+
+5.3 Cómo se trabaja
+-------------------
+
+    Un cambio de número anatómico exige una cita o una etiqueta honesta, una
+línea  en  el  decision  log  si  altera un contrato, y un test que falle si
+alguien  lo pisa. El esqueleto vivo es el de 1,80 m. El de 3,08 m queda solo
+como copia congelada de la auditoría anterior.
+
+    Antes de dar por cerrado un cambio de código se corre python
+scripts/test.py. Antes de dar por cerrado un cambio de motor se corre python
+scripts/engine_tests.py:  primero  Blender,  se  cierra  el proceso, después
+UPBGE,  se  cierra  el  proceso,  y  al  final Godot. Los informes quedan en
+builds/tests/ y no se versionan.
+
+    El  entorno  de  Python  del  proyecto  está  fuera  del repositorio, en
+.ce-venv,  al  lado de la carpeta del proyecto. CHARACTER_ENGINE_ENV=test lo
+fija tests/conftest.py. No se versiona un virtualenv.
+
+    Quien  toque  el  repo,  persona o agente, lee AGENTS.md y las reglas de
+.cursor/rules: pureza del dominio, procedencia anatómica, sistema de
+coordenadas, seguridad del backend y tests.
+
+5.4 Plantillas de personaje
+---------------------------
+
+    human_male_adult: 1,80 m, proporciones PROVEN, pose T.
+human_female_adult:  1,65 m por decisión de proyecto; los ratios de segmento
+siguen  siendo  los  masculinos  (ESTIMATE)  y  la  malla  ósea usa la serie
+femenina  blanca. human_child_5y: 1,10 m. human_child_10y: 1,38 m. Ambos con
+proporciones de adulto marcadas PLACEHOLDER. human_male_elderly_75y:
+estatura  derivada  de  la  corrección  de  edad.  horse_adult  y dog_adult:
+visibles, available = false, y build_character_bones lanza
+NotImplementedError.

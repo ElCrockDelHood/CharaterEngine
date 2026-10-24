@@ -6,9 +6,9 @@ UNKNOWN, and NOT_EVALUATED states.
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import Optional, Dict, Any, List
 from datetime import date
+from enum import Enum
+from typing import Dict, List, Optional
 
 
 class AnatomicalValidationStatus(Enum):
@@ -23,7 +23,7 @@ class AnatomicalValidationStatus(Enum):
 @dataclass(frozen=True)
 class AnatomicalValidationResult:
     """Result of an anatomical validation check.
-    
+
     Attributes:
         test_id: Identifier for the validation test
         test_name: Human-readable test name
@@ -37,7 +37,7 @@ class AnatomicalValidationResult:
         notes: Additional context
         validated_at: Timestamp of validation
     """
-    
+
     test_id: str
     test_name: str
     status: AnatomicalValidationStatus
@@ -49,23 +49,23 @@ class AnatomicalValidationResult:
     recommendation: str = ""
     notes: str = ""
     validated_at: date = field(default_factory=date.today)
-    
+
     def passed(self) -> bool:
         """Check if validation passed."""
         return self.status == AnatomicalValidationStatus.PASS
-    
+
     def failed(self) -> bool:
         """Check if validation failed."""
         return self.status == AnatomicalValidationStatus.FAIL
-    
+
     def has_warning(self) -> bool:
         """Check if validation has warnings."""
         return self.status == AnatomicalValidationStatus.WARNING
-    
+
     def is_unknown(self) -> bool:
         """Check if validation result is unknown."""
         return self.status == AnatomicalValidationStatus.UNKNOWN
-    
+
     def is_not_evaluated(self) -> bool:
         """Check if validation was not evaluated."""
         return self.status == AnatomicalValidationStatus.NOT_EVALUATED
@@ -74,7 +74,7 @@ class AnatomicalValidationResult:
 @dataclass(frozen=True)
 class AnatomicalValidationReport:
     """Complete anatomical validation report.
-    
+
     Attributes:
         report_id: Unique identifier for the report
         skeleton_id: Identifier of skeleton being validated
@@ -89,7 +89,7 @@ class AnatomicalValidationReport:
         overall_status: Overall validation status
         notes: Additional context
     """
-    
+
     report_id: str
     skeleton_id: str
     validation_date: date
@@ -102,26 +102,26 @@ class AnatomicalValidationReport:
     not_evaluated_tests: int
     overall_status: AnatomicalValidationStatus
     notes: str = ""
-    
+
     def get_pass_rate(self) -> float:
         """Calculate pass rate (excluding unknown/not evaluated)."""
         evaluable_tests = self.total_tests - self.unknown_tests - self.not_evaluated_tests
         if evaluable_tests == 0:
             return 0.0
         return self.passed_tests / evaluable_tests
-    
+
     def get_result(self, test_id: str) -> Optional[AnatomicalValidationResult]:
         """Get result for a specific test."""
         return self.results.get(test_id)
-    
+
     def get_failed_tests(self) -> List[AnatomicalValidationResult]:
         """Get all failed test results."""
         return [r for r in self.results.values() if r.failed()]
-    
+
     def get_warning_tests(self) -> List[AnatomicalValidationResult]:
         """Get all warning test results."""
         return [r for r in self.results.values() if r.has_warning()]
-    
+
     def get_unknown_tests(self) -> List[AnatomicalValidationResult]:
         """Get all unknown test results."""
         return [r for r in self.results.values() if r.is_unknown()]
@@ -129,24 +129,24 @@ class AnatomicalValidationReport:
 
 class AnatomicalValidationReportBuilder:
     """Builder for creating anatomical validation reports."""
-    
+
     def __init__(self, report_id: str, skeleton_id: str):
         self.report_id = report_id
         self.skeleton_id = skeleton_id
         self.validation_date = date.today()
         self.results: Dict[str, AnatomicalValidationResult] = {}
         self.notes = ""
-    
+
     def add_result(self, result: AnatomicalValidationResult) -> "AnatomicalValidationReportBuilder":
         """Add a validation result."""
         self.results[result.test_id] = result
         return self
-    
+
     def set_notes(self, notes: str) -> "AnatomicalValidationReportBuilder":
         """Set report notes."""
         self.notes = notes
         return self
-    
+
     def build(self) -> AnatomicalValidationReport:
         """Build the validation report."""
         total_tests = len(self.results)
@@ -155,7 +155,7 @@ class AnatomicalValidationReportBuilder:
         warning_tests = sum(1 for r in self.results.values() if r.has_warning())
         unknown_tests = sum(1 for r in self.results.values() if r.is_unknown())
         not_evaluated_tests = sum(1 for r in self.results.values() if r.is_not_evaluated())
-        
+
         # Determine overall status
         if failed_tests > 0:
             overall_status = AnatomicalValidationStatus.FAIL
@@ -165,7 +165,7 @@ class AnatomicalValidationReportBuilder:
             overall_status = AnatomicalValidationStatus.UNKNOWN
         else:
             overall_status = AnatomicalValidationStatus.PASS
-        
+
         return AnatomicalValidationReport(
             report_id=self.report_id,
             skeleton_id=self.skeleton_id,
@@ -182,7 +182,7 @@ class AnatomicalValidationReportBuilder:
         )
 
 
-def create_pass_result(test_id: str, test_name: str, 
+def create_pass_result(test_id: str, test_name: str,
                        expected_value: str, actual_value: str) -> AnatomicalValidationResult:
     """Create a passing validation result."""
     return AnatomicalValidationResult(

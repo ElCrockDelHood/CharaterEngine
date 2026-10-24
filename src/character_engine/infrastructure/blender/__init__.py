@@ -2,29 +2,29 @@
 
 from .importer import BlenderImporter
 from .inspector import (
-    inspect_scene,
+    compare_with_canonical,
+    diagnose,
     inspect_armature,
     inspect_bone,
     inspect_hierarchy,
-    compare_with_canonical,
-    diagnose,
-)
-from .visual_inspector import (
-    report,
-    describe_object,
-    describe_bone,
-    find_orphan_bones,
-    inspect_mesh,
+    inspect_scene,
 )
 from .state_auditor import (
-    status,
-    status_json,
+    ce,
     diff,
+    errors,
     snapshot,
     snapshot_json,
-    errors,
+    status,
+    status_json,
     warnings,
-    ce,
+)
+from .visual_inspector import (
+    describe_bone,
+    describe_object,
+    find_orphan_bones,
+    inspect_mesh,
+    report,
 )
 
 __all__ = [

@@ -1,16 +1,22 @@
 ﻿"""Skeleton – aggregate mutable con atomicidad y conteo anatómico."""
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Set, Any, Mapping
-from types import MappingProxyType
-from uuid import UUID, uuid4
 from datetime import datetime
+from types import MappingProxyType
+from typing import Any, Dict, List, Mapping, Optional, Set
+from uuid import UUID, uuid4
+
 from .bone import Bone
 from .exceptions import (
-    BoneNotFoundError, BoneAlreadyExistsError, CyclicHierarchyError,
-    MissingRootError, MultipleRootsError, InvalidParentError,
-    InvalidChildError, InvalidGeometryError
+    BoneAlreadyExistsError,
+    BoneNotFoundError,
+    CyclicHierarchyError,
+    InvalidChildError,
+    InvalidGeometryError,
+    InvalidParentError,
+    MissingRootError,
 )
+
 
 @dataclass
 class Skeleton:
@@ -154,7 +160,6 @@ class Skeleton:
         if bone_id not in self._bones:
             raise BoneNotFoundError(f"Hueso {bone_id} no encontrado")
 
-        bone_to_remove = self._bones[bone_id]
         descendants = self.get_all_descendants(bone_id)
 
         if not cascade and descendants:

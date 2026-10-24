@@ -8,7 +8,7 @@ Write-Host "  STATE AUDITOR R1.3" -ForegroundColor Cyan
 Write-Host "============================================================" -ForegroundColor Cyan
 Write-Host ""
 
-$blenderPath = "C:\DEV\Tools\Blender\blender.exe"
+$blenderPath = "C:\Tools\UPBGE\upbge-0.50-windows-x64\blender.exe"
 if (-not (Test-Path $blenderPath)) {
     Write-Host "❌ Blender no encontrado en: $blenderPath" -ForegroundColor Red
     Write-Host "Por favor, actualiza la ruta en el script." -ForegroundColor Yellow

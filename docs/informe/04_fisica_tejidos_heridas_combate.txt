@@ -1,0 +1,104 @@
+﻿4. FÍSICA DE JUEGO: TEJIDOS, HERIDAS Y COMBATE
+==============================================
+
+    Esta  sección  describe la física que el código calcula. No es un modelo
+de  elementos finitos ni un tratado clínico. La decisión 18 obliga a dejarlo
+escrito así.
+
+4.1 Capas
+---------
+
+    Cada  región  del cuerpo (cabeza, cuello, tórax, abdomen, pelvis, brazo,
+antebrazo,  mano,  muslo,  pierna,  pie) tiene un perfil de espesores: piel,
+grasa, músculo, tendón, hueso y, donde corresponde, vísceras. Esos espesores
+son  órdenes  de  magnitud  (ESTIMATE), pensados para que una profundidad en
+milímetros sepa qué capa atraviesa.
+
+    El addon construye, en este orden, la malla de huesos, los tendones, los
+vientres  musculares  y  la  envolvente  de  piel. Los huesos largos usan la
+longitud  de  Trotter  centrada  en  el  segmento articular, con un radio de
+diáfisis  estimado  y epífisis más anchas. El resto de los huesos es un cono
+fino  a lo largo de cabeza y cola. Si existe assets/anatomy/meshes/FEMUR.glb
+(u otro nombre canónico, sin _L ni _R), esa malla reemplaza al proxy y queda
+marcada USER_INPUT.
+
+    Cada  músculo  es  un  segmento desde el hueso de origen, a una fracción
+cabeza-cola,  hasta  el  hueso  de  inserción. Esa fracción es ESTIMATE. Los
+extremos  son  tendón  (una fracción de la longitud; el valor por defecto es
+0,15)  y  el  centro  es vientre. El catálogo tiene 25 entradas bilaterales:
+deltoides, pectoral mayor, dorsal ancho, trapecio, bíceps, tríceps,
+braquial, braquiorradial, flexores y extensores de antebrazo, recto
+abdominal,  oblicuo,  erectores, esternocleidomastoideo, glúteos, iliopsoas,
+cuádriceps, isquiotibiales, aductores, gastrocnemio, sóleo y tibial
+anterior,  entre  otros.  Los  músculos  pequeños  y  profundos  no están, a
+propósito.
+
+4.2 Herida
+----------
+
+    Una  herida  es  un  dato: hueso canónico más cercano, tipo, profundidad
+desde  la  piel,  ancho  y,  si  se conoce, energía en joules. Los tipos son
+abrasión,  laceración,  incisión,  puñalada, disparo, contusión, quemadura y
+amputación.
+
+    El  evaluador  recorre  el  perfil  de  la región y lista las capas cuya
+profundidad  acumulada  es menor o igual que la profundidad de la herida. La
+capa  más profunda fija una severidad base. El tipo de herida la multiplica.
+La  región  tiene  un tope: una mano no llega a la severidad de un tórax. La
+escala  va  de  1  (menor)  a 6 (máxima), en la forma del Abbreviated Injury
+Scale, sin ser el AIS clínico.
+
+    La  letalidad  es  un  puntaje  entre  0  y  1:  peso  de  la región por
+profundidad y por tipo. Cabeza, cuello y tórax pesan más que mano y pie. Hay
+también  una  tasa  de  sangrado  en  unidades  arbitrarias por segundo, una
+bandera  de  fractura  y  otra  de incapacitación. Un impacto contundente se
+convierte  en  herida  con  una  energía de referencia de 400 J. Por debajo,
+contusión.  Cerca  o  por encima, puede marcar fractura y riesgo. Esos 400 J
+son una constante de juego, no una medición de laboratorio.
+
+    En  Blender  la  herida  se aplica con un clic sobre la malla o sobre un
+hueso  nombrado.  El  panel  muestra  región,  capas atravesadas, severidad,
+letalidad  y  sangrado.  En Godot el mismo dictamen se cuelga del hueso como
+marcador de color.
+
+4.3 Combate a 60 Hz, estilo Shenmue
+-----------------------------------
+
+    El combate es una máquina de estados por fotogramas, a 60 Hz,
+independiente  del motor. Los estados son idle, movimiento, startup, active,
+recovery, guardia, hitstun, derribo, agarrado y KO.
+
+    Cada  movimiento  tiene  comando,  fotogramas  de  arranque, actividad y
+recuperación,  energía,  radio de contacto, hueso que pega, hueso que recibe
+por  defecto,  alcance y si derriba. Los ocho movimientos son: jab, Straight
+punch  (P);  straight,  Twin  Blades  (P  P);  hook,  Pit Blow (adelante P);
+elbow_assault,  Elbow  Assault  (adelante  adelante  P);  front_kick, patada
+frontal  (K);  crescent_kick,  Crescent  Kick  (adelante  K); sweep, barrido
+(abajo  K);  shoulder_throw,  Vortex  Throw (adelante T). La guardia absorbe
+puños  y patadas, no agarres. El buffer de entrada es de 12 fotogramas y hay
+lock-on.
+
+    Las  energías  de  esos golpes (60 J el jab, 90 J Twin Blades, 130 J Pit
+Blow, 170 J Elbow Assault, 150 J la patada frontal, 220 J Crescent Kick, 140
+J  el  barrido,  260  J  Vortex  Throw)  son  constantes  de  ajuste. No son
+mediciones biomecánicas. El comentario del código lo dice en la misma tabla.
+
+    Cuando  un  golpe  conecta,  no  resta  solo  puntos  de vida. Genera un
+HitEvent  con el hueso canónico, la energía y el dictamen de herida. La vida
+es  una  lectura de ese dictamen. Godot porta la máquina y tiene que repetir
+los  escenarios  de  referencia con los mismos golpes y la misma vida. UPBGE
+llama al módulo Python directamente.
+
+    souls_like  y  beat_em_up existen como nombres en la tabla, con la lista
+de  movimientos  vacía.  El  panel  los  muestra  como  previstos  y no deja
+elegirlos para una arena.
+
+4.4 Respiración
+---------------
+
+    En  el rig de Blender, un control de respiración desplaza el esternón y,
+en menor medida, las costillas. En Godot, CEBreathing es un
+SkeletonModifier3D que hace el mismo desplazamiento sobre STERNUM. La prueba
+headless  midió un movimiento del orden de unos milímetros entre fotogramas:
+suficiente  para  ver  que el modificador corre, y pequeño para no romper la
+pose.

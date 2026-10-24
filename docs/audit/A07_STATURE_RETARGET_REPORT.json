@@ -1,0 +1,107 @@
+{
+  "source_id": "DRILLIS_CONTINI_1966",
+  "stature_m": 1.8,
+  "ratios": {
+    "vertex": 1.0,
+    "chin": 0.87,
+    "shoulder": 0.818,
+    "elbow": 0.63,
+    "hip": 0.53,
+    "wrist": 0.485,
+    "fingertip": 0.377,
+    "knee": 0.285,
+    "ankle": 0.039,
+    "ground": 0.0,
+    "shoulder_breadth": 0.259
+  },
+  "xy_scale": 0.666,
+  "regions": {
+    "axial": [
+      "hip",
+      "shoulder",
+      "chin",
+      "vertex"
+    ],
+    "arm": [
+      "fingertip",
+      "wrist",
+      "elbow",
+      "shoulder"
+    ],
+    "leg": [
+      "ground",
+      "ankle",
+      "knee",
+      "hip"
+    ]
+  },
+  "landmarks": {
+    "vertex": {
+      "before_m": 3.08,
+      "target_m": 1.8,
+      "after_m": 1.8,
+      "provenance": "DERIVED"
+    },
+    "chin": {
+      "before_m": 2.73,
+      "target_m": 1.566,
+      "after_m": 1.566,
+      "provenance": "DERIVED"
+    },
+    "shoulder": {
+      "before_m": 2.08,
+      "target_m": 1.4724,
+      "after_m": 1.4724,
+      "provenance": "DERIVED"
+    },
+    "elbow": {
+      "before_m": 1.705,
+      "target_m": 1.134,
+      "after_m": 1.1353,
+      "provenance": "DERIVED"
+    },
+    "hip": {
+      "before_m": 1.28,
+      "target_m": 0.954,
+      "after_m": 0.954,
+      "provenance": "DERIVED"
+    },
+    "wrist": {
+      "before_m": 1.38,
+      "target_m": 0.873,
+      "after_m": 0.873,
+      "provenance": "DERIVED"
+    },
+    "fingertip": {
+      "before_m": 0.9,
+      "target_m": 0.6786,
+      "after_m": 0.6786,
+      "provenance": "DERIVED"
+    },
+    "knee": {
+      "before_m": 0.805,
+      "target_m": 0.513,
+      "after_m": 0.5116,
+      "provenance": "DERIVED"
+    },
+    "ankle": {
+      "before_m": 0.38,
+      "target_m": 0.0702,
+      "after_m": 0.0702,
+      "provenance": "DERIVED"
+    },
+    "ground": {
+      "before_m": 0.0,
+      "target_m": 0.0,
+      "after_m": 0.0,
+      "provenance": "DERIVED"
+    },
+    "shoulder_breadth": {
+      "before_m": 0.7,
+      "target_m": 0.4662,
+      "after_m": 0.4662,
+      "provenance": "DERIVED"
+    }
+  },
+  "provenance_note": "Landmark ratios PROVEN (Drillis & Contini 1966 via Winter 2009 Fig. 4.1); absolute landmark heights DERIVED for H=stature; every other bone position ESTIMATE (piecewise-linear interpolation of the previous placeholder layout); XY scale ESTIMATE."
+}

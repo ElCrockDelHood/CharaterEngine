@@ -1,11 +1,12 @@
 ﻿"""Importador de DTO a Blender con asignación de padres en dos pasos."""
 
-from typing import Any, Optional
 from pathlib import Path
+from typing import Any, Optional
+
+from ...domain.anatomy.osteology.skeleton import Skeleton
 
 # Imports correctos: subir tres niveles para llegar a character_engine
 from ...dto import SkeletonDTO
-from ...domain.anatomy.osteology.skeleton import Skeleton
 
 
 class BlenderImporter:
@@ -65,12 +66,12 @@ class BlenderImporter:
         return True
 
     def import_from_skeleton(self, skeleton: Skeleton) -> bool:
-        from ...serialization import SkeletonSerializer
-        from ...loader import JsonLoader
         import json
-        import tempfile
         import os
-        from pathlib import Path
+        import tempfile
+
+        from ...loader import JsonLoader
+        from ...serialization import SkeletonSerializer
 
         serializer = SkeletonSerializer()
         schema_data = serializer.serialize(skeleton)

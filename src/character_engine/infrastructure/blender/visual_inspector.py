@@ -1,7 +1,9 @@
 ﻿"""Visual State Inspector – Herramientas de inspección visual (wrapper sobre StateAuditor)."""
 
-from typing import Dict, Any, List, Optional
-from .state_auditor import get_console, get_auditor, StateAuditor
+from typing import Any, Dict, List, Optional
+
+from .state_auditor import StateAuditor, get_auditor, get_console
+
 
 def report(armature_name: str = "HumanSkeleton", include_hierarchy: bool = True, include_diagnostics: bool = True) -> Dict[str, Any]:
     """Genera un reporte visual completo de la escena (usando StateAuditor)."""

@@ -3,42 +3,39 @@
 This module contains user, account, and identity domain logic.
 """
 
-from backend.identity.user_domain import (
-    User,
-    CreateUserRequest,
-    UserDTO,
-    UserStatus,
-    UserError,
-    UserValidationError,
-    UserDuplicateError,
-    UserNotFoundError,
-    UserPersistenceError
-)
-
-from backend.identity.user_service import UserService
-
 from backend.identity.account_identity_domain import (
     Account,
-    Identity,
-    CreateAccountRequest,
-    CreateIdentityRequest,
     AccountDTO,
-    IdentityDTO,
-    AccountStatus,
-    IdentityStatus,
     AccountError,
-    AccountValidationError,
     AccountNotFoundError,
     AccountOwnershipError,
     AccountPersistenceError,
-    IdentityError,
-    IdentityValidationError,
-    IdentityNotFoundError,
+    AccountStatus,
+    AccountValidationError,
+    CreateAccountRequest,
+    CreateIdentityRequest,
+    Identity,
+    IdentityDTO,
     IdentityDuplicateError,
-    IdentityPersistenceError
+    IdentityError,
+    IdentityNotFoundError,
+    IdentityPersistenceError,
+    IdentityStatus,
+    IdentityValidationError,
 )
-
 from backend.identity.account_identity_service import AccountService, IdentityService
+from backend.identity.user_domain import (
+    CreateUserRequest,
+    User,
+    UserDTO,
+    UserDuplicateError,
+    UserError,
+    UserNotFoundError,
+    UserPersistenceError,
+    UserStatus,
+    UserValidationError,
+)
+from backend.identity.user_service import UserService
 
 __all__ = [
     # User domain models

@@ -1,39 +1,40 @@
 {
   "anthropometric_data": {
-    "version": "1.0.0",
-    "date": "2026-08-20",
-    "status": "PLACEHOLDER",
-    "population": "UNDEFINED",
-    "description": "Placeholder anthropometric data for reconstruction testing",
+    "version": "1.1.0",
+    "date": "2026-09-29",
+    "status": "PARTIAL",
+    "population": "Healthy adult males 20-40 y (Drillis & Contini 1966); stature fixed by project to 1.80 m",
+    "description": "Segment-length and joint-height ratios from Drillis & Contini (1966); canonical base stature 1.80 m",
     "metadata": {
-      "source": "PLACEHOLDER_DATA",
-      "confidence": "LOW",
-      "provenance": "ASSUMPTION",
-      "notes": "This data should be replaced with actual reference data from sources like NHANES, WHO, etc."
+      "source": "DRILLIS_CONTINI_1966",
+      "confidence": "MEDIUM",
+      "provenance": "PROVEN",
+      "notes": "Ratios are population means; individual variance is large (see OPEN Design Lab, PSU). Widths/depths other than shoulder breadth and hip width remain ASSUMPTION. Weight/age/gender remain ASSUMPTION."
     },
     "global_parameters": {
       "height": {
         "name": "total_body_height",
         "unit": "meters",
-        "mean": 1.75,
-        "std_dev": 0.08,
-        "range": [1.60, 1.90],
-        "percentiles": {
-          "5th": 1.60,
-          "25th": 1.68,
-          "50th": 1.75,
-          "75th": 1.82,
-          "95th": 1.90
-        },
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "mean": 1.8,
+        "std_dev": null,
+        "range": [
+          1.8,
+          1.8
+        ],
+        "percentiles": null,
+        "confidence": "HIGH",
+        "provenance": "USER_INPUT",
+        "notes": "Canonical base stature chosen by the project (design decision 2026-09-29, DECISION_LOG). Not a population statistic."
       },
       "weight": {
         "name": "total_body_weight",
         "unit": "kg",
         "mean": 70.0,
         "std_dev": 12.0,
-        "range": [50.0, 90.0],
+        "range": [
+          50.0,
+          90.0
+        ],
         "confidence": "LOW",
         "provenance": "ASSUMPTION"
       },
@@ -41,7 +42,10 @@
         "name": "subject_age",
         "unit": "years",
         "assumed_value": 30,
-        "range": [18, 65],
+        "range": [
+          18,
+          65
+        ],
         "confidence": "UNKNOWN",
         "provenance": "ASSUMPTION"
       },
@@ -55,53 +59,63 @@
     },
     "body_proportions": {
       "head_height_ratio": {
-        "name": "head_height_to_total_height",
-        "value": 0.125,
-        "range": [0.115, 0.135],
-        "confidence": "LOW",
-        "provenance": "CLASSICAL_REFERENCE"
+        "name": "head_height_to_total_height (vertex to chin)",
+        "value": 0.13,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "neck_height_ratio": {
         "name": "neck_height_to_total_height",
-        "value": 0.025,
-        "range": [0.020, 0.030],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "value": 0.052,
+        "confidence": "MEDIUM",
+        "provenance": "DERIVED",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "derivation": "chin 0.870H - shoulder 0.818H",
+        "notes": "Chin-to-shoulder-joint span; not a vertebral measurement"
       },
       "upper_body_ratio": {
         "name": "upper_body_to_total_height",
-        "value": 0.50,
-        "range": [0.48, 0.52],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "value": 0.47,
+        "confidence": "MEDIUM",
+        "provenance": "DERIVED",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "derivation": "1.000H - hip 0.530H"
       },
       "lower_body_ratio": {
         "name": "lower_body_to_total_height",
-        "value": 0.50,
-        "range": [0.48, 0.52],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "value": 0.53,
+        "confidence": "MEDIUM",
+        "provenance": "DERIVED",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "derivation": "hip joint height 0.530H"
       }
     },
     "width_proportions": {
       "shoulder_width_ratio": {
-        "name": "shoulder_width_to_total_height",
-        "value": 0.23,
-        "range": [0.20, 0.26],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "name": "shoulder_breadth_to_total_height (biacromial)",
+        "value": 0.259,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "hip_width_ratio": {
-        "name": "hip_width_to_total_height",
-        "value": 0.18,
-        "range": [0.16, 0.20],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "name": "hip_breadth_to_total_height (outer, not joint-centre spacing)",
+        "value": 0.191,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "head_width_ratio": {
         "name": "head_width_to_total_height",
         "value": 0.08,
-        "range": [0.07, 0.09],
+        "range": [
+          0.07,
+          0.09
+        ],
         "confidence": "LOW",
         "provenance": "ASSUMPTION"
       }
@@ -109,143 +123,238 @@
     "depth_proportions": {
       "chest_depth_ratio": {
         "name": "chest_depth_to_total_height",
-        "value": 0.10,
-        "range": [0.08, 0.12],
+        "value": 0.1,
+        "range": [
+          0.08,
+          0.12
+        ],
         "confidence": "LOW",
         "provenance": "ASSUMPTION"
       },
       "head_depth_ratio": {
         "name": "head_depth_to_total_height",
         "value": 0.07,
-        "range": [0.06, 0.08],
+        "range": [
+          0.06,
+          0.08
+        ],
         "confidence": "LOW",
         "provenance": "ASSUMPTION"
       }
     },
     "segment_lengths": {
       "upper_arm_ratio": {
-        "name": "humerus_length_to_total_height",
-        "value": 0.18,
-        "range": [0.16, 0.20],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "name": "upper_arm_length_to_total_height (shoulder to elbow)",
+        "value": 0.186,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "forearm_ratio": {
-        "name": "forearm_length_to_total_height",
-        "value": 0.15,
-        "range": [0.13, 0.17],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "name": "forearm_length_to_total_height (elbow to wrist)",
+        "value": 0.146,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "hand_ratio": {
-        "name": "hand_length_to_total_height",
-        "value": 0.07,
-        "range": [0.06, 0.08],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "name": "hand_length_to_total_height (wrist to fingertip)",
+        "value": 0.108,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "thigh_ratio": {
-        "name": "femur_length_to_total_height",
-        "value": 0.25,
-        "range": [0.23, 0.27],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "name": "thigh_length_to_total_height (hip to knee)",
+        "value": 0.245,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "lower_leg_ratio": {
-        "name": "tibia_length_to_total_height",
-        "value": 0.20,
-        "range": [0.18, 0.22],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "name": "shank_length_to_total_height (knee to ankle)",
+        "value": 0.246,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "foot_ratio": {
         "name": "foot_length_to_total_height",
-        "value": 0.15,
-        "range": [0.13, 0.17],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "value": 0.152,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
+      },
+      "foot_breadth_ratio": {
+        "name": "foot_breadth_to_total_height",
+        "value": 0.055,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
+      },
+      "ankle_height_ratio": {
+        "name": "ankle_height_to_total_height (ankle joint to sole)",
+        "value": 0.039,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       }
     },
     "joint_position_ratios": {
       "shoulder_joint_height_ratio": {
         "name": "shoulder_joint_height_to_total_height",
-        "value": 0.82,
-        "range": [0.80, 0.84],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "value": 0.818,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "elbow_joint_height_ratio": {
         "name": "elbow_joint_height_to_total_height",
-        "value": 0.62,
-        "range": [0.60, 0.64],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "value": 0.63,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "wrist_joint_height_ratio": {
         "name": "wrist_joint_height_to_total_height",
-        "value": 0.48,
-        "range": [0.46, 0.50],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "value": 0.485,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "hip_joint_height_ratio": {
         "name": "hip_joint_height_to_total_height",
-        "value": 0.50,
-        "range": [0.48, 0.52],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "value": 0.53,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "knee_joint_height_ratio": {
         "name": "knee_joint_height_to_total_height",
-        "value": 0.28,
-        "range": [0.26, 0.30],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "value": 0.285,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       },
       "ankle_joint_height_ratio": {
         "name": "ankle_joint_height_to_total_height",
-        "value": 0.08,
-        "range": [0.06, 0.10],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "value": 0.039,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
+      },
+      "fingertip_height_ratio": {
+        "name": "fingertip_height_to_total_height (arm hanging)",
+        "value": 0.377,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
+      },
+      "chin_height_ratio": {
+        "name": "chin_height_to_total_height",
+        "value": 0.87,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
+      },
+      "eye_height_ratio": {
+        "name": "eye_height_to_total_height",
+        "value": 0.936,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
+      },
+      "chest_height_ratio": {
+        "name": "chest_nipple_height_to_total_height",
+        "value": 0.72,
+        "confidence": "MEDIUM",
+        "provenance": "PROVEN",
+        "source_id": "DRILLIS_CONTINI_1966",
+        "notes": "Drillis & Contini (1966) via Winter (2009) Fig. 4.1; healthy adult males 20-40 y; no formal landmark definitions in the source"
       }
+    },
+    "canonical_landmark_heights_m": {
+      "stature_m": 1.8,
+      "provenance": "DERIVED",
+      "source_id": "DRILLIS_CONTINI_1966",
+      "derivation": "ratio x 1.80 m",
+      "vertex": 1.8,
+      "eye": 1.6848,
+      "chin": 1.566,
+      "shoulder": 1.4724,
+      "chest": 1.296,
+      "elbow": 1.134,
+      "hip": 0.954,
+      "wrist": 0.873,
+      "fingertip": 0.6786,
+      "knee": 0.513,
+      "ankle": 0.0702
     }
   },
   "gender_specific_adjustments": {
     "male": {
       "shoulder_to_hip_ratio": {
-        "value": 1.20,
-        "range": [1.15, 1.25],
+        "value": 1.2,
+        "range": [
+          1.15,
+          1.25
+        ],
         "confidence": "LOW",
         "provenance": "ASSUMPTION"
       },
       "head_to_body_ratio": {
         "value": 0.075,
-        "range": [0.070, 0.080],
+        "range": [
+          0.07,
+          0.08
+        ],
         "confidence": "LOW",
         "provenance": "ASSUMPTION"
       }
     },
     "female": {
       "shoulder_to_hip_ratio": {
-        "value": 1.00,
-        "range": [0.95, 1.05],
+        "value": 1.0,
+        "range": [
+          0.95,
+          1.05
+        ],
         "confidence": "LOW",
         "provenance": "ASSUMPTION"
       },
       "head_to_body_ratio": {
-        "value": 0.080,
-        "range": [0.075, 0.085],
+        "value": 0.08,
+        "range": [
+          0.075,
+          0.085
+        ],
         "confidence": "LOW",
         "provenance": "ASSUMPTION"
       }
     }
   },
   "data_quality": {
-    "accuracy": "LOW",
+    "accuracy": "MEDIUM",
     "precision": "LOW",
     "completeness": "PARTIAL",
-    "representativeness": "UNKNOWN",
-    "notes": "All values are placeholders and should be replaced with actual reference data"
+    "representativeness": "LOW",
+    "notes": "Landmark heights and major segment ratios are sourced (Drillis & Contini 1966). Depths, head width, chest depth, weight, age, gender adjustments are still ASSUMPTION. Individual bone geometry in human_adult_206.json is ESTIMATE (interpolated)."
   }
 }

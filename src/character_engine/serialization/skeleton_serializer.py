@@ -2,16 +2,16 @@
 
 import json
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
-from ..domain.anatomy.osteology.skeleton import Skeleton
 from ..domain.anatomy.osteology.bone import Bone
+from ..domain.anatomy.osteology.skeleton import Skeleton
 from ..schema.skeleton_schema_v1 import (
-    SkeletonAssetSchemaV1,
     AssetSchemaV1,
-    SkeletonSchemaV1,
     BoneSchemaV1,
     ContainerSchemaV1,
+    SkeletonAssetSchemaV1,
+    SkeletonSchemaV1,
 )
 
 

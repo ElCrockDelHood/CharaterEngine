@@ -6,16 +6,11 @@ data from becoming anatomical truth.
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import Dict, Any, List, Optional
 from datetime import date
+from enum import Enum
+from typing import Dict, List, Optional
 
-from .source import (
-    ReferenceValue,
-    ReferenceDataset,
-    ProvenanceState,
-    Confidence
-)
+from .source import Confidence, ProvenanceState, ReferenceValue
 
 
 class ReconstructionEligibility(Enum):
@@ -41,7 +36,7 @@ class RejectionReason(Enum):
 @dataclass
 class EligibilityCheck:
     """Result of reconstruction eligibility check.
-    
+
     Attributes:
         parameter: Parameter name
         value: Parameter value
@@ -51,7 +46,7 @@ class EligibilityCheck:
         confidence: Confidence level
         notes: Additional context
     """
-    
+
     parameter: str
     value: Optional[float]
     provenance_state: ProvenanceState
@@ -59,11 +54,11 @@ class EligibilityCheck:
     rejection_reason: Optional[RejectionReason] = None
     confidence: Confidence = Confidence.UNKNOWN
     notes: str = ""
-    
+
     def is_eligible(self) -> bool:
         """Check if parameter is eligible for reconstruction."""
         return self.eligibility == ReconstructionEligibility.ELIGIBLE
-    
+
     def is_rejected(self) -> bool:
         """Check if parameter is rejected for reconstruction."""
         return self.eligibility == ReconstructionEligibility.NOT_ELIGIBLE
@@ -72,7 +67,7 @@ class EligibilityCheck:
 @dataclass
 class ReconstructionGateResult:
     """Result of reconstruction gate validation.
-    
+
     Attributes:
         gate_name: Name of the validation gate
         passed: Whether gate passed
@@ -85,7 +80,7 @@ class ReconstructionGateResult:
         warnings: List of warnings
         validated_at: Validation timestamp
     """
-    
+
     gate_name: str
     passed: bool
     total_parameters: int
@@ -96,13 +91,13 @@ class ReconstructionGateResult:
     errors: List[str]
     warnings: List[str]
     validated_at: date = field(default_factory=date.today)
-    
+
     def get_completion_percentage(self) -> float:
         """Calculate completion percentage (eligible / total)."""
         if self.total_parameters == 0:
             return 0.0
         return (self.eligible_parameters / self.total_parameters) * 100.0
-    
+
     def get_rejection_summary(self) -> Dict[str, int]:
         """Get summary of rejection reasons."""
         summary = {}
@@ -113,22 +108,22 @@ class ReconstructionGateResult:
 
 class ReconstructionEligibilityValidator:
     """Validates reconstruction eligibility based on provenance and data quality."""
-    
+
     def __init__(self, strict_mode: bool = True):
         """Initialize eligibility validator.
-        
+
         Args:
             strict_mode: If True, rejects all non-PROVEN data for canonical reconstruction
         """
         self.strict_mode = strict_mode
         self.rejection_policy = self._define_rejection_policy()
-    
+
     def _define_rejection_policy(self) -> Dict[ProvenanceState, ReconstructionEligibility]:
         """Define the rejection policy for reconstruction eligibility.
-        
+
         Args:
             None
-            
+
         Returns:
             Dictionary mapping provenance states to eligibility
         """
@@ -154,24 +149,24 @@ class ReconstructionEligibilityValidator:
                 ProvenanceState.UNKNOWN: ReconstructionEligibility.NOT_ELIGIBLE,
                 ProvenanceState.USER_INPUT: ReconstructionEligibility.CONDITIONAL
             }
-    
+
     def validate_parameter(self, parameter: str, value: ReferenceValue) -> EligibilityCheck:
         """Validate single parameter for reconstruction eligibility.
-        
+
         Args:
             parameter: Parameter name
             value: Reference value to validate
-            
+
         Returns:
             Eligibility check result
         """
         # Check provenance state eligibility
-        eligibility = self.rejection_policy.get(value.provenance_state, 
+        eligibility = self.rejection_policy.get(value.provenance_state,
                                                       ReconstructionEligibility.NOT_ELIGIBLE)
-        
+
         rejection_reason = None
         notes = ""
-        
+
         # Determine rejection reason if not eligible
         if eligibility == ReconstructionEligibility.NOT_ELIGIBLE:
             if value.provenance_state == ProvenanceState.PLACEHOLDER:
@@ -186,14 +181,14 @@ class ReconstructionEligibilityValidator:
             elif value.provenance_state == ProvenanceState.ESTIMATE:
                 rejection_reason = RejectionReason.LOW_CONFIDENCE
                 notes = "Estimate data requires explicit authorization"
-        
+
         # Check confidence level for PROVEN data
         if eligibility == ReconstructionEligibility.ELIGIBLE and value.confidence == Confidence.LOW:
             if self.strict_mode:
                 eligibility = ReconstructionEligibility.CONDITIONAL
                 rejection_reason = RejectionReason.LOW_CONFIDENCE
                 notes = "PROVEN data with LOW confidence requires review"
-        
+
         return EligibilityCheck(
             parameter=parameter,
             value=value.value,
@@ -203,24 +198,24 @@ class ReconstructionEligibilityValidator:
             confidence=value.confidence,
             notes=notes
         )
-    
-    def validate_derivation_chain(self, 
+
+    def validate_derivation_chain(self,
                                  parameter: str,
                                  value: ReferenceValue,
                                  derivation_chain: List[ReferenceValue]) -> EligibilityCheck:
         """Validate derivation chain for derived values.
-        
+
         Args:
             parameter: Parameter name
             value: Reference value to validate
             derivation_chain: Chain of values used in derivation
-            
+
         Returns:
             Eligibility check result with derivation validation
         """
         # Start with basic validation
         check = self.validate_parameter(parameter, value)
-        
+
         # Additional validation for derived values
         if value.provenance_state == ProvenanceState.DERIVED:
             # Check that all parent inputs are eligible
@@ -231,15 +226,15 @@ class ReconstructionEligibilityValidator:
                     check.rejection_reason = RejectionReason.CONTAMINATED_CHAIN
                     check.notes = f"Derived from ineligible parameter: {parent_value.parameter}"
                     break
-        
+
         return check
-    
+
     def validate_dataset(self, dataset) -> ReconstructionGateResult:
         """Validate entire dataset for reconstruction eligibility.
-        
+
         Args:
             dataset: Reference dataset to validate
-            
+
         Returns:
             Reconstruction gate result
         """
@@ -247,23 +242,23 @@ class ReconstructionEligibilityValidator:
         rejection_reasons = {}
         errors = []
         warnings = []
-        
-        for value_id, value in dataset.values.items():
+
+        for value in dataset.values.values():
             check = self.validate_parameter(value.parameter, value)
             checks.append(check)
-            
+
             if check.is_rejected():
                 rejection_reasons[value.parameter] = check.rejection_reason
                 errors.append(f"{value.parameter}: {check.notes}")
             elif check.eligibility == ReconstructionEligibility.CONDITIONAL:
                 warnings.append(f"{value.parameter}: {check.notes}")
-        
+
         eligible_count = sum(1 for check in checks if check.is_eligible())
         rejected_count = sum(1 for check in checks if check.is_rejected())
         conditional_count = sum(1 for check in checks if check.eligibility == ReconstructionEligibility.CONDITIONAL)
-        
+
         passed = rejected_count == 0
-        
+
         return ReconstructionGateResult(
             gate_name="reconstruction_eligibility",
             passed=passed,
@@ -275,17 +270,17 @@ class ReconstructionEligibilityValidator:
             errors=errors,
             warnings=warnings
         )
-    
+
     def validate_provenance_gate(self, provenance_state: ProvenanceState) -> bool:
         """Quick check if provenance state can pass reconstruction gate.
-        
+
         Args:
             provenance_state: Provenance state to check
-            
+
         Returns:
             True if state can pass, False otherwise
         """
-        eligibility = self.rejection_policy.get(provenance_state, 
+        eligibility = self.rejection_policy.get(provenance_state,
                                                       ReconstructionEligibility.NOT_ELIGIBLE)
         # In strict mode, only ELIGIBLE states pass (not CONDITIONAL)
         if self.strict_mode:

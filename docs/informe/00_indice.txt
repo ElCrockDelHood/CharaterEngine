@@ -1,0 +1,44 @@
+﻿CHARACTER ENGINE
+================
+
+Informe de la experiencia y manual de uso
+1 de octubre de 2026
+
+    Este  conjunto  de  textos  es  el  informe  final  pedido  ese día: las
+decisiones  y los contratos lógicos, la matemática y la física que el código
+formula  de  verdad,  la  modalidad de trabajo, los resultados medidos, y un
+manual de especificaciones y de uso.
+
+    Cada archivo se lee solo. El castellano es el del pedido. Los nombres de
+archivos,  de  funciones y de estados de procedencia quedan en el inglés del
+repositorio, porque así se llaman en el código.
+
+Orden de lectura
+----------------
+
+    01_informe_de_experiencia.txt
+        Qué se construyó, en qué orden, y qué queda abierto.
+
+    02_decisiones_y_contratos.txt
+        Decisiones y contratos que el código tiene que cumplir.
+
+    03_matematica_y_coordenadas.txt
+        Marco Z-up, conversión a glTF, retarget a 1,80 m, T-pose
+        y regresiones de Trotter.
+
+    04_fisica_tejidos_heridas_combate.txt
+        Capas de tejido, heridas, letalidad de juego y combate
+        a 60 Hz. Lo que es estimación queda marcado como estimación.
+
+    05_estructuras_y_modo_de_trabajo.txt
+        Capas del repositorio y cómo se trabaja sin mezclar motores.
+
+    06_resultados.txt
+        Cifras de pruebas: pytest, Blender, UPBGE y Godot.
+
+    07_manual_de_uso_y_especificaciones.txt
+        Cómo generar un cuerpo, riggearlo, exportarlo y probar
+        el gameplay.
+
+    La  fuente  de  verdad  técnica  sigue  siendo  el  código  y la carpeta
+docs/audit/. Estos textos la resumen. No la reemplazan.

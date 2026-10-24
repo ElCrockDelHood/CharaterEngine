@@ -3,6 +3,9 @@
 **Sprint A0.2 - Forensic Analysis**  
 **Date:** 2026-08-12  
 **Status:** READ-ONLY DISCOVERY
+**Update 2026-09-29:** the scale findings below (3.08 m stature, oversized head, short legs) were
+addressed by **A07** (`A07_STATURE_RETARGET_180.md`): the skeleton is now 1.80 m with joint heights
+from Drillis & Contini (1966). Structural findings (straight spine, joint gaps, schematic hands/feet) remain open.
 
 ---
 

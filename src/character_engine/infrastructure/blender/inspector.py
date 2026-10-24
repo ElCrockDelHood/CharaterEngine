@@ -2,7 +2,8 @@
 
 import sys
 from pathlib import Path
-from typing import Optional, Dict, Any, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
+
 
 class BlenderInspector:
     """Inspector básico para escenas de Blender."""

@@ -5,12 +5,12 @@ with full provenance tracking and validation.
 """
 
 from dataclasses import dataclass, field
-from enum import Enum
-from typing import Optional, Dict, Any
 from datetime import date
+from enum import Enum
+from typing import Any, Dict, Optional
 
-from ..reference import Confidence
 from ..coordinate_system import LateralSide
+from ..reference import Confidence
 
 
 class ParameterStatus(Enum):
@@ -34,19 +34,19 @@ class ParameterType(Enum):
 @dataclass(frozen=True)
 class ParameterConstraint:
     """Constraint definition for parameter validation.
-    
+
     Attributes:
         min_value: Minimum allowed value (None if no minimum)
         max_value: Maximum allowed value (None if no maximum)
         unit: Unit for constraint validation
         description: Description of constraint
     """
-    
+
     min_value: Optional[float] = None
     max_value: Optional[float] = None
     unit: str = "meters"
     description: str = ""
-    
+
     def is_valid(self, value: float) -> bool:
         """Check if value satisfies constraint."""
         if self.min_value is not None and value < self.min_value:
@@ -54,7 +54,7 @@ class ParameterConstraint:
         if self.max_value is not None and value > self.max_value:
             return False
         return True
-    
+
     def get_validation_error(self, value: float) -> Optional[str]:
         """Get validation error message if value violates constraint."""
         if self.min_value is not None and value < self.min_value:
@@ -67,7 +67,7 @@ class ParameterConstraint:
 @dataclass(frozen=True)
 class DerivationMetadata:
     """Metadata for derived parameters.
-    
+
     Attributes:
         parent_parameters: List of parameter IDs used in derivation
         formula: Formula or calculation method used
@@ -75,7 +75,7 @@ class DerivationMetadata:
         derivation_date: Date of derivation
         notes: Additional derivation context
     """
-    
+
     parent_parameters: tuple[str, ...] = field(default_factory=tuple)
     formula: str = ""
     formula_version: str = "1.0.0"
@@ -86,7 +86,7 @@ class DerivationMetadata:
 @dataclass(frozen=True)
 class AnatomicalParameter:
     """Anatomical parameter with full provenance tracking.
-    
+
     Attributes:
         id: Unique identifier for the parameter
         name: Human-readable parameter name
@@ -105,7 +105,7 @@ class AnatomicalParameter:
         version: Parameter version
         created_at: Creation timestamp
     """
-    
+
     id: str
     name: str
     canonical_name: str
@@ -122,51 +122,51 @@ class AnatomicalParameter:
     metadata: Dict[str, Any] = field(default_factory=dict)
     version: str = "1.0.0"
     created_at: date = field(default_factory=date.today)
-    
+
     def is_known(self) -> bool:
         """Check if parameter value is known."""
         return self.value is not None
-    
+
     def is_unknown(self) -> bool:
         """Check if parameter value is unknown."""
         return self.value is None
-    
+
     def is_derived(self) -> bool:
         """Check if parameter is derived."""
         return self.status == ParameterStatus.DERIVED
-    
+
     def is_assumed(self) -> bool:
         """Check if parameter is assumed."""
         return self.status == ParameterStatus.ASSUMED
-    
+
     def is_direct_reference(self) -> bool:
         """Check if parameter is direct reference."""
         return self.status == ParameterStatus.DIRECT_REFERENCE
-    
+
     def is_bilateral(self) -> bool:
         """Check if parameter is bilateral."""
         return self.bilateral
-    
+
     def get_side(self) -> Optional[LateralSide]:
         """Get lateral side."""
         return self.side
-    
+
     def satisfies_constraints(self) -> bool:
         """Check if parameter value satisfies constraints."""
         if self.constraints is None or self.value is None:
             return True
         return self.constraints.is_valid(self.value)
-    
+
     def get_constraint_error(self) -> Optional[str]:
         """Get constraint validation error."""
         if self.constraints is None or self.value is None:
             return None
         return self.constraints.get_validation_error(self.value)
-    
+
     def is_high_confidence(self) -> bool:
         """Check if parameter has high confidence."""
         return self.confidence == Confidence.HIGH
-    
+
     def get_value_or_default(self, default: float = 0.0) -> float:
         """Get value or default if unknown."""
         return self.value if self.value is not None else default
@@ -175,7 +175,7 @@ class AnatomicalParameter:
 @dataclass(frozen=True)
 class ParameterSet:
     """Collection of anatomical parameters.
-    
+
     Attributes:
         set_id: Unique identifier for the parameter set
         name: Name of the parameter set
@@ -183,53 +183,53 @@ class ParameterSet:
         parameters: Dictionary of parameters by ID
         created_at: Creation timestamp
     """
-    
+
     set_id: str
     name: str
     version: str
     parameters: Dict[str, AnatomicalParameter]
     created_at: date = field(default_factory=date.today)
-    
+
     def get_parameter(self, parameter_id: str) -> Optional[AnatomicalParameter]:
         """Get parameter by ID."""
         return self.parameters.get(parameter_id)
-    
+
     def get_parameter_by_canonical_name(self, canonical_name: str) -> Optional[AnatomicalParameter]:
         """Get parameter by canonical name."""
         for param in self.parameters.values():
             if param.canonical_name == canonical_name:
                 return param
         return None
-    
+
     def get_bilateral_pair(self, parameter_name: str) -> tuple[Optional[AnatomicalParameter], Optional[AnatomicalParameter]]:
         """Get left and right versions of a bilateral parameter."""
         left = self.get_parameter_by_canonical_name(f"{parameter_name}_L")
         right = self.get_parameter_by_canonical_name(f"{parameter_name}_R")
         return left, right
-    
+
     def get_parameters_by_type(self, parameter_type: ParameterType) -> list[AnatomicalParameter]:
         """Get all parameters of a specific type."""
         return [p for p in self.parameters.values() if p.parameter_type == parameter_type]
-    
+
     def get_known_parameters(self) -> list[AnatomicalParameter]:
         """Get all parameters with known values."""
         return [p for p in self.parameters.values() if p.is_known()]
-    
+
     def get_unknown_parameters(self) -> list[AnatomicalParameter]:
         """Get all parameters with unknown values."""
         return [p for p in self.parameters.values() if p.is_unknown()]
-    
+
     def get_derived_parameters(self) -> list[AnatomicalParameter]:
         """Get all derived parameters."""
         return [p for p in self.parameters.values() if p.is_derived()]
-    
+
     def get_assumed_parameters(self) -> list[AnatomicalParameter]:
         """Get all assumed parameters."""
         return [p for p in self.parameters.values() if p.is_assumed()]
-    
+
     def validate_constraints(self) -> Dict[str, bool]:
         """Validate all parameter constraints.
-        
+
         Returns:
             Dictionary mapping parameter IDs to validation results
         """
@@ -237,10 +237,10 @@ class ParameterSet:
         for param_id, param in self.parameters.items():
             results[param_id] = param.satisfies_constraints()
         return results
-    
+
     def get_constraint_violations(self) -> Dict[str, str]:
         """Get constraint violations.
-        
+
         Returns:
             Dictionary mapping parameter IDs to violation messages
         """
@@ -254,18 +254,18 @@ class ParameterSet:
 
 class ParameterSetBuilder:
     """Builder for creating parameter sets."""
-    
+
     def __init__(self, set_id: str, name: str, version: str):
         self.set_id = set_id
         self.name = name
         self.version = version
         self.parameters: Dict[str, AnatomicalParameter] = {}
-    
+
     def add_parameter(self, parameter: AnatomicalParameter) -> "ParameterSetBuilder":
         """Add a parameter to the set."""
         self.parameters[parameter.id] = parameter
         return self
-    
+
     def build(self) -> ParameterSet:
         """Build the parameter set."""
         return ParameterSet(
@@ -276,7 +276,7 @@ class ParameterSetBuilder:
         )
 
 
-def create_unknown_parameter(canonical_name: str, unit: str, 
+def create_unknown_parameter(canonical_name: str, unit: str,
                             parameter_type: ParameterType = ParameterType.SCALAR) -> AnatomicalParameter:
     """Create a placeholder unknown parameter."""
     return AnatomicalParameter(
@@ -350,7 +350,7 @@ def create_direct_reference_parameter(canonical_name: str, value: float, unit: s
 @dataclass
 class SubjectProfile:
     """Subject profile for anatomical reconstruction.
-    
+
     Attributes:
         height: Total body height in meters
         weight: Total body weight in kg
@@ -359,7 +359,7 @@ class SubjectProfile:
         ethnicity: Ethnic background
         notes: Additional notes
     """
-    
+
     height: Optional[float] = None
     weight: Optional[float] = None
     age: Optional[int] = None

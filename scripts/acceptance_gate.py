@@ -1,15 +1,16 @@
 ﻿#!/usr/bin/env python
 """Acceptance Gate del Sprint 2 – Verifica todos los invariantes."""
 
-import sys
-import json
 import math
+import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from character_engine.domain.anatomy.osteology import SkeletonBuilder, SkeletonValidator
+from character_engine.domain.anatomy.osteology.exceptions import CyclicHierarchyError
 from character_engine.domain.anatomy.templates.human import HumanTemplate
-from character_engine.domain.anatomy.osteology.exceptions import *
+
 
 def run_gate():
     print("=" * 60)
