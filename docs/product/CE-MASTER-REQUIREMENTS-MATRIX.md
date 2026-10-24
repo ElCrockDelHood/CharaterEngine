@@ -110,6 +110,13 @@ runs **offline in Blender**; manifestations are extracted as meshes, retouched/j
 the game reacts by state and collision point with baked reactions (interpretation CONFIRMED by the owner, Decision 45; keying,
 baked format, performance and offline tool OPEN — draft §9).
 
+Update 2026-10-24 22:51 UTC — owner clarification of "engagement" (verbatim in the draft §10): "entrecruzamiento o
+cruzamiento de combate, aproximaciones … es como reacciona la cinematografía de movimiento según proximidad a enemigo
+o NPC … ataques frontales cambia toda la cinematografía ligeramente". Interpretation (to be confirmed): adaptive
+movement cinematography — slight, continuous changes of camera/motion parameters driven by proximity, attack
+direction and combat state; presets authored in Blender, selected/blended deterministically in Godot (L1). Phase E6
+may become the core (flagged, not reordered). Open questions 10–14 in the draft §10.
+
 ---
 
 ## Rows ANATOMY / RIG / TISSUE / TREATMENTS / FK — DRAFT (owner request, Decision 44)
@@ -201,6 +208,22 @@ Acceptance criteria: **not specified**. Open questions — MANIFESTATION-LEVELS:
 differs between levels (simulation fidelity, mesh resolution, rig detail, render quality, runtime target)? Is the
 level part of each manifestation's signed ID? — MESH-AUTHORING-TOOL: form A or B? Input = drawing directly in
 the tool, scanned drawings, or both? Which assets first (bodies, clothing, equipment, animals)?
+
+---
+
+## Rows WORKBENCH-LAYOUT / MATERIAL-SWATCHES — DRAFT (owner, 2026-10-24 21:49 UTC)
+
+Owner (verbatim): "estaria bueno poder maquetar muy bien bocetar, pulir bien en worckbrech. y ademas si puedo tener
+pequeñas muestar de los materiales que van en cada caso."
+
+| ID | Requirement (owner's words) | Notes / current state | Status |
+|----|-----------------------------|------------------------|--------|
+| **WORKBENCH-LAYOUT** | "maquetar muy bien bocetar, pulir bien en worckbrech" | Layout/mock-up, sketching and polishing in Blender **Workbench** (no shaders/textures, per the original scope), with collisions visible. Today: full-body Workbench preset (CINE-GR-001 step 1) and Experiment 0 key frames (collisions visible, `docs/audit/EXPERIMENT-0-RESULTS-2026-10-24.md`) | PARTIAL |
+| **MATERIAL-SWATCHES** | "pequeñas muestras de los materiales que van en cada caso" | Claude's interpretation, **to be confirmed**: a swatch = a small standard object (sphere/cube) per material shown in Workbench using viewport display colour / MatCap / cavity only, plus a data card with the material's mechanical parameters (density, Young's modulus, …), each with a cited source or ESTIMATE, tied to the measurement-systems library (Decision 45 clarification). Today: no material data in the repository | PENDING |
+
+Acceptance criteria: **not specified**. Open questions: which materials first (bone, muscle, skin, cloth, wood,
+metal, glass…)? Are swatches separate renders or part of each experiment's output? What must a polished Workbench
+layout contain?
 
 ---
 

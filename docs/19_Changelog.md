@@ -8,6 +8,11 @@ All notable changes to Character Engine. Dates are ISO 8601.
 - `scripts/_logrun.py`: live console output + `logs/<UTC>_<tool>.log` / `logs/latest_<tool>.log` for
   `scripts/test.py`, `scripts/lint.py` and every `scripts/engine_tests.py` step (`--verbose` for engine
   debug output). Guide: `docs/09_Debug_Consoles.md`.
+- Experiment 0: `scripts/solver_benchmark.py` + `runtime/blender/ce_solver_benchmark.py` — Blender 3.6 solver
+  benchmark (rigid/Bullet, cloth on a skeleton proxy, soft body, particles, geometry-nodes simulation, fluid), one
+  process per case with a timeout; results in `docs/audit/EXPERIMENT-0-RESULTS-2026-10-24.md` (18/18 ok).
+- Draft rows WORKBENCH-LAYOUT and MATERIAL-SWATCHES; engagement clarified as adaptive movement cinematography by
+  proximity and attack direction (draft §10).
 
 ### Decisions
 - Decision 41: **CE-Q4 unblocked** by the owner (RG-005).

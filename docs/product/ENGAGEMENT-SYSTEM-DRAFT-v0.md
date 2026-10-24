@@ -185,3 +185,31 @@ Open questions (owner):
 8. How does an experiment map to a runtime reaction (keying by conditions: state, region, energy, material,
    gravity, wind…)?
 9. What is the first concrete experiment (e.g. a drop, an impact on a rib, a breaking test)?
+
+## 10. Owner clarification — what "engagement" means (verbatim, 2026-10-24 22:51 UTC)
+
+> "el sitema de engagement ( seria algo como entecruzamiento o crusamiento de combate aproximaciones, etc )es como
+> reacciona la cinematografía de movimiento según proximidad a enemigo o NPC etc. ataques frontales cambia toda la
+> cinematografía ligeramente"
+
+Claude's interpretation — **to be confirmed by the owner**: engagement is the **crossing of combat** (approaches,
+crossings, closing in) and how the **movement cinematography reacts** to it: the motion — and possibly the camera —
+adapts to the **proximity** of an enemy or NPC and to the **direction** of the attack (e.g. a frontal attack
+slightly changes the whole cinematography). In other words, a runtime function from (proximity to the
+enemy/NPC, relative direction of the approach or attack — frontal / flank / behind —, combat state) to
+cinematographic and motion parameters (camera framing, position, FOV, speed/timing, animation blend…), with
+**slight, continuous** changes rather than hard cuts. The cinematographic presets would be authored in Blender
+(Decision 42) and Godot would select/blend them deterministically (L1). This refines, not replaces, the §1
+definition.
+
+Relation to earlier answers: the capsule interactions (Q2/Q3) supply proximity and contact; the confrontation
+phases of Q1 (approach, lock-on, clinch, break) are the states that drive the cinematography. **Flag for the owner:**
+phase E6 ("confrontation phases + lock-on") may become the **core** of the engagement system rather than a late
+step — the order E0→E8 is **not** changed here.
+
+Open questions (owner):
+10. What exactly changes: camera framing/position, FOV, slow motion, animation blending, audio — which ones?
+11. How many proximity bands and direction sectors (e.g. front / side / back)?
+12. Do NPC type or number of enemies change it?
+13. Is it only the player's camera, or the motion of every fighter (and the Blender cinematics too)?
+14. First concrete scenario to specify (e.g. one enemy approaching frontally)?
