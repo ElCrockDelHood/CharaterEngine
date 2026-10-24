@@ -703,12 +703,34 @@ installed but is no longer the project's declared version; tests use 4.7.2.
 
 ---
 
+## 44. ENGAGEMENT SYSTEM — THREE-LAYER DESIGN CONFIRMED
+
+**Decision** (owner, 2026-10-24, "elijo A"): the engagement system (`docs/product/ENGAGEMENT-SYSTEM-DRAFT-v0.md`
+§6) is built in three layers: **L1** deterministic combat logic (bit-identical replay from inputs, Python ↔
+Godot); **L2** physical reaction of the body/capsules, whose raw result is **recorded**; **L3** curation/polish
+of that result, **baked** into a canonical manifest that Godot plays back identically.
+Still OPEN (not answered): interpretation "every option of Q1–Q8", whether L2 itself must be deterministic,
+where L2 physics runs (Blender / Godot / both), what the "manifestación" contains, phasing E0–E8.
+
+**Same message — new scope (owner, verbatim):** "busques modelos de esqueletos meshes reales de difeentes
+medidas nuestros personajes, de nuestros animales, y le agregues el Rig, a cada parte, a la cara ETC. que quede
+perfecto, asi vamos a poder simular las herdas, Tambien necesitamos un mesh de todos musculosm tendones,
+fasias. quiero generar un tratamiento especial de manos, de cabeza y rostro, y uego uno de cuerpo Gral, cada
+uno con su IK y los FK los vamos a extraer de las simulaciones como resultados."
+Recorded as requirement rows ANATOMY-MESH, RIG-PARTS, MUSCLE-FASCIA-MESH, TREAT-HANDS, TREAT-HEAD-FACE,
+TREAT-BODY and FK-FROM-SIM in `docs/product/CE-MASTER-REQUIREMENTS-MATRIX.md` (PARTIAL / PENDING). Consistent
+with Decision 4.2: anatomical geometry is **received from cited sources/specialists**, never invented.
+
+**Date**: 2026-10-24 · **Status**: FINAL (layering) · scope rows DRAFT
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 43
-**Final Decisions**: 39 (+4 deferred)
+**Total Decisions**: 44
+**Final Decisions**: 40 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)

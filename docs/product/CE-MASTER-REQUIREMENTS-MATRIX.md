@@ -101,3 +101,47 @@ Only the owner's words and code facts are filled in. Owner answer 1 (verbatim in
 | **BLENDER → GODOT DATA** | Canonical files only (Decision 42); content open (Q6) | GLB skeleton + gameplay JSON from the Python domain | PENDING |
 | **TEST / ACCEPTANCE** | Not specified (no invented criteria) | — | PENDING |
 | **PRIORITY** | Not set by the owner | — | PENDING |
+
+Update 2026-10-24: the three-layer design L1/L2/L3 is **CONFIRMED** by the owner (Decision 44). The other
+open questions of the draft §8 remain open.
+
+---
+
+## Rows ANATOMY / RIG / TISSUE / TREATMENTS / FK — DRAFT (owner request, Decision 44)
+
+Owner request (verbatim in DECISION_LOG §44): real skeleton meshes of different sizes for "nuestros personajes"
+and "nuestros animales", rigged "a cada parte, a la cara", "que quede perfecto, así vamos a poder simular las
+heridas"; a mesh of all muscles, tendons and fasciae; special treatment of hands, of head and face, then of the
+general body, each with its IK; FK extracted from the simulations as results.
+
+| ID | Requirement (owner's words) | Current state in the repo (2026-10-24) | Status |
+|----|-----------------------------|----------------------------------------|--------|
+| **ANATOMY-MESH** | "modelos de esqueletos meshes reales de diferentes medidas" — humans ("nuestros personajes") and animals ("nuestros animales") | Bones are drawn as **cone proxies** (`build_bone_meshes`); the addon can fit a real per-bone mesh from `assets/anatomy/meshes/<BONE>.glb/.obj/.ply` but the folder holds only a README (**no real meshes**). Stature scaling exists (osteometry table). Animals: `horse_adult`, `dog_adult` templates marked **NO DATA YET** (no skeleton). Species list: **UNKNOWN** | PENDING (DATA REQUIRED) |
+| **RIG-PARTS** | Rig "a cada parte, a la cara, etc." — "que quede perfecto" | 208-bone deform armature + control rig: IK arms, legs, clavicle follow; spline spine and neck; equipment sockets. **No finger rig controls, no face rig** (no jaw/eyes/facial controls, no shape keys). "Perfecto" is **not testable**: measurable criteria needed from the owner | PARTIAL |
+| **MUSCLE-FASCIA-MESH** | "un mesh de todos músculos, tendones, fascias" | 50 bilateral **spindle proxies** (attachment topology PROVEN, geometry PLACEHOLDER/ESTIMATE) with tendon ends; fat/fascia only as **per-region thickness ESTIMATES** in the tissue-layer model; **no fascia mesh** | PENDING (DATA REQUIRED) |
+| **TREAT-HANDS** | Special treatment of hands, with IK | Hands rebuilt (A10, intra-hand proportions PLACEHOLDER); arm IK ends at the wrist; **no finger IK/FK controls** | PARTIAL |
+| **TREAT-HEAD-FACE** | Special treatment of head and face, with IK | Skull bones only (CRANIUM container, FRONTAL, PARIETAL, TEMPORAL, MANDIBLE…); neck spline; **no face rig, no facial mesh** | PENDING |
+| **TREAT-BODY** | General body treatment, with IK | Limb IK + spline spine/neck exist (see RIG-PARTS) | PARTIAL |
+| **FK-FROM-SIM** | "los FK los vamos a extraer de las simulaciones como resultados" (FK not hand-authored) | Mocap retarget to FK exists (`import_mocap`, `retarget_mocap`); **no simulation → FK extraction** (fits L2/L3 of Decision 44) | PENDING |
+| **WOUNDS (context)** | "así vamos a poder simular las heridas" | Today: wound = point + type + depth/width/energy → `assess_wound` over **region tissue-thickness ESTIMATES** → severity/lethality/bleeding/fracture + colour marker on the nearest bone. No mesh is cut or deformed | PARTIAL |
+
+Acceptance criteria for all rows: **not specified** (no invented criteria; the owner defines them).
+
+### Provenance rule for every mesh (reminder, Decisions 4.2 and 12)
+
+* Never invent anatomical data or geometry. A mesh enters the repository only with a **cited source and
+  licence** registered in `src/character_engine/data/anatomy/references/source_registry.json`, status
+  `NOT_ACQUIRED` until it is downloaded **and** approved by the owner.
+* Sizes obtained by scaling or fitting a sourced mesh are `ESTIMATE`/`DERIVED`, never `PROVEN`.
+* **Licence compatibility is a decision for the owner**: share-alike licences (CC BY-SA) oblige derived
+  assets to be shared under the same licence; non-commercial licences may conflict with the product.
+
+### Candidate sources found (research only — nothing downloaded, nothing registered yet)
+
+| Source | Content (as reported) | Licence (as reported, to verify on the official page) |
+|--------|-----------------------|--------------------------------------------------------|
+| BodyParts3D 4.0 (DBCLS, Japan) | Adult male reference anatomy, ~2,234 OBJ meshes (bones, muscles, organs) | Older releases CC BY-SA 2.1 JP; a third-party notice says the current database licence is CC BY 4.0 — **unverified** |
+| Z-Anatomy (Blender template) | Skeleton, muscles, ligaments, insertions, vessels, nerves, organs; derived from BodyParts3D; Blender 2.8+/3.x | CC BY-SA 4.0 (share-alike). Fascia/tendon coverage **unconfirmed** |
+| MakeHuman / MPFB2 (Blender add-on) | Parametric human base mesh (hm08) of any size, auto-rig incl. Rigify | Assets CC0, code GPLv3; face rig coverage **unconfirmed** |
+| Univ. of Edinburgh R(D)SVS (Open.Ed, Sketchfab) | CT-derived animal skeletons and skulls incl. a horse | "openly licensed" — exact licence per model **unverified** |
+| LSU / JoVE 62276 | CT-based whole-body rigged horse skeleton (research) | Release and licence **unknown** |
