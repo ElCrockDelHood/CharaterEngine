@@ -20,9 +20,13 @@ All notable changes to Character Engine. Dates are ISO 8601.
 Addon headless suite 20/20 on Blender 3.6.23 (background) and 20/20 on Blender 4.2.23 LTS
 (background); before the change Blender 3.6 failed 10/20 (`'Armature' object has no attribute
 'collections'`). pytest 713 passed. UPBGE 0.50 suite not run (needs a window).
-Canonical GLB: exporter untouched; same JSON chunk, and the binary chunk varies run-to-run in the last
-bit of container centroids even without code changes (`Bone.child_ids` is a `frozenset` of random
-`uuid4`, so summation order changes) — pre-existing, tracked as an open finding.
+
+### Fixed
+- `export/gltf.py`: the canonical GLB was not byte-reproducible — container centroids
+  (`ROOT_SKELETON`, `CRANIUM`) were summed in `frozenset` order of random `uuid4` child ids, changing
+  the last float bit between runs. Children are now summed in canonical-name order.
+  `tests/export/test_gltf_determinism.py` exports fresh skeletons 5× in-process and in 5 interpreters
+  with different `PYTHONHASHSEED` and requires identical bytes (fails on the old code). pytest 716 passed.
 
 ## [Unreleased] — 2026-09-29 (night) · A08 osteometry, tissues, T-pose, Blender addon, UPBGE/Godot gameplay
 

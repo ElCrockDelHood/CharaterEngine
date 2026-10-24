@@ -385,14 +385,18 @@ class GltfSkeletonExporter:
     def _world_positions(skeleton: Skeleton, ordered: List[Bone]) -> Dict[UUID, Vec3]:
         """Canonical joint positions: bone head, or children centroid for containers."""
         positions: Dict[UUID, Vec3] = {}
+        names = {b.id: b.canonical_name for b in ordered}
         # Anatomical bones first (containers depend on them)
         for bone in ordered:
             if not bone.is_container:
                 positions[bone.id] = (bone.head.x, bone.head.y, bone.head.z)
-        # Containers: resolve deepest first so nested containers see their children
+        # Containers: resolve deepest first so nested containers see their children.
+        # child_ids is a frozenset of random UUIDs: sum in canonical-name order so the float
+        # result (and the GLB bytes) are identical on every run.
         for bone in reversed(ordered):
             if bone.is_container:
-                child_positions = [positions[c] for c in bone.child_ids if c in positions]
+                kids = sorted((c for c in bone.child_ids if c in positions), key=lambda c: names.get(c, ""))
+                child_positions = [positions[c] for c in kids]
                 if child_positions:
                     n = float(len(child_positions))
                     positions[bone.id] = (
