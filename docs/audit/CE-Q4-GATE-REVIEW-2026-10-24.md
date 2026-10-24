@@ -55,7 +55,7 @@ transform / kinematics contracts CE-Q1…CE-Q3). Entry criteria used here:
 | R10 #9 Distance metric naming | `geodesic_distance` doc | R10 | — | docstring says "geodesic on S³" but returns 2·acos‖q₁·q₂‖ (rotation angle on SO(3)) | **PENDIENTE** (P2, doc only) |
 | Phase 4 "engine interoperability verified" | Blender / UPBGE / Godot | Decision 20 | addon + runtimes | Blender 3.6 24/24, Blender 4.2 20/20, Godot 4.7.2 21/21 today; **UPBGE 0.50 suite last run 2026-09-29 on another machine** | Blender/Godot **VERIFICADO**; UPBGE **REPORTADO COMO FUNCIONAL** only |
 | RG-004 | architecture review approval | R21 Phase 4 | this document | — | **PENDIENTE** (owner) |
-| RG-005 | CE-Q4 release | R21 Phase 5 | — | — | **BLOQUEADO** until the items below |
+| RG-005 | CE-Q4 release | R21 Phase 5 | — | — | **BLOQUEADO** at review time → **UNBLOCKED 2026-10-24** (owner, Decision 41; see §6) |
 
 ## 4. Findings
 
@@ -103,4 +103,4 @@ run, not a change.
 | UPBGE 0.50 suite (Phase 4 interoperability) | Run by the owner on this PC: **26/27 PASS** (UPBGE 0.50 / Blender 5.0.1, Python 3.11.13). Only failure: blenderplayer autoplay smoke — NVIDIA 388.73 cannot compile UPBGE EEVEE shaders (C1317), crash 0xC0000005, reproduced with the pre-change `.blend` and without CE code: **environmental**. **DISPENSED by the owner** (Decision 39). Combat inside UPBGE and CINE-GR-001 checks verified |
 | F-3, F-4, NP-001 legacy degrees | open, non-blocking |
 | Runtime gating (Decision 40) | **Godot 4 is the only runtime that gates CE-Q4** and later phases: Godot 4.7.2 suite 21/21 (headless). UPBGE is OPTIONAL and non-blocking (code and tests kept; 26/27 informative). Follow-up: verify Godot windowed play on the GT 740M (Compatibility renderer already configured) |
-| **RG-005 (CE-Q4)** | **BLOQUEADO only by the owner's explicit approval to unblock.** All technical conditions are met (Godot gate 21/21; UPBGE optional per Decision 40; blenderplayer waived, Decision 39). Not declared unblocked by this review. |
+| **RG-005 (CE-Q4)** | **UNBLOCKED — explicit owner approval, 2026-10-24 (Decision 41).** Conditions: Godot gate 21/21 (Decision 40), UPBGE optional, blenderplayer waived (Decision 39), integrator convergence (Decision 38), suite green. |

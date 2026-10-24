@@ -10,6 +10,8 @@ All notable changes to Character Engine. Dates are ISO 8601.
   debug output). Guide: `docs/09_Debug_Consoles.md`.
 
 ### Decisions
+- Decision 41: **CE-Q4 unblocked** by the owner (RG-005).
+- Decision 42: production line in Blender (modelling, rigging, cinematography, render); gameplay runtime in Godot.
 - Decision 40: Godot 4 is the primary runtime and the only one that gates CE-Q4 and later phases; UPBGE stays
   supported but optional and non-blocking (no code or tests removed).
 - Decision 39: blenderplayer smoke check dispensed for CE-Q4 (NVIDIA 388.73 / GT 740M cannot compile UPBGE

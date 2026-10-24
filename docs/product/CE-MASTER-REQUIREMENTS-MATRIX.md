@@ -1,6 +1,7 @@
 # CE-MASTER-REQUIREMENTS-MATRIX
 
 **Owner:** Mariano Martin Galli · **Started:** 2026-10-24 · **Status:** DRAFT (row 1 of N)
+**Gate:** CE-Q4 UNBLOCKED 2026-10-24 (Decision 41) · **Pipeline:** production line in Blender, gameplay runtime in Godot (Decision 42)
 **Source of the method:** "Product Defined Complete — Cinematografías" (T13–T14) and "Tareas para el
 Despliegue" (CINE-SM/GR/H, P1–P15). Chain: PRODUCT → CINEMATOGRAPHY → REQUIREMENT → MANIFOLD →
 DOMAIN MODEL → IMPLEMENTATION → TEST → EVIDENCE (Toyota: CTQ, quality gate, jidoka, poka-yoke, kaizen).

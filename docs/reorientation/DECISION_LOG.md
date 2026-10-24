@@ -635,12 +635,40 @@ the automated suite runs `--headless`, so on-screen rendering on this GPU is sti
 
 ---
 
+## 41. CE-Q4 UNBLOCKED (RG-005) — OWNER APPROVAL
+
+**Decision** (owner, 2026-10-24): CE-Q4 is **UNBLOCKED**. Conditions met, per
+`docs/audit/CE-Q4-GATE-REVIEW-2026-10-24.md`:
+* repository integrity (RG-001) and R19 edits (RG-002) accepted; architecture review approved (RG-004);
+* mathematical contracts D-01…D-14 implemented and independently verified (Decisions 21–34);
+* integrator authorised: convergence tests with the corrected R10 criterion (Decision 38);
+* runtime gate: Godot 4.7.2 suite 21/21 (Decision 40); UPBGE optional; blenderplayer smoke waived as an
+  environment limit (Decision 39);
+* full suite green (pytest, ruff, architecture guard) at the time of approval.
+Open, non-blocking follow-ups: geodesic_distance docstring (F-4), legacy degree parameters (NP-001),
+integrator sign-branch coverage (F-3), Godot windowed play on the GT 740M (Decision 40).
+
+**Date**: 2026-10-24 · **Status**: FINAL
+
+---
+
+## 42. PRODUCTION LINE IN BLENDER, GAMEPLAY RUNTIME IN GODOT
+
+**Statement** (owner, 2026-10-24): the whole production line — modelling, anatomy assets, rigging,
+animation, cinematography and render — is done in **Blender** (3.6 reference, Decision 20); **Godot** is the
+**gameplay runtime** (Decision 40). The two exchange only canonical files (glTF / JSON) as described in
+`docs/architecture/PRODUCTION_VS_RUNTIME.md`. UPBGE stays optional. No new requirement is implied.
+
+**Date**: 2026-10-24 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 40
-**Final Decisions**: 36 (+4 deferred)
+**Total Decisions**: 42
+**Final Decisions**: 38 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)
