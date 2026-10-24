@@ -66,13 +66,17 @@ class Quaternion:
         return Quaternion(self.w, -self.x, -self.y, -self.z)
 
     def inverse(self) -> 'Quaternion':
-        """Compute inverse: q⁻¹ = q* / ||q||.
+        """Compute inverse: q⁻¹ = q* / ||q||² (so q * q⁻¹ = 1 for any non-zero q; Decision 21).
 
         Raises DegenerateQuaternionError when ||q|| < NORM_TOLERANCE (Decision 22).
 
         Provenance: PROVEN (standard definition)
         """
-        return self.conjugate().normalize()
+        n = self.norm()
+        if n < NORM_TOLERANCE:
+            raise DegenerateQuaternionError(f"cannot invert a degenerate quaternion (||q|| = {n:.3e})")
+        n2 = n * n
+        return Quaternion(self.w / n2, -self.x / n2, -self.y / n2, -self.z / n2)
 
     def __mul__(self, other: 'Quaternion') -> 'Quaternion':
         """Hamilton product: q₁ * q₂.

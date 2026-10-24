@@ -79,6 +79,18 @@ class TestQuaternion:
         product = q * qi
         assert product.norm() == pytest.approx(1.0, abs=NORM_TOLERANCE)
 
+    def test_inverse_of_non_unit_quaternion(self):
+        """Decision 21 (D-01): q⁻¹ = q*/||q||², so q * q⁻¹ = q⁻¹ * q = 1 for non-unit q."""
+        qi = Quaternion(2, 0, 0, 0).inverse()
+        assert (qi.w, qi.x, qi.y, qi.z) == pytest.approx((0.5, 0, 0, 0), abs=1e-15)
+        for q in (Quaternion(1, 2, 3, 4), Quaternion(0.1, -0.2, 0.05, 0.3), Quaternion(-3, 0.5, 7, -2)):
+            for prod in (q * q.inverse(), q.inverse() * q):
+                assert (prod.w, prod.x, prod.y, prod.z) == pytest.approx((1, 0, 0, 0), abs=1e-12)
+        q = Quaternion(1, 2, 3, 4)
+        qi = q.inverse()
+        n2 = q.norm() ** 2
+        assert (qi.w, qi.x, qi.y, qi.z) == pytest.approx((1 / n2, -2 / n2, -3 / n2, -4 / n2), abs=1e-15)
+
     def test_multiplication_associativity(self):
         """Test associativity: (q₁ * q₂) * q₃ = q₁ * (q₂ * q₃)."""
         q1 = Quaternion(1, 2, 3, 4)
