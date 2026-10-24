@@ -531,12 +531,28 @@ undid the negation (slerp t=0.5 between rotations 0.399 rad apart landed 2.94 ra
 
 ---
 
+## 35. FINDING A10 — HAND LAYOUT REBUILT FROM SOURCED LENGTH AND ATLAS TOPOLOGY
+
+**Finding**: metacarpals and phalanges of both hands sat 15–20 cm medial to the wrist (by the thigh),
+carpals ~10 cm below the wrist, metacarpals/proximal phalanges parented to the radius.
+
+**Decision** (owner, 2026-10-24): rebuild the 27 hand bones per side with `scripts/rebuild_hand_layout.py`:
+wrist anchor = radius tail, fingertips at 0.377 H (Drillis & Contini, PROVEN → hand length 0.108 H
+DERIVED), atlas topology for carpal rows, metacarpal articulations and phalangeal chains (PROVEN). The
+split carpal row : metacarpal : phalanx = 2 : 4 : 3 and the 0.0133 m spacing are the **pre-existing
+PLACEHOLDER values**, re-arranged only; a sourced set (`HAND_SEGMENT_PROPORTIONS`) is required before
+they can be upgraded (Decision 12). Audit: `docs/audit/A10_HAND_LAYOUT.md`.
+
+**Date**: 2026-10-24 · **Status**: FINAL (layout); proportions PLACEHOLDER, source pending
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 34
-**Final Decisions**: 30 (+4 deferred)
+**Total Decisions**: 35
+**Final Decisions**: 31 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)

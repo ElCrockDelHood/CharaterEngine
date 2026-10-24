@@ -2,6 +2,19 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-24 (afternoon) · Finding A10: hand layout
+
+### Fixed
+- **Hands** (`scripts/rebuild_hand_layout.py`, `docs/audit/A10_HAND_LAYOUT.md`): metacarpals and
+  phalanges were 15–20 cm medial to the wrist and parented to the radius. Rebuilt from the wrist
+  (radius tail) to the sourced fingertip height (0.377 H) with atlas topology (carpal rows,
+  MC1←trapezium … MC4/MC5←hamate, phalangeal chains). Intra-hand proportions remain PLACEHOLDER
+  (pre-existing values), registered as `HAND_SEGMENT_PROPORTIONS` (source pending).
+
+### Test status
+pytest 743 passed (`test_hand_layout.py` new); addon headless 20/20 on Blender 3.6.23; Godot 4.7.2 21/21;
+gameplay table unchanged.
+
 ## [Unreleased] — 2026-10-24 (afternoon) · Decision 17 closed: left is +X
 
 ### Changed
