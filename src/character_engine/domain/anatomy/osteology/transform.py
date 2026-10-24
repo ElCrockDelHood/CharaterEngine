@@ -83,13 +83,14 @@ class GlobalTransform:
         return GlobalTransform(inv_position, inv_orientation)
 
     def to_dict(self) -> Dict[str, Any]:
-        """Serialize to dictionary.
+        """Serialize to dictionary (orientation in canonical w ≥ 0 form, Decision 28).
 
         Provenance: PROVEN (standard serialization)
         """
+        q = self.orientation.canonical()
         return {
             "position": {"x": self.position.x, "y": self.position.y, "z": self.position.z},
-            "orientation": {"w": self.orientation.w, "x": self.orientation.x, "y": self.orientation.y, "z": self.orientation.z}
+            "orientation": {"w": q.w, "x": q.x, "y": q.y, "z": q.z}
         }
 
     @classmethod
@@ -143,13 +144,14 @@ class LocalJointTransform:
         return LocalJointTransform(Vector3.zero(), UnitQuaternion.identity())
 
     def to_dict(self) -> Dict[str, Any]:
-        """Serialize to dictionary.
+        """Serialize to dictionary (orientation in canonical w ≥ 0 form, Decision 28).
 
         Provenance: PROVEN (standard serialization)
         """
+        q = self.orientation.canonical()
         return {
             "position": {"x": self.position.x, "y": self.position.y, "z": self.position.z},
-            "orientation": {"w": self.orientation.w, "x": self.orientation.x, "y": self.orientation.y, "z": self.orientation.z}
+            "orientation": {"w": q.w, "x": q.x, "y": q.y, "z": q.z}
         }
 
     @classmethod

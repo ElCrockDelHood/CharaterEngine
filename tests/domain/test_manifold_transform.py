@@ -174,6 +174,14 @@ class TestLocalJointTransform:
         assert t2.position == pytest.approx(t.position, abs=1e-9)
         assert t2.orientation.equals(t.orientation)
 
+    def test_to_dict_serialises_canonical_orientation(self):
+        """Decision 28: arithmetic keeps the sign, serialisation writes the w ≥ 0 form."""
+        q = UnitQuaternion.from_axis_angle(Vector3(0, 0, 1), math.pi / 6)
+        neg = UnitQuaternion(-q.w, -q.x, -q.y, -q.z)
+        for cls in (LocalJointTransform, GlobalTransform):
+            a, b = cls(Vector3(1, 2, 3), q).to_dict(), cls(Vector3(1, 2, 3), neg).to_dict()
+            assert a == b and a["orientation"]["w"] > 0
+
 
 class TestHierarchicalComposition:
     """Tests for hierarchical parent-child composition."""

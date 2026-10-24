@@ -175,17 +175,23 @@ class TestUnitQuaternion:
         assert q.norm() == pytest.approx(1.0, abs=NORM_TOLERANCE)
 
     def test_double_cover_canonicalization(self):
-        """Test canonicalization to w ≥ 0."""
-        # q with w > 0 should remain unchanged
-        q = UnitQuaternion(0.5, 0.5, 0.5, 0.5)
-        assert q.w > 0
+        """Decision 28 (D-08): the constructor keeps the sign; canonical() gives w ≥ 0.
 
-        # q with w < 0 should be negated
+        (Previously the constructor flipped w < 0, which undid SLERP/NLERP's shortest-path
+        negation — Q-010.)
+        """
+        q = UnitQuaternion(0.5, 0.5, 0.5, 0.5)
+        assert q.canonical() == q
+
         q = UnitQuaternion(-0.5, 0.5, 0.5, 0.5)
-        assert q.w > 0
-        assert q.x == pytest.approx(-0.5, abs=NORM_TOLERANCE)
-        assert q.y == pytest.approx(-0.5, abs=NORM_TOLERANCE)
-        assert q.z == pytest.approx(-0.5, abs=NORM_TOLERANCE)
+        assert (q.w, q.x, q.y, q.z) == (-0.5, 0.5, 0.5, 0.5)       # no canonicalisation in arithmetic
+        c = q.canonical()
+        assert c.w == pytest.approx(0.5, abs=NORM_TOLERANCE)
+        assert (c.x, c.y, c.z) == pytest.approx((-0.5, -0.5, -0.5), abs=NORM_TOLERANCE)
+        assert q.equals(c)                                           # same rotation
+
+        # w == 0: ties broken by the first non-zero component
+        assert UnitQuaternion(0, -1, 0, 0).canonical() == UnitQuaternion(0, 1, 0, 0)
 
     def test_from_quaternion(self):
         """Test creation from general Quaternion."""
@@ -198,10 +204,11 @@ class TestUnitQuaternion:
         assert uq == UnitQuaternion(0, 1, 0, 0)
 
     def test_from_quaternion_canonicalization(self):
-        """Test that from_quaternion canonicalizes double cover."""
+        """Decision 28 (D-08): from_quaternion only normalises; canonical() is explicit."""
         q = Quaternion(-0.5, 0.5, 0.5, 0.5)
         uq = UnitQuaternion.from_quaternion(q)
-        assert uq.w > 0
+        assert uq.w == pytest.approx(-0.5, abs=NORM_TOLERANCE)
+        assert uq.canonical().w > 0
 
     def test_from_quaternion_finite_check(self):
         """Test that from_quaternion rejects non-finite input."""
@@ -305,7 +312,7 @@ class TestUnitQuaternion:
         q1 = UnitQuaternion.from_axis_angle(Vector3(0, 0, 1), math.pi/4)
         q2 = UnitQuaternion(-q1.w, -q1.x, -q1.y, -q1.z)
 
-        # Both should be canonicalized to w ≥ 0
+        # equals() treats q and -q as the same rotation (Decision 28)
         assert q1.equals(q2)
 
         # Both should rotate vectors identically
@@ -445,6 +452,39 @@ class TestNLERP:
             nlerp(q1, q2, 1.1)
 
 
+class TestShortestPathQ010:
+    """Decision 34 (D-14 / Q-010): the shortest-path negation must not be undone.
+
+    q1 and q2 both have w > 0 but q1·q2 < 0; before the fix the constructor flipped -q2 back
+    and SLERP/NLERP went the long way round.
+    """
+
+    N = math.sqrt(0.1 ** 2 + 1)
+    Q1 = UnitQuaternion(0.1 / N, 1 / N, 0, 0)
+    Q2 = UnitQuaternion(0.1 / N, -1 / N, 0, 0)
+
+    def test_slerp_stays_on_the_short_geodesic(self):
+        d12 = geodesic_distance(self.Q1, self.Q2)
+        assert d12 == pytest.approx(0.3987, abs=1e-3)
+        for t in (0.25, 0.5, 0.75):
+            s = slerp(self.Q1, self.Q2, t)
+            assert geodesic_distance(self.Q1, s) + geodesic_distance(s, self.Q2) == pytest.approx(d12, abs=1e-9)
+            assert geodesic_distance(self.Q1, s) == pytest.approx(t * d12, abs=1e-9)
+
+    def test_nlerp_midpoint_is_pi_about_x(self):
+        m = nlerp(self.Q1, self.Q2, 0.5)
+        assert m.equals(UnitQuaternion(0, 1, 0, 0), tolerance=1e-12)
+        assert not m.equals(UnitQuaternion.identity(), tolerance=1e-3)
+
+    def test_slerp_result_keeps_q1_sign(self):
+        """No re-canonicalisation: the curve is continuous from q1 (useful for sampled animation)."""
+        prev = self.Q1
+        for i in range(1, 21):
+            s = slerp(self.Q1, self.Q2, i / 20)
+            assert s.dot(prev) > 0
+            prev = s
+
+
 class TestAngularVelocity:
     """Tests for angular velocity and integration."""
 
@@ -538,6 +578,19 @@ class TestAngularVelocity:
         q_next = integrate_quaternion_angular_velocity(q, omega, dt)
         assert q_next.equals(q)
 
+    def test_integration_has_no_sign_jumps(self):
+        """Decision 28: a full turn passes w = 0 without flipping to the other hemisphere."""
+        q = UnitQuaternion.identity()
+        omega = Vector3(0, 0, 2 * math.pi)          # one turn per second about Z
+        dt = 0.001
+        for _ in range(1000):
+            q_next = integrate_quaternion_angular_velocity(q, omega, dt)
+            assert q_next.dot(q) > 0.99             # consecutive states stay in the same hemisphere
+            q = q_next
+        # after 2π the quaternion is -identity (same rotation), reached continuously
+        assert q.w == pytest.approx(-1.0, abs=1e-2)
+        assert q.equals(UnitQuaternion.identity(), tolerance=1e-2)
+
 
 class TestGeodesicDistance:
     """Tests for geodesic distance on S³."""
@@ -561,8 +614,7 @@ class TestGeodesicDistance:
         q = UnitQuaternion.from_axis_angle(Vector3(0, 0, 1), math.pi/4)
         q_neg = UnitQuaternion(-q.w, -q.x, -q.y, -q.z)
 
-        # After canonicalization, both should be equivalent
-        # Distance should be zero (both canonicalized to same representation)
+        # q and -q are the same rotation: |q·(-q)| = 1, distance zero
         d = geodesic_distance(q, q_neg)
         assert d == pytest.approx(0.0, abs=NORM_TOLERANCE)
 

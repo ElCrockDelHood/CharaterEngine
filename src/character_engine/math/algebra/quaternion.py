@@ -3,7 +3,8 @@
 Contract: CE-Q1 CANONICAL QUATERNION AND MANIFOLD CONTRACT
 - Quaternion: general 4D hypercomplex number
 - UnitQuaternion: subset with ||q|| = 1 (S³ manifold)
-- Double cover: q ~ -q (canonicalized to w ≥ 0)
+- Double cover: q ~ -q. The w ≥ 0 canonical form is applied only when comparing
+  (``equals``) or serialising (``canonical()``), never inside arithmetic (Decision 28 / D-08)
 - Euler angles: boundary only, NOT for internal calculations
 """
 
@@ -162,11 +163,13 @@ class UnitQuaternion:
     """Unit quaternion: subset of Quaternion with ||q|| = 1 (S³ manifold).
 
     This is the canonical representation of 3D orientation in Character Engine.
-    Enforces unit norm and double cover canonicalization (w ≥ 0).
+    Enforces unit norm. The sign is preserved: q and -q are the same rotation, ``equals``
+    treats them as equal and ``canonical()`` gives the w ≥ 0 form for serialisation.
+    ``==`` is component-wise (representation) equality.
 
     Contract: CE-Q1
     - Manifold: S³ (unit quaternions)
-    - Double cover: q ~ -q (canonicalized to w ≥ 0)
+    - Double cover: q ~ -q (canonical form w ≥ 0 only for comparison/serialisation, Decision 28)
     - Physical rotation: SO(3) (via q ⊙ v)
 
     Provenance: PROVEN (CE-Q1 contract)
@@ -177,7 +180,7 @@ class UnitQuaternion:
     z: float = 0.0
 
     def __post_init__(self):
-        """Enforce unit norm and canonicalize double cover (w ≥ 0)."""
+        """Enforce finite components and unit norm (the sign is kept, Decision 28)."""
         # Check if components are finite
         if not all(math.isfinite(c) for c in (self.w, self.x, self.y, self.z)):
             raise ValueError(f"UnitQuaternion components must be finite: got ({self.w}, {self.x}, {self.y}, {self.z})")
@@ -193,13 +196,15 @@ class UnitQuaternion:
         if abs(norm - 1.0) > NORM_TOLERANCE:
             raise ValueError(f"UnitQuaternion must have unit norm (||q|| = 1), got ||q|| = {norm:.15f}")
 
-        # Canonicalize double cover: ensure w ≥ 0
-        # If w < 0, negate all components (q and -q represent same rotation)
-        if self.w < 0:
-            object.__setattr__(self, 'w', -self.w)
-            object.__setattr__(self, 'x', -self.x)
-            object.__setattr__(self, 'y', -self.y)
-            object.__setattr__(self, 'z', -self.z)
+    def canonical(self) -> 'UnitQuaternion':
+        """Representative of {q, -q} with w > 0 (ties broken by the first non-zero of x, y, z).
+
+        Use for comparison and serialisation only, never inside arithmetic (Decision 28).
+        """
+        for c in (self.w, self.x, self.y, self.z):
+            if c != 0:
+                return self if c > 0 else UnitQuaternion(-self.w, -self.x, -self.y, -self.z)
+        return self
 
     def norm(self) -> float:
         """Compute norm (should always be 1.0 within tolerance).
@@ -263,16 +268,16 @@ class UnitQuaternion:
         return True  # Enforced in __post_init__
 
     def equals(self, other: 'UnitQuaternion', tolerance: float = EQUALITY_TOLERANCE) -> bool:
-        """Check equality accounting for double cover (q ≡ -q).
+        """Check rotation equality accounting for double cover (q ≡ -q).
 
-        Provenance: DERIVED (from canonicalization and tolerance)
+        Provenance: DERIVED (from double cover and tolerance)
         """
-        # Anti-aliasing: q₁ ≡ q₂ if canonical(q₁) = canonical(q₂)
-        # Since both are canonicalized (w ≥ 0), direct comparison is sufficient
-        return (abs(self.w - other.w) < tolerance and
-                abs(self.x - other.x) < tolerance and
-                abs(self.y - other.y) < tolerance and
-                abs(self.z - other.z) < tolerance)
+        def close(sign: float) -> bool:
+            return (abs(self.w - sign * other.w) < tolerance and
+                    abs(self.x - sign * other.x) < tolerance and
+                    abs(self.y - sign * other.y) < tolerance and
+                    abs(self.z - sign * other.z) < tolerance)
+        return close(1.0) or close(-1.0)
 
     @staticmethod
     def identity() -> 'UnitQuaternion':
@@ -286,21 +291,15 @@ class UnitQuaternion:
     def from_quaternion(q: Quaternion) -> 'UnitQuaternion':
         """Create UnitQuaternion from general Quaternion.
 
-        Normalizes and canonicalizes to w ≥ 0.
+        Normalizes; the sign is kept (Decision 28 — use ``canonical()`` for w ≥ 0).
 
-        Provenance: DERIVED (from unit enforcement and canonicalization)
+        Provenance: DERIVED (from unit enforcement)
         """
         # Check finite
         if not q.is_finite():
             raise ValueError(f"Cannot create UnitQuaternion from non-finite quaternion: ({q.w}, {q.x}, {q.y}, {q.z})")
 
-        # Normalize
         normalized = q.normalize()
-
-        # Canonicalize to w ≥ 0
-        if normalized.w < 0:
-            normalized = Quaternion(-normalized.w, -normalized.x, -normalized.y, -normalized.z)
-
         return UnitQuaternion(normalized.w, normalized.x, normalized.y, normalized.z)
 
     @staticmethod
@@ -371,7 +370,8 @@ def slerp(q1: UnitQuaternion, q2: UnitQuaternion, t: float) -> UnitQuaternion:
     Formula: slerp(q₁, q₂, t) = (sin((1-t)θ) * q₁ + sin(tθ) * q₂) / sin(θ)
     where θ = arccos(q₁ · q₂)
 
-    Double cover handling: uses shorter path (if q₁ · q₂ < 0, uses -q₂)
+    Double cover handling: uses shorter path (if q₁ · q₂ < 0, blends with -q₂). The result
+    starts at q₁ with q₁'s sign; it is not re-canonicalised (Decisions 28 and 34 / Q-010).
 
     Provenance: PROVEN (Ken Shoemake 1985)
     """
@@ -384,7 +384,7 @@ def slerp(q1: UnitQuaternion, q2: UnitQuaternion, t: float) -> UnitQuaternion:
     # Double cover handling: use shorter path
     dot = q1.dot(q2)
     if dot < 0:
-        q2 = UnitQuaternion(-q2.w, -q2.x, -q2.y, -q2.z)
+        q2 = UnitQuaternion(-q2.w, -q2.x, -q2.y, -q2.z)   # sign kept by the constructor
         dot = -dot
 
     # Clamp dot to [-1, 1] to avoid numerical issues
@@ -419,7 +419,8 @@ def nlerp(q1: UnitQuaternion, q2: UnitQuaternion, t: float) -> UnitQuaternion:
     Interpolates linearly in ℝ⁴, then normalizes to unit quaternion.
     Does NOT follow geodesic (angular velocity not constant), but computationally cheaper.
 
-    Double cover handling: uses shorter path (if q₁ · q₂ < 0, uses -q₂)
+    Double cover handling: uses shorter path (if q₁ · q₂ < 0, blends with -q₂); the result is
+    not re-canonicalised (Decisions 28 and 34 / Q-010).
 
     Provenance: PROVEN (Jonathan Blow 2002)
     """
@@ -432,7 +433,7 @@ def nlerp(q1: UnitQuaternion, q2: UnitQuaternion, t: float) -> UnitQuaternion:
     # Double cover handling: use shorter path
     dot = q1.dot(q2)
     if dot < 0:
-        q2 = UnitQuaternion(-q2.w, -q2.x, -q2.y, -q2.z)
+        q2 = UnitQuaternion(-q2.w, -q2.x, -q2.y, -q2.z)   # sign kept by the constructor
 
     # Linear interpolation
     result = Quaternion(
@@ -498,8 +499,11 @@ def integrate_quaternion_angular_velocity(
         q.z + dt * dq_dt.z
     )
 
-    # Renormalize to maintain unit norm
-    return UnitQuaternion.from_quaternion(q_next)
+    # Renormalize; keep the sign closest to the previous state (continuity, Decision 28)
+    q_next = UnitQuaternion.from_quaternion(q_next)
+    if q_next.dot(q) < 0:
+        q_next = UnitQuaternion(-q_next.w, -q_next.x, -q_next.y, -q_next.z)
+    return q_next
 
 
 def geodesic_distance(q1: UnitQuaternion, q2: UnitQuaternion) -> float:
