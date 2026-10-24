@@ -489,13 +489,46 @@ authorization; new Blender versions are evaluated as isolated candidates first.
 
 ---
 
+## 21–34. MATHEMATICAL CONTRACTS (owner decisions D-01 … D-14)
+
+**Context**: `docs/audit/S2-D1-R21-MATHEMATICAL-DECISION-REGISTER.md` (R21) listed the open quaternion /
+transform contracts. On 2026-10-24 the project owner approved the **recommended option** for each of
+them (decision record D-01 … D-14). Q-010 is a defect found after R21 by direct execution: SLERP/NLERP
+negate `q2` for the shortest path, but the `UnitQuaternion` constructor re-canonicalised `w ≥ 0` and
+undid the negation (slerp t=0.5 between rotations 0.399 rad apart landed 2.94 rad from both ends).
+
+| # | Owner ID | R21 IDs | Decision | Status |
+|---|----------|---------|----------|--------|
+| 21 | D-01 | QI-001, QI-003, QI-005 | `Quaternion.inverse()` = q* / ‖q‖² (general quaternions); unit quaternions keep q⁻¹ = q*. | FINAL |
+| 22 | D-02 | Q-007, Q-008, QI-004 | Degenerate quaternions (‖q‖ < `NORM_TOLERANCE` = 1e-9) raise `DegenerateQuaternionError` (subclass of `ValueError`) in `normalize()` / `inverse()` / `UnitQuaternion`; never a silent identity. Tolerances: `NORM_TOLERANCE` 1e-9 (unit check, degeneracy), `EQUALITY_TOLERANCE` 1e-9. The unused `RENORMALIZATION_TRIGGER` is removed. | FINAL |
+| 23 | D-03 | TI-003, TI-004, TI-006, TI-007 | `Transform.inverse()` is exact: (−(1/s)·R⁻¹⊙p, R⁻¹, 1/s). With uniform scale it is always representable as TRS. | FINAL |
+| 24 | D-04 | TC-003, TC-004, TC-005 | `Transform.compose()` is exact: (p₁ + s₁·R₁⊙p₂, R₁·R₂, s₁·s₂), equal to the 4×4 matrix product. | FINAL |
+| 25 | D-05 | TR-001, TC-006 | `Transform` is TRS with **uniform** scale; no shear. Non-uniform scale raises in `compose()`/`inverse()` (a separate affine type will be introduced only when a module needs it). | FINAL |
+| 26 | D-06 | Q-005, Q-006 | Angular velocity is expressed in the **spatial (world) frame**: q̇ = ½·ω_world·q (left multiplication), consistent with q_global = q_parent·q_local. | FINAL |
+| 27 | D-07 | NP-001 | Angles are **radians** everywhere in the domain; degrees only at interfaces, with a `_deg` suffix. | FINAL |
+| 28 | D-08 | Q-009, NP-002 | Double cover: q and −q are the same rotation. The `w ≥ 0` canonical form is applied **only when comparing or serialising**, never inside arithmetic; integration keeps sign continuity with the previous state. | FINAL |
+| 29 | D-09 | NP-003 | Point3 vs Vector3: deferred (Vector3 only). | DEFERRED |
+| 30 | D-10 | NP-004 | Dimensional validation: deferred. | DEFERRED |
+| 31 | D-11 | NP-005 | Unit conversion: `UnitConverter` (`domain/anatomy/coordinate_system.py`) is the only conversion path and is used at the boundaries. | DEFERRED (rule recorded) |
+| 32 | D-12 | NP-006 | Semantic types: deferred. | DEFERRED |
+| 33 | D-13 | Decision 17 | Left/right vs −Y forward: an impact analysis of mirroring X is prepared before any data change. | OPEN (analysis only) |
+| 34 | D-14 | Q-010 (new) | SLERP/NLERP must take the shortest path; the negation is never undone by canonicalisation. | FINAL |
+
+**Evidence**: each code decision lands in its own commit with tests that distinguish the cases
+(non-unit inverse, degenerate input, frame of ω, exact TRS vs matrix product, SLERP counter-example).
+
+**Date**: 2026-10-24 · **Status**: as per table (decided by the project owner)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 20
-**Final Decisions**: 19
-**Open Decisions**: 1 (Decision 17, left/right labelling vs −Y forward)
+**Total Decisions**: 34
+**Final Decisions**: 28 (+4 deferred, 1 open analysis, Decision 17 open)
+**Open Decisions**: 2 (Decision 17, left/right labelling vs −Y forward; Decision 33, its impact analysis)
+**Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)
 **Critical Decisions**: 6 (Source of Truth, Architecture Direction, Backend Priority, Provenance System, Mesh Generation, Data Invention Rule)
 
