@@ -14,7 +14,7 @@ NO Euler angles for internal calculations.
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from ....math.algebra.matrix4 import Matrix4
 from ....math.algebra.quaternion import Quaternion, UnitQuaternion

@@ -7,8 +7,8 @@ Measures actual performance (not estimates) for:
 - Global/local conversion
 """
 
-import time
 import statistics
+import time
 
 from character_engine.domain.anatomy.osteology.transform import (
     GlobalTransform,
@@ -84,7 +84,7 @@ def benchmark_skeleton_update(joints=206, iterations=100):
 
         start = time.perf_counter()
 
-        for i in range(joints):
+        for _ in range(joints):
             local = LocalJointTransform(
                 Vector3(0.01, 0.0, 0.0),
                 UnitQuaternion.from_axis_angle(Vector3(0.0, 0.0, 1.0), 0.01)

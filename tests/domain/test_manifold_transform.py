@@ -7,13 +7,14 @@ Tests validate manifold properties, hierarchical composition, and frame transfor
 """
 
 import math
+
 import pytest
 
 from character_engine.domain.anatomy.osteology.transform import (
+    BonePivot,
     GlobalTransform,
     LocalJointTransform,
     Transform,
-    BonePivot,
 )
 from character_engine.math.algebra.quaternion import Quaternion, UnitQuaternion
 from character_engine.math.algebra.vector3 import Vector3
@@ -428,7 +429,7 @@ class TestNumericalProperties:
         current = GlobalTransform.identity()
 
         # Create chain with small rotations
-        for i in range(5):
+        for _ in range(5):
             local = LocalJointTransform(
                 Vector3(0.01, 0, 0),
                 UnitQuaternion.from_axis_angle(Vector3(0, 0, 1), 0.01)
@@ -447,7 +448,6 @@ class TestBackwardCompatibility:
 
     def test_transform_still_works(self):
         """Test that legacy Transform class still works."""
-        from character_engine.domain.anatomy.osteology.transform import Transform
 
         t = Transform(
             Vector3(1, 2, 3),
@@ -460,7 +460,6 @@ class TestBackwardCompatibility:
 
     def test_bone_pivot_still_works(self):
         """Test that legacy BonePivot class still works."""
-        from character_engine.domain.anatomy.osteology.transform import BonePivot
 
         pivot = BonePivot(
             Vector3(1, 2, 3),

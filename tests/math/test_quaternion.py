@@ -5,19 +5,18 @@ Tests validate mathematical properties, not just concrete examples.
 """
 
 import math
+
 import pytest
 
 from character_engine.math.algebra.quaternion import (
+    NORM_TOLERANCE,
     Quaternion,
     UnitQuaternion,
-    slerp,
-    nlerp,
     angular_velocity_to_quaternion_derivative,
-    integrate_quaternion_angular_velocity,
     geodesic_distance,
-    NORM_TOLERANCE,
-    EQUALITY_TOLERANCE,
-    RENORMALIZATION_TRIGGER,
+    integrate_quaternion_angular_velocity,
+    nlerp,
+    slerp,
 )
 from character_engine.math.algebra.vector3 import Vector3
 

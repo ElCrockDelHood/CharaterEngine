@@ -9,7 +9,6 @@ Contract: CE-Q1 CANONICAL QUATERNION AND MANIFOLD CONTRACT
 
 import math
 from dataclasses import dataclass
-from typing import Optional
 
 from .vector3 import Vector3
 
