@@ -650,6 +650,24 @@ integrator sign-branch coverage (F-3), Godot windowed play on the GT 740M (Decis
 
 **Date**: 2026-10-24 · **Status**: FINAL
 
+**Follow-up — Godot windowed play on the GT 740M: DONE (owner run, 2026-10-24).** The editor ran windowed
+with `OpenGL API 3.3.0 NVIDIA 388.73 - Compatibility - Using Device: NVIDIA - GeForce GT 740M`, no shader
+errors, plugin loaded (`[CE] Character Engine ready`), 0 errors / 0 warnings in Output. The owner created the
+arena in a new Node3D scene (saved as `res://arena_play.tscn`, Autoplay demo on), validated the T-pose GLB
+(`PASS (bones 208, height 1.76 m)`) and pressed F6: the game window (1152×648) ran the Shenmue-style free
+battle to frame 180 with the HUD (player HP 100.0 recovery, 0 wounds; opponent HP 66.0 hitstun, 4 wounds),
+two 208-bone skeletons in T-pose on the 12×12 m floor. Observed, not defects:
+* the characters render as thin bone proxies (glTF skeleton display) — no body mesh exists yet (CINE-GR-001
+  next steps);
+* `height 1.76 m` vs stature 1.80 m is expected: the validator measures the extent of joint origins (bone
+  heads; top head = FRONTAL head at z 1.7666 m), while stature is reached by the FRONTAL tail (vertex,
+  z 1.800 m) in `human_adult_206.json`. No data changed;
+* the opponent is AI-driven in the arena, so its HP at frame 180 is not comparable with the scripted
+  reference fight `autoplay_180` (63.5 HP).
+FPS not captured yet. `arena_play.tscn` is untracked (not committed); saving in Godot 4.7 also rewrote
+`runtime/godot/project.godot` (features 4.3 → 4.7, header comments and the explicit 60 Hz physics tick
+dropped, an animation compatibility key added) — left uncommitted pending the owner's decision.
+
 ---
 
 ## 42. PRODUCTION LINE IN BLENDER, GAMEPLAY RUNTIME IN GODOT
@@ -658,6 +676,13 @@ integrator sign-branch coverage (F-3), Godot windowed play on the GT 740M (Decis
 animation, cinematography and render — is done in **Blender** (3.6 reference, Decision 20); **Godot** is the
 **gameplay runtime** (Decision 40). The two exchange only canonical files (glTF / JSON) as described in
 `docs/architecture/PRODUCTION_VS_RUNTIME.md`. UPBGE stays optional. No new requirement is implied.
+
+**Clarification** (owner, 2026-10-24, after the windowed Godot run): modelling **and simulation**
+(PBD/XPBD, materials) **and** cinematography are done in Blender; their results are then passed to Godot,
+where the **fight engagement system** (gameplay runtime) lives. What travels from Blender to Godot are
+canonical files (glTF / JSON) carrying baked results. The specific bake/export format for simulation results
+is **NOT yet specified** (pending decision), and the fight engagement system has no specification yet
+(scope to be defined by the owner before any code).
 
 **Date**: 2026-10-24 · **Status**: FINAL
 

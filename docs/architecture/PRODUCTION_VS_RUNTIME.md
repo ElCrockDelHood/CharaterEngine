@@ -14,6 +14,10 @@ work in one never leaks into the others:
 
 Owner decision 2026-10-24 (DECISION_LOG §40, §42): production happens in Blender, gameplay runtime in Godot.
 UPBGE (authoring + game mode) remains supported but optional and non-blocking.
+Clarification (owner, 2026-10-24, DECISION_LOG §42): modelling, **simulation** (PBD/XPBD, materials) and
+cinematography are done in Blender; the results pass to Godot, where the **fight engagement system**
+(gameplay runtime) lives. Only canonical files (glTF / JSON, baked results) travel from Blender to Godot;
+the bake/export format for simulation results is **not yet specified** (pending decision).
 
 The two engines only ever talk to each other through **neutral files** produced or consumed by
 the core. Nothing in production depends on runtime code and vice versa.
