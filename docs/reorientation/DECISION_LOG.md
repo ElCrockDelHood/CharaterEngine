@@ -468,12 +468,33 @@ timer; the UPBGE suite therefore runs in UI mode and uses `blenderplayer.exe` fo
 
 ---
 
+## 20. BLENDER 3.6 LTS IS THE REFERENCE VERSION; 4.x SUPPORTED
+
+**Decision**: The Blender addon targets **Blender 3.6 LTS** (3.6.23, portable in `C:\DEV\Tools\Blender`)
+as the project reference version and keeps working on Blender 4.x and UPBGE 0.50 (Blender 5.0.1).
+`bl_info["blender"] = (3, 6, 0)`. Version-specific API is confined to small compatibility helpers in
+`infrastructure/blender/addon/` (today only bone grouping: bone collections on 4.x, armature layers
+0/1/2 on 3.6, plus the `ce_layer` bone property on both).
+
+**Rationale**: The development machine (ASUS N56VB, GeForce GT 740M / Intel HD 4000) showed a black
+screen with Blender 5.2; Blender 3.6 is the version the owner works with. UPBGE 0.50 (Blender 5.0.1)
+remains the game runtime, so dropping 4.x support would break the Runtime panel.
+
+**Rule**: tool versions are not changed without a concrete compatibility test and the owner's
+authorization; new Blender versions are evaluated as isolated candidates first.
+
+**Evidence**: addon headless suite 20/20 on Blender 3.6.23 and 20/20 on Blender 4.2.23 LTS (background).
+
+**Date**: 2026-10-24 · **Status**: FINAL (decided by the project owner)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 19
-**Final Decisions**: 18
+**Total Decisions**: 20
+**Final Decisions**: 19
 **Open Decisions**: 1 (Decision 17, left/right labelling vs −Y forward)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)
 **Critical Decisions**: 6 (Source of Truth, Architecture Direction, Backend Priority, Provenance System, Mesh Generation, Data Invention Rule)

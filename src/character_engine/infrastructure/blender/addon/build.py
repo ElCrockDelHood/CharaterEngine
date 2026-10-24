@@ -114,6 +114,29 @@ def _material(name: str, rgba: Tuple[float, float, float, float]):
     return mat
 
 
+# Bone layers DEF/MCH/CTRL: bone collections on Blender 4.x, armature layer index on Blender 3.6
+# (no ``Armature.collections`` before 4.0). ``ce_layer`` records the role on both.
+_LAYER_INDEX = {"DEF": 0, "MCH": 1, "CTRL": 2}
+
+
+def assign_bone_layer(arm_data, bone, layer: str) -> None:
+    bone["ce_layer"] = layer
+    if hasattr(arm_data, "collections"):
+        coll = arm_data.collections.get(layer) or arm_data.collections.new(layer)
+        coll.assign(bone)
+    else:
+        idx = _LAYER_INDEX[layer]
+        bone.layers = [i == idx for i in range(32)]
+        arm_data.layers[idx] = True
+
+
+def bone_layer_names(arm_data) -> List[str]:
+    """Names of the DEF/MCH/CTRL layers that hold at least one bone (either Blender API)."""
+    if hasattr(arm_data, "collections"):
+        return sorted(c.name for c in arm_data.collections if c.name in _LAYER_INDEX and len(c.bones))
+    return sorted(name for name, idx in _LAYER_INDEX.items() if any(b.layers[idx] for b in arm_data.bones))
+
+
 def bone_points(armature) -> Dict[str, Tuple[Vector, Vector]]:
     """World-space (head, tail) of every bone from the rest pose."""
     mw = armature.matrix_world
@@ -179,9 +202,8 @@ def build_armature(context, bones: Sequence[dict], containers: Sequence[dict], n
             created[b["canonical_name"]].parent = created[b["parent"]]
     bpy.ops.object.mode_set(mode="OBJECT")
 
-    coll = arm_data.collections.new("DEF")
     for bone in arm_data.bones:
-        coll.assign(bone)
+        assign_bone_layer(arm_data, bone, "DEF")
         bone["ce_canonical"] = True
     return arm
 
@@ -532,13 +554,11 @@ def build_control_rig(context, armature, rig: RigDefinition, ik_default: float =
 
     pb = armature.pose.bones
     arm_data = armature.data
-    coll_mch = arm_data.collections.get("MCH") or arm_data.collections.new("MCH")
-    coll_ctrl = arm_data.collections.get("CTRL") or arm_data.collections.new("CTRL")
     for bone in arm_data.bones:
         if bone.name.startswith("MCH-"):
-            coll_mch.assign(bone)
+            assign_bone_layer(arm_data, bone, "MCH")
         elif bone.name.startswith("CTRL-"):
-            coll_ctrl.assign(bone)
+            assign_bone_layer(arm_data, bone, "CTRL")
 
     for chain, mch_names, tgt_name, pole_name, _ctrl_name in plan:
         _prop(armature, chain.fk_ik_property, ik_default)

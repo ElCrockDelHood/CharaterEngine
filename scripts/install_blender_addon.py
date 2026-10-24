@@ -3,6 +3,7 @@
     python scripts/install_blender_addon.py                     # auto-detect Blender & UPBGE
     python scripts/install_blender_addon.py --target "C:/Users/me/AppData/Roaming/Blender Foundation/Blender/5.0/scripts/addons"
     python scripts/install_blender_addon.py --zip builds/character_engine_blender.zip   # for "Install from file"
+    python scripts/install_blender_addon.py --blender C:/DEV/Tools/Blender/blender.exe   # that Blender's user addons
 
 The addon is copied as ``character_engine_blender`` together with a ``ce_src_path.txt`` marker
 pointing at this repository's ``src`` folder, so the domain code is importable from Blender.
@@ -15,6 +16,7 @@ import argparse
 import glob
 import os
 import shutil
+import subprocess
 import sys
 import zipfile
 from pathlib import Path
@@ -35,6 +37,17 @@ def default_targets() -> list[Path]:
     for p in glob.glob(r"C:/Tools/UPBGE/**/scripts/addons", recursive=True):
         out.append(Path(p))
     return sorted(set(out))
+
+
+def blender_user_addons(blender_exe: Path) -> Path:
+    """User addons folder of a given Blender build (asks that Blender; works for 3.6 and 4.x)."""
+    expr = "import bpy; print('CE_ADDONS=' + bpy.utils.user_resource('SCRIPTS', path='addons'))"
+    out = subprocess.run([str(blender_exe), "-b", "--factory-startup", "--python-expr", expr],
+                         capture_output=True, text=True, timeout=300).stdout
+    for line in out.splitlines():
+        if line.startswith("CE_ADDONS="):
+            return Path(line[len("CE_ADDONS="):].strip())
+    raise RuntimeError(f"could not query the addons folder of {blender_exe}")
 
 
 def install(target: Path) -> Path:
@@ -59,10 +72,15 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--target", type=Path, action="append", help="addons folder (repeatable)")
     ap.add_argument("--zip", type=Path, default=None)
+    ap.add_argument("--blender", type=Path, default=os.environ.get("CE_BLENDER"),
+                    help="Blender executable whose user addons folder is the target (default: $CE_BLENDER)")
     a = ap.parse_args(argv)
     if a.zip:
         print(f"zip written: {make_zip(a.zip)}")
-    targets = a.target or default_targets()
+    targets = list(a.target or [])
+    if a.blender:
+        targets.append(blender_user_addons(Path(a.blender)))
+    targets = targets or default_targets()
     if not targets and not a.zip:
         print("no Blender/UPBGE addons folder found; pass --target or --zip")
         return 1

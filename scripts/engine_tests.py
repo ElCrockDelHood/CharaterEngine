@@ -5,7 +5,8 @@
     python scripts/engine_tests.py --keep-going
 
 Executable discovery (first hit wins):
-  Blender : $CE_BLENDER, C:/Program Files/Blender Foundation/Blender */blender.exe, `blender` on PATH
+  Blender : --blender, $CE_BLENDER, C:/Program Files/Blender Foundation/Blender */blender.exe,
+            C:/DEV/Tools/Blender/blender.exe (portable 3.6 reference), `blender` on PATH
   UPBGE   : $CE_UPBGE,   C:/Tools/UPBGE/**/blender.exe,                          `upbge` on PATH
   Godot   : $CE_GODOT,   C:/Tools/Godot/Godot_v4*_console.exe,                    `godot` on PATH
 If vanilla Blender is not installed, the Blender suite runs on UPBGE's bundled Blender
@@ -42,9 +43,10 @@ def _first(paths):
     return None
 
 
-def find_blender() -> Path | None:
-    return _first([os.environ.get("CE_BLENDER"),
+def find_blender(explicit: str | None = None) -> Path | None:
+    return _first([explicit, os.environ.get("CE_BLENDER"),
                    *sorted(glob.glob(r"C:/Program Files/Blender Foundation/Blender*/blender.exe"), reverse=True),
+                   r"C:/DEV/Tools/Blender/blender.exe",
                    *sorted(glob.glob(r"C:/Tools/Blender/**/blender.exe", recursive=True), reverse=True),
                    shutil.which("blender")])
 
@@ -152,6 +154,7 @@ def main(argv=None) -> int:
     ap.add_argument("--timeout", type=int, default=900)
     ap.add_argument("--upbge-background", action="store_true",
                     help="run the UPBGE suite with -b (no window; component/blenderplayer checks are deferred/skipped)")
+    ap.add_argument("--blender", default=None, help="Blender executable for the blender suite (overrides CE_BLENDER)")
     a = ap.parse_args(argv)
     if not a.engines:
         a.engines = list(ENGINES)
@@ -160,7 +163,7 @@ def main(argv=None) -> int:
         ap.error(f"unknown engine(s) {bad}; choose from {', '.join(ENGINES)}")
     OUT.mkdir(parents=True, exist_ok=True)
 
-    blender, upbge, godot = find_blender(), find_upbge(), find_godot()
+    blender, upbge, godot = find_blender(a.blender), find_upbge(), find_godot()
     summary = {}
     for engine in a.engines:
         if engine == "blender":

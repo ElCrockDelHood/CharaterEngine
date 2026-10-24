@@ -21,8 +21,8 @@ The package name on disk is ``addon`` (inside ``character_engine.infrastructure.
 bl_info = {
     "name": "Character Engine",
     "author": "Character Engine contributors",
-    "version": (0, 3, 0),
-    "blender": (4, 2, 0),
+    "version": (0, 3, 1),
+    "blender": (3, 6, 0),  # Blender 3.6 is the project reference; 4.x supported (bone layers compat in build.py)
     "location": "View3D > Sidebar > Character Engine",
     "description": "Canonical 206-bone anatomy: bodies, tissues, IK/FK rig, mocap retarget, wounds, engine export",
     "category": "Rigging",

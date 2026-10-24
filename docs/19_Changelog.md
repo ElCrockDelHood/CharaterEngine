@@ -2,6 +2,28 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-24 · Blender addon on Blender 3.6 LTS (reference) and 4.x
+
+### Changed
+- Addon `bl_info` 0.3.1, minimum Blender `(3, 6, 0)` (was 4.2). Decision 20: Blender 3.6 is the
+  project reference version; 4.x stays supported.
+- `addon/build.py`: new `assign_bone_layer()` / `bone_layer_names()` — bone collections
+  `DEF`/`MCH`/`CTRL` on Blender 4.x, armature layers 0/1/2 on Blender 3.6 (which has no
+  `Armature.collections`); bones also get the custom property `ce_layer`.
+- `runtime/blender/ce_addon_headless_test.py`: the rig check reads layers through
+  `bone_layer_names()` and checks `ce_layer`.
+- `scripts/engine_tests.py`: `--blender <exe>` and `C:/DEV/Tools/Blender/blender.exe` in Blender
+  discovery. `scripts/install_blender_addon.py`: `--blender <exe>` (default `$CE_BLENDER`) installs
+  into that Blender's user addons folder.
+
+### Test status
+Addon headless suite 20/20 on Blender 3.6.23 (background) and 20/20 on Blender 4.2.23 LTS
+(background); before the change Blender 3.6 failed 10/20 (`'Armature' object has no attribute
+'collections'`). pytest 713 passed. UPBGE 0.50 suite not run (needs a window).
+Canonical GLB: exporter untouched; same JSON chunk, and the binary chunk varies run-to-run in the last
+bit of container centroids even without code changes (`Bone.child_ids` is a `frozenset` of random
+`uuid4`, so summation order changes) — pre-existing, tracked as an open finding.
+
 ## [Unreleased] — 2026-09-29 (night) · A08 osteometry, tissues, T-pose, Blender addon, UPBGE/Godot gameplay
 
 ### Added

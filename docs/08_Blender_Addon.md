@@ -3,13 +3,20 @@
 The addon lives in `src/character_engine/infrastructure/blender/addon/` and is the **production
 side** of the pipeline (see `docs/architecture/PRODUCTION_VS_RUNTIME.md`). It builds the canonical
 208-node armature from the domain, adds tissue proxies, an IK/FK control rig, mocap retargeting,
-wound probes and exports. It works on Blender 4.2+ and on UPBGE 0.50 (Blender 5.0.1).
+wound probes and exports.
+
+**Supported versions** (Decision 20): Blender **3.6 LTS is the project reference** (3.6.23 portable
+in `C:\DEV\Tools\Blender`); Blender 4.x and UPBGE 0.50 (Blender 5.0.1) are also supported. The only
+API difference the addon depends on is bone grouping: `build.assign_bone_layer()` uses bone
+collections `DEF`/`MCH`/`CTRL` on 4.x and armature layers 0/1/2 on 3.6; every bone also carries the
+custom property `ce_layer` with its role, on both.
 
 ## Install
 
 ```bash
 python scripts/install_blender_addon.py            # copies to every detected addons folder
 python scripts/install_blender_addon.py --zip      # builds a zip for "Install from disk"
+python scripts/install_blender_addon.py --blender C:/DEV/Tools/Blender/blender.exe   # that Blender's user addons ($CE_BLENDER also works)
 python scripts/install_blender_addon.py --target "C:/Tools/UPBGE/upbge-0.50-windows-x64/5.0/scripts/addons"
 ```
 
@@ -32,14 +39,15 @@ Enable *Character Engine* in Preferences → Add-ons; the panel appears in the 3
 ## Provenance in the viewport
 
 Every generated object carries custom properties (`ce_canonical`, `ce_rig_id`, `ce_report`,
-template/provenance strings). Proxy meshes are **proxies**: only long-bone lengths are osteometric;
+`ce_layer`, template/provenance strings). Proxy meshes are **proxies**: only long-bone lengths are osteometric;
 diameters, muscle bellies, skin thickness and tissue depths are ESTIMATE/PLACEHOLDER
 (`docs/audit/A08_OSTEOMETRY_TISSUES_TPOSE.md`). Sculpt on top; the addon never invents anatomy.
 
 ## Headless tests
 
 ```bash
-python scripts/engine_tests.py blender      # background mode, 23 checks
+python scripts/engine_tests.py blender      # background mode, 20 checks on vanilla Blender
+python scripts/engine_tests.py blender --blender C:/DEV/Tools/Blender/blender.exe   # pick the Blender build
 python scripts/engine_tests.py upbge        # UI mode (component registration) + blenderplayer smoke
 python scripts/engine_tests.py              # blender -> upbge -> godot, each closed before the next
 ```

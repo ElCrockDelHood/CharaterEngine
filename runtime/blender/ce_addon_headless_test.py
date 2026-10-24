@@ -248,9 +248,10 @@ def main(reset: bool = True) -> int:
         assert ct and ct[0].subtarget == "MCH-ik_HUMERUS_L"
         for prop in ("arm_ik_L", "leg_ik_R", "foot_roll_L", "breath_amplitude"):
             assert prop in arm, prop
-        colls = {c.name for c in arm.data.collections}
-        assert {"DEF", "MCH", "CTRL"} <= colls, colls
-        return f"{len(arm.data.bones)} bones incl. MCH/CTRL, collections {sorted(colls)}"
+        layers = set(addon["mod"].build.bone_layer_names(arm.data))   # collections (4.x) or layers (3.6)
+        assert {"DEF", "MCH", "CTRL"} <= layers, layers
+        assert arm.data.bones["HUMERUS_L"]["ce_layer"] == "DEF" and arm.data.bones["CTRL-root"]["ce_layer"] == "CTRL"
+        return f"{len(arm.data.bones)} bones incl. MCH/CTRL, layers {sorted(layers)}"
     check("build IK/FK rig", _rig)
 
     def _ik_switch():
