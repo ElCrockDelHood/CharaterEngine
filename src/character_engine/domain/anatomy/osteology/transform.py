@@ -174,14 +174,28 @@ class LocalJointTransform:
         return cls(position, orientation)
 
 
+class NonUniformScaleError(ValueError):
+    """compose()/inverse() of a Transform whose scale is not uniform (Decision 25 / D-05)."""
+
+
+# Relative tolerance for "uniform" scale (same order as NORM_TOLERANCE).
+_UNIFORM_SCALE_TOLERANCE = 1e-9
+
+
 @dataclass(frozen=True)
 class Transform:
-    """General transform with scale (backward compatibility).
+    """TRS transform M = T @ R @ S with UNIFORM scale (Decisions 23–25 / D-03, D-04, D-05).
+
+    ``scale`` stays a Vector3 so stored data keeps its shape, but compose() and inverse()
+    are exact only for s·I and raise NonUniformScaleError otherwise (no shear in TRS):
+
+    * compose: (p₁ + s₁·R₁⊙p₂, R₁·R₂, s₁·s₂)  == to_matrix(a) @ to_matrix(b)
+    * inverse: (−(1/s)·R⁻¹⊙p, R⁻¹, 1/s)        == to_matrix(a)⁻¹
 
     NOTE: This class uses Quaternion (not UnitQuaternion) for backward compatibility.
     New code should use GlobalTransform or LocalJointTransform instead.
 
-    Provenance: PROVEN (legacy transform for backward compatibility)
+    Provenance: PROVEN (standard TRS algebra with uniform scale)
     """
     position: Vector3 = field(default_factory=Vector3.zero)
     rotation: Quaternion = field(default_factory=Quaternion.identity)
@@ -191,20 +205,30 @@ class Transform:
         if self.scale.x <= 0 or self.scale.y <= 0 or self.scale.z <= 0:
             raise ValueError("Escala debe ser positiva")
 
+    def is_uniform_scale(self) -> bool:
+        s = self.scale
+        return max(s.x, s.y, s.z) - min(s.x, s.y, s.z) <= _UNIFORM_SCALE_TOLERANCE * max(s.x, s.y, s.z)
+
+    def _uniform_scale(self) -> float:
+        if not self.is_uniform_scale():
+            raise NonUniformScaleError(
+                f"Transform algebra requires uniform scale (TRS without shear); got {self.scale}")
+        return self.scale.x
+
     def to_matrix(self) -> Matrix4:
         return Matrix4.translation(self.position) @ Matrix4.rotation(self.rotation) @ Matrix4.scale(self.scale)
 
     def inverse(self) -> 'Transform':
-        inv_scale = Vector3(1.0/self.scale.x, 1.0/self.scale.y, 1.0/self.scale.z)
+        s = self._uniform_scale()
         inv_rot = self.rotation.inverse()
-        inv_pos = inv_rot.rotate(-self.position)
-        return Transform(inv_pos, inv_rot, inv_scale)
+        inv_pos = inv_rot.rotate(-self.position) * (1.0 / s)
+        return Transform(inv_pos, inv_rot, Vector3(1.0 / s, 1.0 / s, 1.0 / s))
 
     def compose(self, other: 'Transform') -> 'Transform':
-        new_pos = self.position + self.rotation.rotate(other.position * self.scale)
+        s1, s2 = self._uniform_scale(), other._uniform_scale()
+        new_pos = self.position + self.rotation.rotate(other.position * s1)
         new_rot = self.rotation * other.rotation
-        new_scale = self.scale * other.scale
-        return Transform(new_pos, new_rot, new_scale)
+        return Transform(new_pos, new_rot, Vector3(s1 * s2, s1 * s2, s1 * s2))
 
     def to_dict(self) -> Dict[str, Any]:
         return {
