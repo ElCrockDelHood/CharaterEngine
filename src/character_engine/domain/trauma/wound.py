@@ -217,3 +217,20 @@ def blunt_impact_to_wound(bone_hit: str, impulse: Optional[float] = None, contac
     depth = min(profile.total_depth_m(), max(0.0, impulse) * profile.depth_to_layer(TissueLayer.BONE))
     return Wound(bone_hit=bone_hit, wound_type=WoundType.BLUNT, depth_m=round(depth, 4),
                  width_m=contact_radius_m * 2, energy_j=energy_j)
+
+
+def blade_contact_to_wound(bone_hit: str, penetration_m: float, blade_width_m: float,
+                           entry_point: Optional[Tuple[float, float, float]] = None,
+                           direction: Optional[Tuple[float, float, float]] = None) -> Wound:
+    """Map a geometric blade contact (e.g. a sabre entering a collision proxy) to an INCISION.
+
+    ``penetration_m`` is how far the blade entered the body envelope proxy, used as the wound depth from the
+    skin surface; ``blade_width_m`` is the blade width. Both come from proxies (envelope radii ESTIMATE,
+    placeholder blade), so the wound is ESTIMATE. No energy is set: the incision assessment depends on depth
+    and width only, and no cited cutting-energy model exists in the repository.
+    """
+    if penetration_m <= 0:
+        raise ValueError("no penetration: a blade contact needs penetration_m > 0")
+    return Wound(bone_hit=bone_hit, wound_type=WoundType.INCISION, depth_m=round(penetration_m, 4),
+                 width_m=round(blade_width_m, 4), energy_j=None, entry_point=entry_point, direction=direction,
+                 provenance=ProvenanceState.ESTIMATE)

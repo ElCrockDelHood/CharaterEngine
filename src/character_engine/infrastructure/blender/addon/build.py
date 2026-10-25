@@ -972,19 +972,28 @@ _SEVERITY_COLOR = {1: (0.9, 0.9, 0.2, 1), 2: (0.95, 0.6, 0.1, 1), 3: (0.9, 0.3, 
                    4: (0.8, 0.1, 0.1, 1), 5: (0.5, 0.0, 0.1, 1), 6: (0.1, 0.0, 0.0, 1)}
 
 
-def nearest_canonical_bone(armature, point_world: Vector) -> Tuple[str, float]:
-    pts = bone_points(armature)
+def nearest_canonical_bone(armature, point_world: Vector, posed: bool = False) -> Tuple[str, float]:
+    """Canonical bone closest to ``point_world`` — in the rest pose, or in the current pose (``posed``)."""
+    if posed:
+        mw = armature.matrix_world
+        pts = {pb.name: (mw @ pb.head, mw @ pb.tail) for pb in armature.pose.bones}
+    else:
+        pts = bone_points(armature)
     names = [b.name for b in armature.data.bones if b.get("ce_canonical") and b.name not in ("ROOT_SKELETON", "CRANIUM")]
     return _nearest_bone(point_world, pts, names)
 
 
 def apply_wound(context, armature, point_world: Vector, wound_type: str, depth_m: float, width_m: float,
-                energy_j: Optional[float], bone: Optional[str] = None) -> WoundAssessment:
-    """Assess a wound at ``point_world`` and leave a colour-coded marker with the report."""
+                energy_j: Optional[float], bone: Optional[str] = None,
+                provenance: ProvenanceState = ProvenanceState.USER_INPUT) -> WoundAssessment:
+    """Assess a wound at ``point_world`` and leave a colour-coded marker with the report.
+
+    ``provenance`` is USER_INPUT for wounds placed by hand; geometric contacts (proxies) pass ESTIMATE.
+    """
     if not bone:
         bone, _ = nearest_canonical_bone(armature, point_world)
     wound = Wound(bone_hit=bone, wound_type=WoundType(wound_type), depth_m=depth_m, width_m=width_m,
-                  energy_j=energy_j, entry_point=tuple(point_world), provenance=ProvenanceState.USER_INPUT)
+                  energy_j=energy_j, entry_point=tuple(point_world), provenance=provenance)
     a = assess_wound(wound)
     name = armature["ce_character"]
     bm = bmesh.new()

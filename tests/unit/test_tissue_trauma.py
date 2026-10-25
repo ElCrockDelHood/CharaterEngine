@@ -92,6 +92,19 @@ def test_muscles_are_bilateral_and_queryable():
 
 # ------------------------------------------------------------------ wounds ---------------
 
+def test_blade_contact_maps_to_estimate_incision_without_energy():
+    from character_engine.domain.trauma import WoundType, assess_wound, blade_contact_to_wound
+    w = blade_contact_to_wound("RADIUS_L", 0.008, 0.035, entry_point=(0.2, -0.1, 1.2))
+    assert w.wound_type == WoundType.INCISION and w.energy_j is None
+    assert w.depth_m == 0.008 and w.width_m == 0.035
+    assert w.provenance == ProvenanceState.ESTIMATE
+    a1, a2 = assess_wound(w), assess_wound(w)
+    assert a1 == a2                                   # deterministic (same input -> same assessment)
+    assert a1.region.value == "forearm"
+    with pytest.raises(ValueError):
+        blade_contact_to_wound("RADIUS_L", 0.0, 0.035)
+
+
 def test_wound_validation():
     with pytest.raises(ValueError):
         Wound("STERNUM", WoundType.STAB, depth_m=-0.01)

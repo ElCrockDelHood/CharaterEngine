@@ -89,13 +89,14 @@ def world_verts(obj):
 def closest_sabre_contact(attacker, defender, samples: int = 40):
     """Signed distance from the blade centre line to the defender's collision capsules.
 
-    Negative = the blade is inside a capsule (penetration depth). Returns (distance, capsule name).
+    Negative = the blade is inside a capsule (penetration depth). Returns (distance, capsule name, world point
+    on the blade where that distance occurs).
     """
     sabre = bpy.data.objects[f"{attacker.name}_Sabre_PLACEHOLDER"]
     v = world_verts(sabre)
     base, tip = sum(v[:4], Vector()) / 4, sum(v[4:], Vector()) / 4
     line = [base.lerp(tip, i / (samples - 1)) for i in range(samples)]
-    best, where = math.inf, ""
+    best, where, at = math.inf, "", None
     for o in bpy.data.objects:
         if o.get("ce_character") != defender.name or o.get("ce_role") != "collision":
             continue
@@ -108,8 +109,36 @@ def closest_sabre_contact(attacker, defender, samples: int = 40):
             d = (lp - loc).length * (1 if (lp - loc).dot(normal) >= 0 else -1)
             d *= o.matrix_world.to_scale()[0]
             if d < best:
-                best, where = d, o.name.split("_COL_")[-1]
-    return best, where
+                best, where, at = d, o.name.split("_COL_")[-1], p.copy()
+    return best, where, at
+
+
+def wound_from_contact(build, defender, point, penetration_m: float, frame: int, context: dict) -> dict:
+    """Layer-1 wound for a blade contact: same domain code (assess_wound) the Godot table is generated from."""
+    import hashlib
+
+    from character_engine.domain.trauma import assess_wound, blade_contact_to_wound
+    bone, bone_dist = build.nearest_canonical_bone(defender, point, posed=True)
+    w = blade_contact_to_wound(bone, penetration_m, build.SABRE_PLACEHOLDER_WIDTH_M, entry_point=tuple(point))
+    a = assess_wound(w)
+    build.apply_wound(bpy.context, defender, point, w.wound_type.value, w.depth_m, w.width_m, None, bone,
+                      provenance=w.provenance)
+    record = {
+        "frame": frame, "defender": defender.name, "bone": bone, "bone_distance_m": round(bone_dist, 4),
+        "region": a.region.value, "type": w.wound_type.value,
+        "penetration_m": w.depth_m, "penetration_basis": "blade centre line inside the block-dummy capsule "
+                                                         "(envelope radius ESTIMATE)",
+        "width_m": w.width_m, "width_basis": "PLACEHOLDER sabre width",
+        "energy_j": None, "energy_basis": "UNKNOWN - not used by the INCISION assessment; no cited model",
+        "entry_point": [round(c, 4) for c in point],
+        "layers_breached": [layer.value for layer in a.layers_breached], "severity": a.severity.value,
+        "lethality": a.lethality, "bleeding_rate": a.bleeding_rate, "fracture": a.fracture,
+        "incapacitating": a.incapacitating, "provenance": a.provenance.value,
+        "seed": None, "determinism": "no randomness: fixed clips, frame, spacing and geometry",
+        **context,
+    }
+    record["sha256"] = hashlib.sha256(json.dumps(record, sort_keys=True).encode("utf-8")).hexdigest()
+    return record
 
 
 def main() -> int:
@@ -165,7 +194,12 @@ def main() -> int:
     for fr in frames:
         scene.frame_set(fr)
         bpy.context.view_layer.update()
-        gap, region = closest_sabre_contact(attacker, guard)
+        gap, region, point = closest_sabre_contact(attacker, guard)
+        if gap <= 0.0 and not report.get("wounds"):
+            report["wounds"] = [wound_from_contact(build, guard, point, -gap, fr, {
+                "attack_clip": act.name, "distance_m": a.distance, "anim_file": a.anim.name})]
+            print(f"[mockup] wound {json.dumps(report['wounds'][0])}", flush=True)
+            bpy.context.view_layer.update()
         path = a.out / f"D1-2_fight_mockup_f{fr:03d}.png"
         scene.render.filepath = str(path)
         t = time.perf_counter()
@@ -173,6 +207,22 @@ def main() -> int:
         entry = {"frame": fr, "render": str(path), "render_s": round(time.perf_counter() - t, 2),
                  "attacker_sabre_to_guard_body_m": round(gap, 3), "closest_segment": region,
                  "contact": gap <= 0.0}
+        if report.get("wounds") and report["wounds"][0]["frame"] == fr:
+            # close-up of the contact so the colour-coded wound marker is readable
+            close = bpy.data.objects.new("WoundCloseUp", bpy.data.cameras.new("WoundCloseUp"))
+            scene.collection.objects.link(close)
+            close.data.lens = 50.0
+            hit = Vector(report["wounds"][0]["entry_point"])
+            close.location = hit + Vector((0.9, -0.5, 0.25))
+            close.rotation_euler = (hit - close.location).to_track_quat("-Z", "Y").to_euler()
+            scene.camera = close
+            scene.render.filepath = str(a.out / f"D1-2_wound_closeup_f{fr:03d}.png")
+            shading = scene.display.shading
+            shading.show_xray, shading.xray_alpha = True, 0.35      # the marker sits inside the block proxy
+            bpy.ops.render.render(write_still=True)
+            shading.show_xray = False
+            entry["wound_closeup"] = scene.render.filepath
+            scene.camera = cam
         report["frames"].append(entry)
         print(f"[mockup] {json.dumps(entry)}", flush=True)
     a.save.parent.mkdir(parents=True, exist_ok=True)
