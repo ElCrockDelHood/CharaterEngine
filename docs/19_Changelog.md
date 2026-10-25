@@ -2,6 +2,18 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-25 · Game rig CE-GAME-v1 (RIG-GAME-001 step 1)
+
+### Added
+- Spec `docs/architecture/RIG-GAME-001_SPEC.md` (owner-approved): two-level skeleton, hands and face plan.
+- Domain `rigging/game_rig.py`: 66-bone game skeleton (UE5 Mannequin names) derived from canonical joints, with a
+  validated canonical → game coverage map (208 nodes); `export/gltf_game.py` and `scripts/export_gltf.py --skeleton
+  game` → `builds/gltf/human_game_v1.glb`. Canonical skeleton, combat and runtimes unchanged.
+- Tests: `tests/unit/test_game_rig.py`.
+
+### Decisions
+- Decision 51: RIG-GAME-001 (see DECISION_LOG).
+
 ## [Unreleased] — 2026-10-25 · Weapons (runtime plan step 1)
 
 ### Added

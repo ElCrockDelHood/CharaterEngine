@@ -829,6 +829,27 @@ Tests: `tests/unit/test_weapons.py`; Godot runner and UPBGE suite weapon checks.
 
 ---
 
+## 51. RIG-GAME-001: TWO-LEVEL SKELETON, CE-GAME-v1 GAME RIG (UE5 MANNEQUIN NAMING)
+
+**Decision** (owner approval, 2026-10-25, decision card on `docs/architecture/RIG-GAME-001_SPEC.md`): the canonical
+208-node skeleton stays the anatomical truth (unchanged, invariant 4). Runtimes, animation clips and mocap use a
+derived **game skeleton CE-GAME-v1** (`domain/rigging/game_rig.py`): **66 bones** (core 7, arms 12, legs 10, hands 34,
+face 3) named in the **UE5 Mannequin** style. Hands: 3 bones per finger (thumb from its metacarpal) plus ring and
+pinky metacarpals; grip pose library to follow. Face: `jaw` + `eye_l` / `eye_r`, expressions as **ARKit-52** named
+blendshapes; the in-game subset is chosen after a GT 740M hardware test. Contract:
+- Positions come from canonical joint points (DERIVED); twist fractions and the orbit-centre eyes are **ASSUMED**.
+- `covers` assigns each canonical node to exactly one game bone; runtimes keep canonical ids on hitboxes so trauma
+  still receives canonical bones and reference fights stay bit-identical (gate for step 2).
+- Export: `scripts/export_gltf.py --skeleton game` → `builds/gltf/human_game_v1.glb` (asset extras carry the full
+  canonical → game map). The canonical GLB stays the production / simulation asset.
+Step 1 only (definition, mapping, tests, GLB); Godot switch, Blender control rig, hand poses, hardware test and face
+are later steps, each with owner approval.
+Tests: `tests/unit/test_game_rig.py`; GLB import 66 bones in Blender 3.6.23 and Godot 4.7.2.
+
+**Date**: 2026-10-25 · **Status**: FINAL (step 1)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary

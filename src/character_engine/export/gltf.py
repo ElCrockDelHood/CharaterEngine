@@ -543,27 +543,14 @@ def default_canonical_json() -> Path:
     return Path(__file__).resolve().parent.parent / "data" / "anatomy" / "human_adult_206.json"
 
 
-def load_canonical_skeleton(
+def load_canonical_bone_data(
     json_path: Optional[Path] = None,
     pose: str = "anatomical",
     template_id: Optional[str] = None,
     stature_m: Optional[float] = None,
-) -> Skeleton:
-    """Load the canonical JSON through the validated Loader -> Builder path.
-
-    ``template_id`` / ``stature_m`` retarget the skeleton with
-    :func:`character_engine.domain.character.build_character_bones` (published
-    proportion ratios); ``pose`` applies a rigid pose transform (``anatomical`` |
-    ``tpose`` | ``apose``) *before* DTO validation, so the exported hierarchy is
-    still the 208-node canonical contract.
-    """
-    import json
-
-    from ..domain.anatomy.osteology.builder import SkeletonBuilder
-    from ..domain.anatomy.osteology.validator import SkeletonValidator
+) -> Dict:
+    """Canonical JSON with its ``bones`` retargeted (template / stature) and posed (dicts, not validated)."""
     from ..domain.anatomy.pose import apply_pose
-    from ..loader import JsonLoader
-    from ..pipeline.pipeline import dto_to_spec
 
     json_path = Path(json_path) if json_path else default_canonical_json()
     data = json.loads(json_path.read_text(encoding="utf-8"))
@@ -578,7 +565,29 @@ def load_canonical_skeleton(
         bones, _ = build_character_bones(params, canonical_bones=bones)
     else:
         bones = apply_pose(bones, pose)
-    data = dict(data, bones=bones)
+    return dict(data, bones=bones)
+
+
+def load_canonical_skeleton(
+    json_path: Optional[Path] = None,
+    pose: str = "anatomical",
+    template_id: Optional[str] = None,
+    stature_m: Optional[float] = None,
+) -> Skeleton:
+    """Load the canonical JSON through the validated Loader -> Builder path.
+
+    ``template_id`` / ``stature_m`` retarget the skeleton with
+    :func:`character_engine.domain.character.build_character_bones` (published
+    proportion ratios); ``pose`` applies a rigid pose transform (``anatomical`` |
+    ``tpose`` | ``apose``) *before* DTO validation, so the exported hierarchy is
+    still the 208-node canonical contract.
+    """
+    from ..domain.anatomy.osteology.builder import SkeletonBuilder
+    from ..domain.anatomy.osteology.validator import SkeletonValidator
+    from ..loader import JsonLoader
+    from ..pipeline.pipeline import dto_to_spec
+
+    data = load_canonical_bone_data(json_path, pose=pose, template_id=template_id, stature_m=stature_m)
     _, skeleton_dto = JsonLoader().load_data_to_dto(data)
     skeleton = SkeletonBuilder().build(dto_to_spec(skeleton_dto))
     result = SkeletonValidator().validate(skeleton)
@@ -616,9 +625,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--template", default=None,
                         help="Character template id (e.g. human_male_adult, human_female_adult, human_child_5y)")
     parser.add_argument("--stature", type=float, default=None, help="Override stature in metres (retargets proportions)")
+    parser.add_argument("--skeleton", choices=("canonical", "game"), default="canonical",
+                        help="canonical = 208-node anatomical skeleton; game = CE-GAME-v1 (66 bones, RIG-GAME-001)")
     args = parser.parse_args(argv)
 
     options = GltfExportOptions(include_bone_mesh=not args.no_mesh, convert_to_y_up=not args.keep_z_up)
+    if args.skeleton == "game":
+        from .gltf_game import DEFAULT_GAME_GLB, export_game_skeleton
+
+        out = DEFAULT_GAME_GLB if args.output == parser.get_default("output") else args.output
+        path = export_game_skeleton(out, args.input, options, pose=args.pose, template_id=args.template,
+                                    stature_m=args.stature)
+        print(f"glTF written: {path} ({path.stat().st_size} bytes)")
+        return 0
     path = export_canonical_skeleton(args.output, args.input, options, pose=args.pose,
                                      template_id=args.template, stature_m=args.stature)
     print(f"glTF written: {path} ({path.stat().st_size} bytes)")
