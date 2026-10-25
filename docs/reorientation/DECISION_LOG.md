@@ -848,6 +848,10 @@ Tests: `tests/unit/test_game_rig.py`; GLB import 66 bones in Blender 3.6.23 and 
 Step 2 (2026-10-25, owner "sigamos adelante"): Godot `CECharacter` / `CEArena` default to the game GLB; canonical
 names resolve through the GLB asset extras `canonical_to_game` + `canonical_points`; the arena fight on the game
 rig equals the canonical one (runner check). Breathing modifier pending on the game rig.
+Step 3 (2026-10-25, owner "sigamos adelante con tus recomendaciones"): Blender game rig (`<armature>_GAME`,
+IK/FK, hand controls and pose library with weapon grips, domain `hand_poses.py`); the canonical armature is the
+driven layer (COPY_TRANSFORMS from `MCH-anat_*` helpers), bones hidden but object evaluated. Hand angle limits
+ASSUMED.
 
 **Date**: 2026-10-25 · **Status**: FINAL (step 1)
 

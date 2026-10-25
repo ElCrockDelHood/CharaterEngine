@@ -31,6 +31,7 @@ Enable *Character Engine* in Preferences → Add-ons; the panel appears in the 3
 | **Body** | Generate body | Template (`human_male_adult`, `human_female_adult`, `human_child_5y`, `human_child_10y`, `human_male_elderly_75y`; horse/dog listed but refused until data exists), stature override, pose `anatomical / tpose / apose`. Produces `CE_Skeleton` with 208 bones, `DEF` collection, provenance report in the console. |
 | **Tissues** | Generate tissues | Bone proxies sized by osteometry (Trotter 1970 lengths) or fitted meshes from `assets/anatomy/meshes/<BONE>.{glb,gltf,obj,ply}`; 50 bilateral muscles with tendons from the attachment catalogue; skin envelope baked to a mesh. All weighted to the armature. |
 | **Rig** | Build IK/FK rig, Set IK/FK | Adds `MCH`/`CTRL` collections: IK arms (target `CTRL-hand_ik.L/R`, auto-tuned pole), IK legs with foot roll, `arm_ik_L/R`, `leg_ik_L/R` blend properties (COPY_TRANSFORMS drivers), `CTRL-breath` driving sternum/ribs. |
+| **Game rig (CE-GAME-v1)** | Build game rig, Hand pose, Weapon grip | `<armature>_GAME`: 66 game bones (DEF, UE5 Mannequin names), IK arms/legs + foot roll (`arm_ik_L/R`, `leg_ik_L/R`, pole angles refined so IK at rest is a no-op), one `MCH-anat_<BONE>` helper per canonical node. The canonical armature copies the helpers (`CE_GAME` constraints) and its bones are hidden: animate the game rig. Hand sliders per side (curl per finger, spread, thumb opposition, palm cup) pose the fingers through the domain hand model; *Hand pose* applies the library (`rest`, `relaxed`, `open`, `fist`, `point`, `grip_staff`, `grip_blade`, optional keys); *Weapon grip* picks the weapon's grip pose. Angle limits ASSUMED (RIG-GAME-001). |
 | **Mocap** | Import mocap | BVH import (`bpy.ops.import_anim.bvh`) + rest-to-rest retarget through a bone map (`mixamo`, `cmu_bvh`, `rokoko`, `rigify_def`). Optional bake. |
 | **Wounds** | Apply wound (click in viewport), Clear wounds | Raycast → nearest canonical bone → `assess_wound` (type, depth, width, energy). Marker sphere coloured by AIS severity, JSON report in `ce_report`. |
 | **Export** | Export canonical GLB, Export scene GLB | Pure-Python exporter (skeleton contract) or Blender glTF exporter (meshes + active actions). |
@@ -47,7 +48,7 @@ diameters, muscle bellies, skin thickness and tissue depths are ESTIMATE/PLACEHO
 ## Headless tests
 
 ```bash
-python scripts/engine_tests.py blender      # background mode, 20 checks on vanilla Blender
+python scripts/engine_tests.py blender      # background mode, 32 checks on vanilla Blender 3.6
 python scripts/engine_tests.py blender --blender C:/DEV/Tools/Blender/blender.exe   # pick the Blender build
 python scripts/engine_tests.py upbge        # UI mode (component registration) + blenderplayer smoke
 python scripts/engine_tests.py              # blender -> upbge -> godot, each closed before the next

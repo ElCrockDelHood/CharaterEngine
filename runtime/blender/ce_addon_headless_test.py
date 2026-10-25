@@ -958,6 +958,93 @@ def main(reset: bool = True) -> int:
         check("P2 normalize mesh: Y-up import to canonical metres at target height", _normalize)
         check("P2b normalize rig: parent empty keeps object-level clip animation", _normalize_rig)
 
+    # ------------------------------------------------- RIG-GAME-001 step 3: game rig in Blender ---
+    from character_engine.domain.rigging import HAND_POSES, apply_hand_pose, hand_pose_rotations
+
+    game = {}
+
+    def _game_rig_build():
+        if bpy.context.object and bpy.context.object.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode="OBJECT")
+        for o in list(scene.objects):
+            bpy.data.objects.remove(o, do_unlink=True)
+        props.template, props.use_template_stature, props.pose = "human_male_adult", True, "tpose"
+        assert bpy.ops.character_engine.generate_body() == {"FINISHED"}
+        canon = bpy.data.objects[props.armature_name]
+        assert bpy.ops.character_engine.build_game_rig() == {"FINISHED"}
+        arm = bpy.data.objects[f"{canon.name}_GAME"]
+        game.update(arm=arm, canon=canon)
+        deform = [b for b in arm.data.bones if b.get("ce_game_bone")]
+        helpers = [b for b in arm.data.bones if b.name.startswith("MCH-anat_")]
+        assert len(deform) == 66 and len(helpers) == 208, (len(deform), len(helpers))
+        assert "CTRL-hand_ik.L" in arm.data.bones and "CTRL-foot_ik.R" in arm.data.bones
+        driven = [pb for pb in canon.pose.bones if any(c.name == "CE_GAME" for c in pb.constraints)]
+        assert len(driven) == 208 and not canon.hide_get() and all(b.hide for b in canon.data.bones)
+        ctx.view_layer.update()
+        ik_err = max((arm.matrix_world @ arm.pose.bones[n].head - arm.matrix_world @ arm.data.bones[n].head_local).length
+                     for n in ("hand_l", "hand_r", "foot_l", "foot_r"))
+        def rest_err(pb):   # head, tail and orientation (roll) against the rest pose
+            rot = max(abs(a - b) for ra, rb in zip(pb.matrix.to_3x3(), pb.bone.matrix_local.to_3x3())
+                      for a, b in zip(ra, rb))
+            return max((pb.head - pb.bone.head_local).length, (pb.tail - pb.bone.tail_local).length, rot)
+        canon_err = max(rest_err(pb) for pb in canon.pose.bones)
+        assert ik_err < 1e-3 and canon_err < 1e-3, (ik_err, canon_err)
+        return (f"{len(deform)} game bones + {len(helpers)} MCH-anat, IK rest error {ik_err * 1000:.4f} mm, "
+                f"208 canonical bones driven (rest error {canon_err * 1000:.4f} mm), canonical bones hidden")
+    check("game rig: build (66 DEF, IK/FK, canonical layer driven, bones hidden)", _game_rig_build)
+
+    def _game_hand_pose():
+        from character_engine.infrastructure.blender.addon import game_rig as gr
+
+        arm = game["arm"]
+        rest = gr.rest_points(arm)
+        bpy.context.scene.character_engine.armature_name = game["canon"].name
+        worst = 0.0
+        for side in ("L", "R"):
+            assert bpy.ops.character_engine.hand_pose(pose="fist", side=side) == {"FINISHED"}
+        ctx.view_layer.update()
+        for side in ("L", "R"):
+            want = apply_hand_pose(rest, hand_pose_rotations(HAND_POSES["fist"], rest, side))
+            for bone, (h, t) in want.items():
+                if not bone.endswith("_" + side.lower()) or arm.data.bones[bone].parent is None:
+                    continue
+                pb = arm.pose.bones[bone]
+                worst = max(worst, (pb.tail - type(pb.tail)(t)).length, (pb.head - type(pb.head)(h)).length)
+        assert worst < 1e-4, worst
+        tip = arm.pose.bones["index_03_l"].tail
+        knuckle = arm.data.bones["hand_l"].tail_local
+        return f"fist L/R: 34 hand bones match the Python FK (max {worst * 1000:.4f} mm); index tip {(tip - knuckle).length:.3f} m from knuckle"
+    check("game rig: hand pose library matches the Python hand FK", _game_hand_pose)
+
+    def _game_canonical_follows():
+        arm, canon = game["arm"], game["canon"]
+        ctx.view_layer.update()
+        d = (canon.matrix_world @ canon.pose.bones["PHALANX_DISTAL_2_L"].tail
+             - arm.matrix_world @ arm.pose.bones["index_03_l"].tail).length
+        h0 = (canon.matrix_world @ canon.pose.bones["HUMERUS_L"].tail).copy()
+        ctrl = arm.pose.bones["CTRL-hand_ik.L"]
+        ctrl.location = (0.0, 0.0, 0.15)
+        ctx.view_layer.update()
+        h1 = canon.matrix_world @ canon.pose.bones["HUMERUS_L"].tail
+        ctrl.location = (0.0, 0.0, 0.0)
+        ctx.view_layer.update()
+        assert d < 1e-4 and (h1 - h0).length > 0.02, (d, (h1 - h0).length)
+        return (f"canonical PHALANX_DISTAL_2_L on index_03_l ({d * 1000:.4f} mm); IK hand control moves the "
+                f"canonical elbow {(h1 - h0).length:.3f} m")
+    check("game rig: canonical skeleton follows the game rig (fingers and IK)", _game_canonical_follows)
+
+    def _game_weapon_grip():
+        arm = game["arm"]
+        assert bpy.ops.character_engine.weapon_grip(weapon_id="short_blade", side="R") == {"FINISHED"}
+        want = HAND_POSES["grip_blade"]
+        got = arm.ce_hand_R
+        assert abs(got.curl_index - want.curl["index"]) < 1e-6 and abs(got.opposition - want.opposition) < 1e-6
+        assert bpy.ops.character_engine.hand_pose(pose="rest", side="L") == {"FINISHED"}
+        rot = max(abs(arm.pose.bones[b].rotation_quaternion.angle) for b in ("index_01_l", "thumb_01_l"))
+        assert rot < 1e-6, rot
+        return f"short_blade -> grip_blade on R (index curl {got.curl_index:.2f}); rest pose clears L ({rot:.1e} rad)"
+    check("game rig: weapon grip picks its pose; rest pose is identity", _game_weapon_grip)
+
     if args.save:
         def _save():
             args.save.parent.mkdir(parents=True, exist_ok=True)

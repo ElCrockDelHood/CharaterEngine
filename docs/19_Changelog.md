@@ -2,6 +2,14 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-25 · Blender game rig, hands and pose library (RIG-GAME-001 step 3)
+
+### Added
+- Domain `rigging/hand_poses.py`: hand controls (curl, spread, opposition, cup), pose library and weapon → grip
+  pose, hand forward kinematics; angle limits ASSUMED. `GAME_CONTROL_RIG` (IK/FK arms and legs on the game rig).
+- Addon `game_rig.py`: *Build game rig* (66 DEF + IK/FK + `MCH-anat_*` helpers driving the canonical armature),
+  hand sliders, *Hand pose*, *Weapon grip*; Blender suite checks (Blender 3.6.23). Tests `test_hand_poses.py`.
+
 ## [Unreleased] — 2026-10-25 · Godot on the game rig (RIG-GAME-001 step 2)
 
 ### Changed

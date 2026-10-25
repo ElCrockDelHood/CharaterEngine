@@ -1,6 +1,6 @@
 # RIG-GAME-001 — Game rig, hands and face (SPECIFICATION, awaiting owner approval)
 
-**Date:** 2026-10-25 · **Status:** APPROVED by the owner (Decision 51); steps 1–2 implemented, steps 3–6 pending ·
+**Date:** 2026-10-25 · **Status:** APPROVED by the owner (Decision 51); steps 1–3 implemented, steps 4–6 pending ·
 **Context:** the owner chose the Souls-like as the
 first genre and asked for an industry-standard rig, sized for the GT 740M, with emphasis on hands and face.
 
@@ -80,7 +80,12 @@ UE5 Mannequin has ~89 bones; we drop extra twists and the index/middle metacarpa
    positions (0 m error), marker on `spine_03`, weapon on `hand_r`, arena fight identical. Breathing modifier is a
    no-op on the game rig (no STERNUM/RIB bones) until chest breathing is redone (step 3 or face/shape work).
    Godot: `CECharacter` loads the game GLB; hitboxes and grip remapped; combat parity unchanged; weapon follows `hand_r`.
-3. Blender: control rig over L1 DEF (body IK/FK as today) + hand controls + pose library; L0 kept as a hidden
+3. **DONE** — `domain/rigging/hand_poses.py` (controls, library `rest/relaxed/open/fist/point/grip_staff/grip_blade`,
+   weapon → grip pose, hand FK; limits ASSUMED), `GAME_CONTROL_RIG` (IK arms/legs + foot roll), addon
+   `game_rig.py` (*Build game rig*, hand sliders, *Hand pose*, *Weapon grip*); canonical armature driven through
+   `MCH-anat_*` helpers (COPY_TRANSFORMS), its bones hidden (the object stays evaluated). Blender 3.6.23 checks:
+   IK rest 0.0003 mm, hand pose = Python FK (0.0009 mm), canonical fingers on game bones (0.0001 mm).
+   Blender: control rig over L1 DEF (body IK/FK as today) + hand controls + pose library; L0 kept as a hidden
    driven layer for simulation and trauma.
 4. Hardware test: morph targets / bone count on the GT 740M (compatibility test before adopting).
 5. Face: jaw + eyes now; ARKit-named shapes when the head mesh exists.

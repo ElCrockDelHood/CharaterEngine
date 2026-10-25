@@ -7,7 +7,23 @@ from .block_dummy import (
     BlockSegment,
     block_placements,
 )
-from .game_rig import GAME_BONES, RIG_ID, GameBone, canonical_to_game, game_bone_points, validate_game_rig
+from .game_rig import (
+    GAME_BONES,
+    GAME_CONTROL_RIG,
+    RIG_ID,
+    GameBone,
+    canonical_to_game,
+    game_bone_points,
+    validate_game_rig,
+)
+from .hand_poses import (
+    HAND_POSES,
+    WEAPON_GRIP_POSE,
+    HandPose,
+    apply_hand_pose,
+    grip_pose_for_weapon,
+    hand_pose_rotations,
+)
 from .rig_definition import (
     HUMANOID_RIG,
     ControlBone,
@@ -26,6 +42,13 @@ __all__ = [
     "block_placements",
     "EQUIPMENT_SOCKETS",
     "GAME_BONES",
+    "GAME_CONTROL_RIG",
+    "HAND_POSES",
+    "HandPose",
+    "WEAPON_GRIP_POSE",
+    "apply_hand_pose",
+    "grip_pose_for_weapon",
+    "hand_pose_rotations",
     "GameBone",
     "RIG_ID",
     "canonical_to_game",

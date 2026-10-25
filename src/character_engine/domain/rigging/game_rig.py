@@ -248,3 +248,21 @@ def _anchor_bones(a: Anchor) -> List[str]:
     if isinstance(a, Offset):
         return _anchor_bones(a.base) + [a.reference_bone]
     return []
+
+
+def _game_control_rig():
+    from .rig_definition import IKChain, RigDefinition
+
+    chains = []
+    for side in ("L", "R"):
+        s = side.lower()
+        chains.append(IKChain(f"arm_{side}", (f"upperarm_{s}", f"lowerarm_{s}"), f"hand_{s}",
+                              pole_offset_m=(0.0, 0.40, 0.0), fk_ik_property=f"arm_ik_{side}"))
+        chains.append(IKChain(f"leg_{side}", (f"thigh_{s}", f"calf_{s}"), f"foot_{s}",
+                              pole_offset_m=(0.0, -0.50, 0.0), fk_ik_property=f"leg_ik_{side}", foot_roll=True))
+    return RigDefinition(rig_id="ce_game_v1_controls", ik_chains=tuple(chains), spline_chains=(), controls=(),
+                         properties={f"{limb}_ik_{s}": 1.0 for limb in ("arm", "leg") for s in "LR"})
+
+
+#: IK/FK control layer over the game skeleton (same contract and pole offsets as ``HUMANOID_RIG``).
+GAME_CONTROL_RIG = _game_control_rig()

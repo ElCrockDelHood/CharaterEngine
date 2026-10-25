@@ -10,6 +10,7 @@ domain from inside Blender:
   catalogue), skin envelope. Realistic user meshes placed in ``assets/anatomy/meshes``
   are fitted automatically instead of proxies.
 * Rig: IK/FK control layer (``HUMANOID_RIG``), foot roll, breathing control.
+* Game rig: CE-GAME-v1 (66 bones) with IK/FK, hand controls and pose library, driving the canonical armature.
 * Mocap: BVH import + retarget through a bone map (Mixamo / CMU / Rokoko).
 * Wounds: click-to-wound raycast → tissue layers breached, severity, lethality.
 * Export: glTF for Godot/UPBGE; Runtime tab: UPBGE gameplay scene set-up.
@@ -32,9 +33,9 @@ from . import _bootstrap  # noqa: E402  (must run before importing the domain)
 
 _bootstrap.ensure_domain_importable()
 
-from . import operators, panels, properties, runtime_upbge  # noqa: E402
+from . import game_rig, operators, panels, properties, runtime_upbge  # noqa: E402
 
-_MODULES = (properties, operators, runtime_upbge, panels)
+_MODULES = (properties, operators, runtime_upbge, game_rig, panels)
 
 
 def register() -> None:
