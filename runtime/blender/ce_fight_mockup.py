@@ -5,7 +5,7 @@
         --reference "C:/DEV/Assets/Imagenes Para Libertadores, Bocetar y dibujar/<levita sheet>.png"
 
 Two canonical 1.80 m skeletons face each other, each with the block dummy (+ collision capsules) and the
-PLACEHOLDER sabre on the right-hand grip socket. One plays a guard clip, the other an attack clip, both
+PLACEHOLDER sabre on the right-hand grip socket (blade through the fist, Decision 48). One plays a guard clip, the other an attack clip, both
 retargeted from a glTF animation library (e.g. Quaternius UAL, CC0) through the ``quaternius_ual`` bone map.
 An owner reference sheet is shown as an image plane beside them. Renders Workbench frames, reports the
 closest sabre-to-body distance per frame and saves a .blend to open in Blender.
@@ -47,39 +47,6 @@ def load_addon():
     return build
 
 
-def grip_sabre(build, arm, length_m: float, width_m: float, hand: str = "R"):
-    """PLACEHOLDER blade held in a fist: it runs through the grip channel formed by the fingers, i.e. along
-    METACARPAL_5 -> METACARPAL_2 (little-finger side to index side), starting at the hand-grip socket.
-    The axis is ASSUMED (mock-up only); the SOCKET-hand_grip contract axis (along the fingers) is unchanged."""
-    import bmesh  # type: ignore
-    from mathutils import Matrix  # type: ignore
-    mw = arm.matrix_world
-    bones = arm.data.bones
-    socket = bones[f"SOCKET-hand_grip.{hand}"]
-    start = mw @ socket.head_local
-    d = ((mw @ bones[f"METACARPAL_2_{hand}"].head_local) - (mw @ bones[f"METACARPAL_5_{hand}"].head_local)).normalized()
-    u = d.cross(Vector((0.0, 0.0, 1.0)))
-    u = u.normalized() if u.length > 1e-6 else d.cross(Vector((1.0, 0.0, 0.0))).normalized()
-    v = d.cross(u).normalized()
-    h = width_m / 2
-    bm = bmesh.new()
-    verts = [bm.verts.new(start + d * (length_m * t - 0.06) + u * (h * a) + v * (h * b))
-             for t in (0.0, 1.0) for a in (-1, 1) for b in (-1, 1)]
-    for f in ((0, 1, 3, 2), (4, 6, 7, 5), (0, 4, 5, 1), (2, 3, 7, 6), (0, 2, 6, 4), (1, 5, 7, 3)):
-        bm.faces.new([verts[i] for i in f])
-    mesh = bpy.data.meshes.new(f"{arm.name}_Sabre_PLACEHOLDER")
-    bm.to_mesh(mesh)
-    bm.free()
-    obj = bpy.data.objects.new(mesh.name, mesh)
-    bpy.context.scene.collection.objects.link(obj)
-    obj.update_tag()
-    obj["ce_character"], obj["ce_role"] = arm.name, "equipment"
-    obj["ce_provenance"] = "PLACEHOLDER (size) / ASSUMED (grip axis METACARPAL_5->METACARPAL_2)"
-    obj.parent, obj.parent_type, obj.parent_bone = arm, "BONE", socket.name
-    obj.matrix_parent_inverse = (mw @ socket.matrix_local @ Matrix.Translation((0, socket.length, 0))).inverted()
-    return obj
-
-
 def make_fighter(props, build, name: str, anim: Path, clip: str):
     props.armature_name = name
     props.template, props.pose, props.use_template_stature = "human_male_adult", "tpose", True
@@ -87,7 +54,7 @@ def make_fighter(props, build, name: str, anim: Path, clip: str):
     arm = bpy.data.objects[name]
     assert bpy.ops.character_engine.block_dummy(with_collision=True) == {"FINISHED"}
     assert bpy.ops.character_engine.add_equipment_sockets(with_sabre=False) == {"FINISHED"}
-    grip_sabre(build, arm, build.SABRE_PLACEHOLDER_LENGTH_M, build.SABRE_PLACEHOLDER_WIDTH_M)
+    build.build_placeholder_sabre(bpy.context, arm, "SOCKET-hand_grip.R")   # blade along the grip axis (Decision 48)
     props.bone_map, props.bvh_path, props.mocap_action = "quaternius_ual", str(anim), clip
     assert bpy.ops.character_engine.import_mocap() == {"FINISHED"}
     return arm
@@ -119,16 +86,30 @@ def world_verts(obj):
     return pts
 
 
-def closest_sabre_contact(attacker, defender) -> float:
+def closest_sabre_contact(attacker, defender, samples: int = 40):
+    """Signed distance from the blade centre line to the defender's collision capsules.
+
+    Negative = the blade is inside a capsule (penetration depth). Returns (distance, capsule name).
+    """
     sabre = bpy.data.objects[f"{attacker.name}_Sabre_PLACEHOLDER"]
-    blade = world_verts(sabre)
-    best = math.inf
+    v = world_verts(sabre)
+    base, tip = sum(v[:4], Vector()) / 4, sum(v[4:], Vector()) / 4
+    line = [base.lerp(tip, i / (samples - 1)) for i in range(samples)]
+    best, where = math.inf, ""
     for o in bpy.data.objects:
-        if o.get("ce_character") == defender.name and o.get("ce_role") == "collision":
-            for p in world_verts(o):
-                for q in blade:
-                    best = min(best, (p - q).length)
-    return best
+        if o.get("ce_character") != defender.name or o.get("ce_role") != "collision":
+            continue
+        inv = o.matrix_world.inverted()
+        for p in line:
+            ok, loc, normal, _ = o.closest_point_on_mesh(inv @ p)
+            if not ok:
+                continue
+            lp = inv @ p
+            d = (lp - loc).length * (1 if (lp - loc).dot(normal) >= 0 else -1)
+            d *= o.matrix_world.to_scale()[0]
+            if d < best:
+                best, where = d, o.name.split("_COL_")[-1]
+    return best, where
 
 
 def main() -> int:
@@ -184,13 +165,14 @@ def main() -> int:
     for fr in frames:
         scene.frame_set(fr)
         bpy.context.view_layer.update()
-        gap = closest_sabre_contact(attacker, guard)
+        gap, region = closest_sabre_contact(attacker, guard)
         path = a.out / f"D1-2_fight_mockup_f{fr:03d}.png"
         scene.render.filepath = str(path)
         t = time.perf_counter()
         bpy.ops.render.render(write_still=True)
         entry = {"frame": fr, "render": str(path), "render_s": round(time.perf_counter() - t, 2),
-                 "attacker_sabre_to_guard_body_m": round(gap, 3)}
+                 "attacker_sabre_to_guard_body_m": round(gap, 3), "closest_segment": region,
+                 "contact": gap <= 0.0}
         report["frames"].append(entry)
         print(f"[mockup] {json.dumps(entry)}", flush=True)
     a.save.parent.mkdir(parents=True, exist_ok=True)

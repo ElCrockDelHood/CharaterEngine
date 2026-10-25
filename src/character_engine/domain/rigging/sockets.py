@@ -43,9 +43,11 @@ EQUIPMENT_SOCKETS: Tuple[EquipmentSocket, ...] = (
               "slightly behind the arm plane, hanging down and back. ASSUMED placement."),
     EquipmentSocket(
         name="SOCKET-hand_grip.R", parent_bone="METACARPAL_3_R", along=0.5,
-        offset_m=(0.0, -0.02, 0.0), direction=(0.0, 0.0, -1.0), length_m=0.05,
+        offset_m=(0.0, -0.02, 0.0), direction=(-1.0, 0.0, 0.0), length_m=0.05,
         notes="Right-hand grip on the palmar side of the third metacarpal (palm faces −Y in the "
-              "anatomical position). ASSUMED placement."),
+              "anatomical position). A held blade runs through the grip channel of the fist, from the "
+              "little-finger side to the index side: METACARPAL_5_R -> METACARPAL_2_R = -X in the anatomical "
+              "position (Decision 48; previously along the fingers). ASSUMED placement."),
 )
 
 

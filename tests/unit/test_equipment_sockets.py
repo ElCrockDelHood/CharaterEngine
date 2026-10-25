@@ -43,6 +43,18 @@ def test_hand_grip_is_palmar_on_the_right_hand(anatomical):
     assert mc["tail"]["z"] < head[2] < mc["head"]["z"]
 
 
+def test_hand_grip_axis_runs_through_the_fist_little_finger_to_index(anatomical):
+    """Decision 48: the held blade follows METACARPAL_5_R -> METACARPAL_2_R, not the fingers."""
+    head, tail = socket_points(_by("SOCKET-hand_grip.R"), anatomical, anatomical)
+    by = {b["canonical_name"]: b for b in anatomical}
+    mc5, mc2 = by["METACARPAL_5_R"]["head"], by["METACARPAL_2_R"]["head"]
+    channel = (mc2["x"] - mc5["x"], mc2["y"] - mc5["y"], mc2["z"] - mc5["z"])
+    axis = tuple(t - h for h, t in zip(head, tail))
+    cos = sum(a * c for a, c in zip(axis, channel)) / (math.hypot(*axis) * math.hypot(*channel))
+    assert cos == pytest.approx(1.0, abs=1e-6)
+    assert tail[0] < head[0]                                 # towards the index / thumb side (-X, right hand)
+
+
 @pytest.mark.parametrize("name", ["SOCKET-sabre_hip.L", "SOCKET-hand_grip.R"])
 def test_socket_keeps_its_offset_relative_to_the_parent_in_tpose(anatomical, name):
     s = _by(name)
