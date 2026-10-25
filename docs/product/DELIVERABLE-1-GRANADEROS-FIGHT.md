@@ -146,6 +146,37 @@ Renders: `builds/renders/D1-2_1.6m/`, `builds/renders/D1-2_1.2m/` (12 frames eac
 Frame 18 review: the blade now points down, which is the clip's wind-up (wrist dropped before the thrust), no longer
 the socket error; whether it looks natural depends on the clip.
 
+### 3.4 Contact → wound (owner approval 2026-10-25, card "Contacto a heridas")
+
+On the first frame with contact (signed distance ≤ 0), the mock-up creates the wound with the **same domain code**
+used to build the Godot gameplay table. `blade_contact_to_wound` maps the contact to an INCISION, then
+`assess_wound` evaluates it. The bone is the one nearest to the contact point **in the current pose**. A
+colour-coded marker is parented to that bone, and a close-up is rendered with X-ray so the marker shows inside the
+proxy.
+
+Wound generated at 1.2 m (`logs/20261025T043634Z_fight_mockup.log`, renders `builds/renders/D1-2_1.2m_wound/`):
+
+| Field | Value | Basis |
+|-------|-------|-------|
+| frame / defender | 24 / CE_Fighter_A | clip `Sword_Attack` (Quaternius UAL1, CC0), spacing 1.2 m ESTIMATE |
+| bone / region | RADIUS_L (0.054 m from the contact point) / forearm | nearest posed canonical bone |
+| type / depth | incision / 8.2 mm | blade centre line inside the block-dummy capsule (envelope radius ESTIMATE) |
+| width | 35 mm | PLACEHOLDER sabre width |
+| energy | none | UNKNOWN: not used by the incision assessment; no cited model |
+| result | skin + fat breached, severity 2, lethality 0.009, bleeding 0.2, no fracture | `assess_wound`, tissue thicknesses ESTIMATE |
+| provenance / seed | ESTIMATE / none (no randomness) | identical SHA-256 `747e9595…f260d3d` in 3 consecutive runs |
+
+**What a model with a cited basis would need:**
+1. Measured tissue thicknesses per region (skin, fat, muscle) instead of the per-region ESTIMATEs, e.g. from
+   anthropometric / imaging literature.
+2. A cited cutting/penetration model: force or energy needed to cut skin, muscle and bone with a sabre edge, and
+   blade geometry (edge angle, sharpness).
+3. Real sabre data (length, mass, centre of balance) and a measured strike speed. That gives the impact energy
+   now left UNKNOWN.
+4. A body mesh instead of the envelope capsules, so penetration is measured against a real surface.
+5. A cited injury-severity scale for incisions (e.g. an AIS-type classification) to replace the current severity
+   rules.
+
 ## 4. What Mariano must provide or decide first
 
 1. Base mesh origin: artist-made (by you, from your drawings) or generated (MPFB2/other) — and licence policy
