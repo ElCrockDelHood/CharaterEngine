@@ -653,6 +653,94 @@ def main(reset: bool = True) -> int:
         check("CINE-GR-001 (c) placeholder sabre clear of skeleton proxies", _sabre_clear)
         check("CINE-GR-001 (a)+(d) full-body Workbench camera and render", _cinematic)
 
+    def _centre(obj, depsgraph=None):
+        if depsgraph is not None:
+            ev = obj.evaluated_get(depsgraph)
+            me = ev.to_mesh()
+            pts = [obj.matrix_world @ v.co for v in me.vertices]
+            ev.to_mesh_clear()
+        else:
+            pts = [obj.matrix_world @ Vector(c) for c in obj.bound_box]
+        return sum(pts, Vector()) / len(pts)
+
+    def _block_dummy():
+        arm = bpy.data.objects[props.armature_name]
+        assert bpy.ops.character_engine.block_dummy(with_collision=True) == {"FINISHED"}
+        blocks = bpy.data.objects[f"{arm.name}_Blocks"]
+        cols = [o for o in bpy.data.objects if o.get("ce_character") == arm.name and o.get("ce_role") == "collision"]
+        assert len(cols) == 17, len(cols)
+        bad = [v.index for v in blocks.data.vertices if len(v.groups) != 1 or abs(v.groups[0].weight - 1.0) > 1e-6]
+        assert not bad, f"{len(bad)} vertices not 100 % weighted to one bone"
+        assert all(o.modifiers.get("Collision") for o in cols)
+        # pose the left upper arm: its block vertices and its collision capsule must follow the bone
+        action = arm.animation_data.action if arm.animation_data else None
+        if action:
+            arm.animation_data.action = None
+        arm["arm_ik_L"] = 0.0
+        pb = arm.pose.bones["HUMERUS_L"]
+        mode = pb.rotation_mode
+        pb.rotation_mode = "QUATERNION"
+        col = bpy.data.objects[f"{arm.name}_COL_upper_arm.L"]
+        group = blocks.vertex_groups["HUMERUS_L"].index
+        idx = [v.index for v in blocks.data.vertices if v.groups[0].group == group]
+
+        def group_centre():
+            dg = ctx.evaluated_depsgraph_get()
+            ev = blocks.evaluated_get(dg)
+            me = ev.to_mesh()
+            c = sum((blocks.matrix_world @ me.vertices[i].co for i in idx), Vector()) / len(idx)
+            ev.to_mesh_clear()
+            return c
+        ctx.view_layer.update()
+        c0, k0 = _centre(col), group_centre()
+        pb.rotation_quaternion = Quaternion((1.0, 0.0, 0.0), math.radians(60))
+        ctx.view_layer.update()
+        c1, k1 = _centre(col), group_centre()
+        pb.rotation_quaternion = Quaternion()
+        pb.rotation_mode = mode
+        if action:
+            arm.animation_data.action = action
+        ctx.view_layer.update()
+        moved_col, moved_blk = (c1 - c0).length, (k1 - k0).length
+        assert moved_col > 0.05 and moved_blk > 0.05, (moved_col, moved_blk)
+        assert (c1 - k1).length < 0.02, f"collision capsule and block diverge: {(c1 - k1).length:.4f} m"
+        # Workbench sample render with the dummy only (other character layers hidden from render)
+        hidden = [o for o in bpy.data.objects if o.get("ce_character") == arm.name
+                  and o.get("ce_role") not in ("dummy",) and o.type == "MESH" and not o.hide_render]
+        for o in hidden:
+            o.hide_render = True
+        out = ROOT / "builds" / "renders" / f"{args.engine}_block_dummy.png"
+        res = bpy.ops.character_engine.cinematic_fullbody(render=True, filepath=str(out))
+        for o in hidden:
+            o.hide_render = False
+        assert res == {"FINISHED"} and out.exists(), res
+        return (f"{len(blocks.vertex_groups)} bones, {len(blocks.data.vertices)} vertices 100 % weighted, "
+                f"{len(cols)} collision capsules; HUMERUS_L 60 deg -> capsule moved {moved_col:.3f} m, "
+                f"block {moved_blk:.3f} m; render {out.name}")
+
+    def _normalize():
+        bpy.ops.mesh.primitive_cube_add(size=1.0, location=(5.0, 90.0, 3.0))
+        obj = ctx.active_object
+        obj.name = "CE_test_import_yup"
+        obj.scale = (40.0, 180.0, 20.0)            # a Y-up "character" 180 units tall, +Z forward
+        for o in ctx.selected_objects:
+            o.select_set(o is obj)
+        res = bpy.ops.character_engine.normalize_mesh(target_height_m=1.75, up="+Y", forward="+Z")
+        assert res == {"FINISHED"}, res
+        pts = [obj.matrix_world @ v.co for v in obj.data.vertices]
+        lo = [min(p[k] for p in pts) for k in range(3)]
+        hi = [max(p[k] for p in pts) for k in range(3)]
+        info = json.loads(obj["ce_normalized"])
+        bpy.data.objects.remove(obj, do_unlink=True)
+        assert abs(lo[2]) < 1e-6 and abs(hi[2] - 1.75) < 1e-6, (lo, hi)
+        assert abs(lo[0] + hi[0]) < 1e-6 and abs(lo[1] + hi[1]) < 1e-6, (lo, hi)
+        assert abs((hi[1] - lo[1]) - 20.0 * 1.75 / 180.0) < 1e-6, "source Z (forward) must become canonical Y depth"
+        return f"Y-up 180-unit box -> z [0, {hi[2]:.3f}] m, centred, scale {info['scale']:.5f}, {info['provenance']}"
+
+    if not skipped(args, "dummy"):
+        check("P1 block dummy: blocks 100 % weighted, collision capsules follow the bones, render", _block_dummy)
+        check("P2 normalize mesh: Y-up import to canonical metres at target height", _normalize)
+
     if args.save:
         def _save():
             args.save.parent.mkdir(parents=True, exist_ok=True)

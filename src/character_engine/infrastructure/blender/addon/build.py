@@ -19,7 +19,14 @@ from mathutils import Matrix, Quaternion, Vector
 from character_engine.domain.anatomy.osteometry import LONG_BONES, load_osteometry
 from character_engine.domain.anatomy.reference.source import ProvenanceState
 from character_engine.domain.animation import BoneMap
-from character_engine.domain.rigging import EquipmentSocket, RigDefinition, socket_points
+from character_engine.domain.assets import normalization
+from character_engine.domain.rigging import (
+    ENVELOPE_RADIUS_M,
+    EquipmentSocket,
+    RigDefinition,
+    block_placements,
+    socket_points,
+)
 from character_engine.domain.tissue import MUSCLES, BodyRegion, TissueLayer, region_of_bone, tissue_profile
 from character_engine.domain.trauma import Wound, WoundAssessment, WoundType, assess_wound
 
@@ -27,12 +34,8 @@ Vec3 = Tuple[float, float, float]
 
 # Bones excluded from proxy geometry (too small / inside cavities) and from the skin graph.
 _TINY = {"STAPES", "INCUS", "MALLEUS", "LACRIMAL", "VOMER", "INFERIOR_NASAL_CONCHA", "PALATINE", "ETHMOID"}
-# Approximate limb / trunk envelope radii for the skin graph (ESTIMATE, proxy only).
-_SKIN_RADIUS_BY_REGION = {
-    BodyRegion.HEAD: 0.085, BodyRegion.NECK: 0.06, BodyRegion.THORAX: 0.13, BodyRegion.ABDOMEN: 0.13,
-    BodyRegion.PELVIS: 0.14, BodyRegion.UPPER_ARM: 0.05, BodyRegion.FOREARM: 0.04, BodyRegion.HAND: 0.018,
-    BodyRegion.THIGH: 0.08, BodyRegion.LEG: 0.055, BodyRegion.FOOT: 0.03,
-}
+# Approximate limb / trunk envelope radii for the skin graph (ESTIMATE, proxy only; shared with the block dummy).
+_SKIN_RADIUS_BY_REGION = ENVELOPE_RADIUS_M
 
 
 # --------------------------------------------------------------------------- helpers -------
@@ -152,7 +155,7 @@ def clear_character(context, name: str) -> int:
             bpy.data.objects.remove(obj, do_unlink=True)
             removed += 1
     for coll_name in (f"{name}", f"{name}_Tissues", f"{name}_Wounds", f"{name}_Mocap", f"{name}_Equipment",
-                      f"{name}_Cinematic"):
+                      f"{name}_Cinematic", f"{name}_Dummy"):
         coll = bpy.data.collections.get(coll_name)
         if coll and not coll.objects and not coll.children:
             bpy.data.collections.remove(coll)
@@ -466,6 +469,89 @@ def build_skin_envelope(context, armature, subdivisions: int = 2):
     _assign_weights(obj, groups)
     _bind(obj, armature)
     return obj
+
+
+# --------------------------------------------------------------------------- block dummy ---
+
+def _capsule(bm, a: Vector, b: Vector, radius: float, segments: int = 12, rings: int = 9) -> List:
+    """Closed capsule whose hemisphere centres are ``a`` and ``b`` (odd ``rings``: no equator ring)."""
+    half = (b - a).length / 2
+    res = bmesh.ops.create_uvsphere(bm, u_segments=segments, v_segments=rings, radius=radius)
+    verts = res["verts"]
+    for v in verts:
+        v.co.z += half if v.co.z > 0 else -half
+    mat, _ = _align_z(a, b) if half > 0 else (Matrix.Translation(a), 0.0)
+    bmesh.ops.transform(bm, matrix=mat, verts=verts)
+    return verts
+
+
+def build_block_dummy(context, armature, with_collision: bool = True):
+    """Block mannequin: one capsule per body segment, 100 % weighted to one bone (ESTIMATE radii).
+
+    Returns (blocks object, list of collision objects). Collision capsules are separate objects
+    parented to their bone with a COLLISION modifier, so cloth, soft bodies and particles hit them.
+    """
+    name = armature["ce_character"]
+    pts = bone_points(armature)
+    stature = float(armature.get("ce_stature_m", 1.80))
+    placements = block_placements({n: (tuple(h), tuple(t)) for n, (h, t) in pts.items()}, stature)
+    bm = bmesh.new()
+    owned = []
+    spans = []
+    for p in placements:
+        owned.append((p.weight_bone, _capsule(bm, Vector(p.a), Vector(p.b), p.radius_m)))
+        spans.append({"segment": p.name, "bone": p.weight_bone, "radius_m": p.radius_m})
+    bm.verts.index_update()          # indices only after all capsules exist (bmesh ops may reorder)
+    groups: Dict[str, List[Tuple[int, float]]] = {}
+    for bone, verts in owned:
+        groups.setdefault(bone, []).extend((v.index, 1.0) for v in verts)
+    blocks = _mesh_object(context, f"{name}_Blocks", bm, f"{name}_Dummy", {
+        "ce_character": name, "ce_role": "dummy", "ce_provenance": "ESTIMATE",
+        "ce_blocks": json.dumps(spans)})
+    blocks.data.materials.append(_material("CE_Dummy", (0.55, 0.62, 0.70, 1.0)))
+    _assign_weights(blocks, groups)
+    _bind(blocks, armature)
+
+    colliders = []
+    if with_collision:
+        for p in placements:
+            cbm = bmesh.new()
+            _capsule(cbm, Vector(p.a), Vector(p.b), p.radius_m, segments=8, rings=5)
+            col = _mesh_object(context, f"{name}_COL_{p.name}", cbm, f"{name}_Dummy", {
+                "ce_character": name, "ce_role": "collision", "ce_bone": p.weight_bone,
+                "ce_provenance": "ESTIMATE"})
+            col.display_type = "WIRE"
+            col.hide_render = True
+            bone = armature.data.bones[p.weight_bone]
+            col.parent = armature
+            col.parent_type = "BONE"
+            col.parent_bone = p.weight_bone
+            # capsules are built from the REST pose (like the skinned blocks), so the inverse uses the rest matrix
+            col.matrix_parent_inverse = (armature.matrix_world @ bone.matrix_local
+                                         @ Matrix.Translation((0, bone.length, 0))).inverted()
+            col.modifiers.new("Collision", "COLLISION")
+            colliders.append(col)
+    return blocks, colliders
+
+
+# --------------------------------------------------------------------------- normalizer ----
+
+def normalize_mesh(obj, target_height_m: float, up: str = "+Z", forward: str = "-Y") -> dict:
+    """Bake ``obj`` into the canonical frame (metres, Z-up, −Y forward, feet on z = 0) at a target height."""
+    if obj.type != "MESH":
+        raise TypeError(f"{obj.name} is not a mesh")
+    mw = obj.matrix_world.copy()
+    world = [tuple(mw @ v.co) for v in obj.data.vertices]
+    n = normalization(world, target_height_m, up=up, forward=forward)
+    m = Matrix([list(row) for row in n.matrix])
+    obj.data.transform(m @ mw)
+    obj.matrix_world = Matrix.Identity(4)
+    obj.data.update()
+    info = {"target_height_m": target_height_m, "source_height": round(n.source_height, 6), "scale": n.scale,
+            "up": up, "forward": forward, "provenance": n.provenance.value}
+    obj["ce_normalized"] = json.dumps(info)
+    obj["ce_provenance"] = "ESTIMATE"
+    return info
 
 
 # --------------------------------------------------------------------------- rig -----------

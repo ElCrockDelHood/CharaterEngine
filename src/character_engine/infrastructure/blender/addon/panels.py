@@ -156,6 +156,9 @@ class CE_PT_export(_CEPanel, bpy.types.Panel):
         layout.separator()
         layout.operator("character_engine.add_equipment_sockets", icon="BONE_DATA")
         layout.operator("character_engine.cinematic_fullbody", icon="CAMERA_DATA")
+        layout.separator()
+        layout.operator("character_engine.block_dummy", icon="MESH_CAPSULE")
+        layout.operator("character_engine.normalize_mesh", icon="FULLSCREEN_EXIT")
 
 
 class CE_PT_runtime(_CEPanel, bpy.types.Panel):

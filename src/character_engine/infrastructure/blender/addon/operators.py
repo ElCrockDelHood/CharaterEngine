@@ -394,10 +394,65 @@ class CE_OT_cinematic_fullbody(bpy.types.Operator):
             return _report_exc(self, exc)
 
 
+class CE_OT_block_dummy(bpy.types.Operator):
+    """Block dummy: one capsule per body segment, 100 % weighted to its bone, plus collision capsules (ESTIMATE)"""
+
+    bl_idname = "character_engine.block_dummy"
+    bl_label = "Block dummy (blocks + collision)"
+    bl_options = {"REGISTER", "UNDO"}
+
+    with_collision: bpy.props.BoolProperty(name="Collision capsules", default=True)
+
+    def execute(self, context):
+        arm = _armature(context)
+        if arm is None:
+            self.report({"ERROR"}, "Generate a body first")
+            return {"CANCELLED"}
+        try:
+            if context.object and context.object.mode != "OBJECT":
+                bpy.ops.object.mode_set(mode="OBJECT")
+            for obj in list(bpy.data.objects):
+                if obj.get("ce_character") == arm["ce_character"] and obj.get("ce_role") in ("dummy", "collision"):
+                    bpy.data.objects.remove(obj, do_unlink=True)
+            blocks, cols = build.build_block_dummy(context, arm, self.with_collision)
+            self.report({"INFO"}, f"{blocks.name}: {len(blocks.vertex_groups)} bones, {len(cols)} collision capsules")
+            return {"FINISHED"}
+        except Exception as exc:  # noqa: BLE001
+            return _report_exc(self, exc)
+
+
+_AXIS_ITEMS = [(a, a, "") for a in ("+X", "-X", "+Y", "-Y", "+Z", "-Z")]
+
+
+class CE_OT_normalize_mesh(bpy.types.Operator):
+    """Normalize the selected meshes: metres, Z-up, -Y forward, feet on the ground, scaled to a target height"""
+
+    bl_idname = "character_engine.normalize_mesh"
+    bl_label = "Normalize mesh scale"
+    bl_options = {"REGISTER", "UNDO"}
+
+    target_height_m: bpy.props.FloatProperty(name="Target height (m)", default=1.80, min=0.001, soft_max=10.0)
+    up: bpy.props.EnumProperty(name="Source up", items=_AXIS_ITEMS, default="+Z")
+    forward: bpy.props.EnumProperty(name="Source forward", items=_AXIS_ITEMS, default="-Y")
+
+    def execute(self, context):
+        meshes = [o for o in context.selected_objects if o.type == "MESH"]
+        if not meshes:
+            self.report({"ERROR"}, "Select at least one mesh")
+            return {"CANCELLED"}
+        try:
+            for obj in meshes:
+                build.normalize_mesh(obj, self.target_height_m, self.up, self.forward)
+            self.report({"INFO"}, f"normalized {len(meshes)} mesh(es) to {self.target_height_m:.3f} m (ESTIMATE)")
+            return {"FINISHED"}
+        except Exception as exc:  # noqa: BLE001
+            return _report_exc(self, exc)
+
+
 CLASSES = (
     CE_OT_generate_body, CE_OT_generate_tissues, CE_OT_build_rig, CE_OT_set_ik_fk, CE_OT_import_mocap,
     CE_OT_apply_wound, CE_OT_clear_wounds, CE_OT_export_gltf, CE_OT_export_scene_gltf, CE_OT_dump_report,
-    CE_OT_add_equipment_sockets, CE_OT_cinematic_fullbody,
+    CE_OT_add_equipment_sockets, CE_OT_cinematic_fullbody, CE_OT_block_dummy, CE_OT_normalize_mesh,
 )
 
 
