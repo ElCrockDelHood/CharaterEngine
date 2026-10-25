@@ -14,6 +14,7 @@ from .combat import (
     default_hitboxes,
 )
 from .runtime_table import gameplay_runtime_table, run_scenario
+from .weapons import UNARMED, WEAPONS, Weapon, WeaponCategory, weapon
 
 __all__ = [
     "gameplay_runtime_table",
@@ -29,4 +30,9 @@ __all__ = [
     "MoveKind",
     "ShenmueCombat",
     "default_hitboxes",
+    "UNARMED",
+    "WEAPONS",
+    "Weapon",
+    "WeaponCategory",
+    "weapon",
 ]

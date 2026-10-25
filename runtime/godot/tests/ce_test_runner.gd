@@ -8,7 +8,8 @@
 ##   - T-pose: humerus horizontal, arms spread along X
 ##   - CECharacter loads in-tree, finds canonical bones, reports stature; scaling works
 ##   - CEBreathing modifier displaces the sternum over time
-##   - CEShenmueCombat replays every reference fight identically to the Python simulation
+##   - CEShenmueCombat replays every reference fight identically to the Python simulation (incl. weapons)
+##   - weapons table complete; weapon placeholder mounts on the grip bone and follows it when posed
 ##   - CEArena builds two characters + controllers, autoplay lands hits and creates wound markers
 ##   - InputMap actions registered; planned gameplay styles are listed but disabled
 extends SceneTree
@@ -154,6 +155,45 @@ class Runner extends Node:
 			return [marker != null and marker is BoneAttachment3D and ch.wound_markers.size() == 1,
 					"impact %s" % data.impact("elbow_assault", "STERNUM")])
 		ch.queue_free()
+
+		# ---- weapons ---------------------------------------------------------------
+		runner.check("weapons table: unarmed applies to nothing, examples carry provenance", func():
+			var ws := data.weapons()
+			var ok := ws.has("unarmed") and ws.has("staff") and ws.has("short_blade")
+			ok = ok and (data.weapon("unarmed")["applies_to_moves"] as Array).is_empty()
+			for wid in ws:
+				for k in (ws[wid]["provenance"] as Dictionary):
+					ok = ok and ws[wid]["provenance"][k] != "proven"
+			return [ok and data.weapon_applies("short_blade", "jab") and not data.weapon_applies("short_blade", "front_kick"),
+					"%s; short_blade -> %s" % [", ".join(ws.keys()), data.weapon("short_blade")["applies_to_moves"]]])
+		var wch := CECharacter.new()
+		wch.glb_path = tpose
+		wch.breathing_enabled = false
+		tree_root.add_child(wch)
+		var blade := data.weapon("short_blade")
+		var watt := wch.equip_weapon(blade)
+		var grip: String = blade["grip_bone"]
+		await t.process_frame
+		await t.process_frame
+		var w0 := watt.global_position if watt else Vector3.ZERO
+		runner.check("weapon placeholder mounted on grip bone (BoneAttachment3D)", func():
+			var box: BoxMesh = (watt.get_child(0) as MeshInstance3D).mesh if watt and watt.get_child_count() > 0 else null
+			return [watt != null and watt.bone_name == grip and box != null
+					and is_equal_approx(box.size.y, float(blade["length_m"])) and wch.equip_weapon(data.weapon("unarmed")) == null
+					and w0.distance_to(wch.bone_global_position(grip)) < 1e-3,
+					"%s on %s, box %s" % [watt.name if watt else "null", grip, box.size if box else "none"]])
+		watt = wch.equip_weapon(blade)   # the unarmed probe above unequipped it
+		await t.process_frame
+		var hum := wch.skeleton.find_bone("HUMERUS_R")
+		wch.skeleton.set_bone_pose_rotation(hum, wch.skeleton.get_bone_rest(hum).basis.get_rotation_quaternion()
+				* Quaternion(Vector3(0, 0, 1), 0.8))
+		await t.process_frame
+		await t.process_frame
+		var w1 := watt.global_position
+		runner.check("weapon placeholder follows the grip bone when the arm is posed", func():
+			var err := w1.distance_to(wch.bone_global_position(grip))
+			return [w1.distance_to(w0) > 0.05 and err < 1e-3, "moved %.3f m, error to bone %.5f m" % [w1.distance_to(w0), err]])
+		wch.queue_free()
 
 		# ---- combat port vs Python reference ------------------------------------
 		for sc in data.reference_scenarios():

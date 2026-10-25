@@ -79,8 +79,14 @@ The validator checks orientation (`height_m ≥ 1.0`), not an exact stature.
 `runtime/upbge/components/ce_combat.py` is the UPBGE **runtime** side: it embeds the Python
 combat domain (`character_engine.domain.gameplay.ShenmueCombat`) as a `KX_PythonComponent`
 (`ce_combat.CEFighter`) with a logic-brick fallback (`ce_combat.run`). Component / game
-properties: `fighter_id`, `is_player`, `style`, `stature_m`, `move_speed`, `ai_aggression`,
+properties: `fighter_id`, `is_player`, `style`, `stature_m`, `weapon`, `move_speed`, `ai_aggression`,
 `autoplay_frames`, `report_path`. Keys: W/S move, J punch, K kick, L throw, Space guard.
+
+`weapon` names an entry of `character_engine.domain.gameplay.WEAPONS` (`unarmed` default, `staff`,
+`short_blade`; Decision 50); the domain applies reach, energy and wound type. `ce_combat.attach_weapon_placeholder(
+armature, weapon_id)` (authoring time, `bpy`) creates a PLACEHOLDER box bone-parented to the grip bone
+(`METACARPAL_3_R`), which the game engine keeps following. Suite checks: weapon replays match the committed
+Godot table; the placeholder stays rigid on the grip bone when HUMERUS_R is posed.
 
 Set up an arena from the addon panel (*Runtime → Set up UPBGE scene*, `docs/08_Blender_Addon.md`)
 or run the suite: `python scripts/engine_tests.py upbge` — UI mode (UPBGE 0.50 crashes when

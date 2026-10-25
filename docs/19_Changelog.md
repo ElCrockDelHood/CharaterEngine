@@ -2,6 +2,22 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-25 · Weapons (runtime plan step 1)
+
+### Added
+- Domain `gameplay/weapons.py`: `Weapon` (category unarmed/blunt/blade, reach bonus, mass, energy multiplier,
+  grip bone `METACARPAL_3_R` / `SOCKET-hand_grip.R`, wound type BLUNT or INCISION, placeholder size) and the
+  registry `unarmed`, `staff`, `short_blade`; every value ESTIMATE/ASSUMED/PLACEHOLDER. `Fighter.weapon`
+  (default unarmed) modifies hand strikes in `ShenmueCombat`; the 7 unarmed reference fights are unchanged.
+- Gameplay table `ce-gameplay/2`: `weapons` + `default_weapon`, scenarios `short_blade_jab_reach` and
+  `staff_chain_and_kick`.
+- Godot: weapon port in `ce_shenmue_combat.gd` / `ce_gameplay_data.gd`, `CECharacter.equip_weapon()`
+  placeholder on a `BoneAttachment3D`, runner checks. UPBGE: `weapon` property and
+  `attach_weapon_placeholder()` in `ce_combat.py`, suite checks. Tests: `tests/unit/test_weapons.py`.
+
+### Decisions
+- Decision 50: weapons contract (see DECISION_LOG).
+
 ## [Unreleased] — 2026-10-24 (late night) · Debug consoles, blenderplayer waiver
 
 ### Added

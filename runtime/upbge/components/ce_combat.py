@@ -12,6 +12,12 @@ Both embed :class:`character_engine.domain.gameplay.ShenmueCombat` — the same 
 state machine pytest exercises — so gameplay rules are identical in UPBGE, Godot (GDScript
 port) and tests.
 
+Weapons: the ``weapon`` argument names an entry of
+:data:`character_engine.domain.gameplay.WEAPONS` (default ``unarmed``); the domain applies its
+reach / energy / wound type. :func:`attach_weapon_placeholder` (authoring time, ``bpy``) parents
+a PLACEHOLDER box to the weapon's grip bone with bone parenting, which the game engine keeps
+following at run time.
+
 Controls (player): WASD move, J punch, K kick, L throw, SPACE guard. Directional command
 tokens: W = towards the lock-on target (F), S = away (B), A/D = side-step (U/D).
 """
@@ -72,6 +78,7 @@ from character_engine.domain.gameplay import (  # noqa: E402
     CombatState,
     Fighter,
     ShenmueCombat,
+    weapon,
 )
 
 _REGISTRY: OrderedDict[str, FighterLogic] = OrderedDict()   # fighter_id -> logic (scene-wide)
@@ -82,6 +89,7 @@ DEFAULT_ARGS = OrderedDict([
     ("is_player", True),
     ("style", "shenmue"),
     ("stature_m", 1.80),
+    ("weapon", "unarmed"),
     ("move_speed", 2.0),
     ("ai_aggression", 0.02),
     ("autoplay_frames", 0),      # >0: scripted smoke test — player jabs, game ends after N frames
@@ -113,11 +121,13 @@ class FighterLogic:
         self.report_path = str(args.get("report_path", "") or "")
         self.frames = 0
         pos = obj.worldPosition
-        self.fighter = Fighter(self.fighter_id, (pos.x, pos.y, pos.z), stature_m=float(args.get("stature_m", 1.80)))
+        self.fighter = Fighter(self.fighter_id, (pos.x, pos.y, pos.z), stature_m=float(args.get("stature_m", 1.80)),
+                               weapon=weapon(str(args.get("weapon", "unarmed") or "unarmed")))
         _REGISTRY[self.fighter_id] = self
         _SIM["sim"] = None            # rebuilt lazily once every fighter has registered
         obj["ce_health"] = 100.0
         obj["ce_state"] = CombatState.IDLE.value
+        obj["ce_weapon"] = self.fighter.weapon.weapon_id
         self._last_event_index = 0
 
     # ------------------------------------------------------------------ input
@@ -220,6 +230,53 @@ class FighterLogic:
             self.object["ce_last_wound"] = self.fighter.wounds[-1].notes
         if self.is_player and self.autoplay_frames > 0 and self.frames >= self.autoplay_frames:
             self._finish_autoplay(sim)
+
+
+# ---------------------------------------------------------------------------- weapon -------
+
+def attach_weapon_placeholder(armature_obj, weapon_id: str, name: str | None = None):
+    """Create a PLACEHOLDER box for ``weapon_id`` parented to its grip bone on ``armature_obj``.
+
+    Authoring-time helper (needs ``bpy``; UPBGE keeps bone parenting at run time). The box is centred
+    on the grip point (middle of the grip bone; the socket's palmar offset is not applied) and runs along
+    the grip channel of the fist, METACARPAL_5 -> METACARPAL_2 on the grip side (Decision 48). Returns
+    ``None`` for weapons without geometry (``unarmed``).
+    """
+    import bmesh  # type: ignore
+    import bpy  # type: ignore
+    from mathutils import Matrix, Vector  # type: ignore
+
+    w = weapon(weapon_id)
+    if w.length_m <= 0.0:
+        return None
+    bones = armature_obj.data.bones
+    grip = bones[w.grip_bone]
+    side = w.grip_bone.rsplit("_", 1)[-1]
+    mw = armature_obj.matrix_world
+    grip_point = mw @ ((grip.head_local + grip.tail_local) * 0.5)
+    axis = (mw @ bones[f"METACARPAL_2_{side}"].head_local - mw @ bones[f"METACARPAL_5_{side}"].head_local).normalized()
+    centre = grip_point + axis * (0.5 - w.grip_fraction) * w.length_m
+    thick = w.width_m * (0.25 if w.category.value == "blade" else 1.0)
+    mesh = bpy.data.meshes.new(f"{name or armature_obj.name}_{w.weapon_id}_PLACEHOLDER")
+    bm = bmesh.new()
+    bmesh.ops.create_cube(bm, size=1.0)
+    bmesh.ops.scale(bm, vec=(w.width_m, w.length_m, thick), verts=bm.verts)   # local +Y = grip axis
+    bm.to_mesh(mesh)
+    bm.free()
+    obj = bpy.data.objects.new(mesh.name, mesh)
+    (armature_obj.users_collection[0] if armature_obj.users_collection else bpy.context.scene.collection).objects.link(obj)
+    y = axis
+    x = y.cross(Vector((0.0, 0.0, 1.0)) if abs(y.z) < 0.9 else Vector((0.0, -1.0, 0.0))).normalized()
+    z = x.cross(y)
+    world = Matrix(((x.x, y.x, z.x, centre.x), (x.y, y.y, z.y, centre.y), (x.z, y.z, z.z, centre.z), (0, 0, 0, 1)))
+    obj.parent = armature_obj
+    obj.parent_type = "BONE"
+    obj.parent_bone = w.grip_bone
+    obj.matrix_world = world   # bone parenting keeps this world placement at rest
+    obj["ce_provenance"] = "PLACEHOLDER"
+    obj["ce_weapon"] = w.weapon_id
+    obj["ce_note"] = f"Placeholder box for {w.name}; replace with a modelled asset."
+    return obj
 
 
 # ---------------------------------------------------------------------------- component ----

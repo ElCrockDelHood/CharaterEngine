@@ -1,7 +1,8 @@
 """Engine-neutral gameplay table consumed by runtimes that cannot import Python (Godot).
 
 The Python domain stays the single source of truth: this module flattens the move set,
-the pre-computed blunt-impact assessments for every (move, hitbox bone) pair and a set of
+the pre-computed blunt-impact assessments for every (move, hitbox bone) pair, the weapons
+table (with pre-computed assessments for every move a weapon applies to) and a set of
 *reference scenarios* (scripted fights run with :class:`ShenmueCombat`) into a plain
 JSON-serialisable dict. ``scripts/export_gameplay_data.py`` writes it to
 ``runtime/godot/addons/character_engine/data/gameplay_shenmue.json``; the GDScript port
@@ -24,12 +25,18 @@ from .combat import (
     _health_cost,
     default_hitboxes,
 )
+from .weapons import NUMERIC_FIELDS, UNARMED, WEAPONS, Weapon
 
-SCHEMA = "ce-gameplay/1"
+SCHEMA = "ce-gameplay/2"   # /2: weapons table + optional "weapons" in scenario specs (Decision 50)
 
 
-def _impact(bone: str, mv: Move) -> Dict[str, object]:
-    a = assess_wound(blunt_impact_to_wound(bone, contact_radius_m=mv.contact_radius_m, energy_j=mv.energy_j))
+def _impact(bone: str, mv: Move, weapon: Weapon = UNARMED) -> Dict[str, object]:
+    if weapon.applies_to(mv.kind.value, mv.striking_bone):
+        energy = mv.energy_j * weapon.energy_multiplier
+        a = assess_wound(weapon.strike_wound(bone, energy))
+    else:
+        energy = mv.energy_j
+        a = assess_wound(blunt_impact_to_wound(bone, contact_radius_m=mv.contact_radius_m, energy_j=mv.energy_j))
     return {
         "severity": a.severity.value,
         "lethality": round(a.lethality, 4),
@@ -39,7 +46,7 @@ def _impact(bone: str, mv: Move) -> Dict[str, object]:
         "is_lethal": a.is_lethal,
         "region": a.region.value,
         "deepest_layer": a.deepest_layer.value,
-        "health_cost": _health_cost(a, mv),
+        "health_cost": _health_cost(a, mv, energy),
         "provenance": a.provenance.value,
     }
 
@@ -62,6 +69,24 @@ def _move_entry(mv: Move, hitbox_bones: List[str]) -> Dict[str, object]:
         "knockdown": mv.knockdown,
         "cancel_into": list(mv.cancel_into),
         "impacts": {bone: _impact(bone, mv) for bone in hitbox_bones},
+    }
+
+
+def _weapon_entry(w: Weapon, hitbox_bones: List[str]) -> Dict[str, object]:
+    applies = [mid for mid, mv in SHENMUE_MOVES.items() if w.applies_to(mv.kind.value, mv.striking_bone)]
+    return {
+        "weapon_id": w.weapon_id,
+        "name": w.name,
+        "category": w.category.value,
+        "wound_type": w.wound_type.value,
+        "grip_bone": w.grip_bone,
+        "grip_socket": w.grip_socket,
+        "two_handed": w.two_handed,
+        **{k: getattr(w, k) for k in NUMERIC_FIELDS},
+        "provenance": {k: w.provenance[k].value for k in NUMERIC_FIELDS},
+        "applies_to_moves": applies,
+        "impacts": {mid: {bone: _impact(bone, SHENMUE_MOVES[mid], w) for bone in hitbox_bones} for mid in applies},
+        "notes": w.notes,
     }
 
 
@@ -89,13 +114,25 @@ def _scenario_scripts() -> List[Dict[str, object]]:
         {"scenario_id": "autoplay_180", "distance_m": 0.7, "frames": 180,
          "script": {fr: {"player": {"punch": fr % 40 == 1, "kick": fr % 40 == 21}} for fr in range(1, 181)
                     if fr % 40 in (1, 21)}},
+        # Weapons: at 1.0 m an unarmed jab whiffs (reach 0.85 m); the blade adds 0.20 m and cuts.
+        {"scenario_id": "short_blade_jab_reach", "distance_m": 1.0, "frames": 40,
+         "weapons": {"player": "short_blade"},
+         "script": {1: {"player": {"punch": True}}}},
+        # Staff (two-handed): the left-hand P P chain uses it too; the kick stays unarmed.
+        {"scenario_id": "staff_chain_and_kick", "distance_m": 1.3, "frames": 120,
+         "weapons": {"player": "staff"},
+         "script": {1: {"player": {"punch": True}}, 10: {"player": {"punch": True}}, 12: {"player": {"punch": True}},
+                    60: {"player": {"kick": True}}}},
     ]
 
 
 def run_scenario(spec: Mapping[str, object], moves: Mapping[str, Move] = SHENMUE_MOVES) -> Dict[str, object]:
     d = float(spec["distance_m"])
-    player = Fighter("player", position=(0.0, 0.0, 0.0), facing=(0.0, -1.0, 0.0))
-    opponent = Fighter("opponent", position=(0.0, -d, 0.0), facing=(0.0, 1.0, 0.0))
+    armed: Mapping[str, str] = spec.get("weapons", {})  # type: ignore[assignment]
+    player = Fighter("player", position=(0.0, 0.0, 0.0), facing=(0.0, -1.0, 0.0),
+                     weapon=WEAPONS[armed.get("player", "unarmed")])
+    opponent = Fighter("opponent", position=(0.0, -d, 0.0), facing=(0.0, 1.0, 0.0),
+                       weapon=WEAPONS[armed.get("opponent", "unarmed")])
     sim = ShenmueCombat([player, opponent], moves=moves,
                         input_buffer_frames=int(GAMEPLAY_STYLES["shenmue"]["input_buffer_frames"]))
     script: Mapping[int, Mapping[str, Mapping[str, object]]] = spec["script"]  # type: ignore[assignment]
@@ -130,9 +167,12 @@ def gameplay_runtime_table() -> Dict[str, object]:
                    for sid, s in GAMEPLAY_STYLES.items()},
         "moves": {mid: _move_entry(mv, bones) for mid, mv in SHENMUE_MOVES.items()},
         "hitboxes_1p80": hitboxes,
+        "weapons": {wid: _weapon_entry(w, bones) for wid, w in WEAPONS.items()},
+        "default_weapon": UNARMED.weapon_id,
         "fallback_bone": "STERNUM",
         "knockdown_frames": 60,
         "reference_scenarios": scenarios,
         "notes": "Generated by character_engine.domain.gameplay.runtime_table; do not edit by hand. "
-                 "Energy values are gameplay tuning constants; wound assessments are ESTIMATE provenance.",
+                 "Energy values are gameplay tuning constants; wound assessments are ESTIMATE provenance; "
+                 "weapon values carry their own provenance (never PROVEN).",
     }

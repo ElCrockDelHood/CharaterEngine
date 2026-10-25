@@ -72,7 +72,7 @@ def _attach_component(obj, name: str, style: str, is_player: bool) -> str:
     the binding is marked ``deferred`` — *Attach runtime logic* completes it in the UI.
     """
     for key, value in (("fighter_id", name), ("is_player", is_player), ("style", style),
-                       ("stature_m", 1.80), ("move_speed", 2.0), ("ai_aggression", 0.02),
+                       ("stature_m", 1.80), ("weapon", "unarmed"), ("move_speed", 2.0), ("ai_aggression", 0.02),
                        ("autoplay_frames", 0), ("report_path", "")):
         _game_property(obj, key, value)
     obj["ce_component"] = f"{COMPONENT_MODULE}.{COMPONENT_CLASS}"

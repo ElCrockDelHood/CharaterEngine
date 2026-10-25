@@ -7,7 +7,7 @@ class_name CEGameplayData
 extends RefCounted
 
 const DEFAULT_PATH := "res://addons/character_engine/data/gameplay_shenmue.json"
-const SCHEMA := "ce-gameplay/1"
+const SCHEMA := "ce-gameplay/2"
 
 var table: Dictionary = {}
 var path: String = ""
@@ -87,6 +87,28 @@ func hitboxes(stature_m: float = 1.80) -> Dictionary:
 func impact(move_id: String, bone: String) -> Dictionary:
 	var mv := move(move_id)
 	var impacts: Dictionary = mv.get("impacts", {})
+	if impacts.has(bone):
+		return impacts[bone]
+	return impacts.get(table.get("fallback_bone", "STERNUM"), {})
+
+
+func weapons() -> Dictionary:
+	return table.get("weapons", {})
+
+
+## Weapon entry (reach, energy multiplier, grip bone, placeholder size...); unknown ids -> default weapon.
+func weapon(weapon_id: String) -> Dictionary:
+	return weapons().get(weapon_id, weapons().get(table.get("default_weapon", "unarmed"), {}))
+
+
+## True when the weapon modifies `move_id` (hand strike on the grip side, or two-handed).
+func weapon_applies(weapon_id: String, move_id: String) -> bool:
+	return (weapon(weapon_id).get("applies_to_moves", []) as Array).has(move_id)
+
+
+## Pre-computed wound assessment of `move_id` struck with `weapon_id` on `bone`.
+func weapon_impact(weapon_id: String, move_id: String, bone: String) -> Dictionary:
+	var impacts: Dictionary = (weapon(weapon_id).get("impacts", {}) as Dictionary).get(move_id, {})
 	if impacts.has(bone):
 		return impacts[bone]
 	return impacts.get(table.get("fallback_bone", "STERNUM"), {})

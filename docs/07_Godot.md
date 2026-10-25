@@ -71,19 +71,27 @@ Enabled in `project.godot`. The **Character Engine** dock (right panel) offers:
 
 | Control | Effect |
 |---------|--------|
-| Asset (T-pose / anatomical) + stature | *Add character to scene* → `CECharacter` node: loads the GLB at runtime (`GLTFDocument`), scales to stature, installs `CEBreathing` (`SkeletonModifier3D`, sternum/ribs sinusoid), exposes `bone_global_position()` and `add_wound_marker()`. |
+| Asset (T-pose / anatomical) + stature | *Add character to scene* → `CECharacter` node: loads the GLB at runtime (`GLTFDocument`), scales to stature, installs `CEBreathing` (`SkeletonModifier3D`, sternum/ribs sinusoid), exposes `bone_global_position()`, `add_wound_marker()` and `equip_weapon()` (PLACEHOLDER box on a `BoneAttachment3D` at the weapon's grip bone, along the fist's grip channel METACARPAL_5 → METACARPAL_2; flat colour, no textures or shaders). |
 | *Validate skeleton GLB* | Runs `ce_skeleton_validator.gd` on the selected asset. |
 | Gameplay style | `shenmue` (Shenmue-style free battle: J punch, K kick, L throw, Space guard, W/S move; `F,F+J` Elbow Assault, `F+K` Crescent Kick, `F+L` Vortex Throw). `souls_like` / `beat_em_up` are listed as *planned* (disabled). |
 | *Create arena in scene* (+ autoplay) | `CEArena`: floor, two `CECharacter`s, camera, HUD, `CEFighterController`s (player keyboard / opponent AI), `CEShenmueCombat` stepped at 60 Hz in `_physics_process`. Landed hits attach severity-coloured wound markers. Press F6 to play. The committed `res://arena_play.tscn` (autoplay 180 frames) is the project's main scene (Decision 43): F5 plays it, or `godot --path runtime/godot` from the command line. |
-| *Replay reference fights* | Replays the 7 scripted fights from the gameplay table and reports whether the GDScript port matches the Python simulation. |
+| *Replay reference fights* | Replays the scripted fights (7 unarmed + 2 with weapons) from the gameplay table and reports whether the GDScript port matches the Python simulation. |
 
 Data flow: Godot never imports Python. `scripts/export_gameplay_data.py` writes
 `addons/character_engine/data/gameplay_shenmue.json` (moves, frame data, pre-computed wound
-assessments per hitbox bone, reference scenarios) from `character_engine.domain.gameplay`;
+assessments per hitbox bone, weapons, reference scenarios) from `character_engine.domain.gameplay`;
 `tests/unit/test_gameplay_runtime_table.py` fails if the committed JSON is stale.
 
+Weapons (schema `ce-gameplay/2`, Decision 50): `weapons` holds `unarmed`, `staff` and `short_blade`
+(domain `gameplay/weapons.py`) with reach bonus, energy multiplier, grip bone, wound type, placeholder size,
+per-value provenance (never PROVEN), `applies_to_moves` and pre-computed impacts for those moves.
+`CEShenmueCombat.Fighter.weapon_id` (default `"unarmed"`) selects one: when the weapon applies to the move,
+the reach adds `reach_m` and the impact comes from `CEGameplayData.weapon_impact()`; otherwise nothing changes.
+A scenario spec may carry `"weapons": {"player": "short_blade"}`.
+
 Headless tests: `python scripts/engine_tests.py godot` (regenerates `assets/*.glb` and the table,
-runs `res://tests/ce_test_runner.gd`, writes `builds/tests/godot_report.json`; 21 checks).
+runs `res://tests/ce_test_runner.gd`, writes `builds/tests/godot_report.json`; includes the weapon checks: table,
+placeholder mounted on the grip bone, placeholder follows the bone when the arm is posed, weapon replays).
 
 ## Mapping canonical → Godot
 

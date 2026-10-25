@@ -805,6 +805,30 @@ Tests: `test_hand_grip_axis_runs_through_the_fist_little_finger_to_index`; CINE-
 
 ---
 
+## 50. WEAPONS: DOMAIN TABLE, HAND STRIKES ONLY, UNARMED IS THE IDENTITY
+
+**Decision** (owner approval, 2026-10-25, runtime plan step 1 "weapons"): weapons are a pure-Python domain table
+(`domain/gameplay/weapons.py`: `unarmed`, `staff`, `short_blade`) exported to the gameplay JSON (schema
+**`ce-gameplay/2`**: `weapons`, `default_weapon`, optional `"weapons"` per scenario spec) and ported to Godot
+(GDScript) and UPBGE (embedded domain). Contract:
+- A weapon applies only to hand strikes (punch moves struck with a METACARPAL/PHALANX bone) on the grip side, or with
+  either hand when two-handed; kicks, throws and elbows stay unarmed (rule ASSUMED).
+- When it applies: reach = move reach × stature / 1.80 **+ weapon reach** (a held object does not scale with the
+  wielder); energy = move energy × multiplier; BLUNT → `blunt_impact_to_wound` with the weapon contact radius,
+  BLADE → `blade_contact_to_wound` (INCISION) with a fixed **PLACEHOLDER cut depth** (no cited cutting-energy model
+  is committed; a later energy-derived depth must replace it, not stack on it).
+- `unarmed` applies to nothing, so the 7 unarmed reference fights are bit-identical (verified against the previous
+  JSON). Runtimes take `applies_to_moves` and the pre-computed impacts from the table; they never re-derive them.
+- Grip: `METACARPAL_3_R` (parent of `SOCKET-hand_grip.R`); placeholders are plain boxes along the fist's grip
+  channel METACARPAL_5 → METACARPAL_2 (Decision 48), Godot `BoneAttachment3D`, UPBGE bone parenting.
+Provenance: dimensions / masses **ESTIMATE** (no cited source in the repository), reach bonus, energy multiplier and
+cut depth **PLACEHOLDER**, grip fraction and unarmed identity values **ASSUMED**. Nothing PROVEN.
+Tests: `tests/unit/test_weapons.py`; Godot runner and UPBGE suite weapon checks.
+
+**Date**: 2026-10-25 · **Status**: FINAL (values reversible)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary

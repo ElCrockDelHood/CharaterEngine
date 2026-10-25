@@ -602,6 +602,75 @@ def main(reset: bool = True) -> int:
             return f"{len(sim.hits)} hits, opponent health {opp['ce_health']:.1f}, state {opp['ce_state']}"
         check("UPBGE brick entry point runs the shared simulation", _brick_simulation)
 
+        def _weapon_replay():
+            """Weapon reference fights of the Godot table re-run in engine python == committed expectations."""
+            import importlib
+
+            from character_engine.domain.gameplay import run_scenario
+
+            table = json.loads((ROOT / "runtime" / "godot" / "addons" / "character_engine" / "data"
+                                / "gameplay_shenmue.json").read_text(encoding="utf-8"))
+            armed = [sc for sc in table["reference_scenarios"] if "weapons" in sc["spec"]]
+            assert armed, "no weapon scenario in the gameplay table"
+            for sc in armed:
+                spec = {**sc["spec"], "script": {int(k): v for k, v in sc["spec"]["script"].items()}}
+                got = json.loads(json.dumps(run_scenario(spec)))
+                assert got == sc["expected"], sc["spec"]["scenario_id"]
+            mod = importlib.import_module("ce_combat")
+            mod.reset()
+
+            class StubObj(dict):
+                def __init__(self, name):
+                    super().__init__()
+                    from mathutils import Vector
+                    self.name, self.worldPosition = name, Vector((0.0, 0.0, 0.0))
+
+            logic = mod.FighterLogic(StubObj("armed"), {"fighter_id": "armed", "weapon": "short_blade"})
+            assert logic.fighter.weapon.weapon_id == "short_blade" and logic.object["ce_weapon"] == "short_blade"
+            mod.reset()
+            return f"{len(armed)} weapon scenarios identical; FighterLogic weapon arg -> {logic.fighter.weapon.name}"
+        check("UPBGE weapon replay matches Python reference", _weapon_replay)
+
+        def _weapon_follows_bone():
+            """PLACEHOLDER blade bone-parented to the grip bone stays rigidly attached when the arm is posed."""
+            import importlib
+
+            from mathutils import Quaternion
+
+            mod = importlib.import_module("ce_combat")
+            arm = bpy.data.objects.get(props.armature_name)
+            if arm is None or arm.type != "ARMATURE":
+                assert bpy.ops.character_engine.generate_body() == {"FINISHED"}
+                arm = bpy.data.objects[props.armature_name]
+            if bpy.context.object and bpy.context.object.mode != "OBJECT":
+                bpy.ops.object.mode_set(mode="OBJECT")
+            assert mod.attach_weapon_placeholder(arm, "unarmed") is None
+            obj = mod.attach_weapon_placeholder(arm, "short_blade")
+            assert obj.parent is arm and obj.parent_type == "BONE" and obj.parent_bone == "METACARPAL_3_R"
+            pb = arm.pose.bones["METACARPAL_3_R"]
+
+            def grip():
+                return arm.matrix_world @ ((pb.head + pb.tail) * 0.5)
+
+            bpy.context.view_layer.update()
+            p0, off0 = obj.matrix_world.translation.copy(), (obj.matrix_world.translation - grip()).length
+            hum = arm.pose.bones["HUMERUS_R"]
+            mode, rot = hum.rotation_mode, hum.rotation_quaternion.copy()
+            muted = [(c, c.mute) for b in arm.pose.bones for c in b.constraints]   # IK/FK rig drives DEF bones
+            for c, _ in muted:
+                c.mute = True
+            hum.rotation_mode = "QUATERNION"
+            hum.rotation_quaternion = Quaternion((0.0, 0.0, 1.0), 0.8)
+            bpy.context.view_layer.update()
+            p1, off1 = obj.matrix_world.translation.copy(), (obj.matrix_world.translation - grip()).length
+            hum.rotation_quaternion, hum.rotation_mode = rot, mode
+            for c, was in muted:
+                c.mute = was
+            bpy.data.objects.remove(obj, do_unlink=True)
+            assert (p1 - p0).length > 0.05 and abs(off1 - off0) < 1e-4, ((p1 - p0).length, off0, off1)
+            return f"moved {(p1 - p0).length:.3f} m, grip offset {off0:.4f} -> {off1:.4f} m"
+        check("UPBGE weapon placeholder follows grip bone", _weapon_follows_bone)
+
     player_exe = Path(bpy.app.binary_path).with_name("blenderplayer.exe")
     if upbge and player_exe.exists() and not skipped(args, "player"):
         def _blenderplayer_game():

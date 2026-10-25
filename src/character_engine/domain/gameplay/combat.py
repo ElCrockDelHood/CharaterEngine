@@ -7,7 +7,9 @@ lock-on to the nearest opponent, throws as grabs with a range check, and a guard
 absorbs strikes but not throws. Damage is *not* a bare hit-point number: each landed
 strike produces a :class:`HitEvent` with the canonical bone struck, the impact energy
 and a :class:`~character_engine.domain.trauma.WoundAssessment`, so runtime layers
-can show bruising, stagger or, at high energy, fractures.
+can show bruising, stagger or, at high energy, fractures. A fighter may carry a
+:class:`~.weapons.Weapon` that extends the reach and changes the energy and wound type
+of its hand strikes (default ``unarmed``: no change).
 
 The class is pure Python with no engine dependencies. ``runtime/godot/gameplay/
 ce_shenmue_combat.gd`` is a line-by-line port; UPBGE embeds this module directly.
@@ -20,6 +22,7 @@ from enum import Enum
 from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..trauma import WoundAssessment, assess_wound, blunt_impact_to_wound
+from .weapons import UNARMED, Weapon
 
 FRAME_RATE = 60
 Vec = Tuple[float, float, float]
@@ -133,6 +136,7 @@ class Fighter:
     input_history: List[Tuple[int, str]] = field(default_factory=list)   # (frame, token)
     wounds: List[WoundAssessment] = field(default_factory=list)
     hitboxes: Dict[str, float] = field(default_factory=dict)              # bone -> radius m
+    weapon: Weapon = UNARMED
 
     @property
     def alive(self) -> bool:
@@ -154,6 +158,7 @@ class HitEvent:
     blocked: bool
     assessment: Optional[WoundAssessment]
     knockdown: bool
+    weapon_id: str = "unarmed"
 
 
 @dataclass(frozen=True)
@@ -266,21 +271,29 @@ class ShenmueCombat:
     def _resolve_hit(self, attacker: Fighter, mv: Move) -> None:
         self._pending_hit[attacker.fighter_id] = True
         target = self.nearest_opponent(attacker)
-        if target is None or attacker.distance_to(target) > mv.reach_m * (attacker.stature_m / 1.80):
+        armed = attacker.weapon.applies_to(mv.kind.value, mv.striking_bone)
+        reach = mv.reach_m * (attacker.stature_m / 1.80)
+        if armed:
+            reach += attacker.weapon.reach_m
+        if target is None or attacker.distance_to(target) > reach:
             self.events.append(CombatEvent(self.frame, attacker.fighter_id, "whiff", mv.move_id))
             return
         bone = mv.target_region_bone if mv.target_region_bone in target.hitboxes else "STERNUM"
         blocked = target.state == CombatState.GUARD and mv.kind != MoveKind.THROW
+        energy_j = mv.energy_j * attacker.weapon.energy_multiplier if armed else mv.energy_j
         assessment: Optional[WoundAssessment] = None
         if blocked:
             self.events.append(CombatEvent(self.frame, target.fighter_id, "blocked", mv.move_id))
             target.state, target.state_frames = CombatState.HITSTUN, 0
             target.stun_frames = max(4, mv.hitstun // 3)
         else:
-            assessment = assess_wound(blunt_impact_to_wound(bone, contact_radius_m=mv.contact_radius_m,
-                                                            energy_j=mv.energy_j))
+            if armed:
+                assessment = assess_wound(attacker.weapon.strike_wound(bone, energy_j))
+            else:
+                assessment = assess_wound(blunt_impact_to_wound(bone, contact_radius_m=mv.contact_radius_m,
+                                                                energy_j=mv.energy_j))
             target.wounds.append(assessment)
-            target.health = max(0.0, target.health - _health_cost(assessment, mv))
+            target.health = max(0.0, target.health - _health_cost(assessment, mv, energy_j))
             self.events.append(CombatEvent(self.frame, target.fighter_id, "hit",
                                            f"{mv.move_id}->{bone} sev{assessment.severity.value}"))
             if target.health <= 0.0 or assessment.is_lethal:
@@ -293,9 +306,14 @@ class ShenmueCombat:
                 target.state, target.state_frames = CombatState.HITSTUN, 0
                 target.stun_frames = mv.hitstun
         self.hits.append(HitEvent(self.frame, attacker.fighter_id, target.fighter_id, mv.move_id, bone,
-                                  mv.energy_j, blocked, assessment, (not blocked) and mv.knockdown))
+                                  energy_j, blocked, assessment, (not blocked) and mv.knockdown,
+                                  attacker.weapon.weapon_id if armed else "unarmed"))
 
 
-def _health_cost(a: WoundAssessment, mv: Move) -> float:
-    """Gameplay abstraction: severity drives the bar; energy adds a small linear term."""
-    return round(4.0 * a.severity.value + mv.energy_j / 40.0 + (10.0 if a.fracture else 0.0), 2)
+def _health_cost(a: WoundAssessment, mv: Move, energy_j: Optional[float] = None) -> float:
+    """Gameplay abstraction: severity drives the bar; energy adds a small linear term.
+
+    ``energy_j`` overrides the move energy (a weapon multiplies it); default = ``mv.energy_j``.
+    """
+    e = mv.energy_j if energy_j is None else energy_j
+    return round(4.0 * a.severity.value + e / 40.0 + (10.0 if a.fracture else 0.0), 2)
