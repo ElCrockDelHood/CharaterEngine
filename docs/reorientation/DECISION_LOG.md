@@ -792,12 +792,25 @@ who owns the work. This is not legal advice.
 
 ---
 
+## 48. HAND-GRIP SOCKET AXIS: THROUGH THE FIST
+
+**Decision** (owner approval, 2026-10-25, card "Corregir socket y probar 1.2 m"): `SOCKET-hand_grip.R` keeps its
+position (palmar side of METACARPAL_3_R, ASSUMED). Its axis changes from "along the fingers" `(0, 0, -1)` to the
+grip channel of the fist, little-finger side → index side: METACARPAL_5_R → METACARPAL_2_R = **`(-1, 0, 0)`** in the
+anatomical position, derived from the canonical data. Provenance stays **ASSUMED** (an artistic grip, not a
+measurement). Reason: in the D1-2 mock-up the old axis pointed the blade backwards during a thrust.
+Tests: `test_hand_grip_axis_runs_through_the_fist_little_finger_to_index`; CINE-GR-001 checks unchanged (28/28).
+
+**Date**: 2026-10-25 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 47
-**Final Decisions**: 43 (+4 deferred)
+**Total Decisions**: 48
+**Final Decisions**: 44 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)

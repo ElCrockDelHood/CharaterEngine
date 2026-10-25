@@ -129,6 +129,23 @@ Findings:
 * Import robustness: rigs whose left side is not at +X are now turned 180° automatically (parent empty). The
   Quaternius files did not need it; the headless test covers a source that faces +Y.
 
+### 3.3 D1-2 — second run with the corrected socket (Decision 48), 2026-10-25
+
+The sabre now uses the domain `SOCKET-hand_grip.R` (blade through the fist); the mock-up-only blade was removed.
+Contact metric: signed distance from the blade centre line (40 samples) to the defender's collision capsules
+(**negative = penetration**); the first run measured vertex to vertex, which cannot see a blade inside a capsule.
+
+| Spacing (ESTIMATE) | f0 | f6 | f9 | f12 | f14 | f16 | f18 | f21 | f24 | f27 | f30 | f36 |
+|--------------------|----|----|----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| 1.6 m | 1.576 | 1.876 | 1.530 | 1.204 | 1.224 | 1.200 | 1.128 | 0.104 | 0.074 | 1.210 | 1.561 | 1.565 |
+| 1.2 m | 1.180 | 1.512 | 1.203 | 0.835 | 0.859 | 0.825 | 0.753 | 0.071 | **−0.008 (contact, forearm.L)** | 0.828 | 1.164 | 1.169 |
+
+Renders: `builds/renders/D1-2_1.6m/`, `builds/renders/D1-2_1.2m/` (12 frames each); scenes
+`builds/tests/D1-2_fight_mockup_1.6m.blend`, `…_1.2m.blend`; logs `logs/20261025T041512Z_fight_mockup.log`,
+`logs/20261025T041533Z_fight_mockup.log`.
+Frame 18 review: the blade now points down, which is the clip's wind-up (wrist dropped before the thrust), no longer
+the socket error; whether it looks natural depends on the clip.
+
 ## 4. What Mariano must provide or decide first
 
 1. Base mesh origin: artist-made (by you, from your drawings) or generated (MPFB2/other) — and licence policy
