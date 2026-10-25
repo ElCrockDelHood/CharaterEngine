@@ -161,10 +161,10 @@ class CE_OT_set_ik_fk(bpy.types.Operator):
 
 
 class CE_OT_import_mocap(bpy.types.Operator):
-    """Import a BVH/FBX clip and retarget it onto the canonical armature through the selected bone map"""
+    """Import a BVH / FBX / glTF animation and retarget one clip onto the canonical armature (selected bone map)"""
 
     bl_idname = "character_engine.import_mocap"
-    bl_label = "Import & retarget mocap"
+    bl_label = "Import & retarget animation"
     bl_options = {"REGISTER", "UNDO"}
 
     def execute(self, context):
@@ -179,14 +179,16 @@ class CE_OT_import_mocap(bpy.types.Operator):
             return {"CANCELLED"}
         try:
             bone_map = get_bone_map(props.bone_map)
-            src = build.import_mocap(path, bone_map)
+            src = build.import_mocap(path, bone_map, props.mocap_action.strip())
             src["ce_character"] = arm["ce_character"]
             build._link(context, src, f"{arm['ce_character']}_Mocap")
             stats = build.retarget_mocap(context, src, arm, bone_map)
             if props.mocap_bake:
                 src.hide_set(True)
                 src.hide_render = True
-            self.report({"INFO"}, f"Mocap: {stats['mapped_bones']} bones, {stats['frames']} frames ({bone_map.label})")
+            clip = src.animation_data.action.name if src.animation_data and src.animation_data.action else "?"
+            self.report({"INFO"}, f"Animation '{clip}': {stats['mapped_bones']} bones, {stats['frames']} frames "
+                                  f"({bone_map.label})")
             return {"FINISHED"}
         except Exception as exc:  # noqa: BLE001
             return _report_exc(self, exc)

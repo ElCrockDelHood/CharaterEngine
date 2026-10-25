@@ -393,8 +393,92 @@ def main(reset: bool = True) -> int:
         assert t2.z < t1.z, "left arm should swing downwards"
         arm["arm_ik_L"] = arm["arm_ik_R"] = 1.0
         return f"action {act.name}, frames {act.frame_range[0]:.0f}-{act.frame_range[1]:.0f}, humerus tail Δ {(t1 - t2).length:.3f} m"
+    def _write_synthetic_ue_glb(path: Path) -> Path:
+        """Unreal-mannequin-named rig (Quaternius UAL style, metres) with two clips, exported to .glb."""
+        import math as _math
+        from mathutils import Quaternion as _Quat
+        from mathutils import Vector as _Vec
+        before = set(bpy.data.objects)
+        data = bpy.data.armatures.new("UE_Test")
+        rig = bpy.data.objects.new("UE_Test", data)
+        scene.collection.objects.link(rig)
+        ctx.view_layer.objects.active = rig
+        bpy.ops.object.mode_set(mode="EDIT")
+        spec = [("pelvis", None, (0, 0, 0.95), (0, 0, 1.05)), ("spine_01", "pelvis", (0, 0, 1.05), (0, 0, 1.18)),
+                ("spine_02", "spine_01", (0, 0, 1.18), (0, 0, 1.32)), ("spine_03", "spine_02", (0, 0, 1.32), (0, 0, 1.45)),
+                ("neck_01", "spine_03", (0, 0, 1.45), (0, 0, 1.55)), ("Head", "neck_01", (0, 0, 1.55), (0, 0, 1.75))]
+        for s, x in (("l", 1), ("r", -1)):
+            spec += [(f"clavicle_{s}", "spine_03", (0.02 * x, 0, 1.43), (0.15 * x, 0, 1.43)),
+                     (f"upperarm_{s}", f"clavicle_{s}", (0.15 * x, 0, 1.43), (0.43 * x, 0, 1.43)),
+                     (f"lowerarm_{s}", f"upperarm_{s}", (0.43 * x, 0, 1.43), (0.70 * x, 0, 1.43)),
+                     (f"hand_{s}", f"lowerarm_{s}", (0.70 * x, 0, 1.43), (0.80 * x, 0, 1.43)),
+                     (f"thigh_{s}", "pelvis", (0.10 * x, 0, 0.95), (0.10 * x, 0, 0.50)),
+                     (f"calf_{s}", f"thigh_{s}", (0.10 * x, 0, 0.50), (0.10 * x, 0, 0.08)),
+                     (f"foot_{s}", f"calf_{s}", (0.10 * x, 0, 0.08), (0.10 * x, -0.12, 0.02))]
+        try:
+            for name, parent, h, t in spec:
+                eb = data.edit_bones.new(name)
+                eb.head, eb.tail = _Vec(h), _Vec(t)
+                if parent:
+                    eb.parent = data.edit_bones[parent]
+                    eb.use_connect = False
+        finally:
+            bpy.ops.object.mode_set(mode="OBJECT")
+        rig.animation_data_create()
+        idle = bpy.data.actions.new("Idle_Test")
+        rig.animation_data.action = idle
+        for b in rig.pose.bones:
+            b.rotation_mode = "QUATERNION"
+            b.keyframe_insert("rotation_quaternion", frame=1)
+        track = rig.animation_data.nla_tracks.new()
+        track.strips.new("Idle_Test", 1, idle)
+        swing = bpy.data.actions.new("Swing_Test")
+        rig.animation_data.action = swing
+        ua = rig.pose.bones["upperarm_l"]
+        ua.rotation_quaternion = _Quat()
+        ua.keyframe_insert("rotation_quaternion", frame=1)
+        ua.rotation_quaternion = _Quat((0.0, 0.0, 1.0), _math.radians(-70))  # arm swings down/forward
+        ua.keyframe_insert("rotation_quaternion", frame=12)
+        for o in ctx.selected_objects:
+            o.select_set(False)
+        rig.select_set(True)
+        bpy.ops.export_scene.gltf(filepath=str(path), export_format="GLB", use_selection=True, export_animations=True)
+        for o in set(bpy.data.objects) - before:
+            bpy.data.objects.remove(o, do_unlink=True)
+        for a in (idle, swing):
+            bpy.data.actions.remove(a)
+        return path
+
+    def _gltf_animation():
+        glb = _write_synthetic_ue_glb(Path(tempfile.gettempdir()) / "ce_synthetic_ue.glb")
+        arm = bpy.data.objects[props.armature_name]
+        arm["arm_ik_L"] = 0.0
+        props.bone_map, props.bvh_path, props.mocap_action = "quaternius_ual", str(glb), "swing"
+        res = bpy.ops.character_engine.import_mocap()
+        assert res == {"FINISHED"}, res
+        src = next(o for o in bpy.data.objects if o.get("ce_role") == "mocap_source" and o.type == "ARMATURE"
+                   and "upperarm_l" in o.data.bones)
+        clips = json.loads(src["ce_clips"])
+        assert any("Swing" in c for c in clips) and any("Idle" in c for c in clips), clips
+        assert "Swing" in src.animation_data.action.name, src.animation_data.action.name
+        act = arm.animation_data.action
+        f0, f1 = int(act.frame_range[0]), int(act.frame_range[1])
+        hum = arm.pose.bones["HUMERUS_L"]
+        scene.frame_set(f0)
+        ctx.view_layer.update()
+        t0 = (arm.matrix_world @ hum.tail).copy()
+        scene.frame_set(f1)
+        ctx.view_layer.update()
+        t1 = (arm.matrix_world @ hum.tail).copy()
+        assert (t1 - t0).length > 0.1, f"humerus barely moved: {(t1 - t0).length:.3f} m"
+        assert t0.x > 0 and t1.x > 0, f"left arm crossed to -X: {t0.x:.3f}, {t1.x:.3f}"
+        props.mocap_action = ""
+        return (f"glb clips {clips}; retargeted '{src.animation_data.action.name}' frames {f0}-{f1}, "
+                f"HUMERUS_L tail moved {(t1 - t0).length:.3f} m, stays on +X")
+
     if not skipped(args, "mocap"):
         check("mocap: BVH import + retarget (mixamo map)", _mocap)
+        check("animation: glTF import + clip choice + retarget (quaternius_ual map)", _gltf_animation)
 
     out_dir = ROOT / "builds" / "tests"
     out_dir.mkdir(parents=True, exist_ok=True)

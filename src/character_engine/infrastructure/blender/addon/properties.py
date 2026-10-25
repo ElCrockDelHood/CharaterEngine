@@ -52,7 +52,11 @@ class CEProperties(bpy.types.PropertyGroup):
     breath_amplitude: bpy.props.FloatProperty(name="Breath amplitude", default=0.0, min=0.0, max=1.0)
     # --- mocap ---
     bone_map: bpy.props.EnumProperty(name="Bone map", items=_bone_map_items)
-    bvh_path: bpy.props.StringProperty(name="BVH / FBX file", subtype="FILE_PATH")
+    bvh_path: bpy.props.StringProperty(name="Animation file (BVH / FBX / glTF)", subtype="FILE_PATH")
+    mocap_action: bpy.props.StringProperty(
+        name="Clip", default="",
+        description="Part of the clip name to retarget when the file holds several (e.g. Walk, Sword_Attack); "
+                    "empty = the file's default clip")
     mocap_bake: bpy.props.BoolProperty(name="Bake to action", default=True)
     # --- wounds ---
     wound_type: bpy.props.EnumProperty(name="Wound type", items=_WOUND_ITEMS, default="stab")

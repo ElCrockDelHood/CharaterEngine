@@ -713,9 +713,25 @@ def build_control_rig(context, armature, rig: RigDefinition, ik_default: float =
 
 # --------------------------------------------------------------------------- mocap ---------
 
-def import_mocap(filepath: Path, bone_map: BoneMap):
-    """Import a BVH (or FBX) and return the created armature."""
+ANIMATION_SUFFIXES = (".bvh", ".fbx", ".glb", ".gltf")
+
+
+def import_mocap(filepath: Path, bone_map: BoneMap, action_filter: str = ""):
+    """Import a BVH, FBX or glTF animation file and return its armature.
+
+    glTF/FBX files usually carry several clips: ``action_filter`` (case-insensitive substring)
+    picks the one assigned to the armature; empty keeps the importer's choice (or the first clip).
+    Meshes that come with the file are tagged as mocap source and hidden.
+    """
+    suffix = filepath.suffix.lower()
+    if suffix not in ANIMATION_SUFFIXES:
+        raise ValueError(f"unsupported animation file {filepath.name}; use {', '.join(ANIMATION_SUFFIXES)}")
     before = set(bpy.data.objects)
+    actions_before = set(bpy.data.actions)
+    if suffix in (".glb", ".gltf"):
+        # glTF is metres, Y-up, +Z forward by specification; Blender's importer converts it to Z-up / −Y forward.
+        bpy.ops.import_scene.gltf(filepath=str(filepath))
+        return _finish_animation_import(before, actions_before, action_filter)
     # bone_map.forward_axis is where the character FACES in its file; Blender's BVH importer
     # maps ``axis_forward`` to +Y, so pass the opposite axis to make the character face −Y with
     # its left at +X like the canonical skeleton (Decision 17).
@@ -728,11 +744,34 @@ def import_mocap(filepath: Path, bone_map: BoneMap):
     else:
         bpy.ops.import_scene.fbx(filepath=str(filepath), global_scale=bone_map.scale_to_m,
                                  automatic_bone_orientation=False)
-    new = [o for o in bpy.data.objects if o not in before and o.type == "ARMATURE"]
-    if not new:
-        raise RuntimeError("mocap import created no armature")
-    src = new[0]
+    return _finish_animation_import(before, actions_before, action_filter)
+
+
+def _finish_animation_import(before, actions_before, action_filter: str):
+    new = [o for o in bpy.data.objects if o not in before]
+    arms = [o for o in new if o.type == "ARMATURE"]
+    if not arms:
+        raise RuntimeError("animation import created no armature")
+    src = arms[0]
     src["ce_role"] = "mocap_source"
+    for o in new:
+        if o.type == "MESH":
+            o["ce_role"] = "mocap_source"
+            o.hide_render = True
+            o.hide_set(True)
+    clips = sorted((a for a in bpy.data.actions if a not in actions_before), key=lambda a: a.name)
+    src["ce_clips"] = json.dumps([a.name for a in clips])
+    chosen = None
+    if action_filter:
+        chosen = next((a for a in clips if action_filter.lower() in a.name.lower()), None)
+        if chosen is None:
+            raise RuntimeError(f"no clip matching '{action_filter}' in {[a.name for a in clips][:20]}")
+    elif src.animation_data is None or src.animation_data.action is None:
+        chosen = clips[0] if clips else None
+    if chosen is not None:
+        if src.animation_data is None:
+            src.animation_data_create()
+        src.animation_data.action = chosen
     return src
 
 

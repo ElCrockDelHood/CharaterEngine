@@ -115,6 +115,7 @@ class CE_PT_mocap(_CEPanel, bpy.types.Panel):
         layout = self.layout
         layout.prop(props, "bone_map")
         layout.prop(props, "bvh_path")
+        layout.prop(props, "mocap_action")
         layout.prop(props, "mocap_bake")
         layout.operator("character_engine.import_mocap", icon="ARMATURE_DATA")
 
