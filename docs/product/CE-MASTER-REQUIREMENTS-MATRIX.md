@@ -342,6 +342,22 @@ malla, me gustaria que las hagas o que las bajes".
 | **BLOCK-DUMMY** (P1) | `domain/rigging/block_dummy.py` (17 segments: head, neck, thorax, abdomen, pelvis, upper arm, forearm, hand, thigh, leg, foot ×2; capsule between averaged joints; radius = per-region envelope radius, ESTIMATE, scaled with stature — single source shared with the skin envelope) + addon `build_block_dummy`, operator *Block dummy (blocks + collision)*: one skinned mesh, every vertex 100 % on one bone, plus 17 collision capsules parented to their bones (COLLISION modifier) | `tests/unit/test_block_dummy.py` (7); Blender 3.6 headless: 1 666 vertices 100 % weighted, HUMERUS_L 60° → capsule 0.159 m / block 0.158 m; render `builds/renders/blender_block_dummy.png` | IMPLEMENTED |
 | **MESH-NORMALIZER** (P2) | `domain/assets/normalize.py` (declared source up/forward → canonical Z-up / −Y forward, proper rotation, scale to target height, feet on z = 0, centred in X/Y; ESTIMATE) + addon `normalize_mesh`, operator *Normalize mesh scale* | `tests/unit/test_normalize.py` (10); Blender 3.6 headless: Y-up 180-unit box → z [0, 1.750] m, centred | IMPLEMENTED |
 
+**First approved download (owner approval 2026-10-25, Decision 46 procedure):**
+
+| Field | Value |
+|-------|-------|
+| File | `Farm Animals Animated by Quaternius.zip` — 6 963 285 bytes (page: 6.6 MB) |
+| Origin | https://quaternius.itch.io/lowpoly-animated-animals (itch.io free download; file served from itch.io's own storage mirror) |
+| Licence (read on the page) | "Creative Commons Zero v1.0 Universal" (CC0) |
+| SHA-256 | `b4bc5f209368cafc21962934e7d676cf1cfb1f746a363086cd9f45c4385db70e` |
+| Stored | `C:\DEV\Assets\descargas\quaternius_farm_animals\` (outside the repository) |
+| Windows Defender | zip and extracted folder: **no threats found** |
+| Extracted | only FBX / OBJ / MTL / GIF (22 files); the 7 third-party `.blend` files were **not** extracted or opened; no executables in the archive |
+| Content (Blender 3.6 FBX import) | Cow, **Horse**, Zebra (39 bones; Idle, Walk, WalkSlow, Run, Jump, Death) · Llama, Pig, Pug, Sheep (35 bones; Idle, Jump); 283–679 vertices each (low-poly) |
+| Test | Horse scaled to 1.60 m total height (**PLACEHOLDER**, same value as the `horse_adult` template), Walk and Run rendered in Workbench next to a 1.80 m reference: `builds/renders/quaternius_horse_walk.png`, `…_run.png` |
+| Finding | the FBX actions also animate the armature **object** (location, rotation, scale), so a rigged import must be scaled through a parent (empty); `normalize_mesh` only handles plain meshes — a rig-aware variant is pending |
+| Use allowed | tests, blocking, animation reference; **not** anatomy (low-poly, no source); status ACQUIRED (test asset) |
+
 Observations: the trunk segments are shorter than their diameter on the canonical spine, so thorax/abdomen/pelvis
 are spheres; the feet are tiny spheres because the canonical foot bones lie almost vertical near the ground (known
 open item on foot layout). No rigid-body set-up yet (collision capsules work for cloth, soft body and particles).
