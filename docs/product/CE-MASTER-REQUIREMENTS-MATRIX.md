@@ -331,6 +331,23 @@ PROPOSED steps D1-0…D1-8, owner decisions): `docs/product/DELIVERABLE-1-GRANAD
 
 ---
 
+## Rows BLOCK-DUMMY / MESH-NORMALIZER — owner request 2026-10-25 01:17–01:21 UTC
+
+Owner (verbatim): "1ro me gustaria ver un muñeco mesh compuesto por bloques centrales que van a simular de musculos o
+podemos hacerlos para las coliciones … poder normalizar el tamaño la escala de todo en el mesh." and "no tengo ninguna
+malla, me gustaria que las hagas o que las bajes".
+
+| ID | Implementation | Test / evidence | Status |
+|----|----------------|-----------------|--------|
+| **BLOCK-DUMMY** (P1) | `domain/rigging/block_dummy.py` (17 segments: head, neck, thorax, abdomen, pelvis, upper arm, forearm, hand, thigh, leg, foot ×2; capsule between averaged joints; radius = per-region envelope radius, ESTIMATE, scaled with stature — single source shared with the skin envelope) + addon `build_block_dummy`, operator *Block dummy (blocks + collision)*: one skinned mesh, every vertex 100 % on one bone, plus 17 collision capsules parented to their bones (COLLISION modifier) | `tests/unit/test_block_dummy.py` (7); Blender 3.6 headless: 1 666 vertices 100 % weighted, HUMERUS_L 60° → capsule 0.159 m / block 0.158 m; render `builds/renders/blender_block_dummy.png` | IMPLEMENTED |
+| **MESH-NORMALIZER** (P2) | `domain/assets/normalize.py` (declared source up/forward → canonical Z-up / −Y forward, proper rotation, scale to target height, feet on z = 0, centred in X/Y; ESTIMATE) + addon `normalize_mesh`, operator *Normalize mesh scale* | `tests/unit/test_normalize.py` (10); Blender 3.6 headless: Y-up 180-unit box → z [0, 1.750] m, centred | IMPLEMENTED |
+
+Observations: the trunk segments are shorter than their diameter on the canonical spine, so thorax/abdomen/pelvis
+are spheres; the feet are tiny spheres because the canonical foot bones lie almost vertical near the ground (known
+open item on foot layout). No rigid-body set-up yet (collision capsules work for cloth, soft body and particles).
+
+---
+
 ## Rows REALISM-UNITS / PRODUCT-VISION-GRANADEROS — DRAFT (owner, 2026-10-24 22:57 UTC)
 
 Owner (verbatim): "quiero que todo ocurra a distancias y con velocidades y movimientos realistas, tengo que realizar

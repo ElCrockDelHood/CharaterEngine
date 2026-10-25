@@ -11,6 +11,8 @@ All notable changes to Character Engine. Dates are ISO 8601.
 - Experiment 0: `scripts/solver_benchmark.py` + `runtime/blender/ce_solver_benchmark.py` — Blender 3.6 solver
   benchmark (rigid/Bullet, cloth on a skeleton proxy, soft body, particles, geometry-nodes simulation, fluid), one
   process per case with a timeout; results in `docs/audit/EXPERIMENT-0-RESULTS-2026-10-24.md` (18/18 ok).
+- Block dummy (17 capsule blocks, 100 % per bone, collision capsules) and mesh scale normalizer: domain
+  `rigging/block_dummy.py`, `assets/normalize.py`; addon operators *Block dummy* and *Normalize mesh scale*.
 - Draft rows WORKBENCH-LAYOUT and MATERIAL-SWATCHES; engagement clarified as adaptive movement cinematography by
   proximity and attack direction (draft §10).
 
