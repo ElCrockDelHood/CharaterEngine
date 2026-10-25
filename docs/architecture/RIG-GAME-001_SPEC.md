@@ -1,6 +1,6 @@
 # RIG-GAME-001 — Game rig, hands and face (SPECIFICATION, awaiting owner approval)
 
-**Date:** 2026-10-25 · **Status:** APPROVED by the owner (Decision 51); steps 1–3 implemented, steps 4–6 pending ·
+**Date:** 2026-10-25 · **Status:** APPROVED by the owner (Decision 51); steps 1–4 done, steps 5–6 pending ·
 **Context:** the owner chose the Souls-like as the
 first genre and asked for an industry-standard rig, sized for the GT 740M, with emphasis on hands and face.
 
@@ -87,7 +87,10 @@ UE5 Mannequin has ~89 bones; we drop extra twists and the index/middle metacarpa
    IK rest 0.0003 mm, hand pose = Python FK (0.0009 mm), canonical fingers on game bones (0.0001 mm).
    Blender: control rig over L1 DEF (body IK/FK as today) + hand controls + pose library; L0 kept as a hidden
    driven layer for simulation and trauma.
-4. Hardware test: morph targets / bone count on the GT 740M (compatibility test before adopting).
+4. **DONE** — `scripts/godot_perf.py` on the GT 740M (`docs/audit/A12_GODOT_PERF_GT740M.md`): game rig −14 % /
+   −21 % frame time at 4 / 8 characters vs canonical; face 1600 verts: 20 shapes ≈ 0.24 ms, 52 ≈ 0.91 ms per face.
+   Proposal (owner decision pending): ≤ 20 ARKit shapes in game, 52 in Blender cinematics.
+   Hardware test: morph targets / bone count on the GT 740M (compatibility test before adopting).
 5. Face: jaw + eyes now; ARKit-named shapes when the head mesh exists.
 6. Bone maps (Mixamo, quaternius_ual) retargeted to L1 (near 1:1).
 

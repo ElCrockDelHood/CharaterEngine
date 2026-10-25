@@ -96,6 +96,9 @@ Game rig (RIG-GAME-001, Decision 51): `CECharacter` and `CEArena` default to `as
 → `hand_r`). `ce_skeleton_validator.gd` checks the game contract when the GLB says `rig_id` CE-GAME-v1. The
 breathing modifier only acts on the canonical GLB (pending on the game rig).
 
+Hardware benchmark (windowed, needs the GPU): `python scripts/godot_perf.py` → `builds/tests/godot_perf.json`,
+canonical vs game rig and face blend shapes; results on the GT 740M in `docs/audit/A12_GODOT_PERF_GT740M.md`.
+
 Headless tests: `python scripts/engine_tests.py godot` (regenerates `assets/*.glb` — canonical and game — and the table,
 runs `res://tests/ce_test_runner.gd`, writes `builds/tests/godot_report.json`; includes the weapon checks: table,
 placeholder mounted on the grip bone, placeholder follows the bone when the arm is posed, weapon replays).

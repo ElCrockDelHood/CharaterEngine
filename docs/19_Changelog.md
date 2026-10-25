@@ -2,6 +2,12 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-25 · GT 740M benchmark (RIG-GAME-001 step 4)
+
+### Added
+- `scripts/godot_perf.py` + `runtime/godot/tests/ce_perf_bench.gd` (windowed Godot benchmark). Measured on the
+  GT 740M (A12): game rig −21 % frame time at 8 characters; 52 face shapes ≈ 3.8× the cost of 20.
+
 ## [Unreleased] — 2026-10-25 · Blender game rig, hands and pose library (RIG-GAME-001 step 3)
 
 ### Added

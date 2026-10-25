@@ -852,6 +852,8 @@ Step 3 (2026-10-25, owner "sigamos adelante con tus recomendaciones"): Blender g
 IK/FK, hand controls and pose library with weapon grips, domain `hand_poses.py`); the canonical armature is the
 driven layer (COPY_TRANSFORMS from `MCH-anat_*` helpers), bones hidden but object evaluated. Hand angle limits
 ASSUMED.
+Step 4 (2026-10-25): GT 740M benchmark `docs/audit/A12_GODOT_PERF_GT740M.md` — game rig −14 % / −21 % frame
+time at 4 / 8 characters; in-game face subset of ≤ 20 ARKit shapes PROPOSED (owner decision pending).
 
 **Date**: 2026-10-25 · **Status**: FINAL (step 1)
 
