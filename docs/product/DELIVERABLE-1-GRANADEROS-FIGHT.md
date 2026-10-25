@@ -100,6 +100,35 @@ photo). Each file gets a register entry (SHA-256, origin, licence/generator, sta
 | caballo criollo | `horse_adult` template | **NO DATA** (no equine skeleton) — image plane only |
 | tero, perro cimarrón | environment / `dog_adult` template | **NO DATA** |
 
+### 3.2 D1-2 — first version DONE (2026-10-25)
+
+Script `runtime/blender/ce_fight_mockup.py` (Blender 3.6, headless, reproducible):
+
+```
+blender -b --factory-startup --python runtime/blender/ce_fight_mockup.py -- --anim <UAL1_Standard.glb> --reference <levita sheet .png>
+```
+
+* Two canonical 1.80 m skeletons (`CE_Fighter_A`, `CE_Fighter_B`), each with the block dummy + 17 collision
+  capsules; spacing **1.6 m (ESTIMATE)**, B turned to face A.
+* A plays `Sword_Idle`, B plays `Sword_Attack` — Quaternius UAL1 (CC0) clips retargeted through `quaternius_ual`.
+* PLACEHOLDER sabre (0.90 × 0.035 m box) in the right fist. Its blade axis runs through the grip channel
+  (METACARPAL_5 → METACARPAL_2) — **ASSUMED, mock-up only**.
+* Reference: the owner's levita sheet (`…5_19AM.png`, front/back/side) as an image plane beside the fighters
+  (height 1.4 m, ESTIMATE).
+* Output: Workbench renders `builds/renders/D1-2_fight_mockup_f###.png`, report `D1-2_fight_mockup.json`
+  (closest attacker-sabre to defender-body distance per frame), scene `builds/tests/D1-2_fight_mockup.blend`.
+* First run (frames 0, 9, 14, 18, 27, 36): closest sabre-to-body distance 1.195 / 1.481 / 1.187 / 1.132 /
+  **0.646** / 1.186 m. There is no contact at 1.6 m spacing; the spacing is a script parameter.
+
+Findings:
+* `SOCKET-hand_grip.R` (CINE-GR-001 step 1, ASSUMED) points along the fingers. A sabre held in a fist runs
+  through the grip channel instead, so the socket axis needs correcting. **Proposed** for the owner's approval:
+  socket direction along METACARPAL_5 → METACARPAL_2. The domain contract was not changed.
+* In frame 18 the blade angle looks unnatural (wrist rotation of the clip on the canonical hand). To review once
+  the socket axis is decided.
+* Import robustness: rigs whose left side is not at +X are now turned 180° automatically (parent empty). The
+  Quaternius files did not need it; the headless test covers a source that faces +Y.
+
 ## 4. What Mariano must provide or decide first
 
 1. Base mesh origin: artist-made (by you, from your drawings) or generated (MPFB2/other) — and licence policy
