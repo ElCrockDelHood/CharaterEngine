@@ -13,6 +13,9 @@ All notable changes to Character Engine. Dates are ISO 8601.
   process per case with a timeout; results in `docs/audit/EXPERIMENT-0-RESULTS-2026-10-24.md` (18/18 ok).
 - Block dummy (17 capsule blocks, 100 % per bone, collision capsules) and mesh scale normalizer: domain
   `rigging/block_dummy.py`, `assets/normalize.py`; addon operators *Block dummy* and *Normalize mesh scale*.
+- Bone map `quaternius_ual` (Quaternius UAL / Universal Base Characters, CC0, 65-bone UE-style rig → 52 canonical
+  bones via the Mixamo equivalents). Retarget fix: root motion moves the canonical hierarchy root (trunk no longer
+  detaches in deep poses).
 - Draft rows WORKBENCH-LAYOUT and MATERIAL-SWATCHES; engagement clarified as adaptive movement cinematography by
   proximity and attack direction (draft §10).
 

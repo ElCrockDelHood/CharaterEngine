@@ -358,6 +358,28 @@ malla, me gustaria que las hagas o que las bajes".
 | Finding | the FBX actions also animate the armature **object** (location, rotation, scale), so a rigged import must be scaled through a parent (empty); `normalize_mesh` only handles plain meshes — a rig-aware variant is pending |
 | Use allowed | tests, blocking, animation reference; **not** anatomy (low-poly, no source); status ACQUIRED (test asset) |
 
+**Second approved batch (owner approval 2026-10-25, a + b + c, same Decision 46 procedure):**
+
+| File (itch.io, quaternius) | Bytes | SHA-256 | Licence |
+|----------------------------|-------|---------|---------|
+| `Universal Animation Library[Standard].zip` (page 15 MB) | 15 904 933 | `cc73fc4e495b82958207316596317a3f40b9fa38065bde1027937452da537724` | itch field "Creative Commons Zero v1.0 Universal" + `License.txt` CC0 1.0 |
+| `Universal Animation Library 2[Standard].zip` (page 17 MB) | 18 735 003 | `4008ea208a604773a2b2177d965f0f5d3195498b5bf838c3f5785d68e95f2a68` | page text "(CC0 License)" (no itch licence field) + `License.txt` CC0 1.0 |
+| `Universal Base Characters[Standard].zip` (page 122 MB) | 128 968 391 | `fdbf1804c90dfc1ea03e992bff7da2dfd1a79318e13270a660180f9308455f40` | itch field "Creative Commons Zero v1.0 Universal" + `License_Standard.txt` CC0 1.0 |
+
+Stored in `C:\DEV\Assets\descargas\quaternius_ual1\`, `…\quaternius_ual2\`, `…\quaternius_base_characters\` (outside
+the repository); Windows Defender: **no threats** (zips and extracted folders); no executables in any archive;
+extracted only FBX / GLB / glTF / BIN / PNG / TXT; the one `.blend` (UAL2) was **not** extracted or opened.
+Content: one 65-bone Unreal-mannequin rig shared by all three; UAL1 43 and UAL2 43 animations (Idle, Walk, Jog,
+Sitting, Sword_Idle / Attack / Block / Dash / combos, Idle_Shield…); base characters Superhero male/female 1.82 m in
+metres (+ hair, eyebrows). Two normal-map textures referenced by the glTF are not in the Standard zip (irrelevant for
+Workbench).
+Tests (Blender 3.6): the base male plays Walk / Sword_Idle / Sword_Attack (renders `builds/renders/quaternius_base_*.png`);
+new bone map `quaternius_ual` (52 canonical bones, same targets as Mixamo) retargets Walk / Idle / Sword_Attack onto
+the canonical 208-bone skeleton with the block dummy (renders `builds/renders/ual_retarget_*.png`).
+Fix found by this test: retarget root motion was applied to the hips bone only, which detached the trunk in deep
+poses (the canonical spine hangs from the head down to the SACRUM); it now moves the hierarchy root.
+Use allowed: tests, blocking, animation library for the canonical rig (CC0); status ACQUIRED (test assets).
+
 Observations: the trunk segments are shorter than their diameter on the canonical spine, so thorax/abdomen/pelvis
 are spheres; the feet are tiny spheres because the canonical foot bones lie almost vertical near the ground (known
 open item on foot layout). No rigid-body set-up yet (collision capsules work for cloth, soft body and particles).
