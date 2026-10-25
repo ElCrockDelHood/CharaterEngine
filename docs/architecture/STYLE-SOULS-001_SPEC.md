@@ -1,6 +1,7 @@
 # STYLE-SOULS-001 — `souls_like` gameplay style (SPECIFICATION, awaiting owner approval)
 
-**Date:** 2026-10-25 · **Status:** DRAFT — no code written · **Context:** the owner chose the Souls-like as the first
+**Date:** 2026-10-25 · **Status:** APPROVED (Decision 53: Sentinel with the bo, keyboard only in v1); step 1
+implemented · **Context:** the owner chose the Souls-like as the first
 genre to develop (option A). This spec turns the planned `souls_like` entry of `GAMEPLAY_STYLES` into a playable
 style: stamina, dodge with invulnerability frames, light / heavy attacks with the staff and the short blade, and one
 enemy with a simple, readable pattern.
@@ -87,7 +88,7 @@ Deterministic pattern (no randomness, so Python and Godot replay it identically)
 | dodge_frames / i-frames | 26 / frames 4–15 | dodge distance | 2.0 m |
 | dodge_cancel_from (attack recovery) | 8 | chain_window | first 10 recovery frames |
 | poise_max / regen delay | 50 / 60 frames | stagger_frames | 40 |
-| walk_speed | 1.6 m/s | engage / retreat range | 1.6 m / 2.6 m |
+| walk_speed | 1.6 m/s | engage / retreat range | 1.3 m / 2.6 m (engage corrected in step 1: 1.6 m exceeded the staff reach of 1.45 m) |
 | telegraph / punish window | 20 / 40 frames | | |
 
 Per-weapon frame data (startup / active / recovery frames, energy multiplier over the weapon's own):
@@ -128,7 +129,13 @@ Godot replays every scenario and must reproduce frames, stamina, poise, health a
 
 ## 7. Steps (each one: spec → code → tests → owner OK)
 
-1. Domain `souls.py` + pytest (rules + the 9 scenarios).
+1. **DONE** — `domain/gameplay/souls.py` (`SoulsCombat`, `SoulsFighter`, `SOULS_MOVES`, `Sentinel`,
+   `run_souls_scenario`, `souls_reference_specs`) + `tests/unit/test_souls.py`. Implementation choices within the
+   spec: attack / dodge presses are buffered 8 frames (the style's `input_buffer_frames`); a heavy may finish a
+   light chain (entered in the chain window: Sentinel's light → light → heavy); a hit that neither breaks poise
+   nor meets armour causes a short hitstun (light 12, heavy 20 frames); held inputs (walk, guard) must be fed
+   every frame. Shenmue untouched (no JSON change until step 2).
+   Domain `souls.py` + pytest (rules + the 9 scenarios).
 2. JSON `ce-gameplay/3` + Godot port + parity checks (Shenmue fights still identical).
 3. Godot arena: style switch, player controls, Sentinel controller, HUD (health, stamina, poise).
 4. Blender placeholder clips on the game rig (grips from the pose library), baked glTF; Godot plays them by state.

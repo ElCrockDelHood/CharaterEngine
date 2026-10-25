@@ -888,6 +888,22 @@ Invariant recorded in `AGENTS.md`. Provenance unaffected (the test checks bytes,
 
 ---
 
+## 53. STYLE-SOULS-001: SOULS-LIKE STYLE RULES (STAMINA, I-FRAMES, POISE, SENTINEL)
+
+**Decision** (owner approval, 2026-10-25, decision card on `docs/architecture/STYLE-SOULS-001_SPEC.md`): the first
+genre developed is the Souls-like. Rules per the spec: stamina with costs and delayed regeneration, guard break at 0
+stamina, dodge roll with i-frames (frames 4–15 of 26), light chains up to 3 and heavies with hyper-armour per weapon
+set (unarmed, staff, short blade) through the existing weapon / trauma path, poise and stagger, one deterministic
+enemy **Sentinel with the bo**, keyboard only in v1 (gamepad later). All tuning values **PLACEHOLDER**. Same pattern
+as Shenmue: Python domain is the truth → JSON → Godot port → parity on 9 reference scenarios; Shenmue fights must stay
+identical. Cinematography / animation stay in Blender (owner rule); Godot plays baked clips by state.
+Step 1 done: `domain/gameplay/souls.py`, `tests/unit/test_souls.py` (engage range corrected to 1.3 m, within the
+staff reach). Steps 2–5 each need owner approval.
+
+**Date**: 2026-10-25 · **Status**: FINAL (values reversible)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary

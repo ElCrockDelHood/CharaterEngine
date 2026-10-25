@@ -2,6 +2,16 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-25 · Souls-like domain (STYLE-SOULS-001 step 1)
+
+### Added
+- `domain/gameplay/souls.py`: stamina, dodge roll with i-frames, guard break, light chains and heavies per weapon
+  (unarmed, staff, short blade), poise and hyper-armour, deterministic Sentinel (bo), 9 reference scenarios;
+  all tuning PLACEHOLDER. Tests `test_souls.py`. Shenmue fights and the gameplay JSON unchanged.
+
+### Decisions
+- Decision 53: STYLE-SOULS-001 approved (Sentinel with the bo, keyboard only in v1).
+
 ## [Unreleased] — 2026-10-25 · Canonical bone maps corrected to the standard correspondence
 
 ### Changed
