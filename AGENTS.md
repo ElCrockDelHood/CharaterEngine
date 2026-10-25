@@ -47,6 +47,10 @@ Environment: `CHARACTER_ENGINE_ENV` = `development | test | production`. Tests u
 5. **Authorization (C6):** deterministic 7-step decision, RBAC only, `UserRole` history is
    append-only (revoke, never delete), IDOR → 404 not 403, no global SYSTEM bypass.
 6. **Backend tests never touch a real DB**; use fixtures in `tests/backend/conftest.py`.
+7. **Canonical data is fingerprinted:** `tests/anatomy/test_contract_fingerprint.py` pins the SHA-256
+   (CRLF normalised to LF) of `human_adult_206.json`, `human_adult_206_backup.json` and every
+   `references/*.json`. Changing one needs the owner's OK and a new `DECISION_LOG.md` entry; update the
+   hash and its decision reference in the same commit as the data (Decision 52).
 
 ## Working style
 

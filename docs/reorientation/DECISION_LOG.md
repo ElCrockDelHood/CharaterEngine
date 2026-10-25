@@ -859,6 +859,22 @@ time at 4 / 8 characters; in-game face subset of ≤ 20 ARKit shapes PROPOSED (o
 
 ---
 
+## 52. CANONICAL DATA FINGERPRINT: CHANGES TO THE CONTRACT DATA FAIL THE SUITE
+
+**Decision** (owner request, 2026-10-25, thread "Character Engine"): `tests/anatomy/test_contract_fingerprint.py`
+pins the SHA-256 of `human_adult_206.json`, the frozen `human_adult_206_backup.json` and every table in
+`data/anatomy/references/` (anthropometry, biomechanics, osteometry, source_registry), each with the decision
+that approved its current state (12, 15, 16, 33, 35, 36). Bytes are hashed after CRLF → LF normalisation, so the
+fingerprint is identical on Windows and Linux checkouts. A new or removed reference table also fails.
+The fingerprints were taken from the committed state; **no data file was modified**.
+**Rule**: a change to any of these files requires the owner's OK and a new numbered entry here; only then are
+the hash and the decision reference in the test updated, in the same commit as the data change.
+Invariant recorded in `AGENTS.md`. Provenance unaffected (the test checks bytes, not values).
+
+**Date**: 2026-10-25 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
