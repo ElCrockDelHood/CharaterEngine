@@ -304,7 +304,7 @@ con syntesmezclados con techno y trance."
 | **MUSIC-PRODUCTION** | "los temas los puedo tocar yo y grabar, mas los mios … super estilo lo mas folcklorico rokero de argentina … Chamameces, todo con syntes mezclados con techno y trance" | Owner performs and records; own songs plus covers; style: Argentine folk-rock + chamamé + synths, techno, trance. Music in products follows **Decision 47** | PENDING |
 
 **Author profile (owner, 2026-10-25):** audiovisual programmer, visual artist, musician, composer and producer
-("2.5 experience" — meaning not yet confirmed).
+— **2.5exp ("2.5 experience") is the owner's personal production company** (owner, 2026-10-25: "2.5exp es mi productora personal").
 
 ---
 
