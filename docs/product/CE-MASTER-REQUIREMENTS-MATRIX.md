@@ -289,6 +289,25 @@ drinking mate…)? (5) what must the walk satisfy (speeds, gait, terrain) — re
 
 ---
 
+## Rows MUSIC-DRIVEN-SHOTS / MUSIC-PRODUCTION — DRAFT (owner, 2026-10-25 00:13–00:29 UTC)
+
+Owner (verbatim, 00:13): "no son la base de la serie, las escenas y momentos todos los que mencionaste. quiero hacer
+tomas, con chamame y folklore en 3 tiempos y luego mezclar las lineas, usando un mix de folcklores mios y famosos de
+argentina de mercedez sosa charly gracia." (00:29): "los temas los puedo tocar yo y grabar, mas los mios y tambien ya
+pensar en un super estilo lo mas folcklorico rokero de argentina, los maestros, tambien puedo tocar Chamameces , todo
+con syntesmezclados con techno y trance."
+(Clarifies the pilot: the base is the scenes and moments listed in `PILOT-SAN-LORENZO.md`, not the video lesson notes.)
+
+| ID | Requirement (owner's words) | Notes | Status |
+|----|-----------------------------|-------|--------|
+| **MUSIC-DRIVEN-SHOTS** | "tomas, con chamame y folklore en 3 tiempos y luego mezclar las lineas" | Shots cut to the music; famous Argentine folklore (Mercedes Sosa, Charly García) as **style inspiration**. Per-shot music fields added to `PILOT-SAN-LORENZO-SHOTLIST.md` (cue, work owner, BPM, metre 3/4 or 6/8, start/end bar, cut beat, musical line). Mixing 3/4–6/8 folklore with 4/4 techno/trance implies tempo/metre changes per section | PENDING |
+| **MUSIC-PRODUCTION** | "los temas los puedo tocar yo y grabar, mas los mios … super estilo lo mas folcklorico rokero de argentina … Chamameces, todo con syntes mezclados con techno y trance" | Owner performs and records; own songs plus covers; style: Argentine folk-rock + chamamé + synths, techno, trance. Music in products follows **Decision 47** | PENDING |
+
+**Author profile (owner, 2026-10-25):** audiovisual programmer, visual artist, musician, composer and producer
+("2.5 experience" — meaning not yet confirmed).
+
+---
+
 ## Row PILOT-SAN-LORENZO — DRAFT (owner, 2026-10-24 23:41–23:44 UTC)
 
 Owner: "voy a tomar este video para el guion y ya lo tenemos" (https://www.youtube.com/watch?v=j6slbLEUA3c,

@@ -776,12 +776,28 @@ Working rules derived from it (Claude's proposal, consistent with REFERENCE-IMAG
 
 ---
 
+## 47. MUSIC RULE FOR PRODUCTS
+
+**Decision** (owner, 2026-10-25, applying Decision 46 to music): music in anything published or sold is only
+* the owner's **own compositions** (performed and recorded by him) — free;
+* **public-domain** pieces, verified one by one (many "traditional" songs have a registered author) — free;
+* otherwise **licensed**: master licence for an existing recording **and** licence of the work (composition/lyrics,
+  synchronisation) from its authors or publisher — in Argentina via SADAIC or the publisher.
+Performing or recording someone else's song oneself (e.g. a version of a Mercedes Sosa or Charly García song) does
+**not** free it: it only avoids the master licence; the **work** still needs the authors'/publisher's licence.
+Style and inspiration are free as long as no melody or lyrics are copied. Each shot records which song plays and
+who owns the work. This is not legal advice.
+
+**Date**: 2026-10-25 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 46
-**Final Decisions**: 42 (+4 deferred)
+**Total Decisions**: 47
+**Final Decisions**: 43 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)

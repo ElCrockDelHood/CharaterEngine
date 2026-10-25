@@ -10,6 +10,9 @@ imágenes del video.
 Campos por toma: `shot_id` · `boceto` (archivo + SHA-256) · `escena/lugar` · `plano` · `movimiento de cámara` ·
 `duración s` · `acción` · `lente mm (ESTIMATE)` · `engagement` · `notas` · `procedencia`.
 
+Campos musicales por toma (MUSIC-DRIVEN-SHOTS): `tema/cue` · `obra de` (autor/editorial — Decisión 47) · `BPM` ·
+`compás` (3/4, 6/8, 4/4) · `compás inicio/fin` · `tiempo del corte` · `línea musical` (melodía, bajo, guitarra, acordeón, sinte…).
+
 ---
 
 ## A) Cotidiano de época
