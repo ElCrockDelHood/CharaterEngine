@@ -89,7 +89,31 @@ _CMU_ALIASES = {
     "LeftHandIndex1": "LeftHandIndex1", "LThumb": "LeftHandThumb1", "RThumb": "RightHandThumb1",
 }
 
+# Quaternius Universal Animation Library / Universal Base Characters (Unreal-mannequin naming, 65 bones,
+# CC0). Each joint is mapped through its Mixamo equivalent, so the canonical targets are the same as for
+# Mixamo (no new anatomical choice). ``*_leaf`` end bones and ``root`` stay unmapped.
+_UE_TO_MIXAMO: Dict[str, str] = {
+    "pelvis": "Hips", "spine_01": "Spine", "spine_02": "Spine1", "spine_03": "Spine2", "neck_01": "Neck",
+    "Head": "Head",
+}
+for _s, _m in (("l", "Left"), ("r", "Right")):
+    _UE_TO_MIXAMO.update({
+        f"clavicle_{_s}": f"{_m}Shoulder", f"upperarm_{_s}": f"{_m}Arm", f"lowerarm_{_s}": f"{_m}ForeArm",
+        f"hand_{_s}": f"{_m}Hand", f"thigh_{_s}": f"{_m}UpLeg", f"calf_{_s}": f"{_m}Leg", f"foot_{_s}": f"{_m}Foot",
+        f"ball_{_s}": f"{_m}ToeBase",
+    })
+    for _ue, _mx in (("thumb", "Thumb"), ("index", "Index"), ("middle", "Middle"), ("ring", "Ring"), ("pinky", "Pinky")):
+        for _i in (1, 2, 3):
+            _UE_TO_MIXAMO[f"{_ue}_0{_i}_{_s}"] = f"{_m}Hand{_mx}{_i}"
+_QUATERNIUS_UAL: Dict[str, str] = {ue: _MIXAMO[mx] for ue, mx in _UE_TO_MIXAMO.items() if mx in _MIXAMO}
+
 BONE_MAPS: Dict[str, BoneMap] = {
+    "quaternius_ual": BoneMap(
+        map_id="quaternius_ual", label="Quaternius UAL / Universal Base Characters (glTF, UE naming)",
+        source_to_canonical=_QUATERNIUS_UAL, root_joint="pelvis", forward_axis="+Z", up_axis="+Y",
+        scale_to_m=1.0,
+        notes="CC0 packs by Quaternius; 65-bone Unreal-mannequin rig in metres. Mapped through the Mixamo "
+              "equivalents (same canonical targets); root and *_leaf bones unmapped."),
     "mixamo": BoneMap(
         map_id="mixamo", label="Mixamo / Adobe (FBX)", source_to_canonical=_MIXAMO, prefix="mixamorig:",
         forward_axis="+Z", up_axis="+Y", scale_to_m=0.01,

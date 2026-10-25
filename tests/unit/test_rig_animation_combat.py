@@ -75,6 +75,19 @@ def test_mixamo_prefix_and_symmetry():
     assert inv["HUMERUS_L"] == "mixamorig:LeftArm"
 
 
+def test_quaternius_ual_map_reuses_mixamo_targets_and_is_symmetric():
+    bm, mx = get_bone_map("quaternius_ual"), get_bone_map("mixamo")
+    assert bm.root_joint == "pelvis" and bm.scale_to_m == 1.0
+    assert bm.canonical("pelvis") == mx.canonical("mixamorig:Hips") == "SACRUM"
+    assert bm.canonical("upperarm_l") == mx.canonical("mixamorig:LeftArm") == "HUMERUS_L"
+    assert bm.canonical("index_01_r") == mx.canonical("mixamorig:RightHandIndex1")
+    assert bm.canonical("root") is None and bm.canonical("index_04_leaf_l") is None
+    left = {k: v for k, v in bm.source_to_canonical.items() if k.endswith("_l")}
+    for k, v in left.items():
+        assert bm.canonical(k[:-2] + "_r") == v[:-2] + "_R"
+    assert bm.coverage() == 52
+
+
 def test_cmu_aliases():
     bm = get_bone_map("cmu_bvh")
     assert bm.canonical("LowerBack") == "LUMBAR_5"

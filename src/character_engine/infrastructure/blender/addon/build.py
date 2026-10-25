@@ -805,6 +805,12 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
     for frame in range(frame_start, frame_end + 1):
         scene.frame_set(frame)
         src_pose = {b.name: src_arm.matrix_world @ b.matrix for b in src_arm.pose.bones}
+        # Root motion moves the WHOLE canonical hierarchy: its root is above the head (the spine hangs
+        # CRANIUM -> CERVICAL -> ... -> SACRUM), so displacing only the hips bone would detach the trunk.
+        root_delta = Vector((0.0, 0.0, 0.0))
+        if root_location and src_root is not None:
+            root_delta = (src_pose[src_root.name].to_translation()
+                          - src_rest[src_root.name].to_translation()) * stature_scale
         world: Dict[str, Matrix] = {}
         for bone in order:
             n = bone.name
@@ -814,15 +820,15 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
                 rest_rel = dst_rest[bone.parent.name].inverted() @ rest
                 default_world = parent_world @ rest_rel
             else:
-                default_world = rest.copy()
+                default_world = Matrix.Translation(root_delta) @ rest
+                if root_location:
+                    p = pb[n]
+                    p.location = ((inv_dst_world @ rest).inverted() @ (inv_dst_world @ default_world)).to_translation()
+                    p.keyframe_insert("location", frame=frame)
             if n in mapping:
                 rot = src_pose[mapping[n]].to_3x3() @ offset[n]
                 m = rot.to_4x4()
-                loc = default_world.to_translation()
-                if root_location and src_root is not None and mapping[n] == src_root.name:
-                    delta = src_pose[mapping[n]].to_translation() - src_rest[mapping[n]].to_translation()
-                    loc = rest.to_translation() + delta * stature_scale
-                m.translation = loc
+                m.translation = default_world.to_translation()
                 world[n] = m
             else:
                 world[n] = default_world
@@ -837,9 +843,6 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
                 p = pb[n]
                 p.rotation_quaternion = basis.to_quaternion()
                 p.keyframe_insert("rotation_quaternion", frame=frame)
-                if root_location and mapping[n] == (src_root.name if src_root else None):
-                    p.location = basis.to_translation()
-                    p.keyframe_insert("location", frame=frame)
                 keyed += 1
     scene.frame_set(frame_start)
     dst_arm["ce_mocap_source"] = action.name
