@@ -2,6 +2,13 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-25 · Godot on the game rig (RIG-GAME-001 step 2)
+
+### Changed
+- Godot `CECharacter` / `CEArena` default to `human_game_v1_tpose.glb`; canonical names resolve through the GLB's
+  `canonical_to_game` / `canonical_points` (new asset extra); validator knows the CE-GAME-v1 contract; dock lists
+  the game rig first. `engine_tests.py godot` exports the game GLBs too. Fights identical (runner check).
+
 ## [Unreleased] — 2026-10-25 · Game rig CE-GAME-v1 (RIG-GAME-001 step 1)
 
 ### Added

@@ -9,7 +9,7 @@ class_name CEArena
 extends Node3D
 
 @export var style_id: String = "shenmue"
-@export var glb_path: String = "res://assets/human_adult_206_tpose.glb"
+@export var glb_path: String = "res://assets/human_game_v1_tpose.glb"
 @export var player_stature_m: float = 1.80
 @export var opponent_stature_m: float = 1.80
 @export var start_distance_m: float = 1.6
@@ -27,7 +27,7 @@ var _built := false
 signal fight_finished(summary: Dictionary)
 
 
-static func build(p_data: CEGameplayData, p_style := "shenmue", p_glb := "res://assets/human_adult_206_tpose.glb") -> CEArena:
+static func build(p_data: CEGameplayData, p_style := "shenmue", p_glb := "res://assets/human_game_v1_tpose.glb") -> CEArena:
 	var arena := CEArena.new()
 	arena.name = "CEArena"
 	arena.data = p_data

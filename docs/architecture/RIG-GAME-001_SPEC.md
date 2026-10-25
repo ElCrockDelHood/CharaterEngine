@@ -1,6 +1,6 @@
 # RIG-GAME-001 — Game rig, hands and face (SPECIFICATION, awaiting owner approval)
 
-**Date:** 2026-10-25 · **Status:** APPROVED by the owner (Decision 51); step 1 implemented, steps 2–6 pending ·
+**Date:** 2026-10-25 · **Status:** APPROVED by the owner (Decision 51); steps 1–2 implemented, steps 3–6 pending ·
 **Context:** the owner chose the Souls-like as the
 first genre and asked for an industry-standard rig, sized for the GT 740M, with emphasis on hands and face.
 
@@ -75,7 +75,11 @@ UE5 Mannequin has ~89 bones; we drop extra twists and the index/middle metacarpa
 
 1. **DONE** — `domain/rigging/game_rig.py`, `export/gltf_game.py`, `scripts/export_gltf.py --skeleton game`,
    `tests/unit/test_game_rig.py`; GLB imports with 66 bones in Blender 3.6.23 and Godot 4.7.2. Domain: `CE-GAME-v1` definition + L0→L1 mapping + validator + tests; glTF export `human_game_v1.glb`.
-2. Godot: `CECharacter` loads the game GLB; hitboxes and grip remapped; combat parity unchanged; weapon follows `hand_r`.
+2. **DONE** — `CECharacter` defaults to `human_game_v1_tpose.glb` and resolves canonical names through the GLB's
+   `canonical_to_game` / `canonical_points`; validator knows the CE-GAME-v1 contract; runner checks prove canonical
+   positions (0 m error), marker on `spine_03`, weapon on `hand_r`, arena fight identical. Breathing modifier is a
+   no-op on the game rig (no STERNUM/RIB bones) until chest breathing is redone (step 3 or face/shape work).
+   Godot: `CECharacter` loads the game GLB; hitboxes and grip remapped; combat parity unchanged; weapon follows `hand_r`.
 3. Blender: control rig over L1 DEF (body IK/FK as today) + hand controls + pose library; L0 kept as a hidden
    driven layer for simulation and trauma.
 4. Hardware test: morph targets / bone count on the GT 740M (compatibility test before adopting).

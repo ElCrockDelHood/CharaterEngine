@@ -12,6 +12,8 @@
 ##   - required canonical names present (ROOT_SKELETON, CRANIUM, SACRUM, ...)
 ##   - Y-up: the lowest joint is at ground level (y ~= 0) and the skeleton is upright
 ##   - every bone has at most one parent and there are no cycles (Skeleton3D guarantees it)
+## A GLB whose asset extras say rig_id "CE-GAME-v1" (game skeleton, RIG-GAME-001) is checked against the
+## game contract instead: GAME_BONE_COUNT bones, GAME_REQUIRED_BONES, a single root, same Y-up checks.
 ## It prints a PASS/FAIL report and, when run as the main script, quits with exit code 0/1.
 extends SceneTree
 
@@ -19,6 +21,10 @@ const EXPECTED_TOTAL_NODES := 208
 const EXPECTED_ANATOMICAL := 206
 const REQUIRED_BONES := ["ROOT_SKELETON", "CRANIUM", "SACRUM", "CERVICAL_1", "FEMUR_L", "FEMUR_R", "FRONTAL"]
 const GROUND_TOLERANCE := 0.05
+const GAME_RIG_ID := "CE-GAME-v1"
+const GAME_BONE_COUNT := 66
+const GAME_REQUIRED_BONES := ["root", "pelvis", "spine_03", "head", "jaw", "eye_l", "eye_r", "hand_l", "hand_r",
+		"thumb_03_l", "pinky_03_r", "foot_l", "foot_r"]
 
 @export var glb_path: String = "res://human_adult_206.glb"
 
@@ -50,27 +56,31 @@ static func validate_file(path: String) -> Dictionary:
 	if root == null:
 		return {"passed": false, "errors": ["generate_scene returned null"], "path": path}
 	var skeleton := _find_skeleton(root)
-	var report := validate_skeleton(skeleton)
+	var rig_id := str(((state.json.get("asset", {}) as Dictionary).get("extras", {}) as Dictionary).get("rig_id", ""))
+	var report := validate_skeleton(skeleton, rig_id)
 	report["path"] = path
 	root.queue_free()
 	return report
 
 
 ## Validate an already instantiated Skeleton3D (e.g. from an imported scene).
-static func validate_skeleton(skeleton: Skeleton3D) -> Dictionary:
+## `rig_id` "" = canonical contract, GAME_RIG_ID = game skeleton contract.
+static func validate_skeleton(skeleton: Skeleton3D, rig_id := "") -> Dictionary:
 	var errors: Array[String] = []
 	var warnings: Array[String] = []
 	if skeleton == null:
 		return {"passed": false, "errors": ["No Skeleton3D found in the scene (skin not imported?)"]}
 
+	var game := rig_id == GAME_RIG_ID
+	var expected := GAME_BONE_COUNT if game else EXPECTED_TOTAL_NODES
 	var count := skeleton.get_bone_count()
-	if count != EXPECTED_TOTAL_NODES:
-		errors.append("bone count %d != expected %d" % [count, EXPECTED_TOTAL_NODES])
+	if count != expected:
+		errors.append("bone count %d != expected %d" % [count, expected])
 
 	var names := {}
 	for i in range(count):
 		names[skeleton.get_bone_name(i)] = i
-	for required in REQUIRED_BONES:
+	for required in (GAME_REQUIRED_BONES if game else REQUIRED_BONES):
 		if not names.has(required):
 			errors.append("missing required bone: %s" % required)
 
@@ -86,6 +96,8 @@ static func validate_skeleton(skeleton: Skeleton3D) -> Dictionary:
 		max_y = max(max_y, global_rest.origin.y)
 	if roots == 0:
 		errors.append("skeleton has no root bone")
+	elif game and roots != 1:
+		errors.append("game skeleton must have a single root, found %d" % roots)
 
 	# Y-up contract: ground contact near y=0 and skeleton upright (height along +Y)
 	if abs(min_y) > GROUND_TOLERANCE:
@@ -98,6 +110,7 @@ static func validate_skeleton(skeleton: Skeleton3D) -> Dictionary:
 		"errors": errors,
 		"warnings": warnings,
 		"bone_count": count,
+		"rig_id": rig_id if game else "canonical",
 		"roots": roots,
 		"height_m": max_y - min_y,
 		"ground_y": min_y,

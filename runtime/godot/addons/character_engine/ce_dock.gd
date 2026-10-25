@@ -6,7 +6,8 @@ extends VBoxContainer
 
 const VALIDATOR := preload("res://ce_skeleton_validator.gd")
 const ASSETS := {
-	"T-pose (rigging / gameplay)": "res://assets/human_adult_206_tpose.glb",
+	"Game rig T-pose (CE-GAME-v1, gameplay)": "res://assets/human_game_v1_tpose.glb",
+	"Canonical T-pose (206 bones, rigging)": "res://assets/human_adult_206_tpose.glb",
 	"Anatomical rest pose": "res://assets/human_adult_206.glb",
 }
 

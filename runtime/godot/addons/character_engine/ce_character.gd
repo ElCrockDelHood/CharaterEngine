@@ -3,6 +3,10 @@
 ## requested stature and hosts runtime layers (breathing modifier, wound markers).
 ##
 ## Godot consumes the exported asset only; it never touches the Python domain.
+## Two skeletons load (RIG-GAME-001): the canonical 208-node GLB and the CE-GAME-v1 game GLB (66 bones,
+## the default). With the game GLB, canonical bone names still work everywhere (`has_bone`, positions,
+## wound markers, weapon grip): the GLB's asset extras map each canonical bone to the game bone that
+## carries it and give its canonical head / tail, so anatomical points ride rigidly on that game bone.
 ## Coordinate note: the GLB is Y-up. Canonical (x, y, z) -> Godot (x, z, -y), so canonical
 ## forward (-Y) is Godot +Z.
 @tool
@@ -14,7 +18,7 @@ const BASE_STATURE_M := 1.80
 const SEVERITY_COLORS := [Color.GRAY, Color(0.2, 0.8, 0.2), Color(0.9, 0.9, 0.1), Color(1.0, 0.6, 0.0),
 		Color(1.0, 0.2, 0.0), Color(0.7, 0.0, 0.1), Color(0.1, 0.0, 0.0)]
 
-@export_file("*.glb", "*.gltf") var glb_path: String = "res://assets/human_adult_206_tpose.glb"
+@export_file("*.glb", "*.gltf") var glb_path: String = "res://assets/human_game_v1_tpose.glb"
 @export var stature_m: float = 1.80:
 	set(v):
 		stature_m = v
@@ -27,6 +31,8 @@ var skeleton: Skeleton3D
 var breathing: CEBreathing
 var wound_markers: Array[Node3D] = []
 var weapon_attachment: BoneAttachment3D = null
+var game_map: Dictionary = {}           # canonical bone -> game bone (empty for the canonical GLB)
+var _canon_points: Dictionary = {}      # canonical bone -> [head, tail] in skeleton space (game GLB only)
 var load_error: String = ""
 var _scene_root: Node
 
@@ -54,6 +60,7 @@ func load_glb(path: String) -> Error:
 	if root == null:
 		load_error = "generate_scene returned null"
 		return ERR_CANT_CREATE
+	_read_rig_extras(state)
 	add_child(root)
 	_scene_root = root
 	skeleton = find_skeleton(root)
@@ -64,6 +71,52 @@ func load_glb(path: String) -> Error:
 	if breathing_enabled:
 		_install_breathing()
 	return OK
+
+
+func _read_rig_extras(state: GLTFState) -> void:
+	game_map.clear()
+	_canon_points.clear()
+	var extras: Dictionary = (state.json.get("asset", {}) as Dictionary).get("extras", {})
+	game_map = (extras.get("canonical_to_game", {}) as Dictionary).duplicate()
+	var pts: Dictionary = extras.get("canonical_points", {})
+	for bone in pts:
+		var h: Array = pts[bone][0]
+		var t: Array = pts[bone][1]
+		# canonical Z-up (x, y, z) -> glTF / Godot Y-up (x, z, -y)
+		_canon_points[bone] = [Vector3(h[0], h[2], -h[1]), Vector3(t[0], t[2], -t[1])]
+
+
+func is_game_rig() -> bool:
+	return not game_map.is_empty()
+
+
+## Skeleton bone that carries `bone`: itself, or (game GLB) the game bone covering a canonical bone.
+func carrier_bone(bone: String) -> String:
+	if skeleton == null:
+		return ""
+	if skeleton.find_bone(bone) >= 0:
+		return bone
+	var g := str(game_map.get(bone, ""))
+	return g if skeleton.find_bone(g) >= 0 else ""
+
+
+## Rest position of a canonical bone's head or tail in skeleton space (works on both GLBs).
+func canonical_rest_point(bone: String, end := "head") -> Vector3:
+	if _canon_points.has(bone):
+		return _canon_points[bone][0 if end == "head" else 1]
+	var idx := skeleton.find_bone(bone)
+	if idx < 0:
+		return Vector3.ZERO
+	if end == "head":
+		return skeleton.get_bone_global_rest(idx).origin
+	var kids := skeleton.get_bone_children(idx)
+	return skeleton.get_bone_global_rest(kids[0]).origin if not kids.is_empty() else skeleton.get_bone_global_rest(idx).origin
+
+
+## `point` (skeleton space, rest) expressed in the rest frame of the bone carrying `bone`.
+func _local_on_carrier(bone: String, point: Vector3) -> Vector3:
+	var idx := skeleton.find_bone(carrier_bone(bone))
+	return skeleton.get_bone_global_rest(idx).affine_inverse() * point if idx >= 0 else point
 
 
 static func find_skeleton(node: Node) -> Skeleton3D:
@@ -97,23 +150,23 @@ func bone_count() -> int:
 
 
 func has_bone(bone: String) -> bool:
-	return skeleton != null and skeleton.find_bone(bone) >= 0
+	return carrier_bone(bone) != ""
 
 
-## Global position of a canonical bone head (current pose, modifiers included).
+## Global position of a bone head (canonical or game name; current pose).
 func bone_global_position(bone: String) -> Vector3:
-	var idx := skeleton.find_bone(bone)
+	var idx := skeleton.find_bone(carrier_bone(bone))
 	if idx < 0:
 		return global_position
-	return skeleton.global_transform * skeleton.get_bone_global_pose(idx).origin
+	var local := _local_on_carrier(bone, canonical_rest_point(bone))
+	return skeleton.global_transform * (skeleton.get_bone_global_pose(idx) * local)
 
 
-## Global rest position of a canonical bone head.
+## Global rest position of a bone head (canonical or game name).
 func bone_rest_position(bone: String) -> Vector3:
-	var idx := skeleton.find_bone(bone)
-	if idx < 0:
+	if carrier_bone(bone) == "":
 		return global_position
-	return skeleton.global_transform * skeleton.get_bone_global_rest(idx).origin
+	return skeleton.global_transform * canonical_rest_point(bone)
 
 
 ## Height of the rest skeleton along Godot +Y in metres (after stature scaling).
@@ -134,10 +187,11 @@ func add_wound_marker(bone: String, impact: Dictionary) -> Node3D:
 	if skeleton == null or not has_bone(bone):
 		return null
 	var att := BoneAttachment3D.new()
-	att.bone_name = bone
+	att.bone_name = carrier_bone(bone)
 	att.name = "Wound_%s_%d" % [bone, wound_markers.size()]
 	skeleton.add_child(att)
 	var mesh := MeshInstance3D.new()
+	mesh.position = _local_on_carrier(bone, canonical_rest_point(bone))   # zero on the canonical GLB
 	var sphere := SphereMesh.new()
 	var sev := clampi(int(impact.get("severity", 1)), 0, 6)
 	sphere.radius = 0.02 + 0.008 * sev
@@ -158,7 +212,8 @@ func clear_wounds() -> void:
 	wound_markers.clear()
 
 
-## Mount a PLACEHOLDER weapon (plain box, flat colour; no textures or shaders) on its grip bone.
+## Mount a PLACEHOLDER weapon (plain box, flat colour; no textures or shaders) on its grip bone
+## (on the game GLB: on the game bone carrying it, e.g. METACARPAL_3_R -> hand_r).
 ## `weapon` is an entry of CEGameplayData.weapons(). The box is centred on the grip point (middle of
 ## the grip bone; the socket's 2 cm palmar offset is not applied) and runs along the grip channel of
 ## the fist, little-finger side -> index side (Decision 48), taken from the rest positions of
@@ -169,16 +224,15 @@ func equip_weapon(weapon: Dictionary) -> BoneAttachment3D:
 	if skeleton == null or not has_bone(grip) or float(weapon.get("length_m", 0.0)) <= 0.0:
 		return null
 	var side := grip.substr(grip.length() - 1)
-	var idx := skeleton.find_bone(grip)
+	var carrier := carrier_bone(grip)
+	var idx := skeleton.find_bone(carrier)
 	var rest := skeleton.global_transform * skeleton.get_bone_global_rest(idx)
-	var children := skeleton.get_bone_children(idx)
-	var tip := rest.origin if children.is_empty() else skeleton.global_transform * skeleton.get_bone_global_rest(children[0]).origin
-	var grip_point := (rest.origin + tip) * 0.5
+	var grip_point := skeleton.global_transform * ((canonical_rest_point(grip) + canonical_rest_point(grip, "tail")) * 0.5)
 	var axis := (bone_rest_position("METACARPAL_2_" + side) - bone_rest_position("METACARPAL_5_" + side)).normalized()
 	var length := float(weapon["length_m"])   # world metres: rest.affine_inverse() below cancels the stature scale
 	var centre := grip_point + axis * (0.5 - float(weapon.get("grip_fraction", 0.5))) * length
 	var att := BoneAttachment3D.new()
-	att.bone_name = grip
+	att.bone_name = carrier
 	att.name = "Weapon_%s" % weapon.get("weapon_id", "weapon")
 	skeleton.add_child(att)
 	var mesh := MeshInstance3D.new()

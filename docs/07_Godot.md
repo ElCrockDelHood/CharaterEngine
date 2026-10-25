@@ -71,7 +71,7 @@ Enabled in `project.godot`. The **Character Engine** dock (right panel) offers:
 
 | Control | Effect |
 |---------|--------|
-| Asset (T-pose / anatomical) + stature | *Add character to scene* → `CECharacter` node: loads the GLB at runtime (`GLTFDocument`), scales to stature, installs `CEBreathing` (`SkeletonModifier3D`, sternum/ribs sinusoid), exposes `bone_global_position()`, `add_wound_marker()` and `equip_weapon()` (PLACEHOLDER box on a `BoneAttachment3D` at the weapon's grip bone, along the fist's grip channel METACARPAL_5 → METACARPAL_2; flat colour, no textures or shaders). |
+| Asset (game rig T-pose — default — / canonical T-pose / anatomical) + stature | *Add character to scene* → `CECharacter` node: loads the GLB at runtime (`GLTFDocument`), scales to stature, installs `CEBreathing` (`SkeletonModifier3D`, sternum/ribs sinusoid), exposes `bone_global_position()`, `add_wound_marker()` and `equip_weapon()` (PLACEHOLDER box on a `BoneAttachment3D` at the weapon's grip bone, along the fist's grip channel METACARPAL_5 → METACARPAL_2; flat colour, no textures or shaders). |
 | *Validate skeleton GLB* | Runs `ce_skeleton_validator.gd` on the selected asset. |
 | Gameplay style | `shenmue` (Shenmue-style free battle: J punch, K kick, L throw, Space guard, W/S move; `F,F+J` Elbow Assault, `F+K` Crescent Kick, `F+L` Vortex Throw). `souls_like` / `beat_em_up` are listed as *planned* (disabled). |
 | *Create arena in scene* (+ autoplay) | `CEArena`: floor, two `CECharacter`s, camera, HUD, `CEFighterController`s (player keyboard / opponent AI), `CEShenmueCombat` stepped at 60 Hz in `_physics_process`. Landed hits attach severity-coloured wound markers. Press F6 to play. The committed `res://arena_play.tscn` (autoplay 180 frames) is the project's main scene (Decision 43): F5 plays it, or `godot --path runtime/godot` from the command line. |
@@ -89,7 +89,14 @@ per-value provenance (never PROVEN), `applies_to_moves` and pre-computed impacts
 the reach adds `reach_m` and the impact comes from `CEGameplayData.weapon_impact()`; otherwise nothing changes.
 A scenario spec may carry `"weapons": {"player": "short_blade"}`.
 
-Headless tests: `python scripts/engine_tests.py godot` (regenerates `assets/*.glb` and the table,
+Game rig (RIG-GAME-001, Decision 51): `CECharacter` and `CEArena` default to `assets/human_game_v1_tpose.glb`
+(CE-GAME-v1, 66 bones, UE5 Mannequin names). Canonical bone names keep working on it: the GLB's asset extras
+`canonical_to_game` and `canonical_points` let `has_bone()`, `bone_global_position()`, `add_wound_marker()` and
+`equip_weapon()` place a canonical point on the game bone that carries it (RIB_08_L → `spine_03`, METACARPAL_3_R
+→ `hand_r`). `ce_skeleton_validator.gd` checks the game contract when the GLB says `rig_id` CE-GAME-v1. The
+breathing modifier only acts on the canonical GLB (pending on the game rig).
+
+Headless tests: `python scripts/engine_tests.py godot` (regenerates `assets/*.glb` — canonical and game — and the table,
 runs `res://tests/ce_test_runner.gd`, writes `builds/tests/godot_report.json`; includes the weapon checks: table,
 placeholder mounted on the grip bone, placeholder follows the bone when the arm is posed, weapon replays).
 

@@ -122,7 +122,9 @@ def run_godot(exe: Path, timeout: int) -> int:
     assets = project / "assets"
     assets.mkdir(exist_ok=True)
     py = sys.executable
-    for extra, name in (([], "human_adult_206.glb"), (["--pose", "tpose"], "human_adult_206_tpose.glb")):
+    for extra, name in (([], "human_adult_206.glb"), (["--pose", "tpose"], "human_adult_206_tpose.glb"),
+                        (["--skeleton", "game"], "human_game_v1.glb"),
+                        (["--skeleton", "game", "--pose", "tpose"], "human_game_v1_tpose.glb")):
         code, _ = run([py, ROOT / "scripts" / "export_gltf.py", *extra, "-o", assets / name], timeout, OUT / "godot_assets.log")
         if code:
             print(f"[godot] glTF export failed for {name}; see {OUT / 'godot_assets.log'}")

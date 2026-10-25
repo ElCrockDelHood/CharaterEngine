@@ -138,6 +138,12 @@ def test_glb_export_round_trips_positions(tmp_path):
         world[g.name] = tuple(b + c for b, c in zip(base, t))
         assert world[g.name] == pytest.approx(pts[g.name][0], abs=1e-5), g.name
         assert nodes[g.name]["extras"]["covers"] == list(g.covers)
+    canon = doc["asset"]["extras"]["canonical_points"]          # runtimes place anatomical points with it
+    assert len(canon) == 206
+    by = {b["canonical_name"]: b for b in load_canonical_bones()[0]}
+    rib = by["RIB_08_L"]["head"]
+    assert canon["RIB_08_L"][0] == pytest.approx([rib["x"], rib["y"], rib["z"]] if isinstance(rib, dict) else rib,
+                                                 abs=1e-6)
 
 
 def test_document_without_display_mesh():

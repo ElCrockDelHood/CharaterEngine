@@ -845,6 +845,9 @@ blendshapes; the in-game subset is chosen after a GT 740M hardware test. Contrac
 Step 1 only (definition, mapping, tests, GLB); Godot switch, Blender control rig, hand poses, hardware test and face
 are later steps, each with owner approval.
 Tests: `tests/unit/test_game_rig.py`; GLB import 66 bones in Blender 3.6.23 and Godot 4.7.2.
+Step 2 (2026-10-25, owner "sigamos adelante"): Godot `CECharacter` / `CEArena` default to the game GLB; canonical
+names resolve through the GLB asset extras `canonical_to_game` + `canonical_points`; the arena fight on the game
+rig equals the canonical one (runner check). Breathing modifier pending on the game rig.
 
 **Date**: 2026-10-25 · **Status**: FINAL (step 1)
 

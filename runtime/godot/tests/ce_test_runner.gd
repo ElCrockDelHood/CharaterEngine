@@ -11,6 +11,8 @@
 ##   - CEShenmueCombat replays every reference fight identically to the Python simulation (incl. weapons)
 ##   - weapons table complete; weapon placeholder mounts on the grip bone and follows it when posed
 ##   - CEArena builds two characters + controllers, autoplay lands hits and creates wound markers
+##   - CE-GAME-v1 game GLB: contract, canonical bones at their anatomical positions, markers / weapon on the
+##     carrying game bone, and the arena fight identical to the canonical skeleton
 ##   - InputMap actions registered; planned gameplay styles are listed but disabled
 extends SceneTree
 
@@ -195,6 +197,62 @@ class Runner extends Node:
 			return [w1.distance_to(w0) > 0.05 and err < 1e-3, "moved %.3f m, error to bone %.5f m" % [w1.distance_to(w0), err]])
 		wch.queue_free()
 
+		# ---- game rig CE-GAME-v1 (RIG-GAME-001 step 2) ---------------------------------
+		var game_tpose := "res://assets/human_game_v1_tpose.glb"
+		runner.check("game GLBs pass the CE-GAME-v1 contract", func():
+			var r: Dictionary = VALIDATOR.validate_file(game_tpose)
+			var r2: Dictionary = VALIDATOR.validate_file("res://assets/human_game_v1.glb")
+			return [r.get("passed", false) and r2.get("passed", false) and r.get("rig_id") == "CE-GAME-v1",
+					"%s bones, height %.3f m, errors %s %s" % [r.get("bone_count"), r.get("height_m", 0.0), r.get("errors", []), r2.get("errors", [])]])
+		var gch := CECharacter.new()
+		gch.glb_path = game_tpose
+		gch.breathing_enabled = false
+		tree_root.add_child(gch)
+		var cch := CECharacter.new()
+		cch.glb_path = tpose
+		cch.breathing_enabled = false
+		tree_root.add_child(cch)
+		runner.check("game rig maps every canonical bone at its anatomical position", func():
+			var worst := 0.0
+			var worst_bone := ""
+			var mapped := 0
+			for i in range(cch.skeleton.get_bone_count()):
+				var n := cch.skeleton.get_bone_name(i)
+				if n == "ROOT_SKELETON" or n == "CRANIUM":
+					continue   # containers: centroid placement, not anatomical points
+				mapped += 1 if gch.has_bone(n) else 0
+				var d := gch.bone_rest_position(n).distance_to(cch.bone_rest_position(n))
+				if d > worst:
+					worst = d
+					worst_bone = n
+			return [gch.is_game_rig() and gch.bone_count() == 66 and gch.game_map.size() == 208 and mapped == 206 and worst < 1e-4,
+					"%d bones, %d canonical mapped, worst %s %.6f m" % [gch.bone_count(), mapped, worst_bone, worst]])
+		var gm := gch.add_wound_marker("RIB_08_L", data.impact("hook", "RIB_08_L"))
+		var gblade := gch.equip_weapon(data.weapon("short_blade"))
+		var cblade := cch.equip_weapon(data.weapon("short_blade"))
+		await t.process_frame
+		await t.process_frame
+		var g_mesh0: Vector3 = (gblade.get_child(0) as Node3D).global_position
+		var g_off0 := g_mesh0.distance_to(gch.bone_global_position("METACARPAL_3_R"))
+		runner.check("game rig: wound marker rides on spine_03 at RIB_08_L", func():
+			var d := (gm.get_child(0) as Node3D).global_position.distance_to(cch.bone_rest_position("RIB_08_L"))
+			return [gm.bone_name == "spine_03" and d < 1e-3, "%s, %.5f m from the canonical RIB_08_L" % [gm.bone_name, d]])
+		runner.check("game rig: weapon on hand_r matches the canonical grip", func():
+			var d := g_mesh0.distance_to((cblade.get_child(0) as Node3D).global_position)
+			return [gblade.bone_name == "hand_r" and cblade.bone_name == "METACARPAL_3_R" and d < 1e-3,
+					"%s vs %s, placeholder centres %.5f m apart" % [gblade.bone_name, cblade.bone_name, d]])
+		var uarm := gch.skeleton.find_bone("upperarm_r")
+		gch.skeleton.set_bone_pose_rotation(uarm, Quaternion(Vector3(0, 0, 1), 0.8))
+		await t.process_frame
+		await t.process_frame
+		runner.check("game rig: weapon follows hand_r when the arm is posed", func():
+			var g_mesh1: Vector3 = (gblade.get_child(0) as Node3D).global_position
+			var off1 := g_mesh1.distance_to(gch.bone_global_position("METACARPAL_3_R"))
+			return [g_mesh1.distance_to(g_mesh0) > 0.05 and absf(off1 - g_off0) < 1e-3,
+					"moved %.3f m, grip offset %.4f -> %.4f m" % [g_mesh1.distance_to(g_mesh0), g_off0, off1]])
+		gch.queue_free()
+		cch.queue_free()
+
 		# ---- combat port vs Python reference ------------------------------------
 		for sc in data.reference_scenarios():
 			var sid: String = sc["spec"]["scenario_id"]
@@ -235,6 +293,21 @@ class Runner extends Node:
 			var d := p.global_position.distance_to(o.global_position)
 			return [d < arena.start_distance_m and d > 0.2 and absf(p.global_position.y) < 1e-6,
 					"distance %.2f m (start %.2f)" % [d, arena.start_distance_m]])
+		var garena := CEArena.build(data, "shenmue", game_tpose)
+		garena.autoplay_frames = 240
+		garena.show_hud = false
+		tree_root.add_child(garena)
+		for _i in range(240):
+			garena.step_once()
+		runner.check("arena on the game rig: same fight as on the canonical skeleton", func():
+			var diff: Array = []
+			var same := CEGameplayData.deep_equal(garena.combat.summary(), summary, diff)
+			var gopp: CECharacter = garena.characters["opponent"]
+			var copp: CECharacter = arena.characters["opponent"]
+			return [same and gopp.is_game_rig() and gopp.wound_markers.size() == copp.wound_markers.size(),
+					"%d hits, %d markers on %s%s" % [summary["hits"].size(), gopp.wound_markers.size(),
+					gopp.glb_path.get_file(), "" if same else "  diff: " + str(diff)]])
+		garena.queue_free()
 		arena.queue_free()
 		await t.process_frame
 		runner.finish()

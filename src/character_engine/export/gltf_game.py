@@ -3,7 +3,9 @@
 Same conventions as :mod:`character_engine.export.gltf`: Z-up canonical → glTF Y-up ``(x, y, z) → (x, z, -y)``,
 joints as translation-only nodes at the bone heads, inverse bind matrices from the head positions, an optional
 octahedral display mesh skinned 100 % per joint. Node ``extras`` carry the canonical Z-up head / tail, the
-canonical bones the game bone covers and its provenance; the asset ``extras`` carry the full canonical → game map.
+canonical bones the game bone covers and its provenance; the asset ``extras`` carry the full canonical → game map
+and the canonical head / tail of every canonical bone in the exported pose (``canonical_points``, Z-up), so a
+runtime can place anatomical points (wound markers, the hand-grip axis) on the game bone that carries them.
 Pure Python, stdlib only.
 """
 
@@ -14,6 +16,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from ..domain.rigging.game_rig import GAME_BONES, RIG_ID, canonical_to_game, game_bone_points
+from ..domain.rigging.sockets import _point
 from .gltf import (
     GENERATOR,
     GLTF_VERSION,
@@ -38,8 +41,12 @@ from .gltf import (
 DEFAULT_GAME_GLB = Path("builds/gltf/human_game_v1.glb")
 
 
-def build_game_document(points: Dict[str, tuple], options: Optional[GltfExportOptions] = None) -> GltfDocument:
-    """glTF document for game bone ``points`` (name -> (head, tail), canonical Z-up)."""
+def build_game_document(points: Dict[str, tuple], options: Optional[GltfExportOptions] = None,
+                        canonical_bones: Optional[List[dict]] = None) -> GltfDocument:
+    """glTF document for game bone ``points`` (name -> (head, tail), canonical Z-up).
+
+    ``canonical_bones`` (the posed canonical bone dicts the points came from) adds ``canonical_points``.
+    """
     options = options or GltfExportOptions()
     convert = canonical_to_gltf if options.convert_to_y_up else (lambda v: v)
     nodes: List[Dict] = [{"name": options.armature_node_name, "children": []}]
@@ -107,6 +114,10 @@ def build_game_document(points: Dict[str, tuple], options: Optional[GltfExportOp
     }
     if not meshes:
         del document["meshes"]
+    if canonical_bones is not None:
+        document["asset"]["extras"]["canonical_points"] = {
+            b["canonical_name"]: [[_clean(c) for c in _point(b["head"])], [_clean(c) for c in _point(b["tail"])]]
+            for b in sorted(canonical_bones, key=lambda b: b["canonical_name"])}
     return GltfDocument(json=document, binary=bytes(buffer.data), node_index_by_canonical=index)
 
 
@@ -147,9 +158,13 @@ def _display_mesh(points, convert, options: GltfExportOptions, buffer: _BufferBu
 def game_skeleton_points(json_path: Optional[Path] = None, pose: str = "anatomical",
                          template_id: Optional[str] = None, stature_m: Optional[float] = None) -> Dict[str, tuple]:
     """Game bone points for the canonical skeleton after the same retarget / pose as the canonical exporter."""
+    return _game_inputs(json_path, pose, template_id, stature_m)[0]
+
+
+def _game_inputs(json_path, pose, template_id, stature_m):
     data = load_canonical_bone_data(json_path, pose=pose, template_id=template_id, stature_m=stature_m)
     reference = json.loads(Path(json_path or default_canonical_json()).read_text(encoding="utf-8"))["bones"]
-    return game_bone_points(data["bones"], reference)
+    return game_bone_points(data["bones"], reference), data["bones"]
 
 
 def export_game_skeleton(output_path: Path, json_path: Optional[Path] = None,
@@ -158,7 +173,8 @@ def export_game_skeleton(output_path: Path, json_path: Optional[Path] = None,
     """Write the CE-GAME-v1 skeleton to ``output_path`` (.glb or .gltf + .bin)."""
     output_path = Path(output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    doc = build_game_document(game_skeleton_points(json_path, pose, template_id, stature_m), options)
+    points, bones = _game_inputs(json_path, pose, template_id, stature_m)
+    doc = build_game_document(points, options, canonical_bones=bones)
     if output_path.suffix.lower() == ".glb":
         output_path.write_bytes(doc.to_glb())
     elif output_path.suffix.lower() == ".gltf":
