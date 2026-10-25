@@ -408,14 +408,15 @@ def main(reset: bool = True) -> int:
         spec = [("pelvis", None, (0, 0, 0.95), (0, 0, 1.05)), ("spine_01", "pelvis", (0, 0, 1.05), (0, 0, 1.18)),
                 ("spine_02", "spine_01", (0, 0, 1.18), (0, 0, 1.32)), ("spine_03", "spine_02", (0, 0, 1.32), (0, 0, 1.45)),
                 ("neck_01", "spine_03", (0, 0, 1.45), (0, 0, 1.55)), ("Head", "neck_01", (0, 0, 1.55), (0, 0, 1.75))]
-        for s, x in (("l", 1), ("r", -1)):
+        # faces +Y (left at -X) like the Quaternius glTF files, so the import must turn it 180 degrees
+        for s, x in (("l", -1), ("r", 1)):
             spec += [(f"clavicle_{s}", "spine_03", (0.02 * x, 0, 1.43), (0.15 * x, 0, 1.43)),
                      (f"upperarm_{s}", f"clavicle_{s}", (0.15 * x, 0, 1.43), (0.43 * x, 0, 1.43)),
                      (f"lowerarm_{s}", f"upperarm_{s}", (0.43 * x, 0, 1.43), (0.70 * x, 0, 1.43)),
                      (f"hand_{s}", f"lowerarm_{s}", (0.70 * x, 0, 1.43), (0.80 * x, 0, 1.43)),
                      (f"thigh_{s}", "pelvis", (0.10 * x, 0, 0.95), (0.10 * x, 0, 0.50)),
                      (f"calf_{s}", f"thigh_{s}", (0.10 * x, 0, 0.50), (0.10 * x, 0, 0.08)),
-                     (f"foot_{s}", f"calf_{s}", (0.10 * x, 0, 0.08), (0.10 * x, -0.12, 0.02))]
+                     (f"foot_{s}", f"calf_{s}", (0.10 * x, 0, 0.08), (0.10 * x, 0.12, 0.02))]
         try:
             for name, parent, h, t in spec:
                 eb = data.edit_bones.new(name)
@@ -462,6 +463,7 @@ def main(reset: bool = True) -> int:
         clips = json.loads(src["ce_clips"])
         assert any("Swing" in c for c in clips) and any("Idle" in c for c in clips), clips
         assert "Swing" in src.animation_data.action.name, src.animation_data.action.name
+        assert src.get("ce_turned_180") is True, "source facing +Y was not turned to the canonical -Y"
         act = arm.animation_data.action
         f0, f1 = int(act.frame_range[0]), int(act.frame_range[1])
         hum = arm.pose.bones["HUMERUS_L"]
@@ -475,7 +477,7 @@ def main(reset: bool = True) -> int:
         assert t0.x > 0 and t1.x > 0, f"left arm crossed to -X: {t0.x:.3f}, {t1.x:.3f}"
         props.mocap_action = ""
         return (f"glb clips {clips}; retargeted '{src.animation_data.action.name}' frames {f0}-{f1}, "
-                f"HUMERUS_L tail moved {(t1 - t0).length:.3f} m, stays on +X")
+                f"source turned 180 deg (faced +Y), HUMERUS_L tail moved {(t1 - t0).length:.3f} m, stays on +X")
 
     if not skipped(args, "mocap"):
         check("mocap: BVH import + retarget (mixamo map)", _mocap)

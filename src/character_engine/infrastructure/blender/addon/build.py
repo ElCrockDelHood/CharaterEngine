@@ -778,9 +778,10 @@ def import_mocap(filepath: Path, bone_map: BoneMap, action_filter: str = ""):
     before = set(bpy.data.objects)
     actions_before = set(bpy.data.actions)
     if suffix in (".glb", ".gltf"):
-        # glTF is metres, Y-up, +Z forward by specification; Blender's importer converts it to Z-up / −Y forward.
+        # glTF is metres and Y-up; which way the character faces depends on the exporter, so
+        # _face_canonical() checks the left side after import.
         bpy.ops.import_scene.gltf(filepath=str(filepath))
-        return _finish_animation_import(before, actions_before, action_filter)
+        return _face_canonical(_finish_animation_import(before, actions_before, action_filter), bone_map)
     # bone_map.forward_axis is where the character FACES in its file; Blender's BVH importer
     # maps ``axis_forward`` to +Y, so pass the opposite axis to make the character face −Y with
     # its left at +X like the canonical skeleton (Decision 17).
@@ -793,7 +794,34 @@ def import_mocap(filepath: Path, bone_map: BoneMap, action_filter: str = ""):
     else:
         bpy.ops.import_scene.fbx(filepath=str(filepath), global_scale=bone_map.scale_to_m,
                                  automatic_bone_orientation=False)
-    return _finish_animation_import(before, actions_before, action_filter)
+    return _face_canonical(_finish_animation_import(before, actions_before, action_filter), bone_map)
+
+
+def _face_canonical(src, bone_map: BoneMap):
+    """Turn an imported source rig 180° about Z when its LEFT side is not at +X (Decision 17: canonical faces −Y).
+
+    Retargeting copies world-space motion, so a source facing +Y would play its clips backwards on the
+    canonical skeleton. The turn is carried by a static parent empty, because clips may animate the
+    armature object itself.
+    """
+    left = next((b for b in src.data.bones if bone_map.canonical(b.name) in ("HUMERUS_L", "FEMUR_L")), None)
+    right = next((b for b in src.data.bones if bone_map.canonical(b.name) in ("HUMERUS_R", "FEMUR_R")), None)
+    if left is None or right is None:
+        return src
+    lx = (src.matrix_world @ left.head_local).x
+    rx = (src.matrix_world @ right.head_local).x
+    src["ce_turned_180"] = lx < rx
+    if lx >= rx:
+        return src
+    turn = bpy.data.objects.new(f"{src.name}_Facing", None)
+    for coll in src.users_collection:
+        coll.objects.link(turn)
+    turn["ce_role"] = "mocap_source"
+    turn.rotation_euler = (0.0, 0.0, math.pi)
+    src.parent = turn
+    src.matrix_parent_inverse = Matrix.Identity(4)
+    bpy.context.view_layer.update()
+    return src
 
 
 def _finish_animation_import(before, actions_before, action_filter: str):
