@@ -396,6 +396,7 @@ def main(reset: bool = True) -> int:
     def _write_synthetic_ue_glb(path: Path) -> Path:
         """Unreal-mannequin-named rig (Quaternius UAL style, metres) with two clips, exported to .glb."""
         import math as _math
+
         from mathutils import Quaternion as _Quat
         from mathutils import Vector as _Vec
         before = set(bpy.data.objects)
