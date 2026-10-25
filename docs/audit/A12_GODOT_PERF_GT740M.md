@@ -1,6 +1,6 @@
 # A12 — Godot hardware benchmark on the GT 740M (RIG-GAME-001 step 4)
 
-**Date:** 2026-10-25 · **Status:** MEASURED (3 runs) · face subset = PROPOSAL awaiting owner approval
+**Date:** 2026-10-25 · **Status:** MEASURED (3 runs) · face subset APPROVED by the owner (20 shapes)
 
 ## Machine and method
 

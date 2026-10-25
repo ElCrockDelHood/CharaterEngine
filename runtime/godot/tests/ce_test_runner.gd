@@ -11,6 +11,7 @@
 ##   - CEShenmueCombat replays every reference fight identically to the Python simulation (incl. weapons)
 ##   - weapons table complete; weapon placeholder mounts on the grip bone and follows it when posed
 ##   - CEArena builds two characters + controllers, autoplay lands hits and creates wound markers
+##   - face: 20 game shapes only (52 stay in Blender), jaw / eye rotations equal to Python, eyes aim with the neck turned
 ##   - CE-GAME-v1 game GLB: contract, canonical bones at their anatomical positions, markers / weapon on the
 ##     carrying game bone, and the arena fight identical to the canonical skeleton
 ##   - InputMap actions registered; planned gameplay styles are listed but disabled
@@ -78,6 +79,13 @@ func finish() -> void:
 
 class Runner extends Node:
 	var owner_tree: SceneTree
+
+	## Quaternion distance against a Python (w, x, y, z) canonical quaternion (q and -q are the same rotation).
+	static func _quat_err(q: Quaternion, ref: Array) -> float:
+		var r := Quaternion(float(ref[1]), float(ref[3]), -float(ref[2]), float(ref[0]))   # canonical -> Y-up axes
+		var a := Vector4(q.x, q.y, q.z, q.w)
+		var b := Vector4(r.x, r.y, r.z, r.w)
+		return minf((a - b).length(), (a + b).length())
 
 	func _ready() -> void:
 		await get_tree().process_frame   # root is still setting up children during _initialize
@@ -252,6 +260,45 @@ class Runner extends Node:
 					"moved %.3f m, grip offset %.4f -> %.4f m" % [g_mesh1.distance_to(g_mesh0), g_off0, off1]])
 		gch.queue_free()
 		cch.queue_free()
+
+		# ---- face (RIG-GAME-001 step 5) -----------------------------------------------------
+		var fch := CECharacter.new()
+		fch.glb_path = game_tpose
+		fch.breathing_enabled = false
+		tree_root.add_child(fch)
+		runner.check("face contract: only the 20 in-game ARKit shapes reach Godot, jaw and eyes", func():
+			var game: Array = fch.face.get("game_shapes", [])
+			var cinema_only := fch.face.has("arkit_52")      # the 52-shape set stays in Blender (owner rule)
+			return [fch.has_face() and game.size() == 20 and game.has("jawOpen") and not cinema_only,
+					"%d game shapes, cinematic set exported: %s, limits jaw %s eye yaw %s pitch %s deg" % [game.size(), cinema_only,
+					fch.face.get("jaw_open_max_deg"), fch.face.get("eye_yaw_max_deg"), fch.face.get("eye_pitch_max_deg")]])
+		runner.check("face: jaw and eye rotations identical to Python", func():
+			var worst := 0.0
+			var ref: Dictionary = fch.face["reference"]
+			for k in ref["jaw"]:
+				worst = maxf(worst, _quat_err(fch.set_jaw_open(float(k)), ref["jaw"][k]))
+			for case in ref["eyes"]:
+				var tgt: Array = ref["eyes"][case]["target"]
+				var got := fch.look_at_point(fch.skeleton.global_transform * Vector3(tgt[0], tgt[2], -tgt[1]))
+				for eye in got:
+					worst = maxf(worst, _quat_err(got[eye], ref["eyes"][case][eye]))
+			fch.set_jaw_open(0.0)
+			var cases := (ref["jaw"] as Dictionary).size() + (ref["eyes"] as Dictionary).size() * 2
+			return [worst < 1e-4, "%d cases (jaw + both eyes), worst quaternion difference %s" % [cases, str(worst)]])
+		var neck := fch.skeleton.find_bone("neck_01")
+		fch.skeleton.set_bone_pose_rotation(neck, Quaternion(Vector3.UP, deg_to_rad(30.0)))
+		var target := fch.bone_global_position("head") + Vector3(0.3, 0.1, 1.0)   # Godot +Z = canonical forward
+		fch.look_at_point(target)
+		await t.process_frame
+		runner.check("face: eyes keep aiming at a target while the neck is turned", func():
+			var worst := 0.0
+			for eye in ["eye_l", "eye_r"]:
+				var idx := fch.skeleton.find_bone(eye)
+				var pose := fch.skeleton.global_transform * fch.skeleton.get_bone_global_pose(idx)
+				var aim: Vector3 = (pose.basis * (fch._face_axes[1] as Vector3)).normalized()
+				worst = maxf(worst, rad_to_deg(aim.angle_to((target - pose.origin).normalized())))
+			return [worst < 0.5, "neck 30 deg, worst aim error %.3f deg" % worst])
+		fch.queue_free()
 
 		# ---- combat port vs Python reference ------------------------------------
 		for sc in data.reference_scenarios():

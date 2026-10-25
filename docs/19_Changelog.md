@@ -2,6 +2,17 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-25 · Face contract, jaw and eye look-at (RIG-GAME-001 step 5)
+
+### Added
+- Domain `rigging/face.py`: ARKit-52 names (Blender), owner-approved 20 game shapes, jaw open and clamped eye
+  look-at (ASSUMED limits). Game GLB `face` block (game data only); Godot `CECharacter.set_jaw_open()` /
+  `look_at_point()` with parity checks against Python. Tests `test_face.py`.
+
+### Decisions
+- Owner rule recorded in Decision 51: cinematography authored and polished in Blender; only finished assets go
+  to Godot.
+
 ## [Unreleased] — 2026-10-25 · GT 740M benchmark (RIG-GAME-001 step 4)
 
 ### Added

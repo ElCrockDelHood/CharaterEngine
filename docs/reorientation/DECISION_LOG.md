@@ -854,6 +854,11 @@ driven layer (COPY_TRANSFORMS from `MCH-anat_*` helpers), bones hidden but objec
 ASSUMED.
 Step 4 (2026-10-25): GT 740M benchmark `docs/audit/A12_GODOT_PERF_GT740M.md` — game rig −14 % / −21 % frame
 time at 4 / 8 characters; in-game face subset of ≤ 20 ARKit shapes PROPOSED (owner decision pending).
+Step 5 (2026-10-25): owner approved the 20 game face shapes (A12 proposal); `domain/rigging/face.py` fixes the
+ARKit-52 (Blender) and 20-shape (game) name contracts, jaw and eye look-at; Godot parity with Python.
+Owner rule: cinematography is authored and polished in Blender first; only finished, validated assets go to
+Godot (game rig, 20 game shapes, baked clips); cinematic-only data (52 shapes, control rigs, canonical driven
+layer) never ships to Godot.
 
 **Date**: 2026-10-25 · **Status**: FINAL (step 1)
 

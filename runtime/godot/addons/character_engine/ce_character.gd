@@ -33,6 +33,8 @@ var wound_markers: Array[Node3D] = []
 var weapon_attachment: BoneAttachment3D = null
 var game_map: Dictionary = {}           # canonical bone -> game bone (empty for the canonical GLB)
 var _canon_points: Dictionary = {}      # canonical bone -> [head, tail] in skeleton space (game GLB only)
+var face: Dictionary = {}               # face contract from the game GLB (ARKit names, limits, axes)
+var _face_axes: Array = []              # [lateral, forward, up] in skeleton space (Y-up)
 var load_error: String = ""
 var _scene_root: Node
 
@@ -76,6 +78,8 @@ func load_glb(path: String) -> Error:
 func _read_rig_extras(state: GLTFState) -> void:
 	game_map.clear()
 	_canon_points.clear()
+	face.clear()
+	_face_axes.clear()
 	var extras: Dictionary = (state.json.get("asset", {}) as Dictionary).get("extras", {})
 	game_map = (extras.get("canonical_to_game", {}) as Dictionary).duplicate()
 	var pts: Dictionary = extras.get("canonical_points", {})
@@ -84,6 +88,11 @@ func _read_rig_extras(state: GLTFState) -> void:
 		var t: Array = pts[bone][1]
 		# canonical Z-up (x, y, z) -> glTF / Godot Y-up (x, z, -y)
 		_canon_points[bone] = [Vector3(h[0], h[2], -h[1]), Vector3(t[0], t[2], -t[1])]
+	face = (extras.get("face", {}) as Dictionary).duplicate(true)
+	if face.has("axes"):
+		for k in ["lateral", "forward", "up"]:
+			var a: Array = face["axes"][k]
+			_face_axes.append(Vector3(a[0], a[2], -a[1]).normalized())
 
 
 func is_game_rig() -> bool:
@@ -259,3 +268,44 @@ func unequip_weapon() -> void:
 	if weapon_attachment != null:
 		weapon_attachment.queue_free()
 		weapon_attachment = null
+
+
+## True when the loaded GLB carries the face contract (game rig): jaw + eyes + ARKit shape names.
+func has_face() -> bool:
+	return not _face_axes.is_empty() and skeleton != null and skeleton.find_bone("jaw") >= 0
+
+
+## Open the jaw: `amount` 0..1 of the contract's jaw_open_max_deg about the head's lateral axis (chin down).
+## Game GLB rests are translation-only, so the rotation is expressed in the head's (parent) frame directly.
+func set_jaw_open(amount: float) -> Quaternion:
+	if not has_face():
+		return Quaternion.IDENTITY
+	var q := Quaternion(_face_axes[0], deg_to_rad(clampf(amount, 0.0, 1.0) * float(face["jaw_open_max_deg"])))
+	skeleton.set_bone_pose_rotation(skeleton.find_bone("jaw"), q)
+	return q
+
+
+## Aim both eyes at `target` (global position) with the contract's clamped yaw / pitch. The target is first
+## brought into the head's rest frame, so the eyes keep aiming while the head and neck are posed.
+## Returns {eye bone: Quaternion} (local rotation set on the bone).
+func look_at_point(target: Vector3) -> Dictionary:
+	var out := {}
+	if not has_face():
+		return out
+	var lateral: Vector3 = _face_axes[0]
+	var forward: Vector3 = _face_axes[1]
+	var up: Vector3 = _face_axes[2]
+	var yaw_max := deg_to_rad(float(face["eye_yaw_max_deg"]))
+	var pitch_max := deg_to_rad(float(face["eye_pitch_max_deg"]))
+	var head_idx := skeleton.find_bone("head")
+	var head_delta := skeleton.get_bone_global_pose(head_idx) * skeleton.get_bone_global_rest(head_idx).affine_inverse()
+	var local_target := head_delta.affine_inverse() * (skeleton.global_transform.affine_inverse() * target)
+	for eye in face.get("eye_bones", []):
+		var idx := skeleton.find_bone(eye)
+		var d := (local_target - skeleton.get_bone_global_rest(idx).origin).normalized()
+		var yaw := clampf(atan2(d.dot(lateral), d.dot(forward)), -yaw_max, yaw_max)
+		var pitch := clampf(atan2(d.dot(up), Vector2(d.dot(lateral), d.dot(forward)).length()), -pitch_max, pitch_max)
+		var q := Quaternion(up, yaw) * Quaternion(forward.cross(up).normalized(), pitch)
+		skeleton.set_bone_pose_rotation(idx, q)
+		out[eye] = q
+	return out

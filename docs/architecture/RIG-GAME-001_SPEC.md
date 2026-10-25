@@ -1,6 +1,6 @@
 # RIG-GAME-001 — Game rig, hands and face (SPECIFICATION, awaiting owner approval)
 
-**Date:** 2026-10-25 · **Status:** APPROVED by the owner (Decision 51); steps 1–4 done, steps 5–6 pending ·
+**Date:** 2026-10-25 · **Status:** APPROVED by the owner (Decision 51); steps 1–5 done, step 6 pending ·
 **Context:** the owner chose the Souls-like as the
 first genre and asked for an industry-standard rig, sized for the GT 740M, with emphasis on hands and face.
 
@@ -14,6 +14,11 @@ ossicles, 26 vertebrae, 25 rib/sternum bones). That is correct anatomy, but as a
 - heavy for authoring and runtime on the target PC (CPU pose updates, viewport, skinning weights spread over
   bones that never move independently);
 - missing what games need: twist bones, an explicit face rig (eyes, blendshapes) and hand pose controls.
+
+**Production boundary (owner rule, 2026-10-25):** all cinematography is authored and polished in Blender first;
+only finished, validated assets go to Godot (so meshes are clean and nothing crashes). Godot consumes the game
+rig, the 20 game face shapes and baked clips — never cinematic-only data (the 52-shape set, control rigs, the
+canonical driven layer stay in Blender).
 
 ## 2. Proposal: two levels, the canonical skeleton stays the truth
 
@@ -91,7 +96,12 @@ UE5 Mannequin has ~89 bones; we drop extra twists and the index/middle metacarpa
    −21 % frame time at 4 / 8 characters vs canonical; face 1600 verts: 20 shapes ≈ 0.24 ms, 52 ≈ 0.91 ms per face.
    Proposal (owner decision pending): ≤ 20 ARKit shapes in game, 52 in Blender cinematics.
    Hardware test: morph targets / bone count on the GT 740M (compatibility test before adopting).
-5. Face: jaw + eyes now; ARKit-named shapes when the head mesh exists.
+5. **DONE** — `domain/rigging/face.py`: `ARKIT_52` (Blender contract), `GAME_FACE_SHAPES` (owner-approved 20),
+   jaw open and clamped eye look-at (limits ASSUMED: jaw 25°, eye yaw ±35°, pitch ±25°). The game GLB carries only
+   the runtime face block (20 names, limits, axes, Python reference rotations); Godot `CECharacter.set_jaw_open()` /
+   `look_at_point()` match Python (worst quaternion difference 3e-8) and keep aiming with the neck turned. Shape
+   geometry waits for the head mesh.
+   Face: jaw + eyes now; ARKit-named shapes when the head mesh exists.
 6. Bone maps (Mixamo, quaternius_ual) retargeted to L1 (near 1:1).
 
 ## 7. Owner decisions requested

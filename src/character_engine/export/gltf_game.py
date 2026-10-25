@@ -5,7 +5,8 @@ joints as translation-only nodes at the bone heads, inverse bind matrices from t
 octahedral display mesh skinned 100 % per joint. Node ``extras`` carry the canonical Z-up head / tail, the
 canonical bones the game bone covers and its provenance; the asset ``extras`` carry the full canonical → game map
 and the canonical head / tail of every canonical bone in the exported pose (``canonical_points``, Z-up), so a
-runtime can place anatomical points (wound markers, the hand-grip axis) on the game bone that carries them.
+runtime can place anatomical points (wound markers, the hand-grip axis) on the game bone that carries them,
+plus the face contract (``face``: ARKit names, game subset, jaw / eye limits and Python reference rotations).
 Pure Python, stdlib only.
 """
 
@@ -15,6 +16,7 @@ import json
 from pathlib import Path
 from typing import Dict, List, Optional
 
+from ..domain.rigging.face import face_contract
 from ..domain.rigging.game_rig import GAME_BONES, RIG_ID, canonical_to_game, game_bone_points
 from ..domain.rigging.sockets import _point
 from .gltf import (
@@ -114,6 +116,7 @@ def build_game_document(points: Dict[str, tuple], options: Optional[GltfExportOp
     }
     if not meshes:
         del document["meshes"]
+    document["asset"]["extras"]["face"] = face_contract(points)
     if canonical_bones is not None:
         document["asset"]["extras"]["canonical_points"] = {
             b["canonical_name"]: [[_clean(c) for c in _point(b["head"])], [_clean(c) for c in _point(b["tail"])]]

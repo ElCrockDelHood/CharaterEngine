@@ -95,6 +95,9 @@ Game rig (RIG-GAME-001, Decision 51): `CECharacter` and `CEArena` default to `as
 `equip_weapon()` place a canonical point on the game bone that carries it (RIB_08_L → `spine_03`, METACARPAL_3_R
 → `hand_r`). `ce_skeleton_validator.gd` checks the game contract when the GLB says `rig_id` CE-GAME-v1. The
 breathing modifier only acts on the canonical GLB (pending on the game rig).
+Face (game GLB): `set_jaw_open(0..1)` and `look_at_point(global_target)` drive `jaw` / `eye_l` / `eye_r` from the
+GLB's `face` block (20 ARKit game shape names, limits, Python reference rotations). Only finished game assets reach
+Godot: the 52-shape cinematic set and all cinematography stay in Blender (owner rule, RIG-GAME-001).
 
 Hardware benchmark (windowed, needs the GPU): `python scripts/godot_perf.py` → `builds/tests/godot_perf.json`,
 canonical vs game rig and face blend shapes; results on the GT 740M in `docs/audit/A12_GODOT_PERF_GT740M.md`.
