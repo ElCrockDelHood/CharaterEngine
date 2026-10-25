@@ -7,6 +7,24 @@
 
 ---
 
+> **Current status (2026-10-25).** This document is the 2026-09-02 post-reorientation snapshot and is
+> kept as history; it is **not** rewritten. Where it disagrees with the items below, the items below win.
+>
+> - **Backend C1–C6 implemented and tested**: configuration (C1), database foundation (C2), users (C3),
+>   accounts / identities (C4), Argon2id authentication with sessions (C5), RBAC authorization (C6).
+>   Code in `backend/`, tests in `tests/backend/` (261 tests). Evidence: `docs/reorientation/PHASE_C_EVIDENCE.md`,
+>   `docs/audit/C05_*`, `docs/audit/C5_*`, `docs/audit/C6_*`.
+> - **Anatomy data**: base stature 1.80 m (A07, Decision 15), osteometry drives mesh extents (A08, Decision 16),
+>   left is +X with −Y forward (A09 mirror, Decision 33 / D-13), hand layout rebuilt (A10, Decision 35), radius
+>   lateral to ulna (A11, Decision 36). The canonical data is fingerprinted (Decision 52).
+> - **Math contracts** D-01 … D-14 (Decisions 21–34); **runtimes**: Godot 4 is the primary gameplay runtime,
+>   UPBGE optional (Decision 40); Blender is the production line (Decisions 42, 45).
+> - Full suite: ~850 pytest tests (`python scripts/test.py`).
+> - Source of truth for what changed since this snapshot: `docs/audit/A07`–`A11` and Decisions 15–48 (and later)
+>   in `docs/reorientation/DECISION_LOG.md`.
+
+---
+
 ## 1. DOMAIN LAYER
 
 ### 1.1 Anatomy Domain (WELL_IMPLEMENTED)

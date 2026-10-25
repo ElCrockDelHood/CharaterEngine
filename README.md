@@ -2,7 +2,7 @@
 
 Engine-agnostic canonical anatomy system. The core is a **206-bone human skeleton** with
 provenance-tracked reference data, modelled in pure Python and exported to neutral formats
-(JSON, glTF 2.0) so that any runtime — Godot 4, UPBGE/Blender, or others — can consume it
+(JSON, glTF 2.0) so that any runtime — Godot 4 (primary gameplay runtime, Decision 40), UPBGE/Blender, or others — can consume it
 without depending on a particular DCC tool or engine.
 
 The repository also contains the backend foundation (FastAPI + SQLAlchemy 2): configuration,
@@ -19,7 +19,7 @@ canonical JSON ──► domain (pure Python) ──► glTF 2.0 (.glb) ──�
 ```bash
 git clone <repo> && cd CharaterEngine
 python scripts/bootstrap.py            # venv outside the repo + `pip install -e .[backend,dev,schema]`
-python scripts/test.py                 # 566 tests
+python scripts/test.py                 # ~850 tests
 python scripts/lint.py                 # ruff + architecture guard
 python scripts/export_gltf.py          # builds/gltf/human_adult_206.glb
 ```
@@ -48,8 +48,11 @@ for the runtime validators.
 
 - **Skeleton**: 206 anatomical bones + `ROOT_SKELETON` + `CRANIUM` containers = 208 nodes,
   unique canonical names, acyclic hierarchy, single root.
-- **Coordinate system**: Z-up, right-handed, -Y forward, metres, origin at the foot midline.
+- **Coordinate system**: Z-up, right-handed, -Y forward, metres, origin at the foot midline;
+  the body's left is **+X** (`*_L` at +X, `*_R` at −X, Decision 33 / D-13).
   Exporters convert at the boundary (glTF/Godot: `(x, y, z) → (x, z, -y)`).
+- **Fingerprint**: `tests/anatomy/test_contract_fingerprint.py` pins the canonical data files;
+  changing them needs the owner's OK and a `DECISION_LOG.md` entry (Decision 52).
 - **Provenance**: every value is `PROVEN`, `DERIVED`, `ESTIMATE`, `ASSUMED`, `PLACEHOLDER`
   or `UNKNOWN`. Data is never invented; missing data is marked as missing.
 
@@ -82,10 +85,12 @@ python scripts/engine_tests.py            # Blender -> UPBGE -> Godot suites (ea
 
 ## Status
 
-Domain phases A02–A08 audited; canonical stature 1.80 m with Drillis & Contini (1966) joint
+Domain phases A02–A11 audited; canonical stature 1.80 m with Drillis & Contini (1966) joint
 heights (`docs/audit/A07_STATURE_RETARGET_180.md`); osteometry, T-pose, tissue/wound layers,
 character templates, IK/FK rig, mocap maps and Shenmue-style gameplay across Blender, UPBGE and
-Godot (`docs/audit/A08_OSTEOMETRY_TISSUES_TPOSE.md`). Backend phases C1–C6 implemented and tested.
+Godot (`docs/audit/A08_OSTEOMETRY_TISSUES_TPOSE.md`); left = +X (Decision 33), hand and forearm layout
+(A10, A11). Godot is the primary gameplay runtime, UPBGE optional (Decision 40); Blender is the production
+line (Decision 42). Backend phases C1–C6 implemented and tested.
 Open gaps (events, rewards, assets API, HTTP layer) are tracked in
 `docs/reorientation/OPEN_GAPS.md`. The production/runtime split and the roadmap (character
 editor, IK/FK rig, mocap, runtime IK, simulation extraction, animals) are in

@@ -2,7 +2,8 @@
 
 Character Engine is an **engine-agnostic canonical anatomy system**: a 206-bone human
 skeleton with provenance-tracked reference data, exported to neutral formats (JSON, glTF 2.0)
-and consumed by runtimes (Godot 4, UPBGE/Blender). It also ships a backend (FastAPI + SQLAlchemy)
+and consumed by runtimes (Godot 4 as the primary gameplay runtime, UPBGE optional — Decision 40;
+Blender is the production line — Decision 42). It also ships a backend (FastAPI + SQLAlchemy)
 for users, accounts, authentication and RBAC authorization.
 
 ## Layout
@@ -16,7 +17,7 @@ for users, accounts, authentication and RBAC authorization.
 | `src/character_engine/infrastructure/blender/` | Blender/UPBGE adapters | Only place `bpy` is allowed (plus `runtime/`) |
 | `runtime/godot/`, `runtime/upbge/` | Runtime validators (GDScript, bpy) | Consume `builds/gltf/*.glb`, never the domain |
 | `backend/` | Config, DB models, users, accounts, authentication, authorization | SQLAlchemy 2, Argon2id, tests on in-memory SQLite |
-| `tests/` | pytest (`anatomy`, `unit`, `integration`, `export`, `backend`) | ~570 tests, all must pass |
+| `tests/` | pytest (`anatomy`, `unit`, `integration`, `export`, `backend`) | ~850 tests, all must pass |
 | `docs/audit/`, `docs/reorientation/` | Forensic audits, contracts, decision log | Source of truth for phase closure |
 | `scripts/` | `bootstrap`, `test`, `lint`, `format`, `clean`, `export_gltf`, `acceptance_gate` | Cross-platform Python |
 
@@ -39,7 +40,8 @@ Environment: `CHARACTER_ENGINE_ENV` = `development | test | production`. Tests u
    (`PROVEN`, `DERIVED`, `ESTIMATE`, `ASSUMED`, `PLACEHOLDER`, `UNKNOWN`). If a source
    is missing, mark `UNKNOWN`/`PLACEHOLDER` — do not guess.
 2. **Canonical coordinate system:** Z-up, right-handed, -Y forward, metres, origin at
-   foot midline. Engines convert at the boundary (`export/gltf.py`: `(x, y, z) → (x, z, -y)`).
+   foot midline; the body's left is **+X** (`*_L` at +X, `*_R` at −X, Decision 33 / D-13).
+   Engines convert at the boundary (`export/gltf.py`: `(x, y, z) → (x, z, -y)`).
 3. **Domain purity:** `src/character_engine/domain/**` imports nothing from `bpy`,
    `backend`, or any engine. `scripts/lint.py` enforces this.
 4. **Skeleton contract:** 208 nodes = 206 anatomical bones + `ROOT_SKELETON` + `CRANIUM`
