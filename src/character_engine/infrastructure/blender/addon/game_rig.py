@@ -9,6 +9,9 @@
   cup. Changing a slider poses the hand through :func:`hand_pose_rotations` (domain), so Blender and Python
   produce the same fingers. Keyframes go on the bone rotations (*Hand pose* operator with *Insert keys*).
 * Pose library (*Hand pose*) and weapon grips (*Weapon grip*: the weapon picks its grip pose).
+* *Retarget to game rig*: import a mocap / animation file (BVH, FBX, glTF; or use the active source armature) and
+  bake it onto the game rig in FK through
+  a game bone map (Mixamo, CMU, Rokoko, Quaternius UAL, Rigify); the canonical layer follows.
 """
 
 from __future__ import annotations
@@ -18,6 +21,7 @@ from typing import Dict, Tuple
 import bpy
 from mathutils import Quaternion, Vector
 
+from character_engine.domain.animation import GAME_BONE_MAPS, get_game_bone_map
 from character_engine.domain.character import load_canonical_bones
 from character_engine.domain.gameplay import WEAPONS
 from character_engine.domain.rigging import (
@@ -39,6 +43,7 @@ HAND_PROPS = tuple(f"curl_{f}" for f in FINGERS) + ("spread", "opposition", "cup
 _POSE_ITEMS = [(n, n, "") for n in HAND_POSES]
 _WEAPON_ITEMS = [(w, WEAPONS[w].name, "") for w in WEAPONS]
 _SIDE_ITEMS = [("L", "Left", ""), ("R", "Right", "")]
+_MAP_ITEMS = [(m, GAME_BONE_MAPS[m].label, "") for m in GAME_BONE_MAPS]
 
 
 def game_armature_name(canonical_name: str) -> str:
@@ -174,6 +179,15 @@ def set_hand_pose(game_arm, side: str, pose: HandPose, insert_keys: bool = False
             game_arm.pose.bones[bone].keyframe_insert("rotation_quaternion", frame=frame, group=bone)
 
 
+def retarget_to_game_rig(context, src_arm, game_arm, map_id: str, **kwargs) -> Dict[str, int]:
+    """Bake ``src_arm``'s action onto the game rig through the game bone map ``map_id`` (FK: IK switches off)."""
+    for prop in GAME_CONTROL_RIG.properties:
+        game_arm[prop] = 0.0
+    stats = build.retarget_mocap(context, src_arm, game_arm, get_game_bone_map(map_id), **kwargs)
+    game_arm["ce_game_bone_map"] = map_id
+    return stats
+
+
 def _on_hand_change(self, context) -> None:
     if self.get("_ce_batch"):
         return
@@ -262,6 +276,38 @@ class CE_OT_weapon_grip(bpy.types.Operator):
         return {"FINISHED"}
 
 
+class CE_OT_retarget_game(bpy.types.Operator):
+    """Bake the active source armature's animation onto the game rig (FK) through a game bone map"""
+
+    bl_idname = "character_engine.retarget_game"
+    bl_label = "Retarget to game rig"
+    bl_options = {"REGISTER", "UNDO"}
+
+    map_id: bpy.props.EnumProperty(name="Bone map", items=_MAP_ITEMS)
+    filepath: bpy.props.StringProperty(name="File", subtype="FILE_PATH",
+                                       description="BVH / FBX / glTF to import; empty = use the active armature")
+    action_filter: bpy.props.StringProperty(name="Clip", description="Clip name filter for multi-clip files")
+
+    def execute(self, context):
+        from pathlib import Path
+
+        arm = _game_arm(context)
+        if arm is not None and self.filepath:
+            src = build.import_mocap(Path(bpy.path.abspath(self.filepath)), get_game_bone_map(self.map_id),
+                                     self.action_filter.strip())
+        else:
+            src = context.view_layer.objects.active
+        if arm is None or src is None or src.type != "ARMATURE" or src is arm or src.get("ce_driven_by"):
+            self.report({"ERROR"}, "build the game rig and make the source (mocap) armature active")
+            return {"CANCELLED"}
+        if not (src.animation_data and src.animation_data.action):
+            self.report({"ERROR"}, f"{src.name} has no animation")
+            return {"CANCELLED"}
+        stats = retarget_to_game_rig(context, src, arm, self.map_id)
+        self.report({"INFO"}, f"{self.map_id}: {stats['mapped_bones']} bones, {stats['frames']} frames -> {arm.name}")
+        return {"FINISHED"}
+
+
 class CE_PT_game_rig(bpy.types.Panel):
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
@@ -277,6 +323,7 @@ class CE_PT_game_rig(bpy.types.Panel):
             return
         for p in GAME_CONTROL_RIG.properties:
             col.prop(arm, f'["{p}"]', text=p)
+        col.operator_menu_enum(CE_OT_retarget_game.bl_idname, "map_id", text="Retarget active armature")
         for side in ("L", "R"):
             box = col.box()
             box.label(text=f"Hand {side}")
@@ -290,7 +337,8 @@ class CE_PT_game_rig(bpy.types.Panel):
             op.side = side
 
 
-CLASSES = (CEHandControls, CE_OT_build_game_rig, CE_OT_hand_pose, CE_OT_weapon_grip, CE_PT_game_rig)
+CLASSES = (CEHandControls, CE_OT_build_game_rig, CE_OT_hand_pose, CE_OT_weapon_grip, CE_OT_retarget_game,
+           CE_PT_game_rig)
 
 
 def register() -> None:

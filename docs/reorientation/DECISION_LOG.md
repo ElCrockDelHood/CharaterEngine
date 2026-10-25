@@ -859,6 +859,10 @@ ARKit-52 (Blender) and 20-shape (game) name contracts, jaw and eye look-at; Godo
 Owner rule: cinematography is authored and polished in Blender first; only finished, validated assets go to
 Godot (game rig, 20 game shapes, baked clips); cinematic-only data (52 shapes, control rigs, canonical driven
 layer) never ships to Godot.
+Step 6 (2026-10-25): game-rig bone maps (`domain/animation/game_bone_map.py`, Mixamo → UE5 correspondence) and
+*Retarget to game rig* in Blender; clips are baked in Blender and only baked results go to Godot. Finding for
+the owner: the canonical Mixamo-style maps are one joint off from UE5 practice on fingers 2–5, Head and ToeBase
+(27 joints); left unchanged pending a decision.
 
 **Date**: 2026-10-25 · **Status**: FINAL (step 1)
 

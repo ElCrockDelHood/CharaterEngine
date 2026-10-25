@@ -28,6 +28,7 @@ class BoneMap:
     scale_to_m: float = 1.0          # multiply source units to metres
     notes: str = ""
     aliases: Mapping[str, str] = field(default_factory=dict)  # alternate source spellings
+    target_rig: str = "canonical"     # "canonical" (206 bones) or "CE-GAME-v1" (game rig, game_bone_map.py)
 
     def canonical(self, source_joint: str) -> Optional[str]:
         name = source_joint

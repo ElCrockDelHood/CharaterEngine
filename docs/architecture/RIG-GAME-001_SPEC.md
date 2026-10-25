@@ -1,6 +1,6 @@
 # RIG-GAME-001 — Game rig, hands and face (SPECIFICATION, awaiting owner approval)
 
-**Date:** 2026-10-25 · **Status:** APPROVED by the owner (Decision 51); steps 1–5 done, step 6 pending ·
+**Date:** 2026-10-25 · **Status:** APPROVED by the owner (Decision 51); steps 1–6 done (shape geometry waits for the head mesh) ·
 **Context:** the owner chose the Souls-like as the
 first genre and asked for an industry-standard rig, sized for the GT 740M, with emphasis on hands and face.
 
@@ -102,7 +102,13 @@ UE5 Mannequin has ~89 bones; we drop extra twists and the index/middle metacarpa
    `look_at_point()` match Python (worst quaternion difference 3e-8) and keep aiming with the neck turned. Shape
    geometry waits for the head mesh.
    Face: jaw + eyes now; ARKit-named shapes when the head mesh exists.
-6. Bone maps (Mixamo, quaternius_ual) retargeted to L1 (near 1:1).
+6. **DONE** — `domain/animation/game_bone_map.py`: game-rig maps for Mixamo, CMU, Rokoko, Quaternius UAL and
+   Rigify (Mixamo → UE5 correspondence, `BoneMap.target_rig = CE-GAME-v1`); addon *Retarget to game rig* (FK bake,
+   canonical layer follows). Blender 3.6: BVH (Mixamo) and glTF (Quaternius UAL) clips move `upperarm_l` 0.364 m,
+   same as the canonical retarget. **Finding (owner decision pending):** the canonical Mixamo-style maps put
+   Index1/Middle1/Ring1/Pinky1 on the metacarpals, Head on CERVICAL_1 and ToeBase on a metatarsal (one joint off
+   from UE5 practice; 27 joints, `differences_from_canonical`). The canonical maps are unchanged.
+   Bone maps (Mixamo, quaternius_ual) retargeted to L1 (near 1:1).
 
 ## 7. Owner decisions requested
 

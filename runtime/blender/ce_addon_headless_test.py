@@ -1045,6 +1045,56 @@ def main(reset: bool = True) -> int:
         return f"short_blade -> grip_blade on R (index curl {got.curl_index:.2f}); rest pose clears L ({rot:.1e} rad)"
     check("game rig: weapon grip picks its pose; rest pose is identity", _game_weapon_grip)
 
+    def _game_retarget():
+        """Mixamo-named BVH (left arm swings down) baked onto the game rig through the game Mixamo map."""
+        if not hasattr(bpy.ops.import_anim, "bvh"):
+            import addon_utils
+            addon_utils.enable("io_anim_bvh", default_set=False)
+        arm, canon = game["arm"], game["canon"]
+        bvh = write_synthetic_bvh(Path(tempfile.gettempdir()) / "ce_synthetic_game.bvh")
+        assert bpy.ops.character_engine.retarget_game(map_id="mixamo", filepath=str(bvh)) == {"FINISHED"}
+        assert arm["ce_game_bone_map"] == "mixamo" and arm["arm_ik_L"] == 0.0
+        act = arm.animation_data.action
+        tails, gap = [], 0.0
+        for f in (int(act.frame_range[0]), int(act.frame_range[1])):
+            scene.frame_set(f)
+            ctx.view_layer.update()
+            t = arm.matrix_world @ arm.pose.bones["upperarm_l"].tail
+            tails.append(t.copy())
+            gap = max(gap, (canon.matrix_world @ canon.pose.bones["HUMERUS_L"].tail - t).length)
+        scene.frame_set(1)
+        moved = (tails[1] - tails[0]).length
+        assert moved > 0.1 and min(t.x for t in tails) > 0.0 and gap < 1e-4, (moved, tails, gap)
+        return (f"upperarm_l elbow moved {moved:.3f} m over the clip, stays on +X (Decision 17); canonical HUMERUS_L "
+                f"follows ({gap * 1000:.4f} mm)")
+    check("game rig: mocap retarget (Mixamo map) drives the game rig and the canonical layer", _game_retarget)
+
+    def _game_retarget_ue():
+        """UE-named glTF clip (Quaternius UAL naming) baked onto the game rig through the game Quaternius map."""
+        arm, canon = game["arm"], game["canon"]
+        # earlier checks leave actions; Blender's glTF exporter would bake every action whose bone names match
+        # the UE test rig into the file (and the clip filter could pick a static one)
+        for a in list(bpy.data.actions):
+            bpy.data.actions.remove(a)
+        glb = _write_synthetic_ue_glb(Path(tempfile.gettempdir()) / "ce_synthetic_ue_game.glb")
+        assert bpy.ops.character_engine.retarget_game(map_id="quaternius_ual", filepath=str(glb),
+                                                      action_filter="swing") == {"FINISHED"}
+        act = arm.animation_data.action
+        tails, gap = [], 0.0
+        for f in (int(act.frame_range[0]), int(act.frame_range[1])):
+            scene.frame_set(f)
+            ctx.view_layer.update()
+            t = arm.matrix_world @ arm.pose.bones["upperarm_l"].tail
+            tails.append(t.copy())
+            gap = max(gap, (canon.matrix_world @ canon.pose.bones["HUMERUS_L"].tail - t).length)
+        scene.frame_set(1)
+        moved = (tails[1] - tails[0]).length
+        assert arm["ce_game_bone_map"] == "quaternius_ual"
+        assert moved > 0.1 and min(t.x for t in tails) > 0.0 and gap < 1e-4, (moved, tails, gap)
+        return f"glTF swing clip: upperarm_l elbow moved {moved:.3f} m, stays on +X; canonical follows ({gap * 1000:.4f} mm)"
+    if not skipped(args, "mocap"):
+        check("game rig: glTF retarget (Quaternius UAL map) drives the game rig", _game_retarget_ue)
+
     if args.save:
         def _save():
             args.save.parent.mkdir(parents=True, exist_ok=True)

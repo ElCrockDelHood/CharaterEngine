@@ -2,6 +2,15 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-25 · Mocap / clip retarget onto the game rig (RIG-GAME-001 step 6)
+
+### Added
+- `domain/animation/game_bone_map.py`: game-rig bone maps (Mixamo, CMU, Rokoko, Quaternius UAL, Rigify) using the
+  Mixamo → UE5 correspondence; `BoneMap.target_rig`; `differences_from_canonical()` reports where the canonical
+  maps differ (27 joints: fingers 2–5, Head, ToeBase — finding, canonical maps unchanged).
+- Addon *Retarget to game rig* (FK bake, canonical layer follows); Blender suite checks for BVH and glTF clips.
+  Tests `test_game_bone_map.py`.
+
 ## [Unreleased] — 2026-10-25 · Face contract, jaw and eye look-at (RIG-GAME-001 step 5)
 
 ### Added
