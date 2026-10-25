@@ -105,9 +105,10 @@ UE5 Mannequin has ~89 bones; we drop extra twists and the index/middle metacarpa
 6. **DONE** — `domain/animation/game_bone_map.py`: game-rig maps for Mixamo, CMU, Rokoko, Quaternius UAL and
    Rigify (Mixamo → UE5 correspondence, `BoneMap.target_rig = CE-GAME-v1`); addon *Retarget to game rig* (FK bake,
    canonical layer follows). Blender 3.6: BVH (Mixamo) and glTF (Quaternius UAL) clips move `upperarm_l` 0.364 m,
-   same as the canonical retarget. **Finding (owner decision pending):** the canonical Mixamo-style maps put
-   Index1/Middle1/Ring1/Pinky1 on the metacarpals, Head on CERVICAL_1 and ToeBase on a metatarsal (one joint off
-   from UE5 practice; 27 joints, `differences_from_canonical`). The canonical maps are unchanged.
+   same as the canonical retarget. Finding resolved (owner: "corregir al estándar"): the canonical Mixamo-style
+   maps now put Index1..Pinky1 on the proximal phalanx (…3 on the distal, *4 end joints unmapped) and ToeBase /
+   Rigify `toe` on TOE_PHALANX_PROXIMAL_3 (ball). `Head` → CERVICAL_1 stays: its head is the skull base, the same
+   pivot as the game `head`; only the carrier differs (C1 rides on `neck_01`).
    Bone maps (Mixamo, quaternius_ual) retargeted to L1 (near 1:1).
 
 ## 7. Owner decisions requested

@@ -47,17 +47,10 @@ def test_quaternius_is_identity_on_game_names():
     assert all(src.lower() == dst for src, dst in m.source_to_canonical.items())
 
 
-def test_differences_from_canonical_maps_are_the_documented_pattern():
-    """Canonical Mixamo-style maps put Index1..Pinky1 on metacarpals, Head on CERVICAL_1, ToeBase on a metatarsal.
-
-    The game maps follow UE5 practice instead; the canonical maps are left unchanged (finding, owner decision).
-    """
+def test_canonical_maps_follow_the_same_correspondence():
+    """After the owner-approved correction only Head differs, by design (same pivot point, C1 rides on neck_01)."""
     for map_id in ("mixamo", "cmu_bvh", "rokoko", "quaternius_ual"):
         diff = differences_from_canonical(map_id)
-        assert len(diff) == 27, map_id
-        for src in diff:
-            name = src.lower()
-            assert "head" in name or "toe" in name or "ball" in name or any(
-                f in name for f in ("index", "middle", "ring", "pinky")), src
-            assert "thumb" not in name
-    assert set(differences_from_canonical("rigify_def")) == {"spine.006", "toe.L", "toe.R"}
+        assert set(diff) == {"Head"}, (map_id, diff)
+        assert diff["Head"] == ("neck_01", "head")
+    assert set(differences_from_canonical("rigify_def")) == {"spine.006"}

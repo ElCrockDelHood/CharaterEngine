@@ -2,6 +2,14 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-25 · Canonical bone maps corrected to the standard correspondence
+
+### Changed
+- `domain/animation/bone_map.py` (owner decision "corregir al estándar"): Mixamo / CMU / Rokoko / Quaternius
+  `*Index1..Pinky1` → proximal phalanx (were metacarpals), `*3` → distal, `*4` end joints unmapped; `ToeBase` and
+  Rigify `toe` → TOE_PHALANX_PROXIMAL_3 (ball joint; were METATARSAL_3). `Head` → CERVICAL_1 unchanged (skull
+  base). Mixamo coverage 63 → 55 (the 8 `*4` end joints). Canonical and game retarget checks unchanged (Blender 3.6).
+
 ## [Unreleased] — 2026-10-25 · Mocap / clip retarget onto the game rig (RIG-GAME-001 step 6)
 
 ### Added

@@ -9,9 +9,10 @@ The maps reuse :class:`~.bone_map.BoneMap` with ``target_rig = "CE-GAME-v1"``: `
 *game* bone names. Source metadata (prefix, axes, unit scale, aliases) is the same as the canonical maps.
 
 :func:`differences_from_canonical` lists the joints where the canonical map lands on a different game bone than
-this map (e.g. the canonical Mixamo map sends ``LeftHandIndex1`` to METACARPAL_2, which the game rig carries on
-``hand_l``, while UE5 practice is ``index_01_l``). They are reported, not changed: the canonical maps are a
-contract of their own.
+this map. Since the canonical maps were corrected to the same correspondence (fingers 2–5 on the proximal phalanx,
+ToeBase on the ball joint — owner, 2026-10-25) only ``Head`` remains, by design: the canonical target CERVICAL_1
+has its head at the skull base, the same point as the game ``head`` pivot, but the game rig carries C1 on
+``neck_01``.
 """
 
 from __future__ import annotations

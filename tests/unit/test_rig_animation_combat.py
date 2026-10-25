@@ -68,9 +68,13 @@ def test_mixamo_prefix_and_symmetry():
     bm = get_bone_map("mixamo")
     assert bm.canonical("mixamorig:LeftArm") == "HUMERUS_L"
     assert bm.canonical("RightArm") == "HUMERUS_R"
-    assert bm.canonical("mixamorig:LeftHandIndex4") == "PHALANX_DISTAL_2_L"
+    assert bm.canonical("mixamorig:LeftHandIndex1") == "PHALANX_PROXIMAL_2_L"   # knuckle, UE5 correspondence
+    assert bm.canonical("mixamorig:LeftHandIndex3") == "PHALANX_DISTAL_2_L"
+    assert bm.canonical("mixamorig:LeftHandIndex4") is None                     # end joint: no canonical head
+    assert bm.canonical("mixamorig:LeftHandThumb1") == "METACARPAL_1_L"
+    assert bm.canonical("mixamorig:RightToeBase") == "TOE_PHALANX_PROXIMAL_3_R"
     assert bm.canonical("Unknown") is None
-    assert bm.coverage() >= 60
+    assert bm.coverage() == 55          # 52 joints of the UE5 set + HeadTop_End + 2 Toe_End
     inv = invert(bm)
     assert inv["HUMERUS_L"] == "mixamorig:LeftArm"
 

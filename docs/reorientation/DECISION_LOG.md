@@ -863,6 +863,10 @@ Step 6 (2026-10-25): game-rig bone maps (`domain/animation/game_bone_map.py`, Mi
 *Retarget to game rig* in Blender; clips are baked in Blender and only baked results go to Godot. Finding for
 the owner: the canonical Mixamo-style maps are one joint off from UE5 practice on fingers 2–5, Head and ToeBase
 (27 joints); left unchanged pending a decision.
+Canonical bone maps corrected (owner decision 2026-10-25, "corregir al estándar"; recorded here, not as a new
+number, because the audio branch also uses 51): Mixamo-style `*Index1..Pinky1` → proximal phalanx (`*3` → distal,
+`*4` end joints unmapped), `ToeBase` / Rigify `toe` → TOE_PHALANX_PROXIMAL_3 (ball). `Head` → CERVICAL_1 kept:
+it is the skull-base joint, the same pivot as the game `head` (only the carrier differs by rig design).
 
 **Date**: 2026-10-25 · **Status**: FINAL (step 1)
 
