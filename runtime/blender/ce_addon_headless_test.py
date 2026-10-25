@@ -822,9 +822,70 @@ def main(reset: bool = True) -> int:
         assert abs((hi[1] - lo[1]) - 20.0 * 1.75 / 180.0) < 1e-6, "source Z (forward) must become canonical Y depth"
         return f"Y-up 180-unit box -> z [0, {hi[2]:.3f}] m, centred, scale {info['scale']:.5f}, {info['provenance']}"
 
+    def _normalize_rig():
+        # an "FBX-like" rig: centimetre-sized, object-level scale and location keyed in its clip
+        before = set(bpy.data.objects)
+        data = bpy.data.armatures.new("RigTest")
+        rig = bpy.data.objects.new("RigTest", data)
+        scene.collection.objects.link(rig)
+        ctx.view_layer.objects.active = rig
+        bpy.ops.object.mode_set(mode="EDIT")
+        try:
+            eb = data.edit_bones.new("body")
+            eb.head, eb.tail = (0.0, 0.0, 0.0), (0.0, 0.0, 1.0)
+        finally:
+            bpy.ops.object.mode_set(mode="OBJECT")
+        bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, 0.5))
+        body = ctx.active_object
+        body.scale = (0.4, 0.8, 1.0)
+        bpy.ops.object.transform_apply(scale=True)
+        body.parent = rig
+        body.vertex_groups.new(name="body").add(list(range(len(body.data.vertices))), 1.0, "REPLACE")
+        body.modifiers.new("Armature", "ARMATURE").object = rig
+        rig.scale = (100.0, 100.0, 100.0)
+        rig.animation_data_create()
+        rig.animation_data.action = bpy.data.actions.new("RigTest_Walk")
+        for fr, x in ((1, 0.0), (10, 300.0)):
+            rig.location = (x, 0.0, 0.0)
+            rig.keyframe_insert("location", frame=fr)
+            rig.keyframe_insert("scale", frame=fr)
+        scene.frame_set(1)
+        for o in ctx.selected_objects:
+            o.select_set(False)
+        body.select_set(True)
+        res = bpy.ops.character_engine.normalize_mesh(target_height_m=1.6, up="+Z", forward="-Y")
+        assert res == {"FINISHED"}, res
+
+        def box():
+            ctx.view_layer.update()
+            dg = ctx.evaluated_depsgraph_get()
+            ev = body.evaluated_get(dg)
+            me = ev.to_mesh()
+            pts = [body.matrix_world @ v.co for v in me.vertices]
+            ev.to_mesh_clear()
+            return [min(p[k] for p in pts) for k in range(3)], [max(p[k] for p in pts) for k in range(3)]
+        lo1, hi1 = box()
+        scene.frame_set(10)
+        lo10, hi10 = box()
+        scene.frame_set(1)
+        root = rig.parent
+        try:
+            assert root is not None and root.type == "EMPTY", "rig not parented to a normalization empty"
+            assert rig.animation_data.action.name == "RigTest_Walk"
+            assert abs(hi1[2] - lo1[2] - 1.6) < 1e-4 and abs(lo1[2]) < 1e-4, (lo1, hi1)
+            assert abs(hi10[2] - lo10[2] - 1.6) < 1e-4, "object-level animation broke the normalized size"
+            moved = lo10[0] - lo1[0]
+            assert moved > 0.1, f"clip root motion lost: {moved:.4f} m"
+        finally:
+            for o in set(bpy.data.objects) - before:
+                bpy.data.objects.remove(o, do_unlink=True)
+        return (f"rig 100x with keyed object scale/location -> {hi1[2] - lo1[2]:.3f} m at frame 1 and "
+                f"{hi10[2] - lo10[2]:.3f} m at frame 10, clip moves it {moved:.3f} m, animation intact")
+
     if not skipped(args, "dummy"):
         check("P1 block dummy: blocks 100 % weighted, collision capsules follow the bones, render", _block_dummy)
         check("P2 normalize mesh: Y-up import to canonical metres at target height", _normalize)
+        check("P2b normalize rig: parent empty keeps object-level clip animation", _normalize_rig)
 
     if args.save:
         def _save():

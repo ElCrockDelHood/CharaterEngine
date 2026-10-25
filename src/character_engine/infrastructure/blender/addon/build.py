@@ -554,6 +554,55 @@ def normalize_mesh(obj, target_height_m: float, up: str = "+Z", forward: str = "
     return info
 
 
+def rig_meshes(armature) -> List:
+    """Meshes deformed by or parented to ``armature``."""
+    return [o for o in bpy.data.objects if o.type == "MESH" and (
+        o.parent is armature or any(m.type == "ARMATURE" and m.object is armature for m in o.modifiers))]
+
+
+def normalize_rig(context, armature, target_height_m: float, up: str = "+Z", forward: str = "-Y"):
+    """Normalize a rigged import (armature + skinned meshes) without touching its animation.
+
+    Imported clips often animate the armature OBJECT itself (FBX: location, rotation, scale), so baking a
+    transform into it would be overwritten every frame. Instead the armature is parented to a static empty
+    that carries the normalization (canonical axes, target height in the rest pose, feet on z = 0, centred).
+    """
+    if armature.type != "ARMATURE":
+        raise TypeError(f"{armature.name} is not an armature")
+    if armature.parent is not None:
+        raise RuntimeError(f"{armature.name} already has a parent ({armature.parent.name}); normalize the top object")
+    meshes = rig_meshes(armature)
+    if not meshes:
+        raise RuntimeError(f"{armature.name} has no skinned or child meshes to measure")
+    old_pose = armature.data.pose_position
+    armature.data.pose_position = "REST"
+    try:
+        context.view_layer.update()
+        depsgraph = context.evaluated_depsgraph_get()
+        world = []
+        for m in meshes:
+            ev = m.evaluated_get(depsgraph)
+            me = ev.to_mesh()
+            world.extend(tuple(m.matrix_world @ v.co) for v in me.vertices)
+            ev.to_mesh_clear()
+    finally:
+        armature.data.pose_position = old_pose
+    n = normalization(world, target_height_m, up=up, forward=forward)
+    root = bpy.data.objects.new(f"{armature.name}_NormRoot", None)
+    for coll in armature.users_collection:
+        coll.objects.link(root)
+    armature.parent = root
+    armature.matrix_parent_inverse = Matrix.Identity(4)
+    root.matrix_world = Matrix([list(row) for row in n.matrix])
+    info = {"target_height_m": target_height_m, "source_height": round(n.source_height, 6), "scale": n.scale,
+            "up": up, "forward": forward, "provenance": n.provenance.value, "root": root.name}
+    for o in (root, armature):
+        o["ce_normalized"] = json.dumps(info)
+        o["ce_provenance"] = "ESTIMATE"
+    context.view_layer.update()
+    return root, info
+
+
 # --------------------------------------------------------------------------- rig -----------
 
 def _prop(obj, name: str, default: float) -> None:

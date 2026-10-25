@@ -427,7 +427,9 @@ _AXIS_ITEMS = [(a, a, "") for a in ("+X", "-X", "+Y", "-Y", "+Z", "-Z")]
 
 
 class CE_OT_normalize_mesh(bpy.types.Operator):
-    """Normalize the selected meshes: metres, Z-up, -Y forward, feet on the ground, scaled to a target height"""
+    """Normalize the selection: metres, Z-up, -Y forward, feet on the ground, scaled to a target height.
+    Rigs (an armature, or a mesh deformed by one) are scaled through a static parent empty so their
+    animation keeps working"""
 
     bl_idname = "character_engine.normalize_mesh"
     bl_label = "Normalize mesh scale"
@@ -438,14 +440,27 @@ class CE_OT_normalize_mesh(bpy.types.Operator):
     forward: bpy.props.EnumProperty(name="Source forward", items=_AXIS_ITEMS, default="-Y")
 
     def execute(self, context):
-        meshes = [o for o in context.selected_objects if o.type == "MESH"]
-        if not meshes:
-            self.report({"ERROR"}, "Select at least one mesh")
+        rigs, meshes = [], []
+        for o in context.selected_objects:
+            owner = o if o.type == "ARMATURE" else next(
+                (m.object for m in getattr(o, "modifiers", []) if m.type == "ARMATURE" and m.object), None)
+            if owner is None and o.type == "MESH" and o.parent and o.parent.type == "ARMATURE":
+                owner = o.parent
+            if owner is not None:
+                if owner not in rigs:
+                    rigs.append(owner)
+            elif o.type == "MESH":
+                meshes.append(o)
+        if not rigs and not meshes:
+            self.report({"ERROR"}, "Select at least one mesh or armature")
             return {"CANCELLED"}
         try:
+            for arm in rigs:
+                build.normalize_rig(context, arm, self.target_height_m, self.up, self.forward)
             for obj in meshes:
                 build.normalize_mesh(obj, self.target_height_m, self.up, self.forward)
-            self.report({"INFO"}, f"normalized {len(meshes)} mesh(es) to {self.target_height_m:.3f} m (ESTIMATE)")
+            self.report({"INFO"}, f"normalized {len(rigs)} rig(s) and {len(meshes)} mesh(es) to "
+                                  f"{self.target_height_m:.3f} m (ESTIMATE)")
             return {"FINISHED"}
         except Exception as exc:  # noqa: BLE001
             return _report_exc(self, exc)
