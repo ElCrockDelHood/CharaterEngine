@@ -177,6 +177,34 @@ Wound generated at 1.2 m (`logs/20261025T043634Z_fight_mockup.log`, renders `bui
 5. A cited injury-severity scale for incisions (e.g. an AIS-type classification) to replace the current severity
    rules.
 
+### 3.5 Reaction library v1 (owner choice 2026-10-28, card "Biblioteca de reacciones")
+
+`runtime/blender/ce_reaction_library.py` runs 7 attack clips × 2 defender stances × 3 spacings and scans every
+frame of each attack. The attacks are Sword_Attack (UAL1) and Sword_Regular_A/B/C, Sword_Regular_Combo,
+Sword_Heavy_Combo and Sword_Dash (UAL2). The stances are Sword_Idle and Sword_Block; the spacings are 0.9, 1.2 and
+1.6 m (ESTIMATE). For each frame it records the signed sabre-to-capsule distance. The first contact goes to a wound
+(`blade_contact_to_wound` + `assess_wound`, layer 1) and then to a reaction clip. The rule is `reaction_for`,
+ASSUMED, a stand-in for baked L2/L3 manifestations.
+
+The output is a plain-JSON document Godot reads: `runtime/godot/addons/character_engine/data/reaction_library_d1.json`
+(42 entries). It is validated by `validate_library` (pytest) and by a check in the Godot runner. Each entry carries
+a SHA-256, and two consecutive runs produced identical hashes. Log: `logs/20261028T055543Z_reaction_library.log`.
+
+| Attack | Stance | Contact at | Frame | Bone / region | Depth | Severity | Reaction |
+|--------|--------|-----------|-------|---------------|-------|----------|----------|
+| Sword_Attack | Sword_Idle | 0.9 m | 22 | NASAL_R / head | 16.1 mm | 4 | Hit_Knockback |
+| Sword_Regular_Combo | Sword_Idle | 0.9 m | 37 | FEMUR_L / thigh | 30.6 mm | 3 (incapacitating) | Hit_Knockback |
+| Sword_Attack | Sword_Block | 0.9 m | 21 | STERNUM / thorax | 26.4 mm | 3 (incapacitating) | Hit_Knockback |
+
+No other combination reaches the defender. Closest misses: Sword_Heavy_Combo vs Sword_Idle 0.019 m at 0.9 m;
+Sword_Regular_Combo vs Sword_Block 0.011 m at 0.9 m. Nothing reaches at 1.2 m or 1.6 m.
+**Change since §3.3:** Sword_Attack at 1.2 m no longer touches the forearm. Commit `adfa557` (owner decision,
+note under Decision 51) moved the finger mapping from the metacarpals to the proximal phalanges. The sabre hangs on
+METACARPAL_3_R, so its path changed. §3.3–§3.4 describe the previous mapping.
+Limitations: the defender does not react during the scan; a stance shorter than the attack holds its last pose;
+contact is measured against envelope capsules (ESTIMATE); the sabre is a PLACEHOLDER; energy is UNKNOWN; the four
+reaction clips (Death01, Hit_Knockback, Hit_Head, Hit_Chest) are CC0 Quaternius clips, not owner-authored.
+
 ## 4. What Mariano must provide or decide first
 
 1. Base mesh origin: artist-made (by you, from your drawings) or generated (MPFB2/other) — and licence policy

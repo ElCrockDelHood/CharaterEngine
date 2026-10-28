@@ -10,6 +10,7 @@
 ##   - CEBreathing modifier displaces the sternum over time
 ##   - CEShenmueCombat replays every reference fight identically to the Python simulation (incl. weapons)
 ##   - CESoulsCombat replays the 9 Souls-like reference scenarios identically to Python
+##   - the D1 reaction library JSON (generated offline in Blender) loads with a wound and a reaction per contact
 ##   - weapons table complete; weapon placeholder mounts on the grip bone and follows it when posed
 ##   - CEArena builds two characters + controllers, autoplay lands hits and creates wound markers
 ##   - face: 20 game shapes only (52 stay in Blender), jaw / eye rotations equal to Python, eyes aim with the neck turned
@@ -326,6 +327,27 @@ class Runner extends Node:
 				return [same, "%d hits, %d events, player HP %.2f st %.2f%s" % [got["hits"].size(), got["events"].size(),
 						got["fighters"]["player"]["health"], got["fighters"]["player"]["stamina"],
 						"" if same else "  diff: " + str(diff)]])
+
+		# ---- D1 reaction library (generated offline in Blender, read as plain JSON) -
+		runner.check("D1 reaction library: schema 1, every contact has a wound and a known reaction clip", func():
+			var path := "res://addons/character_engine/data/reaction_library_d1.json"
+			if not FileAccess.file_exists(path):
+				return [false, "missing " + path]
+			var lib = JSON.parse_string(FileAccess.get_file_as_string(path))
+			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 1:
+				return [false, "not a schema-1 document"]
+			var known := ["Death01", "Hit_Knockback", "Hit_Head", "Hit_Chest"]
+			var contacts := 0
+			var bad: Array = []
+			for e in lib["entries"]:
+				if (e["frames"] as Array).size() != (e["signed_distance_m"] as Array).size():
+					bad.append(e["id"])
+				if e["first_contact"] != null:
+					contacts += 1
+					if e["wound"] == null or not (e["reaction"]["clip"] in known):
+						bad.append(e["id"])
+			return [bad.is_empty() and lib["entries"].size() > 0, "%d entries, %d contacts%s" % [
+					lib["entries"].size(), contacts, "" if bad.is_empty() else "  bad: " + str(bad)]])
 
 		# ---- arena ---------------------------------------------------------------
 		CEFighterController.ensure_input_map()
