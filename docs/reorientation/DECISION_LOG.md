@@ -805,6 +805,28 @@ Tests: `test_hand_grip_axis_runs_through_the_fist_little_finger_to_index`; CINE-
 
 ---
 
+## 49. MATERIAL LAYERS: ONE CATALOGUE, PURE-PYTHON XPBD REFERENCE, CUT ENERGY ON LAYERED CAPSULES
+
+**Decision** (owner approval, 2026-10-25, thread "Diseñar física materialística y colisiones"): materials get one
+catalogue per layer (`domain/materials/catalog.py`: skin, fat, muscle, tendon, bone, wool, steel) with a mechanical
+face (density, modulus, friction, cut energy per area, XPBD compliances) and an optical face named after OpenPBR
+Surface parameters; renderers map the optical face at the boundary. A block-dummy capsule becomes a **layered
+capsule** (`domain/materials/layered_capsule.py`): bone core = half the regional bone thickness, soft layers keep
+their relative thickness and are scaled to fill the envelope radius, garments / armour are outer shells with air
+gaps. The reference solver is a small **pure-Python XPBD** (`domain/physics/xpbd.py`, small-steps scheme); Blender /
+Godot solvers are compared against it. Blade depth comes from a **cut-energy model** (`domain/physics/cut.py`); the
+wound itself is still produced by the trauma entry points (`blade_contact_to_wound`, `blunt_impact_to_wound`,
+`assess_wound` with the fitted profile), so physics never duplicates trauma logic.
+Provenance: tissue mechanics **ESTIMATE** (order of magnitude, unsourced); bone chopping energy, steel blade-defeat
+energy, XPBD compliances **ASSUMED** tuning; optics **ASSUMED** look-dev. Nothing PROVEN.
+Constraint order is a permutation seeded by the sample seed: a structured Gauss-Seidel sweep over the closed sleeve
+lattice gained +4 % mechanical energy in 0.5 s (measured); the seeded shuffle does not gain energy.
+Tests: `tests/unit/test_materials_xpbd.py`. Evidence: `docs/audit/A09_MATERIAL_SAMPLE_1.md`.
+
+**Date**: 2026-10-25 · **Status**: FINAL (values reversible)
+
+---
+
 ## 50. WEAPONS: DOMAIN TABLE, HAND STRIKES ONLY, UNARMED IS THE IDENTITY
 
 **Decision** (owner approval, 2026-10-25, runtime plan step 1 "weapons"): weapons are a pure-Python domain table
@@ -910,11 +932,11 @@ Step 2 (2026-10-25, owner "sigamos adelante"): gameplay table `ce-gameplay/3` wi
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 48
-**Final Decisions**: 44 (+4 deferred)
+**Total Decisions**: 53
+**Final Decisions**: 49 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
-**Reversible Decisions**: 2 (base stature value; tissue/wound estimate values)
+**Reversible Decisions**: 3 (base stature value; tissue/wound estimate values; material values)
 **Critical Decisions**: 6 (Source of Truth, Architecture Direction, Backend Priority, Provenance System, Mesh Generation, Data Invention Rule)
 
 ### 14.2 Decision Impact

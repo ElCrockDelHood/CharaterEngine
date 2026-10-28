@@ -8,6 +8,10 @@ All notable changes to Character Engine. Dates are ISO 8601.
 - Gameplay table `ce-gameplay/3`: `souls_like_rules` (tuning, per-weapon moves with energy and impacts, 9 reference
   scenarios). Godot `ce_souls_combat.gd` port + `CEGameplayData.souls_rules()`; runner checks: all 9 scenarios
   identical to Python. Shenmue fights unchanged.
+- Material layers and physics (Decision 49): `domain/materials` (layer catalogue, layered capsule),
+  `domain/physics` (pure-Python XPBD reference, cut-energy model, forearm strike), `scripts/material_sample.py` +
+  `runtime/blender/ce_material_sample.py`; evidence `docs/audit/A09_MATERIAL_SAMPLE_1.md`. All values ESTIMATE /
+  ASSUMED / PLACEHOLDER. DECISION_LOG totals corrected to the real numbering (53 total, 49 final + 4 deferred).
 
 ## [Unreleased] — 2026-10-25 · Souls-like domain (STYLE-SOULS-001 step 1)
 
