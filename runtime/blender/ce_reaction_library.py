@@ -181,6 +181,45 @@ def reaction_playback(build, props, sources, scene, attacker, defender, first, h
     }
 
 
+def blade_line(fighter):
+    """(base, tip) of the fighter's PLACEHOLDER sabre centre line (box: 4 base + 4 tip vertices)."""
+    v = mock.world_verts(bpy.data.objects[f"{fighter.name}_Sabre_PLACEHOLDER"])
+    return sum(v[:4], Vector()) / 4, sum(v[4:], Vector()) / 4
+
+
+def blade_to_blade(attacker, defender):
+    """Distance between the two blade centre lines and the midpoint of the closest pair (domain geometry)."""
+    from character_engine.domain.gameplay.reaction_library import segment_distance
+    a0, a1 = blade_line(attacker)
+    d0, d1 = blade_line(defender)
+    return segment_distance(tuple(a0), tuple(a1), tuple(d0), tuple(d1))
+
+
+def parry_playback(props, sources, scene, attacker, defender, f_parry: int, attack_end: int, renders: Path,
+                   render_tag, distance: float, blend_in: int, defender_stance: str) -> dict:
+    """After a parry the attacker switches to the recoil clip (contact + 1, blend-in); the defender keeps its
+    stance. Re-measures the body distance to see whether the blade still reaches the body (ASSUMED reaction)."""
+    from character_engine.domain.gameplay.reaction_library import parry_reaction_for
+    clip, rule = parry_reaction_for(defender_stance)
+    name, length = layer_reaction(props, sources, attacker, clip, f_parry + 1, blend_in)
+    if render_tag:
+        scene.frame_set(f_parry)
+        render_sample(scene, renders / f"{render_tag}_f{f_parry:03d}_parry.png", distance)
+    frames, signed = [], []
+    for fr in range(f_parry, max(attack_end, f_parry + 1 + length) + 1):
+        scene.frame_set(fr)
+        bpy.context.view_layer.update()
+        gap, _, _ = mock.closest_sabre_contact(attacker, defender)
+        frames.append(fr)
+        signed.append(round(gap, 4))
+        if render_tag and fr == f_parry + RENDER_AFTER_FRAMES:
+            render_sample(scene, renders / f"{render_tag}_f{fr:03d}_recoil.png", distance)
+    return {"start_frame": f_parry, "attacker_clip": clip, "attacker_action": name, "rule": rule,
+            "starts_frame": f_parry + 1, "blend_in_frames": blend_in, "frames": frames, "signed_distance_m": signed,
+            "body_reached_after_parry": any(s <= 0.0 for s in signed[1:]), "provenance": "ASSUMED",
+            "note": "defender keeps its stance; the attacker recoils"}
+
+
 def wound_region(wound) -> str:
     from character_engine.domain.trauma import assess_wound
     return assess_wound(wound).region.value
@@ -217,6 +256,7 @@ def main() -> int:
     from character_engine.domain.gameplay.reaction_library import (
         SCHEMA_VERSION,
         entry_sha256,
+        first_event,
         reaction_for,
         summary,
         validate_library,
@@ -251,18 +291,33 @@ def main() -> int:
             rendered = False
             for d in distances:
                 attacker.location = (0.0, -d, 0.0)
-                frames, signed, first = [], [], None
+                frames, signed, blade, first, parry_at = [], [], [], None, {}
                 for fr in range(f0, f1 + 1):
                     scene.frame_set(fr)
                     bpy.context.view_layer.update()
                     gap, seg, point = mock.closest_sabre_contact(attacker, defender)
+                    bd, mid = blade_to_blade(attacker, defender)
                     frames.append(fr)
                     signed.append(round(gap, 4))
+                    blade.append(round(bd, 4))
                     if first is None and gap <= 0.0:
                         bone, _ = build.nearest_canonical_bone(defender, point, posed=True)
                         first = {"frame": fr, "segment": seg, "bone": bone, "penetration_m": round(-gap, 4),
                                  "entry_point": [round(c, 4) for c in point]}
                         hit_point = point
+                    parry_at.setdefault(fr, [round(c, 4) for c in mid])
+                event, event_frame = first_event(frames, signed, blade)
+                first_parry = parry_play = None
+                if event != "body_hit":
+                    first = None                         # a parry came first, or nothing happened
+                if event == "parry":
+                    first_parry = {"frame": event_frame, "blade_distance_m": blade[frames.index(event_frame)],
+                                   "point": parry_at[event_frame]}
+                    render_tag = None if rendered else f"{attack}__vs__{stance}__{d:.1f}m"
+                    parry_play = parry_playback(props, sources, scene, attacker, defender, event_frame, f1,
+                                                a.renders, render_tag, d, a.blend_in, stance)
+                    rendered = rendered or render_tag is not None
+                    play_back_stance(defender, attacker)
                 wound = reaction = playback = None
                 if first:
                     w = blade_contact_to_wound(first["bone"], first["penetration_m"], build.SABRE_PLACEHOLDER_WIDTH_M)
@@ -286,8 +341,10 @@ def main() -> int:
                 entry = {
                     "id": f"{attack}__vs__{stance}__{d:.1f}m", "attack_clip": attack, "attack_action": act_name,
                     "defender_stance": stance, "distance_m": d, "distance_provenance": "ESTIMATE",
-                    "frames": frames, "signed_distance_m": signed, "min_distance_m": min(signed),
-                    "first_contact": first, "wound": wound, "reaction": reaction, "reaction_playback": playback,
+                    "frames": frames, "signed_distance_m": signed, "blade_distance_m": blade,
+                    "min_distance_m": min(signed), "event": event,
+                    "first_contact": first, "first_parry": first_parry, "wound": wound, "reaction": reaction,
+                    "reaction_playback": playback, "parry_playback": parry_play,
                     "energy_j": None, "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed "
                                                       "from depth and width only",
                     "seed": None, "determinism": "no randomness: fixed clips, frames, spacing and geometry",
@@ -299,8 +356,11 @@ def main() -> int:
                 after = (f", after: separated {playback['separated_at_frame']}, max pen "
                          f"{playback['max_penetration_after_m']}, at end {playback['penetrating_at_end']}, wound-bone "
                          f"{playback['wound_bone_consistent_ratio']}") if playback else ""
-                print(f"[reactions] {entry['id']}: min {entry['min_distance_m']} m, "
-                      f"contact {first['frame'] if first else None}, "
+                if parry_play:
+                    after = (f", parry f{first_parry['frame']} blade {first_parry['blade_distance_m']} m, body reached "
+                             f"after: {parry_play['body_reached_after_parry']}")
+                print(f"[reactions] {entry['id']}: event {event}, min body {entry['min_distance_m']} m, "
+                      f"min blade {min(blade)} m, contact {first['frame'] if first else None}, "
                       f"reaction {reaction['clip'] if reaction else None}{after}, sha256 {entry['sha256'][:12]}",
                       flush=True)
 
@@ -312,13 +372,16 @@ def main() -> int:
         "bone_map": "quaternius_ual",
         "sources": [{"file": p.name, "sha256": file_sha256(p), "licence": "CC0 1.0 (Quaternius)"}
                     for p in a.lib],
-        "rule": "reaction_for (ASSUMED): lethal -> Death01; incapacitating/severe -> Hit_Knockback; "
-                "head/neck -> Hit_Head; else Hit_Chest",
+        "rule": "reaction_for (ASSUMED): lethal -> Death01; head/neck -> Hit_Head; incapacitating leg -> "
+                "Hit_Knockback (fall); severe -> Hit_Knockback; else Hit_Chest. Parry (blade-to-blade distance <= "
+                "PLACEHOLDER blade width before any body contact) -> attacker Hit_Chest recoil, no wound",
         "settings": {"blend_in_frames": a.blend_in, "attacker_reaction": not a.no_attacker_reaction,
                      "provenance": "ASSUMED"},
-        "limitations": ["defender reacts only after the first contact (no anticipation, no parry)",
+        "limitations": ["defender reacts only after the first contact (no anticipation)",
                         "reactions start the frame after contact with a fixed NLA blend-in (ASSUMED)",
-                        "blade-on-blade contact (parry) is not detected: every contact is a body hit",
+                        "parry = blade centre lines within the PLACEHOLDER blade width; the defender plays no "
+                        "parry clip and only the attacker recoils (no blocked-hit clip in the CC0 libraries)",
+                        "no dedicated fall/stagger clips: Hit_Knockback stands in for a fall, Hit_Chest for a stagger",
                         "attacker reaction is one recovery clip for every hit (ASSUMED)",
                         "stance shorter than the attack holds its last pose",
                         "contact measured against block-dummy capsules (envelope radii ESTIMATE)",

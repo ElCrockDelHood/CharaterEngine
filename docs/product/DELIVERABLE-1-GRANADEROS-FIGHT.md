@@ -256,6 +256,51 @@ Renders: `builds/renders/reactions/*_contact.png`, `*_reaction.png` (both fighte
 Limitations: no reaction before contact; one fixed blend length; one recovery clip for every hit; no parry
 detection; envelope capsules (ESTIMATE), PLACEHOLDER sabre, energy UNKNOWN.
 
+### 3.8 Parry detection and reaction variety — reaction library schema 4 (owner order 2026-10-28)
+
+(1) **Parry.** For every frame, the generator also measures the distance between the centre lines of the two
+PLACEHOLDER sabres (`blade_distance_m`, closest points between segments, `segment_distance`). If the blades come
+within the PLACEHOLDER blade width (`PARRY_CONTACT_M` = 0.035 m) before any body contact (a tie counts as a parry),
+the event is `parry` (`first_event`). In that case there is no wound and no defender reaction. The attacker plays a
+recoil from the frame after the parry: `Hit_Chest` with a 4-frame blend-in (`parry_reaction_for`, ASSUMED, because
+the CC0 libraries have no blocked-hit clip). The body distance is then measured again
+(`body_reached_after_parry`).
+
+(2) **Reaction rule** (`reaction_for`, ASSUMED, replaces "always knockback"):
+
+| Condition | Clip | Rule |
+|-----------|------|------|
+| lethal | Death01 | lethal |
+| head or neck | Hit_Head | head_or_neck |
+| incapacitating leg wound | Hit_Knockback (stands in for a fall) | leg_incapacitated_fall |
+| severity ≥ SEVERE | Hit_Knockback | severe |
+| otherwise | Hit_Chest (stands in for a stagger) | body_stagger |
+
+The schema is now 4 (`event`, `blade_distance_m`, `first_parry`, `parry_playback`). The validator, the tests and the
+Godot check are updated. Each entry's `event` must match the measured series, a parry carries no wound, and a body
+hit carries no parry.
+
+Final run twice: identical SHA-256 for all 42 entries (logs `20261028T224158Z`, `20261028T224620Z`). The 0.9 m smoke
+run is `20261028T223628Z`.
+
+| Entry | Event | Result |
+|-------|-------|--------|
+| Sword_Attack vs Idle 0.9 m | body hit f22, NASAL_R | **Hit_Head** (was Hit_Knockback) |
+| Regular_Combo vs Idle 0.9 m | body hit f37, FEMUR_L, incapacitating | **Hit_Knockback** (leg fall) |
+| Sword_Attack vs Block 0.9 m | body hit f21, STERNUM | **Hit_Chest** (was Hit_Knockback) |
+| Regular_C vs Block 0.9 m | **parry f5**, blades 0.0235 m apart | attacker recoils; body never reached (min 0.59 m after) |
+
+**Finding.** The only parry happens at frame 5, during the attacker's wind-up, not in the strike. The point is to
+the side and at head height (x −0.89, z 1.52). It is a geometric crossing with the Sword_Block guard rather than a
+deliberate parry: the detector is purely geometric and has no notion of intent or blade edge versus flat.
+Body-hit entries are unchanged from schema 3 apart from the reaction clip and the new fields.
+
+Renders: `builds/renders/reactions/Sword_Regular_C__vs__Sword_Block__0.9m_f005_parry.png`, `…_f013_recoil.png`.
+
+Limitations: no blocked-hit, fall or stagger clips (stand-ins listed above); the defender plays nothing on a parry;
+the threshold is the PLACEHOLDER blade width; no reaction before contact; envelope capsules (ESTIMATE); energy
+UNKNOWN.
+
 ## 4. What Mariano must provide or decide first
 
 1. Base mesh origin: artist-made (by you, from your drawings) or generated (MPFB2/other) — and licence policy

@@ -10,8 +10,8 @@
 ##   - CEBreathing modifier displaces the sternum over time
 ##   - CEShenmueCombat replays every reference fight identically to the Python simulation (incl. weapons)
 ##   - CESoulsCombat replays the 9 Souls-like reference scenarios identically to Python
-##   - the D1 reaction library JSON (generated offline in Blender, schema 3) loads with a wound, a reaction and its
-##     playback per contact (defender and attacker reacting from the frame after contact, NLA blend-in)
+##   - the D1 reaction library JSON (generated offline in Blender, schema 4) loads: body hits carry a wound, a reaction
+##     and its playback; parries carry the attacker recoil and no wound
 ##   - weapons table complete; weapon placeholder mounts on the grip bone and follows it when posed
 ##   - CEArena builds two characters + controllers, autoplay lands hits and creates wound markers
 ##   - face: 20 game shapes only (52 stay in Blender), jaw / eye rotations equal to Python, eyes aim with the neck turned
@@ -330,33 +330,34 @@ class Runner extends Node:
 						"" if same else "  diff: " + str(diff)]])
 
 		# ---- D1 reaction library (generated offline in Blender, read as plain JSON) -
-		runner.check("D1 reaction library: schema 3, every contact has a wound, a reaction, its playback and the attacker reaction", func():
+		runner.check("D1 reaction library: schema 4, body hits carry wound + reaction + playback, parries carry recoil and no wound", func():
 			var path := "res://addons/character_engine/data/reaction_library_d1.json"
 			if not FileAccess.file_exists(path):
 				return [false, "missing " + path]
 			var lib = JSON.parse_string(FileAccess.get_file_as_string(path))
-			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 3:
-				return [false, "not a schema-3 document"]
+			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 4:
+				return [false, "not a schema-4 document"]
 			var known := ["Death01", "Hit_Knockback", "Hit_Head", "Hit_Chest"]
-			var contacts := 0
+			var hits := 0
+			var parries := 0
 			var bad: Array = []
 			for e in lib["entries"]:
-				if (e["frames"] as Array).size() != (e["signed_distance_m"] as Array).size():
+				if (e["frames"] as Array).size() != (e["signed_distance_m"] as Array).size() 						or (e["frames"] as Array).size() != (e["blade_distance_m"] as Array).size():
 					bad.append(e["id"])
-				if e["first_contact"] != null:
-					contacts += 1
+				if e["event"] == "body_hit":
+					hits += 1
 					var pb = e["reaction_playback"]
-					if e["wound"] == null or not (e["reaction"]["clip"] in known) or pb == null \
-							or int(pb["start_frame"]) != int(e["first_contact"]["frame"]) \
-							or pb["clip"] != e["reaction"]["clip"] \
-							or (pb["frames"] as Array).size() != (pb["signed_distance_m"] as Array).size() \
-							or int(pb["blend_in_frames"]) < 0 \
-							or (pb["attacker_reaction"] != null and int(pb["attacker_reaction"]["starts_frame"]) != int(e["first_contact"]["frame"]) + 1):
+					if e["first_contact"] == null or e["wound"] == null or not (e["reaction"]["clip"] in known) or pb == null 							or e["parry_playback"] != null 							or int(pb["start_frame"]) != int(e["first_contact"]["frame"]) 							or pb["clip"] != e["reaction"]["clip"] 							or (pb["frames"] as Array).size() != (pb["signed_distance_m"] as Array).size() 							or int(pb["blend_in_frames"]) < 0 							or (pb["attacker_reaction"] != null and int(pb["attacker_reaction"]["starts_frame"]) != int(e["first_contact"]["frame"]) + 1):
 						bad.append(e["id"])
-				elif e["reaction_playback"] != null:
+				elif e["event"] == "parry":
+					parries += 1
+					var pp = e["parry_playback"]
+					if e["first_parry"] == null or pp == null or e["wound"] != null or e["reaction"] != null 							or e["reaction_playback"] != null 							or int(pp["start_frame"]) != int(e["first_parry"]["frame"]) 							or (pp["frames"] as Array).size() != (pp["signed_distance_m"] as Array).size():
+						bad.append(e["id"])
+				elif e["event"] != "none" or e["first_contact"] != null or e["first_parry"] != null 						or e["reaction_playback"] != null or e["parry_playback"] != null:
 					bad.append(e["id"])
-			return [bad.is_empty() and lib["entries"].size() > 0, "%d entries, %d contacts%s" % [
-					lib["entries"].size(), contacts, "" if bad.is_empty() else "  bad: " + str(bad)]])
+			return [bad.is_empty() and lib["entries"].size() > 0, "%d entries, %d body hits, %d parries%s" % [
+					lib["entries"].size(), hits, parries, "" if bad.is_empty() else "  bad: " + str(bad)]])
 
 		# ---- arena ---------------------------------------------------------------
 		CEFighterController.ensure_input_map()
