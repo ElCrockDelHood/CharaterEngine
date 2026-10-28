@@ -11,8 +11,9 @@ contact becomes a wound (domain ``blade_contact_to_wound`` + ``assess_wound``, l
 reaction clip (domain ``reaction_for``, ASSUMED). Writes a JSON document Godot reads, renders one Workbench
 sample per contacting (attack, stance) pair and logs one line per entry.
 
-Not physics: the defender plays its stance clip and does not react within the scan; a stance shorter than the
-attack holds its last pose. Spacing, envelope radii and the sabre are ESTIMATE / PLACEHOLDER; no energy.
+Not physics: the defender plays its stance clip up to the first contact and then its reaction clip (schema 2,
+pose switch without blending); it does not react to the attack before contact. A stance shorter than the attack
+holds its last pose. Spacing, envelope radii and the sabre are ESTIMATE / PLACEHOLDER; no energy.
 """
 
 from __future__ import annotations
@@ -73,6 +74,86 @@ def play(props, fighter, lib: Path, clip: str):
     assert bpy.ops.character_engine.import_mocap() == {"FINISHED"}, clip
     act = fighter.animation_data.action
     return int(act.frame_range[0]), int(act.frame_range[1]), act.name
+
+
+RENDER_AFTER_FRAMES = 8          # second sample render, this many frames into the reaction
+
+
+def render_sample(scene, path: Path, distance: float) -> None:
+    camera_for(distance)
+    # each clip import can switch the scene back to EEVEE (black without lights)
+    scene.render.engine = "BLENDER_WORKBENCH"
+    scene.display.shading.light, scene.display.shading.color_type = "STUDIO", "MATERIAL"
+    scene.render.filepath = str(path)
+    bpy.ops.render.render(write_still=True)
+
+
+def play_back_stance(defender) -> None:
+    """Undo the reaction set-up: drop the NLA tracks and put the stance action back."""
+    ad = defender.animation_data
+    for t in list(ad.nla_tracks):
+        ad.nla_tracks.remove(t)
+    ad.action = defender["ce_stance_action"] and bpy.data.actions[defender["ce_stance_action"]]
+    for o in list(bpy.data.objects):
+        if o.get("ce_role") == "wound":
+            bpy.data.objects.remove(o, do_unlink=True)
+
+
+def reaction_playback(build, props, sources, scene, attacker, defender, first, hit_point, wound, clip: str,
+                      attack_end: int, renders: Path, render_tag, distance: float) -> dict:
+    """Defender plays ``clip`` from the frame after the first contact; re-measure until both clips end.
+
+    NLA: the stance strip (held) underneath, the reaction strip on top starting at contact + 1, no blend-in
+    (pose switch, ASSUMED). The wound point is carried by the wounded bone from the contact pose.
+    """
+    f_contact = first["frame"]
+    stance_action = defender.animation_data.action
+    stance_action.use_fake_user = True
+    defender["ce_stance_action"] = stance_action.name
+    _, _, react_name = play(props, defender, sources[clip], clip)
+    react_action = defender.animation_data.action
+    react_action.use_fake_user = True
+    react_len = int(react_action.frame_range[1] - react_action.frame_range[0])
+    ad = defender.animation_data
+    ad.action = None
+    stance_strip = ad.nla_tracks.new().strips.new("stance", int(stance_action.frame_range[0]), stance_action)
+    stance_strip.extrapolation = "HOLD"
+    react_strip = ad.nla_tracks.new().strips.new("reaction", f_contact + 1, react_action)
+    react_strip.extrapolation = "HOLD_FORWARD"
+    react_strip.blend_in = 0.0
+
+    scene.frame_set(f_contact)
+    bpy.context.view_layer.update()
+    pb = defender.pose.bones[first["bone"]]
+    local = (defender.matrix_world @ pb.matrix).inverted() @ hit_point
+    build.apply_wound(bpy.context, defender, hit_point, wound.wound_type.value, wound.depth_m, wound.width_m, None,
+                      wound.bone_hit, provenance=wound.provenance)
+    if render_tag:
+        render_sample(scene, renders / f"{render_tag}_f{f_contact:03d}_contact.png", distance)
+
+    frames, signed, consistent = [], [], 0
+    for fr in range(f_contact, max(attack_end, f_contact + 1 + react_len) + 1):
+        scene.frame_set(fr)
+        bpy.context.view_layer.update()
+        gap, _, _ = mock.closest_sabre_contact(attacker, defender)
+        frames.append(fr)
+        signed.append(round(gap, 4))
+        carried = (defender.matrix_world @ pb.matrix) @ local
+        nearest, _ = build.nearest_canonical_bone(defender, carried, posed=True)
+        consistent += nearest == first["bone"]
+        if render_tag and fr == f_contact + RENDER_AFTER_FRAMES:
+            render_sample(scene, renders / f"{render_tag}_f{fr:03d}_reaction.png", distance)
+    after = signed[1:]
+    separated = next((f for f, g in zip(frames[1:], after) if g > 0.0), None)
+    return {
+        "start_frame": f_contact, "clip": clip, "clip_action": react_name, "reaction_starts_frame": f_contact + 1,
+        "blend_in_frames": 0, "frames": frames, "signed_distance_m": signed, "separated_at_frame": separated,
+        "max_penetration_after_m": round(max([0.0] + [-g for g in after]), 4),
+        "penetrating_at_end": signed[-1] <= 0.0,
+        "wound_bone_consistent_ratio": round(consistent / len(frames), 4),
+        "provenance": "ASSUMED",
+        "note": "pose switch without blending; the attacker's clip keeps playing unchanged (no reaction to the hit)",
+    }
 
 
 def camera_for(distance: float):
@@ -150,7 +231,7 @@ def main() -> int:
                         first = {"frame": fr, "segment": seg, "bone": bone, "penetration_m": round(-gap, 4),
                                  "entry_point": [round(c, 4) for c in point]}
                         hit_point = point
-                wound = reaction = None
+                wound = reaction = playback = None
                 if first:
                     w = blade_contact_to_wound(first["bone"], first["penetration_m"], build.SABRE_PLACEHOLDER_WIDTH_M)
                     asm = assess_wound(w)
@@ -164,25 +245,16 @@ def main() -> int:
                                               wound["incapacitating"])
                     reaction = {"clip": clip, "rule": rule, "provenance": "ASSUMED",
                                 "note": "placeholder for a baked L2/L3 manifestation (Decisions 44-45)"}
-                    if not rendered:
-                        scene.frame_set(first["frame"])
-                        build.apply_wound(bpy.context, defender, hit_point, w.wound_type.value, w.depth_m,
-                                          w.width_m, None, w.bone_hit, provenance=w.provenance)
-                        camera_for(d)
-                        # each clip import can switch the scene back to EEVEE (black without lights)
-                        scene.render.engine = "BLENDER_WORKBENCH"
-                        scene.display.shading.light, scene.display.shading.color_type = "STUDIO", "MATERIAL"
-                        scene.render.filepath = str(a.renders / f"{attack}__vs__{stance}__{d:.1f}m_f{first['frame']:03d}.png")
-                        bpy.ops.render.render(write_still=True)
-                        for o in list(bpy.data.objects):
-                            if o.get("ce_role") == "wound":
-                                bpy.data.objects.remove(o, do_unlink=True)
-                        rendered = True
+                    render_tag = None if rendered else f"{attack}__vs__{stance}__{d:.1f}m"
+                    playback = reaction_playback(build, props, sources, scene, attacker, defender, first, hit_point,
+                                                 w, clip, f1, a.renders, render_tag, d)
+                    rendered = rendered or render_tag is not None
+                    play_back_stance(defender)
                 entry = {
                     "id": f"{attack}__vs__{stance}__{d:.1f}m", "attack_clip": attack, "attack_action": act_name,
                     "defender_stance": stance, "distance_m": d, "distance_provenance": "ESTIMATE",
                     "frames": frames, "signed_distance_m": signed, "min_distance_m": min(signed),
-                    "first_contact": first, "wound": wound, "reaction": reaction,
+                    "first_contact": first, "wound": wound, "reaction": reaction, "reaction_playback": playback,
                     "energy_j": None, "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed "
                                                       "from depth and width only",
                     "seed": None, "determinism": "no randomness: fixed clips, frames, spacing and geometry",
@@ -191,9 +263,13 @@ def main() -> int:
                 }
                 entry["sha256"] = entry_sha256(entry)
                 entries.append(entry)
+                after = (f", after: separated {playback['separated_at_frame']}, max pen "
+                         f"{playback['max_penetration_after_m']}, at end {playback['penetrating_at_end']}, wound-bone "
+                         f"{playback['wound_bone_consistent_ratio']}") if playback else ""
                 print(f"[reactions] {entry['id']}: min {entry['min_distance_m']} m, "
                       f"contact {first['frame'] if first else None}, "
-                      f"reaction {reaction['clip'] if reaction else None}, sha256 {entry['sha256'][:12]}", flush=True)
+                      f"reaction {reaction['clip'] if reaction else None}{after}, sha256 {entry['sha256'][:12]}",
+                      flush=True)
 
     doc = {
         "schema_version": SCHEMA_VERSION,
@@ -205,7 +281,9 @@ def main() -> int:
                     for p in a.lib],
         "rule": "reaction_for (ASSUMED): lethal -> Death01; incapacitating/severe -> Hit_Knockback; "
                 "head/neck -> Hit_Head; else Hit_Chest",
-        "limitations": ["defender plays its stance clip and does not react during the scan",
+        "limitations": ["defender reacts only after the first contact (no anticipation, no parry)",
+                        "reaction starts the frame after contact with no blending (pose switch)",
+                        "the attacker keeps playing its clip unchanged after the hit",
                         "stance shorter than the attack holds its last pose",
                         "contact measured against block-dummy capsules (envelope radii ESTIMATE)",
                         "PLACEHOLDER sabre; no energy model"],

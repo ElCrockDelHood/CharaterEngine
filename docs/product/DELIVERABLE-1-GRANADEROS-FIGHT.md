@@ -205,6 +205,31 @@ Limitations: the defender does not react during the scan; a stance shorter than 
 contact is measured against envelope capsules (ESTIMATE); the sabre is a PLACEHOLDER; energy is UNKNOWN; the four
 reaction clips (Death01, Hit_Knockback, Hit_Head, Hit_Chest) are CC0 Quaternius clips, not owner-authored.
 
+### 3.6 Defender that reacts — reaction library schema 2 (owner choice 2026-10-28)
+
+From the frame after the first contact, the defender plays its reaction clip, retargeted to the canonical
+skeleton, on an NLA strip over the held stance strip. There is no blend-in, so the pose switches (ASSUMED). The scan
+continues until both clips end and records `reaction_playback` per contact: signed distance per frame, the frame
+the blade leaves, the deepest penetration after contact, whether it is still inside at the end, and how often the
+wound point carried by the wounded bone still has that bone as its nearest canonical bone. JSON schema bumped to 2;
+pytest validator and Godot runner check updated. Two full runs give identical SHA-256 for all 42 entries (logs
+`logs/20261028T152241Z_reaction_library.log`, `logs/20261028T152734Z_reaction_library.log`).
+
+| Contact (0.9 m) | Reaction | Separated at | Penetration after | Wound bone kept | Without reaction (v1 scan) |
+|-----------------|----------|--------------|-------------------|-----------------|----------------------------|
+| Sword_Attack vs Sword_Idle, f22, NASAL_R | Hit_Knockback | f23 (+0.30 m) | none | 100 % | also out at f23 (+0.20 m) |
+| Sword_Regular_Combo vs Sword_Idle, f37, FEMUR_L | Hit_Knockback | f38 (+0.53 m) | none | 100 % | also out at f38 (+0.55 m) |
+| Sword_Attack vs Sword_Block, f21, STERNUM | Hit_Knockback | f22 (+0.12 m) | none | 100 % | **still in at f22 (−0.034 m)**, out at f23 |
+
+Findings: in two cases the blade leaves on the next frame because the attacker's own clip withdraws, with or
+without the reaction. Only against Sword_Block does the reaction change the outcome: the knockback takes the
+defender out of reach before the blade goes 3.4 mm deeper. After the knockback the blade comes back within
+0.11–0.38 m (frames 25–26 and 41–44) but never re-enters. Part of the first-frame jump comes from the pose switch.
+Renders: `builds/renders/reactions/*_contact.png` and `*_reaction.png` (8 frames into the reaction).
+Limitations: the defender reacts only after contact (no anticipation, parry or dodge); no blending between stance
+and reaction; the attacker keeps playing its clip unchanged; envelope capsules (ESTIMATE), PLACEHOLDER sabre, energy
+UNKNOWN; the reaction rule and clips are ASSUMED stand-ins for baked L2/L3 manifestations.
+
 ## 4. What Mariano must provide or decide first
 
 1. Base mesh origin: artist-made (by you, from your drawings) or generated (MPFB2/other) — and licence policy

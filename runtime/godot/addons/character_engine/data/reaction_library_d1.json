@@ -1,7 +1,7 @@
 {
- "schema_version": 1,
+ "schema_version": 2,
  "library": "D1 reaction library (Granaderos fight mock-up)",
- "generated_utc": "2026-10-28T05:58:44Z",
+ "generated_utc": "2026-10-28T15:32:08Z",
  "generated_by": "runtime/blender/ce_reaction_library.py (Blender 3.6.23)",
  "bone_map": "quaternius_ual",
  "sources": [
@@ -18,7 +18,9 @@
  ],
  "rule": "reaction_for (ASSUMED): lethal -> Death01; incapacitating/severe -> Hit_Knockback; head/neck -> Hit_Head; else Hit_Chest",
  "limitations": [
-  "defender plays its stance clip and does not react during the scan",
+  "defender reacts only after the first contact (no anticipation, no parry)",
+  "reaction starts the frame after contact with no blending (pose switch)",
+  "the attacker keeps playing its clip unchanged after the hit",
   "stance shorter than the attack holds its last pose",
   "contact measured against block-dummy capsules (envelope radii ESTIMATE)",
   "PLACEHOLDER sabre; no energy model"
@@ -147,13 +149,74 @@
     "provenance": "ASSUMED",
     "note": "placeholder for a baked L2/L3 manifestation (Decisions 44-45)"
    },
+   "reaction_playback": {
+    "start_frame": 22,
+    "clip": "Hit_Knockback",
+    "clip_action": "CE_Fighter_A_Hit_Knockback_Armature",
+    "reaction_starts_frame": 23,
+    "blend_in_frames": 0,
+    "frames": [
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31,
+     32,
+     33,
+     34,
+     35,
+     36,
+     37,
+     38,
+     39,
+     40,
+     41,
+     42,
+     43
+    ],
+    "signed_distance_m": [
+     -0.0161,
+     0.3015,
+     0.4635,
+     0.4368,
+     0.1148,
+     0.3626,
+     0.5805,
+     0.5479,
+     0.7466,
+     1.0525,
+     1.2018,
+     1.18,
+     1.0335,
+     0.9176,
+     0.9704,
+     1.0294,
+     1.0288,
+     1.0352,
+     1.0674,
+     1.1131,
+     1.149,
+     1.153
+    ],
+    "separated_at_frame": 23,
+    "max_penetration_after_m": 0.0,
+    "penetrating_at_end": false,
+    "wound_bone_consistent_ratio": 1.0,
+    "provenance": "ASSUMED",
+    "note": "pose switch without blending; the attacker's clip keeps playing unchanged (no reaction to the hit)"
+   },
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "318bf752569658a27645cc2c2502486655875da66574541eb0cf32fde014bc83"
+   "sha256": "b1fa67602343ee5c783ba2a62dbb50810693aa2067fbff7e52c33a141ae99d1a"
   },
   {
    "id": "Sword_Attack__vs__Sword_Idle__1.2m",
@@ -244,13 +307,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "35fbbac63677c400b4c8804ff7d1f0bb9862988e502758287d521f07884feb2e"
+   "sha256": "af2cf77e06c3867f7ffa9ad0c2b1829fd24d4aad736829f3eaf780124e73c545"
   },
   {
    "id": "Sword_Attack__vs__Sword_Idle__1.6m",
@@ -341,13 +405,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "066df0f33487a529012508c8fbdd940f14f6db071af71bef3cf8833ad5efa880"
+   "sha256": "53d46affa30850c495ab2a6a93f3f711690217c7967e98aefd3a8143a6b32cb7"
   },
   {
    "id": "Sword_Regular_A__vs__Sword_Idle__0.9m",
@@ -386,13 +451,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "1b7de07c371365792aaa40a9c1fa73f81ccc385da2485cc40a20c6263760d369"
+   "sha256": "d7c3dc9aababee6eafc353a20376a6372e41417dd98cf852c79190c3537bb583"
   },
   {
    "id": "Sword_Regular_A__vs__Sword_Idle__1.2m",
@@ -431,13 +497,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "7651df528a90c2cff264319d22844de7d48ae3b7acbef0ae726855dd50f4a914"
+   "sha256": "983920346765701666375466906f15a643f089609c159d09791cacf18544bb4a"
   },
   {
    "id": "Sword_Regular_A__vs__Sword_Idle__1.6m",
@@ -476,13 +543,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "52bc1b61ca0c1f3e9fa0811e3d69d5c1ff0e212faa1d2a8238cb80f0e08ddebd"
+   "sha256": "19b193af012b8743ec0329b2eb2c7e64ea8c7cb86572190a10c2c72bebebc0f3"
   },
   {
    "id": "Sword_Regular_B__vs__Sword_Idle__0.9m",
@@ -525,13 +593,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "ba66987642054a7afb036aa846a8160a63c2013fb3c84731ca9e6c525783ac03"
+   "sha256": "4e316cc6353733d6719d5c07c0e1f1a8512ba03281762309b53202c2dd672626"
   },
   {
    "id": "Sword_Regular_B__vs__Sword_Idle__1.2m",
@@ -574,13 +643,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "26686dbd51e75305656c03f1e202da12ef31386c0a49c7cd6f6b531687cf5cec"
+   "sha256": "9da25f62c11f44aa9b9bb2f38528128f652f40722b758e830b6f0cb3a9dd1267"
   },
   {
    "id": "Sword_Regular_B__vs__Sword_Idle__1.6m",
@@ -623,13 +693,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "5af1614a52d35a97f5b3c4f81aa1ef4a20022a068bb6ca7e3ed7d7db8d502897"
+   "sha256": "71a3d43d596f2a4c792dd5e70dcf940db662ddd43aa96a2f27e8e383e70d157e"
   },
   {
    "id": "Sword_Regular_C__vs__Sword_Idle__0.9m",
@@ -744,13 +815,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "be21d2359eb19d543590c6f36a41a6abf5b394ccd5231f54232e84b78d4ac068"
+   "sha256": "2d6f1777cec0c622db1b273187ee9d99af58c2231b783a550585f2f0d4b03724"
   },
   {
    "id": "Sword_Regular_C__vs__Sword_Idle__1.2m",
@@ -865,13 +937,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "d25a6ac935647ffc6241381a65108a9a3fa15ca0ebae05d6aa16224cb9ab4bc4"
+   "sha256": "44f7e0a2a254b188c6a12de8acff0318b13c259e20b581e94db209c99a43dd73"
   },
   {
    "id": "Sword_Regular_C__vs__Sword_Idle__1.6m",
@@ -986,13 +1059,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "c2bc4a351997d0dbb3232136b3df014b6836e19446cbd2babc9d85d96eb816d3"
+   "sha256": "02599c6143b1d1cd20ab41c653edf0cc571bd991975e82ceb501c2ed0e444111"
   },
   {
    "id": "Sword_Regular_Combo__vs__Sword_Idle__0.9m",
@@ -1187,13 +1261,102 @@
     "provenance": "ASSUMED",
     "note": "placeholder for a baked L2/L3 manifestation (Decisions 44-45)"
    },
+   "reaction_playback": {
+    "start_frame": 37,
+    "clip": "Hit_Knockback",
+    "clip_action": "CE_Fighter_A_Hit_Knockback_Armature.001",
+    "reaction_starts_frame": 38,
+    "blend_in_frames": 0,
+    "frames": [
+     37,
+     38,
+     39,
+     40,
+     41,
+     42,
+     43,
+     44,
+     45,
+     46,
+     47,
+     48,
+     49,
+     50,
+     51,
+     52,
+     53,
+     54,
+     55,
+     56,
+     57,
+     58,
+     59,
+     60,
+     61,
+     62,
+     63,
+     64,
+     65,
+     66,
+     67,
+     68,
+     69,
+     70,
+     71,
+     72
+    ],
+    "signed_distance_m": [
+     -0.0306,
+     0.5315,
+     0.8035,
+     0.6535,
+     0.4377,
+     0.5828,
+     0.496,
+     0.3769,
+     0.4551,
+     0.6352,
+     0.7665,
+     0.819,
+     0.8211,
+     0.8049,
+     0.8295,
+     0.9501,
+     1.1161,
+     1.2493,
+     1.2864,
+     1.3346,
+     1.3914,
+     1.402,
+     1.401,
+     1.3898,
+     1.3814,
+     1.3829,
+     1.3883,
+     1.3938,
+     1.3991,
+     1.4041,
+     1.4085,
+     1.4118,
+     1.4136,
+     1.414,
+     1.414,
+     1.414
+    ],
+    "separated_at_frame": 38,
+    "max_penetration_after_m": 0.0,
+    "penetrating_at_end": false,
+    "wound_bone_consistent_ratio": 1.0,
+    "provenance": "ASSUMED",
+    "note": "pose switch without blending; the attacker's clip keeps playing unchanged (no reaction to the hit)"
+   },
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "b8f1e4d4282f1b23c500403c55fa26941702f6a9e42c4771cf18a6cc33b570fa"
+   "sha256": "b3ea3cc75dec1cb4ce9c8fe54a6edc67fbda2e57b4165b1123bca80605ef441c"
   },
   {
    "id": "Sword_Regular_Combo__vs__Sword_Idle__1.2m",
@@ -1356,13 +1519,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "379e0e3effc3f32d485d85d9dd23b752897563d2efd62c66450dd9b4b04ded98"
+   "sha256": "7b7cb693567a780717361c6158071f413a838466305420e579a1b39cff1019d4"
   },
   {
    "id": "Sword_Regular_Combo__vs__Sword_Idle__1.6m",
@@ -1525,13 +1689,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "694eb21fbbec87492d92e244b5354d9935255aa406fdebc24f7bfb63430db3df"
+   "sha256": "5b22452f0dc2a289f9425373cc87f34ae40601177da0007db6e38f3cc17e450b"
   },
   {
    "id": "Sword_Heavy_Combo__vs__Sword_Idle__0.9m",
@@ -1758,13 +1923,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "56e5a1c3bc122a5d5770c6d1c412987ace75e0b2de4a97a8ba768bc41cf458a5"
+   "sha256": "d299e73ce181da9495ba63f1afd0761ed3f725e833d613d3c6d7c827d478f5dd"
   },
   {
    "id": "Sword_Heavy_Combo__vs__Sword_Idle__1.2m",
@@ -1991,13 +2157,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "dbb846363f70c0c9a763f58e416ad9d320f76acd6275eccc281dcdc89a4cafac"
+   "sha256": "67d23b73e704b7ee2b47c79cd7468bc902628a93f0221e39f4958a0eb89bac85"
   },
   {
    "id": "Sword_Heavy_Combo__vs__Sword_Idle__1.6m",
@@ -2224,13 +2391,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "711a107079186bb35c93a6364e23d2d8e628f6d8674ac7ff8d21a5d679e09a8d"
+   "sha256": "438ee3febe78136c1ed1a75392133f8c0eac6216f4913aa09a43deaf040f0d36"
   },
   {
    "id": "Sword_Dash__vs__Sword_Idle__0.9m",
@@ -2323,13 +2491,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "669ad9b72875af2585a3489ba0eeb331869767e98c018fe738ebda1ce7534a53"
+   "sha256": "41ab9d18314e13053394df3bb074447616fa547aaadaee84205f025af99874a9"
   },
   {
    "id": "Sword_Dash__vs__Sword_Idle__1.2m",
@@ -2422,13 +2591,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "2710b847edc12f211f58c8c724c5885b18f1bdeb9090ed238d8d306046df1823"
+   "sha256": "13cfab6cdf33ac2282a37c79cc8ae2cbc782bde11722f024144329eb49d2792a"
   },
   {
    "id": "Sword_Dash__vs__Sword_Idle__1.6m",
@@ -2521,13 +2691,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "dc9ffdcef919fa7c24be1bdf5ef8c4f23b6b28c58c59ec9e121dc6b1bd9f75eb"
+   "sha256": "ef8a044c28efac0c5e794a78281912cf7ba66e985c8d40acddda19c05269e46a"
   },
   {
    "id": "Sword_Attack__vs__Sword_Block__0.9m",
@@ -2650,13 +2821,74 @@
     "provenance": "ASSUMED",
     "note": "placeholder for a baked L2/L3 manifestation (Decisions 44-45)"
    },
+   "reaction_playback": {
+    "start_frame": 21,
+    "clip": "Hit_Knockback",
+    "clip_action": "CE_Fighter_A_Hit_Knockback_Armature.002",
+    "reaction_starts_frame": 22,
+    "blend_in_frames": 0,
+    "frames": [
+     21,
+     22,
+     23,
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31,
+     32,
+     33,
+     34,
+     35,
+     36,
+     37,
+     38,
+     39,
+     40,
+     41,
+     42
+    ],
+    "signed_distance_m": [
+     -0.0264,
+     0.1176,
+     0.2101,
+     0.2818,
+     0.1066,
+     0.2151,
+     0.6415,
+     0.5617,
+     0.7561,
+     1.0565,
+     1.2034,
+     1.1785,
+     1.0298,
+     0.9134,
+     0.9671,
+     1.0294,
+     1.0288,
+     1.0352,
+     1.0674,
+     1.1131,
+     1.149,
+     1.153
+    ],
+    "separated_at_frame": 22,
+    "max_penetration_after_m": 0.0,
+    "penetrating_at_end": false,
+    "wound_bone_consistent_ratio": 1.0,
+    "provenance": "ASSUMED",
+    "note": "pose switch without blending; the attacker's clip keeps playing unchanged (no reaction to the hit)"
+   },
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "cdc918dd61267512c48b318710b744ac4fc7927e3a9ae401561dbb6c53058b1d"
+   "sha256": "d67342f0454d66102cd213dc558896aeb4035fca302fb323ba6b1dbf84e11c6a"
   },
   {
    "id": "Sword_Attack__vs__Sword_Block__1.2m",
@@ -2747,13 +2979,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "7be4b5d715f1f99b8168af611ca13983f3a6f330a2a6525fb177bbf2a1fc78f0"
+   "sha256": "7d31bcef2bb976c033acd142a667e7c657657fc0efb8553a22433377396ab7b4"
   },
   {
    "id": "Sword_Attack__vs__Sword_Block__1.6m",
@@ -2844,13 +3077,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "66bf144c2778f3fba2bf6a9c4421abaa4216afe02e1f2aceeeb259dd179d7ec7"
+   "sha256": "5195521e533fe1b03a45bed46c91b4f81bffbfc618e1782740e5d4feb443aaff"
   },
   {
    "id": "Sword_Regular_A__vs__Sword_Block__0.9m",
@@ -2889,13 +3123,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "59bdc00a178dfdb8cc102cdc2a30168f3a17d37dd4b1749d91aea60faba4f828"
+   "sha256": "91fab4041b796916567f4d1ded58954d3ca664b34589ee4fe96f653a4404cbfa"
   },
   {
    "id": "Sword_Regular_A__vs__Sword_Block__1.2m",
@@ -2934,13 +3169,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "45224979e13d6a7801612ba9ca5c533fe886e01719c338c9c90d778c407fbea5"
+   "sha256": "0584348cb6c0da6d184f1ca45664b357b3d6bb09236d4d03c9a34b6f03ee8f3c"
   },
   {
    "id": "Sword_Regular_A__vs__Sword_Block__1.6m",
@@ -2979,13 +3215,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "f089e1d439f1715da1bb7b6c2890c1462c65aeb863f7d0df33a0d1df2e6c39ee"
+   "sha256": "5761ef5c1aaa51434ae9f65413f9e8bf8fc36a105592a2f5317f95b9f49413e6"
   },
   {
    "id": "Sword_Regular_B__vs__Sword_Block__0.9m",
@@ -3028,13 +3265,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "9c331f09b898294331e0686c7196fdd1078e2713da6c972d626d245865e8797b"
+   "sha256": "a700de9eeeed614f4f29d6580be22613b698c15d26969ee9e5be76450996c664"
   },
   {
    "id": "Sword_Regular_B__vs__Sword_Block__1.2m",
@@ -3077,13 +3315,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "779c1f274cf895104d9daaf571c998b3355e396dcda2938dd9d687406c833d8a"
+   "sha256": "58e3a94c19f73f32e30e6097527821e7af8c7a868137540c51fb76c0b84e7858"
   },
   {
    "id": "Sword_Regular_B__vs__Sword_Block__1.6m",
@@ -3126,13 +3365,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "9ae4eb2c8bb18c3def043ee4bc49c43f9582154b1b8746e4046ae7a4c4477b3b"
+   "sha256": "b3d5e2dcc40d48e83731f830b40da9887ac77ab8b365e8429535f8c999d953c4"
   },
   {
    "id": "Sword_Regular_C__vs__Sword_Block__0.9m",
@@ -3247,13 +3487,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "384d667edbe1db7413d909cbbe20b72540e150412c4a3ddb4f9ea4a1a2603b2a"
+   "sha256": "957a440fcbc1830f4022a3359af9ea8efa13730546d18e70dbe42716db96d79a"
   },
   {
    "id": "Sword_Regular_C__vs__Sword_Block__1.2m",
@@ -3368,13 +3609,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "ddc8c7bd826d4f6a8b387ff23b1137a72fb9cdf3389072041bb8fb731084355b"
+   "sha256": "69ddb478481903930d3267c51305902a25f79d3f98439e431ddc3cfe2936a640"
   },
   {
    "id": "Sword_Regular_C__vs__Sword_Block__1.6m",
@@ -3489,13 +3731,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "cc12df5b5cc39c3fd2862e67e32d0008362bacb456fcb9a916da83ea036fab73"
+   "sha256": "9319bef8e11964ddc3ef77865264e142a8bd427674ee15fee483dbfaa7cd5102"
   },
   {
    "id": "Sword_Regular_Combo__vs__Sword_Block__0.9m",
@@ -3658,13 +3901,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "5fbf0534c7c8bda079545af83cec98917fe76e65da94c232db40f12affe9d4df"
+   "sha256": "6c8e768132235afe1f9404fbea854b7fd08708030c7b0cce350463d967bebdcf"
   },
   {
    "id": "Sword_Regular_Combo__vs__Sword_Block__1.2m",
@@ -3827,13 +4071,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "8140fdfc6424be590feed150dd3b7f255e3424038b2003adc021b9d7c81e16b6"
+   "sha256": "248922b8dd63eb55a187cd24e8e3637ec4ce4112e8c29673a842981d059ea5b0"
   },
   {
    "id": "Sword_Regular_Combo__vs__Sword_Block__1.6m",
@@ -3996,13 +4241,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "424c8f588800e5f5d2802956f533e2584b4bb502f706b03e30ad9ae82bc9176d"
+   "sha256": "e0359b9e86799cf4c66ee5976a9907966a9212fafdf5976533fec473c6b1a68f"
   },
   {
    "id": "Sword_Heavy_Combo__vs__Sword_Block__0.9m",
@@ -4229,13 +4475,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "7e47b7d9fe49f44f61d57f98046455cd0fcd31c943c5f218bcba38d002e57c1e"
+   "sha256": "97cd849477a1f7010ff56802874cd07cde5886ae66b88a61f4c12824b7e4424d"
   },
   {
    "id": "Sword_Heavy_Combo__vs__Sword_Block__1.2m",
@@ -4462,13 +4709,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "1b8f3e692762629247e799e78a3ccef58d029b5e4fb610ff1312e7a49f9af016"
+   "sha256": "cc75cdf63f50f5ae183affff3aa80d91b89cc4604d25c595768b5399bbf1239b"
   },
   {
    "id": "Sword_Heavy_Combo__vs__Sword_Block__1.6m",
@@ -4695,13 +4943,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "1a343caa8478b646aa757516e877c2a904cb0ce6e9fe67a58f474fe577b83965"
+   "sha256": "ea778f42ca27a2743d04a08e9e23e4d4d588e665202cdb9dfd81d0229e1f036f"
   },
   {
    "id": "Sword_Dash__vs__Sword_Block__0.9m",
@@ -4794,13 +5043,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "c48b3af53d98be7149ea4c47c1de94ca5613d8396de16da60bdca5afd62508f7"
+   "sha256": "2807f32a5866a3ad6997807716c9e6fcf3d8c4df9673103ff9aea57e5818060a"
   },
   {
    "id": "Sword_Dash__vs__Sword_Block__1.2m",
@@ -4893,13 +5143,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "8966aedb519b72e5172041c5e4eb96d84c24cdd19b6e2afd6dd79af05f817600"
+   "sha256": "aec29da6847d7b3ee67c6ab1dd93319e851ee5d0f2a509c88df339119aaceccf"
   },
   {
    "id": "Sword_Dash__vs__Sword_Block__1.6m",
@@ -4992,13 +5243,14 @@
    "first_contact": null,
    "wound": null,
    "reaction": null,
+   "reaction_playback": null,
    "energy_j": null,
    "energy_basis": "UNKNOWN - no cited cutting-energy model; incision assessed from depth and width only",
    "seed": null,
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "d040cbdb6a0562071e5c4f8e83aff677f181391521110d0b8a6dbb95ee356958"
+   "sha256": "d8a8a1c1f711cbc26263088659e0c2e1d22cf9c2de5707368440f5a2a44abdc8"
   }
  ]
 }

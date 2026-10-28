@@ -14,6 +14,11 @@ CC0 animation libraries (Quaternius UAL1/UAL2):
 * head or neck -> ``Hit_Head``
 * anything else -> ``Hit_Chest``
 
+Schema 2 adds ``reaction_playback``: from the first-contact frame the defender plays the reaction clip (no blend,
+``blend_in_frames`` 0, ASSUMED) and the scan continues, recording the signed distance after contact, the frame the
+blade leaves the body, the deepest penetration after contact, and how often the wound point carried by the
+wounded bone still has that bone as its nearest canonical bone.
+
 Pure Python, no engine code. The JSON written from it is read by Godot (plain JSON, no engine types).
 """
 
@@ -25,7 +30,7 @@ from typing import Any, Dict, List, Mapping, Tuple
 
 from ..trauma import Severity
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2   # 2: reaction_playback (defender plays the reaction clip from the first contact)
 
 REACTION_CLIPS: Mapping[str, str] = {
     "death": "Death01", "knockback": "Hit_Knockback", "head": "Hit_Head", "body": "Hit_Chest",
@@ -33,9 +38,11 @@ REACTION_CLIPS: Mapping[str, str] = {
 HEAD_REGIONS = ("head", "neck")
 
 ENTRY_KEYS = ("id", "attack_clip", "defender_stance", "distance_m", "distance_provenance", "frames",
-              "signed_distance_m", "min_distance_m", "first_contact", "wound", "reaction", "energy_j",
+              "signed_distance_m", "min_distance_m", "first_contact", "wound", "reaction", "reaction_playback", "energy_j",
               "energy_basis", "seed", "provenance", "sha256")
 CONTACT_KEYS = ("frame", "segment", "bone", "penetration_m", "entry_point")
+PLAYBACK_KEYS = ("start_frame", "clip", "blend_in_frames", "frames", "signed_distance_m", "separated_at_frame",
+                 "max_penetration_after_m", "penetrating_at_end", "wound_bone_consistent_ratio", "provenance")
 WOUND_KEYS = ("type", "bone", "region", "depth_m", "width_m", "layers_breached", "severity", "lethality",
               "bleeding_rate", "fracture", "incapacitating", "provenance")
 
@@ -81,8 +88,8 @@ def validate_library(data: Mapping[str, Any]) -> List[str]:
         if len(e["signed_distance_m"]) != len(e["frames"]):
             problems.append(f"{eid}: one signed distance per frame")
         if e["first_contact"] is None:
-            if e["wound"] is not None or e["reaction"] is not None:
-                problems.append(f"{eid}: wound/reaction without contact")
+            if e["wound"] is not None or e["reaction"] is not None or e["reaction_playback"] is not None:
+                problems.append(f"{eid}: wound/reaction/playback without contact")
             if e["min_distance_m"] <= 0:
                 problems.append(f"{eid}: penetration recorded but no first_contact")
         else:
@@ -96,6 +103,16 @@ def validate_library(data: Mapping[str, Any]) -> List[str]:
             elif (r["clip"], r["rule"]) != reaction_for(w["region"], w["severity"], w["lethality"],
                                                         w["incapacitating"]):
                 problems.append(f"{eid}: reaction does not follow the rule")
+            p = e["reaction_playback"]
+            if not p or [k for k in PLAYBACK_KEYS if k not in p]:
+                problems.append(f"{eid}: bad reaction_playback")
+            else:
+                if p["start_frame"] != c["frame"] or (r and p["clip"] != r["clip"]):
+                    problems.append(f"{eid}: playback must start at the first contact with the reaction clip")
+                if len(p["frames"]) != len(p["signed_distance_m"]) or not p["frames"]:
+                    problems.append(f"{eid}: one playback distance per frame")
+                if not 0.0 <= p["wound_bone_consistent_ratio"] <= 1.0:
+                    problems.append(f"{eid}: wound_bone_consistent_ratio out of [0, 1]")
         if e["provenance"] != "estimate":
             problems.append(f"{eid}: provenance must be estimate")
         if e["sha256"] != entry_sha256(e):
@@ -110,4 +127,6 @@ def summary(data: Mapping[str, Any]) -> Dict[str, Any]:
     per_clip: Dict[str, int] = {}
     for e in contacts:
         per_clip[e["reaction"]["clip"]] = per_clip.get(e["reaction"]["clip"], 0) + 1
-    return {"entries": len(entries), "contacts": len(contacts), "reactions": per_clip}
+    separated = sum(1 for e in contacts if (e.get("reaction_playback") or {}).get("separated_at_frame") is not None)
+    return {"entries": len(entries), "contacts": len(contacts), "reactions": per_clip,
+            "separated_after_reaction": separated}

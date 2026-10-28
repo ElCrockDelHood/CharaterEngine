@@ -37,7 +37,8 @@ def _entry(contact=True):
     e = {"id": "x", "attack_clip": "Sword_Attack", "defender_stance": "Sword_Idle", "distance_m": 1.2,
          "distance_provenance": "ESTIMATE", "frames": [0, 1], "signed_distance_m": [0.5, -0.01],
          "min_distance_m": -0.01, "energy_j": None, "energy_basis": "UNKNOWN", "seed": None,
-         "provenance": "estimate", "first_contact": None, "wound": None, "reaction": None}
+         "provenance": "estimate", "first_contact": None, "wound": None, "reaction": None,
+         "reaction_playback": None}
     if contact:
         e["first_contact"] = {"frame": 1, "segment": "forearm.L", "bone": "RADIUS_L", "penetration_m": 0.01,
                               "entry_point": [0, 0, 1]}
@@ -46,6 +47,10 @@ def _entry(contact=True):
                       "bleeding_rate": 0.2, "fracture": False, "incapacitating": False, "provenance": "estimate"}
         clip, rule = reaction_for("forearm", 2, 0.01, False)
         e["reaction"] = {"clip": clip, "rule": rule, "provenance": "ASSUMED"}
+        e["reaction_playback"] = {"start_frame": 1, "clip": clip, "blend_in_frames": 0, "frames": [1, 2, 3],
+                                  "signed_distance_m": [-0.01, 0.02, 0.2], "separated_at_frame": 2,
+                                  "max_penetration_after_m": 0.01, "penetrating_at_end": False,
+                                  "wound_bone_consistent_ratio": 1.0, "provenance": "ASSUMED"}
     else:
         e["signed_distance_m"], e["min_distance_m"] = [0.5, 0.3], 0.3
     e["sha256"] = entry_sha256(e)
@@ -60,7 +65,18 @@ def _doc(*entries):
 def test_valid_document_and_summary():
     doc = _doc(_entry(True), {**_entry(False), "id": "y"} | {"sha256": entry_sha256({**_entry(False), "id": "y"})})
     assert validate_library(doc) == []
-    assert summary(doc) == {"entries": 2, "contacts": 1, "reactions": {"Hit_Chest": 1}}
+    assert summary(doc) == {"entries": 2, "contacts": 1, "reactions": {"Hit_Chest": 1}, "separated_after_reaction": 1}
+
+
+def test_playback_must_start_at_the_contact_with_the_reaction_clip():
+    e = _entry(True)
+    e["reaction_playback"]["start_frame"] = 5
+    e["sha256"] = entry_sha256(e)
+    assert any("first contact" in p for p in validate_library(_doc(e)))
+    e2 = _entry(False)
+    e2["reaction_playback"] = {"start_frame": 0}
+    e2["sha256"] = entry_sha256(e2)
+    assert any("without contact" in p for p in validate_library(_doc(e2)))
 
 
 def test_tampering_is_detected():
