@@ -1,6 +1,6 @@
 # STYLE-SOULS-001 — `souls_like` gameplay style (SPECIFICATION, awaiting owner approval)
 
-**Date:** 2026-10-25 · **Status:** APPROVED (Decision 53: Sentinel with the bo, keyboard only in v1); step 1
+**Date:** 2026-10-25 · **Status:** APPROVED (Decision 53: Sentinel with the bo, keyboard only in v1); steps 1–2
 implemented · **Context:** the owner chose the Souls-like as the first
 genre to develop (option A). This spec turns the planned `souls_like` entry of `GAMEPLAY_STYLES` into a playable
 style: stamina, dodge with invulnerability frames, light / heavy attacks with the staff and the short blade, and one
@@ -136,7 +136,11 @@ Godot replays every scenario and must reproduce frames, stamina, poise, health a
    nor meets armour causes a short hitstun (light 12, heavy 20 frames); held inputs (walk, guard) must be fed
    every frame. Shenmue untouched (no JSON change until step 2).
    Domain `souls.py` + pytest (rules + the 9 scenarios).
-2. JSON `ce-gameplay/3` + Godot port + parity checks (Shenmue fights still identical).
+2. **DONE** — `ce-gameplay/3` adds `souls_like_rules` (tuning, 6 moves with energy and pre-computed impacts per
+   hitbox bone, the 9 scenarios with Python expectations); `ce_souls_combat.gd` (GDScript port, 64-bit float
+   positions) replays all 9 identically; Shenmue fights and the rest of the table unchanged. `GAMEPLAY_STYLES`
+   still lists `souls_like` as planned until the arena switch (step 3).
+   JSON `ce-gameplay/3` + Godot port + parity checks (Shenmue fights still identical).
 3. Godot arena: style switch, player controls, Sentinel controller, HUD (health, stamina, poise).
 4. Blender placeholder clips on the game rig (grips from the pose library), baked glTF; Godot plays them by state.
 5. Play-testing pass on the GT 740M and value tuning (values stay PLACEHOLDER until then).

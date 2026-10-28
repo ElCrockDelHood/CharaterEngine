@@ -9,6 +9,7 @@
 ##   - CECharacter loads in-tree, finds canonical bones, reports stature; scaling works
 ##   - CEBreathing modifier displaces the sternum over time
 ##   - CEShenmueCombat replays every reference fight identically to the Python simulation (incl. weapons)
+##   - CESoulsCombat replays the 9 Souls-like reference scenarios identically to Python
 ##   - weapons table complete; weapon placeholder mounts on the grip bone and follows it when posed
 ##   - CEArena builds two characters + controllers, autoplay lands hits and creates wound markers
 ##   - face: 20 game shapes only (52 stay in Blender), jaw / eye rotations equal to Python, eyes aim with the neck turned
@@ -308,6 +309,22 @@ class Runner extends Node:
 				var diff: Array = []
 				var same := CEGameplayData.deep_equal(got, sc["expected"], diff)
 				return [same, "%d hits, opponent HP %.2f%s" % [got["hits"].size(), got["fighters"]["opponent"]["health"],
+						"" if same else "  diff: " + str(diff)]])
+
+		# ---- souls-like port vs Python reference (STYLE-SOULS-001) -------------
+		runner.check("souls_like rules table: 6 moves (3 weapons x light/heavy), 9 reference scenarios", func():
+			var r := data.souls_rules()
+			return [(r.get("moves", {}) as Dictionary).size() == 6 and data.souls_reference_scenarios().size() == 9
+					and r.get("provenance") == "placeholder", "%d moves, %d scenarios, provenance %s" % [
+					(r.get("moves", {}) as Dictionary).size(), data.souls_reference_scenarios().size(), r.get("provenance")]])
+		for sc in data.souls_reference_scenarios():
+			var ssid: String = sc["spec"]["scenario_id"]
+			runner.check("souls replay identical to Python: " + ssid, func():
+				var got := CESoulsCombat.replay(data, sc["spec"])
+				var diff: Array = []
+				var same := CEGameplayData.deep_equal(got, sc["expected"], diff)
+				return [same, "%d hits, %d events, player HP %.2f st %.2f%s" % [got["hits"].size(), got["events"].size(),
+						got["fighters"]["player"]["health"], got["fighters"]["player"]["stamina"],
 						"" if same else "  diff: " + str(diff)]])
 
 		# ---- arena ---------------------------------------------------------------

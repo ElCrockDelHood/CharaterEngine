@@ -99,6 +99,12 @@ Face (game GLB): `set_jaw_open(0..1)` and `look_at_point(global_target)` drive `
 GLB's `face` block (20 ARKit game shape names, limits, Python reference rotations). Only finished game assets reach
 Godot: the 52-shape cinematic set and all cinematography stay in Blender (owner rule, RIG-GAME-001).
 
+Souls-like (STYLE-SOULS-001, Decision 53): `gameplay/ce_souls_combat.gd` is the GDScript port of
+`domain/gameplay/souls.py` (stamina, dodge i-frames, light / heavy per weapon, poise, Sentinel). Rules, strike
+energies and pre-computed impacts come from the table's `souls_like_rules` (`CEGameplayData.souls_rules()`); the
+runner replays its 9 reference scenarios against the Python expectations. Godot decides state only; animation
+clips are authored and baked in Blender (owner rule).
+
 Hardware benchmark (windowed, needs the GPU): `python scripts/godot_perf.py` → `builds/tests/godot_perf.json`,
 canonical vs game rig and face blend shapes; results on the GT 740M in `docs/audit/A12_GODOT_PERF_GT740M.md`.
 

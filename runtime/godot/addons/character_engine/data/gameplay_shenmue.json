@@ -3052,7 +3052,2501 @@
       }
     }
   ],
-  "schema": "ce-gameplay/2",
+  "schema": "ce-gameplay/3",
+  "souls_like_rules": {
+    "base_reach_m": 0.85,
+    "moves": {
+      "short_blade_heavy": {
+        "active": 4,
+        "armour_from": 8,
+        "energy_j": 108.0,
+        "hitstun": 20,
+        "impacts": {
+          "CRANIUM": {
+            "fracture": false,
+            "health_cost": 14.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 3,
+            "wound_type": "incision"
+          },
+          "FEMUR_L": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "FEMUR_R": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "HUMERUS_L": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "HUMERUS_R": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "LUMBAR_3": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "abdomen",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "MANDIBLE": {
+            "fracture": false,
+            "health_cost": 14.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 3,
+            "wound_type": "incision"
+          },
+          "RADIUS_L": {
+            "fracture": false,
+            "health_cost": 10.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 2,
+            "wound_type": "incision"
+          },
+          "RADIUS_R": {
+            "fracture": false,
+            "health_cost": 10.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 2,
+            "wound_type": "incision"
+          },
+          "RIB_08_L": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "RIB_08_R": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "RIB_10_L": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "RIB_10_R": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "SACRUM": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "pelvis",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "SCAPULA_L": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "SCAPULA_R": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "STERNUM": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "TEMPORAL_L": {
+            "fracture": false,
+            "health_cost": 14.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 3,
+            "wound_type": "incision"
+          },
+          "TEMPORAL_R": {
+            "fracture": false,
+            "health_cost": 14.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 3,
+            "wound_type": "incision"
+          },
+          "TIBIA_L": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "TIBIA_R": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 1,
+            "wound_type": "incision"
+          }
+        },
+        "kind": "heavy",
+        "move_id": "short_blade_heavy",
+        "poise_damage": 28.0,
+        "recovery": 22,
+        "stamina_cost": 30.0,
+        "startup": 18,
+        "target_bone": "TEMPORAL_L",
+        "weapon_id": "short_blade"
+      },
+      "short_blade_light": {
+        "active": 3,
+        "armour_from": null,
+        "energy_j": 60.0,
+        "hitstun": 12,
+        "impacts": {
+          "CRANIUM": {
+            "fracture": false,
+            "health_cost": 13.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 3,
+            "wound_type": "incision"
+          },
+          "FEMUR_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "FEMUR_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "HUMERUS_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "HUMERUS_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "LUMBAR_3": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "abdomen",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "MANDIBLE": {
+            "fracture": false,
+            "health_cost": 13.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 3,
+            "wound_type": "incision"
+          },
+          "RADIUS_L": {
+            "fracture": false,
+            "health_cost": 9.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 2,
+            "wound_type": "incision"
+          },
+          "RADIUS_R": {
+            "fracture": false,
+            "health_cost": 9.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 2,
+            "wound_type": "incision"
+          },
+          "RIB_08_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "RIB_08_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "RIB_10_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "RIB_10_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "SACRUM": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "pelvis",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "SCAPULA_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "SCAPULA_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "STERNUM": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "TEMPORAL_L": {
+            "fracture": false,
+            "health_cost": 13.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 3,
+            "wound_type": "incision"
+          },
+          "TEMPORAL_R": {
+            "fracture": false,
+            "health_cost": 13.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 3,
+            "wound_type": "incision"
+          },
+          "TIBIA_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 1,
+            "wound_type": "incision"
+          },
+          "TIBIA_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 1,
+            "wound_type": "incision"
+          }
+        },
+        "kind": "light",
+        "move_id": "short_blade_light",
+        "poise_damage": 12.0,
+        "recovery": 14,
+        "stamina_cost": 15.0,
+        "startup": 9,
+        "target_bone": "RIB_08_L",
+        "weapon_id": "short_blade"
+      },
+      "staff_heavy": {
+        "active": 5,
+        "armour_from": 8,
+        "energy_j": 140.4,
+        "hitstun": 20,
+        "impacts": {
+          "CRANIUM": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "FEMUR_L": {
+            "fracture": false,
+            "health_cost": 11.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "FEMUR_R": {
+            "fracture": false,
+            "health_cost": 11.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "HUMERUS_L": {
+            "fracture": false,
+            "health_cost": 11.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "HUMERUS_R": {
+            "fracture": false,
+            "health_cost": 11.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "LUMBAR_3": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "abdomen",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "MANDIBLE": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RADIUS_L": {
+            "fracture": false,
+            "health_cost": 11.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "RADIUS_R": {
+            "fracture": false,
+            "health_cost": 11.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "RIB_08_L": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_08_R": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_10_L": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_10_R": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SACRUM": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "pelvis",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SCAPULA_L": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SCAPULA_R": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "STERNUM": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TEMPORAL_L": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TEMPORAL_R": {
+            "fracture": false,
+            "health_cost": 7.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TIBIA_L": {
+            "fracture": false,
+            "health_cost": 11.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "TIBIA_R": {
+            "fracture": false,
+            "health_cost": 11.51,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 2,
+            "wound_type": "blunt"
+          }
+        },
+        "kind": "heavy",
+        "move_id": "staff_heavy",
+        "poise_damage": 35.0,
+        "recovery": 26,
+        "stamina_cost": 30.0,
+        "startup": 24,
+        "target_bone": "TEMPORAL_L",
+        "weapon_id": "staff"
+      },
+      "staff_light": {
+        "active": 4,
+        "armour_from": null,
+        "energy_j": 78.0,
+        "hitstun": 12,
+        "impacts": {
+          "CRANIUM": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "FEMUR_L": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "FEMUR_R": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "HUMERUS_L": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "HUMERUS_R": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "LUMBAR_3": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "abdomen",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "MANDIBLE": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RADIUS_L": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RADIUS_R": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_08_L": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_08_R": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_10_L": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_10_R": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SACRUM": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "pelvis",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SCAPULA_L": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SCAPULA_R": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "STERNUM": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TEMPORAL_L": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TEMPORAL_R": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TIBIA_L": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TIBIA_R": {
+            "fracture": false,
+            "health_cost": 5.95,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 1,
+            "wound_type": "blunt"
+          }
+        },
+        "kind": "light",
+        "move_id": "staff_light",
+        "poise_damage": 15.0,
+        "recovery": 18,
+        "stamina_cost": 15.0,
+        "startup": 12,
+        "target_bone": "RIB_08_L",
+        "weapon_id": "staff"
+      },
+      "unarmed_heavy": {
+        "active": 4,
+        "armour_from": 8,
+        "energy_j": 108.0,
+        "hitstun": 20,
+        "impacts": {
+          "CRANIUM": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "FEMUR_L": {
+            "fracture": false,
+            "health_cost": 10.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "FEMUR_R": {
+            "fracture": false,
+            "health_cost": 10.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "HUMERUS_L": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "HUMERUS_R": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "LUMBAR_3": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "abdomen",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "MANDIBLE": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RADIUS_L": {
+            "fracture": false,
+            "health_cost": 10.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "RADIUS_R": {
+            "fracture": false,
+            "health_cost": 10.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "RIB_08_L": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_08_R": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_10_L": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_10_R": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SACRUM": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "pelvis",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SCAPULA_L": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SCAPULA_R": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "STERNUM": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TEMPORAL_L": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TEMPORAL_R": {
+            "fracture": false,
+            "health_cost": 6.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TIBIA_L": {
+            "fracture": false,
+            "health_cost": 10.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 2,
+            "wound_type": "blunt"
+          },
+          "TIBIA_R": {
+            "fracture": false,
+            "health_cost": 10.7,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 2,
+            "wound_type": "blunt"
+          }
+        },
+        "kind": "heavy",
+        "move_id": "unarmed_heavy",
+        "poise_damage": 25.0,
+        "recovery": 20,
+        "stamina_cost": 30.0,
+        "startup": 16,
+        "target_bone": "TEMPORAL_L",
+        "weapon_id": "unarmed"
+      },
+      "unarmed_light": {
+        "active": 3,
+        "armour_from": null,
+        "energy_j": 60.0,
+        "hitstun": 12,
+        "impacts": {
+          "CRANIUM": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "FEMUR_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "FEMUR_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thigh",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "HUMERUS_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "HUMERUS_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "upper_arm",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "LUMBAR_3": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "abdomen",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "MANDIBLE": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RADIUS_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RADIUS_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "forearm",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_08_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_08_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_10_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "RIB_10_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SACRUM": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "pelvis",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SCAPULA_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "SCAPULA_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "STERNUM": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "thorax",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TEMPORAL_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TEMPORAL_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "head",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TIBIA_L": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 1,
+            "wound_type": "blunt"
+          },
+          "TIBIA_R": {
+            "fracture": false,
+            "health_cost": 5.5,
+            "is_lethal": false,
+            "provenance": "estimate",
+            "region": "leg",
+            "severity": 1,
+            "wound_type": "blunt"
+          }
+        },
+        "kind": "light",
+        "move_id": "unarmed_light",
+        "poise_damage": 10.0,
+        "recovery": 12,
+        "stamina_cost": 15.0,
+        "startup": 8,
+        "target_bone": "RIB_08_L",
+        "weapon_id": "unarmed"
+      }
+    },
+    "provenance": "placeholder",
+    "reference_scenarios": [
+      {
+        "expected": {
+          "events": [
+            {
+              "detail": "staff_light#1",
+              "fighter": "player",
+              "frame": 0,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light->RIB_08_L sev1",
+              "fighter": "opponent",
+              "frame": 13,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_light#2",
+              "fighter": "player",
+              "frame": 17,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light->RIB_08_L sev1",
+              "fighter": "opponent",
+              "frame": 30,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_light#3",
+              "fighter": "player",
+              "frame": 34,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light->RIB_08_L sev1",
+              "fighter": "opponent",
+              "frame": 47,
+              "kind": "hit"
+            }
+          ],
+          "fighters": {
+            "opponent": {
+              "health": 82.15,
+              "poise": 12.0,
+              "position": [
+                0.0,
+                -1.0
+              ],
+              "stamina": 100.0,
+              "state": "idle",
+              "wounds": 3
+            },
+            "player": {
+              "health": 100.0,
+              "poise": 50.0,
+              "position": [
+                0.0,
+                0.0
+              ],
+              "stamina": 97.0,
+              "state": "idle",
+              "wounds": 0
+            }
+          },
+          "frames": 120,
+          "hits": [
+            {
+              "attacker": "player",
+              "bone_hit": "RIB_08_L",
+              "defender": "opponent",
+              "energy_j": 78.0,
+              "frame": 13,
+              "move_id": "staff_light",
+              "severity": 1
+            },
+            {
+              "attacker": "player",
+              "bone_hit": "RIB_08_L",
+              "defender": "opponent",
+              "energy_j": 78.0,
+              "frame": 30,
+              "move_id": "staff_light",
+              "severity": 1
+            },
+            {
+              "attacker": "player",
+              "bone_hit": "RIB_08_L",
+              "defender": "opponent",
+              "energy_j": 78.0,
+              "frame": 47,
+              "move_id": "staff_light",
+              "severity": 1
+            }
+          ],
+          "scenario_id": "light_chain_lands"
+        },
+        "spec": {
+          "distance_m": 1.0,
+          "frames": 120,
+          "scenario_id": "light_chain_lands",
+          "script": {
+            "1": {
+              "player": {
+                "light": true
+              }
+            },
+            "15": {
+              "player": {
+                "light": true
+              }
+            },
+            "33": {
+              "player": {
+                "light": true
+              }
+            }
+          },
+          "weapons": {
+            "player": "staff"
+          }
+        }
+      },
+      {
+        "expected": {
+          "events": [
+            {
+              "detail": "staff_heavy",
+              "fighter": "opponent",
+              "frame": 0,
+              "kind": "move_start"
+            },
+            {
+              "detail": "L",
+              "fighter": "player",
+              "frame": 21,
+              "kind": "dodge"
+            },
+            {
+              "detail": "staff_heavy",
+              "fighter": "player",
+              "frame": 25,
+              "kind": "dodged"
+            }
+          ],
+          "fighters": {
+            "opponent": {
+              "health": 100.0,
+              "poise": 50.0,
+              "position": [
+                0.0,
+                -1.2
+              ],
+              "stamina": 100.0,
+              "state": "idle",
+              "wounds": 0
+            },
+            "player": {
+              "health": 100.0,
+              "poise": 50.0,
+              "position": [
+                1.999998,
+                0.0
+              ],
+              "stamina": 100.0,
+              "state": "idle",
+              "wounds": 0
+            }
+          },
+          "frames": 80,
+          "hits": [],
+          "scenario_id": "dodge_through_heavy"
+        },
+        "spec": {
+          "distance_m": 1.2,
+          "frames": 80,
+          "scenario_id": "dodge_through_heavy",
+          "script": {
+            "1": {
+              "opponent": {
+                "heavy": true
+              }
+            },
+            "22": {
+              "player": {
+                "direction": "L",
+                "dodge": true
+              }
+            }
+          },
+          "weapons": {
+            "opponent": "staff"
+          }
+        }
+      },
+      {
+        "expected": {
+          "events": [
+            {
+              "detail": "staff_heavy",
+              "fighter": "opponent",
+              "frame": 0,
+              "kind": "move_start"
+            },
+            {
+              "detail": "L",
+              "fighter": "player",
+              "frame": 23,
+              "kind": "dodge"
+            },
+            {
+              "detail": "staff_heavy->TEMPORAL_L sev1",
+              "fighter": "player",
+              "frame": 25,
+              "kind": "hit"
+            }
+          ],
+          "fighters": {
+            "opponent": {
+              "health": 100.0,
+              "poise": 50.0,
+              "position": [
+                0.0,
+                -1.2
+              ],
+              "stamina": 100.0,
+              "state": "idle",
+              "wounds": 0
+            },
+            "player": {
+              "health": 92.49,
+              "poise": 15.0,
+              "position": [
+                0.153846,
+                0.0
+              ],
+              "stamina": 100.0,
+              "state": "idle",
+              "wounds": 1
+            }
+          },
+          "frames": 80,
+          "hits": [
+            {
+              "attacker": "opponent",
+              "bone_hit": "TEMPORAL_L",
+              "defender": "player",
+              "energy_j": 140.4,
+              "frame": 25,
+              "move_id": "staff_heavy",
+              "severity": 1
+            }
+          ],
+          "scenario_id": "dodge_too_late"
+        },
+        "spec": {
+          "distance_m": 1.2,
+          "frames": 80,
+          "scenario_id": "dodge_too_late",
+          "script": {
+            "1": {
+              "opponent": {
+                "heavy": true
+              }
+            },
+            "24": {
+              "player": {
+                "direction": "L",
+                "dodge": true
+              }
+            }
+          },
+          "weapons": {
+            "opponent": "staff"
+          }
+        }
+      },
+      {
+        "expected": {
+          "events": [
+            {
+              "detail": "unarmed_light#1",
+              "fighter": "player",
+              "frame": 0,
+              "kind": "move_start"
+            },
+            {
+              "detail": "unarmed_light",
+              "fighter": "player",
+              "frame": 9,
+              "kind": "whiff"
+            },
+            {
+              "detail": "unarmed_light#2",
+              "fighter": "player",
+              "frame": 12,
+              "kind": "move_start"
+            },
+            {
+              "detail": "unarmed_light",
+              "fighter": "player",
+              "frame": 21,
+              "kind": "whiff"
+            },
+            {
+              "detail": "unarmed_light#3",
+              "fighter": "player",
+              "frame": 24,
+              "kind": "move_start"
+            },
+            {
+              "detail": "unarmed_light",
+              "fighter": "player",
+              "frame": 33,
+              "kind": "whiff"
+            },
+            {
+              "detail": "unarmed_light#1",
+              "fighter": "player",
+              "frame": 48,
+              "kind": "move_start"
+            },
+            {
+              "detail": "unarmed_light",
+              "fighter": "player",
+              "frame": 57,
+              "kind": "whiff"
+            },
+            {
+              "detail": "unarmed_light#2",
+              "fighter": "player",
+              "frame": 60,
+              "kind": "move_start"
+            },
+            {
+              "detail": "unarmed_light",
+              "fighter": "player",
+              "frame": 69,
+              "kind": "whiff"
+            },
+            {
+              "detail": "unarmed_light#3",
+              "fighter": "player",
+              "frame": 72,
+              "kind": "move_start"
+            },
+            {
+              "detail": "unarmed_light",
+              "fighter": "player",
+              "frame": 81,
+              "kind": "whiff"
+            },
+            {
+              "detail": "unarmed_light",
+              "fighter": "player",
+              "frame": 96,
+              "kind": "no_stamina"
+            },
+            {
+              "detail": "unarmed_light",
+              "fighter": "player",
+              "frame": 96,
+              "kind": "no_stamina"
+            },
+            {
+              "detail": "unarmed_light",
+              "fighter": "player",
+              "frame": 102,
+              "kind": "no_stamina"
+            },
+            {
+              "detail": "unarmed_light",
+              "fighter": "player",
+              "frame": 108,
+              "kind": "no_stamina"
+            }
+          ],
+          "fighters": {
+            "opponent": {
+              "health": 100.0,
+              "poise": 50.0,
+              "position": [
+                0.0,
+                -3.0
+              ],
+              "stamina": 100.0,
+              "state": "idle",
+              "wounds": 0
+            },
+            "player": {
+              "health": 100.0,
+              "poise": 50.0,
+              "position": [
+                0.0,
+                0.0
+              ],
+              "stamina": 16.0,
+              "state": "idle",
+              "wounds": 0
+            }
+          },
+          "frames": 110,
+          "hits": [],
+          "scenario_id": "stamina_exhausted"
+        },
+        "spec": {
+          "distance_m": 3.0,
+          "frames": 110,
+          "scenario_id": "stamina_exhausted",
+          "script": {
+            "1": {
+              "player": {
+                "light": true
+              }
+            },
+            "103": {
+              "player": {
+                "light": true
+              }
+            },
+            "109": {
+              "player": {
+                "light": true
+              }
+            },
+            "13": {
+              "player": {
+                "light": true
+              }
+            },
+            "19": {
+              "player": {
+                "light": true
+              }
+            },
+            "25": {
+              "player": {
+                "light": true
+              }
+            },
+            "31": {
+              "player": {
+                "light": true
+              }
+            },
+            "37": {
+              "player": {
+                "light": true
+              }
+            },
+            "43": {
+              "player": {
+                "light": true
+              }
+            },
+            "49": {
+              "player": {
+                "light": true
+              }
+            },
+            "55": {
+              "player": {
+                "light": true
+              }
+            },
+            "61": {
+              "player": {
+                "light": true
+              }
+            },
+            "67": {
+              "player": {
+                "light": true
+              }
+            },
+            "7": {
+              "player": {
+                "light": true
+              }
+            },
+            "73": {
+              "player": {
+                "light": true
+              }
+            },
+            "79": {
+              "player": {
+                "light": true
+              }
+            },
+            "85": {
+              "player": {
+                "light": true
+              }
+            },
+            "91": {
+              "player": {
+                "light": true
+              }
+            },
+            "97": {
+              "player": {
+                "light": true
+              }
+            }
+          },
+          "weapons": {
+            "player": "unarmed"
+          }
+        }
+      },
+      {
+        "expected": {
+          "events": [
+            {
+              "detail": "staff_light#1",
+              "fighter": "player",
+              "frame": 0,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light",
+              "fighter": "opponent",
+              "frame": 13,
+              "kind": "blocked"
+            },
+            {
+              "detail": "staff_light#2",
+              "fighter": "player",
+              "frame": 17,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light",
+              "fighter": "opponent",
+              "frame": 30,
+              "kind": "blocked"
+            },
+            {
+              "detail": "staff_light#3",
+              "fighter": "player",
+              "frame": 34,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light",
+              "fighter": "opponent",
+              "frame": 47,
+              "kind": "guard_break"
+            },
+            {
+              "detail": "staff_heavy",
+              "fighter": "player",
+              "frame": 51,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_heavy->TEMPORAL_L sev1",
+              "fighter": "opponent",
+              "frame": 76,
+              "kind": "hit"
+            }
+          ],
+          "fighters": {
+            "opponent": {
+              "health": 92.49,
+              "poise": 15.0,
+              "position": [
+                0.0,
+                -1.0
+              ],
+              "stamina": 19.875,
+              "state": "guard",
+              "wounds": 1
+            },
+            "player": {
+              "health": 100.0,
+              "poise": 50.0,
+              "position": [
+                0.0,
+                0.0
+              ],
+              "stamina": 54.25,
+              "state": "idle",
+              "wounds": 0
+            }
+          },
+          "frames": 120,
+          "hits": [
+            {
+              "attacker": "player",
+              "bone_hit": "TEMPORAL_L",
+              "defender": "opponent",
+              "energy_j": 140.4,
+              "frame": 76,
+              "move_id": "staff_heavy",
+              "severity": 1
+            }
+          ],
+          "scenario_id": "guard_break"
+        },
+        "spec": {
+          "distance_m": 1.0,
+          "frames": 120,
+          "hold": {
+            "opponent": {
+              "guard": true
+            }
+          },
+          "scenario_id": "guard_break",
+          "script": {
+            "1": {
+              "player": {
+                "light": true
+              }
+            },
+            "15": {
+              "player": {
+                "light": true
+              }
+            },
+            "33": {
+              "player": {
+                "light": true
+              }
+            },
+            "50": {
+              "player": {
+                "heavy": true
+              }
+            }
+          },
+          "start": {
+            "opponent": {
+              "stamina": 20.0
+            }
+          },
+          "weapons": {
+            "player": "staff"
+          }
+        }
+      },
+      {
+        "expected": {
+          "events": [
+            {
+              "detail": "staff_heavy",
+              "fighter": "player",
+              "frame": 0,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_heavy->TEMPORAL_L sev1",
+              "fighter": "opponent",
+              "frame": 25,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_heavy",
+              "fighter": "player",
+              "frame": 59,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_heavy->TEMPORAL_L sev1",
+              "fighter": "opponent",
+              "frame": 84,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_heavy",
+              "fighter": "opponent",
+              "frame": 84,
+              "kind": "poise_break"
+            }
+          ],
+          "fighters": {
+            "opponent": {
+              "health": 84.98,
+              "poise": 50.0,
+              "position": [
+                0.0,
+                -1.0
+              ],
+              "stamina": 100.0,
+              "state": "idle",
+              "wounds": 2
+            },
+            "player": {
+              "health": 100.0,
+              "poise": 50.0,
+              "position": [
+                0.0,
+                0.0
+              ],
+              "stamina": 100.0,
+              "state": "idle",
+              "wounds": 0
+            }
+          },
+          "frames": 140,
+          "hits": [
+            {
+              "attacker": "player",
+              "bone_hit": "TEMPORAL_L",
+              "defender": "opponent",
+              "energy_j": 140.4,
+              "frame": 25,
+              "move_id": "staff_heavy",
+              "severity": 1
+            },
+            {
+              "attacker": "player",
+              "bone_hit": "TEMPORAL_L",
+              "defender": "opponent",
+              "energy_j": 140.4,
+              "frame": 84,
+              "move_id": "staff_heavy",
+              "severity": 1
+            }
+          ],
+          "scenario_id": "poise_break"
+        },
+        "spec": {
+          "distance_m": 1.0,
+          "frames": 140,
+          "scenario_id": "poise_break",
+          "script": {
+            "1": {
+              "player": {
+                "heavy": true
+              }
+            },
+            "60": {
+              "player": {
+                "heavy": true
+              }
+            }
+          },
+          "weapons": {
+            "player": "staff"
+          }
+        }
+      },
+      {
+        "expected": {
+          "events": [
+            {
+              "detail": "staff_heavy",
+              "fighter": "opponent",
+              "frame": 0,
+              "kind": "move_start"
+            },
+            {
+              "detail": "unarmed_light#1",
+              "fighter": "player",
+              "frame": 9,
+              "kind": "move_start"
+            },
+            {
+              "detail": "unarmed_light->RIB_08_L sev1",
+              "fighter": "opponent",
+              "frame": 18,
+              "kind": "hit"
+            },
+            {
+              "detail": "unarmed_light",
+              "fighter": "opponent",
+              "frame": 18,
+              "kind": "armoured"
+            },
+            {
+              "detail": "staff_heavy->TEMPORAL_L sev1",
+              "fighter": "player",
+              "frame": 25,
+              "kind": "hit"
+            }
+          ],
+          "fighters": {
+            "opponent": {
+              "health": 94.5,
+              "poise": 41.5,
+              "position": [
+                0.0,
+                -0.8
+              ],
+              "stamina": 100.0,
+              "state": "idle",
+              "wounds": 1
+            },
+            "player": {
+              "health": 92.49,
+              "poise": 15.0,
+              "position": [
+                0.0,
+                0.0
+              ],
+              "stamina": 100.0,
+              "state": "idle",
+              "wounds": 1
+            }
+          },
+          "frames": 80,
+          "hits": [
+            {
+              "attacker": "player",
+              "bone_hit": "RIB_08_L",
+              "defender": "opponent",
+              "energy_j": 60.0,
+              "frame": 18,
+              "move_id": "unarmed_light",
+              "severity": 1
+            },
+            {
+              "attacker": "opponent",
+              "bone_hit": "TEMPORAL_L",
+              "defender": "player",
+              "energy_j": 140.4,
+              "frame": 25,
+              "move_id": "staff_heavy",
+              "severity": 1
+            }
+          ],
+          "scenario_id": "hyper_armour_trade"
+        },
+        "spec": {
+          "distance_m": 0.8,
+          "frames": 80,
+          "scenario_id": "hyper_armour_trade",
+          "script": {
+            "1": {
+              "opponent": {
+                "heavy": true
+              }
+            },
+            "10": {
+              "player": {
+                "light": true
+              }
+            }
+          },
+          "weapons": {
+            "opponent": "staff"
+          }
+        }
+      },
+      {
+        "expected": {
+          "events": [
+            {
+              "detail": "",
+              "fighter": "opponent",
+              "frame": 64,
+              "kind": "telegraph"
+            },
+            {
+              "detail": "staff_light#1",
+              "fighter": "opponent",
+              "frame": 85,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light->RIB_08_L sev1",
+              "fighter": "player",
+              "frame": 98,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_light#2",
+              "fighter": "opponent",
+              "frame": 102,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light->RIB_08_L sev1",
+              "fighter": "player",
+              "frame": 115,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_heavy",
+              "fighter": "opponent",
+              "frame": 119,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_heavy->TEMPORAL_L sev1",
+              "fighter": "player",
+              "frame": 144,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_heavy",
+              "fighter": "player",
+              "frame": 144,
+              "kind": "poise_break"
+            },
+            {
+              "detail": "",
+              "fighter": "opponent",
+              "frame": 317,
+              "kind": "telegraph"
+            },
+            {
+              "detail": "staff_light#1",
+              "fighter": "opponent",
+              "frame": 338,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light->RIB_08_L sev1",
+              "fighter": "player",
+              "frame": 351,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_light#2",
+              "fighter": "opponent",
+              "frame": 355,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light->RIB_08_L sev1",
+              "fighter": "player",
+              "frame": 368,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_heavy",
+              "fighter": "opponent",
+              "frame": 372,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_heavy->TEMPORAL_L sev1",
+              "fighter": "player",
+              "frame": 397,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_heavy",
+              "fighter": "player",
+              "frame": 397,
+              "kind": "poise_break"
+            },
+            {
+              "detail": "",
+              "fighter": "opponent",
+              "frame": 570,
+              "kind": "telegraph"
+            },
+            {
+              "detail": "staff_light#1",
+              "fighter": "opponent",
+              "frame": 591,
+              "kind": "move_start"
+            }
+          ],
+          "fighters": {
+            "opponent": {
+              "health": 100.0,
+              "poise": 50.0,
+              "position": [
+                0.0,
+                -1.293312
+              ],
+              "stamina": 85.0,
+              "state": "startup",
+              "wounds": 0
+            },
+            "player": {
+              "health": 61.18,
+              "poise": 50.0,
+              "position": [
+                0.0,
+                0.0
+              ],
+              "stamina": 100.0,
+              "state": "idle",
+              "wounds": 6
+            }
+          },
+          "frames": 600,
+          "hits": [
+            {
+              "attacker": "opponent",
+              "bone_hit": "RIB_08_L",
+              "defender": "player",
+              "energy_j": 78.0,
+              "frame": 98,
+              "move_id": "staff_light",
+              "severity": 1
+            },
+            {
+              "attacker": "opponent",
+              "bone_hit": "RIB_08_L",
+              "defender": "player",
+              "energy_j": 78.0,
+              "frame": 115,
+              "move_id": "staff_light",
+              "severity": 1
+            },
+            {
+              "attacker": "opponent",
+              "bone_hit": "TEMPORAL_L",
+              "defender": "player",
+              "energy_j": 140.4,
+              "frame": 144,
+              "move_id": "staff_heavy",
+              "severity": 1
+            },
+            {
+              "attacker": "opponent",
+              "bone_hit": "RIB_08_L",
+              "defender": "player",
+              "energy_j": 78.0,
+              "frame": 351,
+              "move_id": "staff_light",
+              "severity": 1
+            },
+            {
+              "attacker": "opponent",
+              "bone_hit": "RIB_08_L",
+              "defender": "player",
+              "energy_j": 78.0,
+              "frame": 368,
+              "move_id": "staff_light",
+              "severity": 1
+            },
+            {
+              "attacker": "opponent",
+              "bone_hit": "TEMPORAL_L",
+              "defender": "player",
+              "energy_j": 140.4,
+              "frame": 397,
+              "move_id": "staff_heavy",
+              "severity": 1
+            }
+          ],
+          "scenario_id": "sentinel_cycle_600"
+        },
+        "spec": {
+          "distance_m": 3.0,
+          "frames": 600,
+          "scenario_id": "sentinel_cycle_600",
+          "script": {},
+          "sentinel": "opponent",
+          "weapons": {
+            "opponent": "staff"
+          }
+        }
+      },
+      {
+        "expected": {
+          "events": [
+            {
+              "detail": "",
+              "fighter": "opponent",
+              "frame": 64,
+              "kind": "telegraph"
+            },
+            {
+              "detail": "staff_light#1",
+              "fighter": "opponent",
+              "frame": 85,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light->RIB_08_L sev1",
+              "fighter": "player",
+              "frame": 98,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_light#2",
+              "fighter": "opponent",
+              "frame": 102,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light->RIB_08_L sev1",
+              "fighter": "player",
+              "frame": 115,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_heavy",
+              "fighter": "opponent",
+              "frame": 119,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_heavy->TEMPORAL_L sev1",
+              "fighter": "player",
+              "frame": 144,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_heavy",
+              "fighter": "player",
+              "frame": 144,
+              "kind": "poise_break"
+            },
+            {
+              "detail": "staff_light#1",
+              "fighter": "player",
+              "frame": 191,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light->RIB_08_L sev1",
+              "fighter": "opponent",
+              "frame": 204,
+              "kind": "hit"
+            },
+            {
+              "detail": "",
+              "fighter": "opponent",
+              "frame": 215,
+              "kind": "telegraph"
+            },
+            {
+              "detail": "staff_light#1",
+              "fighter": "opponent",
+              "frame": 236,
+              "kind": "move_start"
+            },
+            {
+              "detail": "staff_light->RIB_08_L sev1",
+              "fighter": "player",
+              "frame": 249,
+              "kind": "hit"
+            },
+            {
+              "detail": "staff_light#2",
+              "fighter": "opponent",
+              "frame": 253,
+              "kind": "move_start"
+            }
+          ],
+          "fighters": {
+            "opponent": {
+              "health": 94.05,
+              "poise": 35.0,
+              "position": [
+                0.0,
+                -1.293312
+              ],
+              "stamina": 70.0,
+              "state": "startup",
+              "wounds": 1
+            },
+            "player": {
+              "health": 74.64,
+              "poise": 35.0,
+              "position": [
+                0.0,
+                0.0
+              ],
+              "stamina": 100.0,
+              "state": "hitstun",
+              "wounds": 4
+            }
+          },
+          "frames": 260,
+          "hits": [
+            {
+              "attacker": "opponent",
+              "bone_hit": "RIB_08_L",
+              "defender": "player",
+              "energy_j": 78.0,
+              "frame": 98,
+              "move_id": "staff_light",
+              "severity": 1
+            },
+            {
+              "attacker": "opponent",
+              "bone_hit": "RIB_08_L",
+              "defender": "player",
+              "energy_j": 78.0,
+              "frame": 115,
+              "move_id": "staff_light",
+              "severity": 1
+            },
+            {
+              "attacker": "opponent",
+              "bone_hit": "TEMPORAL_L",
+              "defender": "player",
+              "energy_j": 140.4,
+              "frame": 144,
+              "move_id": "staff_heavy",
+              "severity": 1
+            },
+            {
+              "attacker": "player",
+              "bone_hit": "RIB_08_L",
+              "defender": "opponent",
+              "energy_j": 78.0,
+              "frame": 204,
+              "move_id": "staff_light",
+              "severity": 1
+            },
+            {
+              "attacker": "opponent",
+              "bone_hit": "RIB_08_L",
+              "defender": "player",
+              "energy_j": 78.0,
+              "frame": 249,
+              "move_id": "staff_light",
+              "severity": 1
+            }
+          ],
+          "scenario_id": "sentinel_punished"
+        },
+        "spec": {
+          "distance_m": 3.0,
+          "frames": 260,
+          "scenario_id": "sentinel_punished",
+          "script": {
+            "192": {
+              "player": {
+                "light": true
+              }
+            }
+          },
+          "sentinel": "opponent",
+          "weapons": {
+            "opponent": "staff",
+            "player": "staff"
+          }
+        }
+      }
+    ],
+    "tuning": {
+      "block_divisor": 10.0,
+      "chain_window": 10,
+      "dodge_cancel_from": 8,
+      "dodge_cost": 20.0,
+      "dodge_distance": 2.0,
+      "dodge_frames": 26,
+      "engage_range": 1.3,
+      "guard_regen_factor": 0.3,
+      "iframe_end": 15,
+      "iframe_start": 4,
+      "input_buffer_frames": 8,
+      "max_chain": 3,
+      "poise_max": 50.0,
+      "poise_regen": 0.5,
+      "poise_regen_delay": 60,
+      "punish_window": 40,
+      "regen_delay": 30,
+      "retreat_range": 2.6,
+      "stagger_frames": 40,
+      "stamina_max": 100.0,
+      "stamina_regen": 0.75,
+      "telegraph_frames": 20,
+      "walk_speed": 1.6
+    }
+  },
   "styles": {
     "beat_em_up": {
       "frame_rate": 60,

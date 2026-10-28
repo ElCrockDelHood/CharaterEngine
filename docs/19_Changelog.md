@@ -2,6 +2,13 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-25 · Souls-like in Godot (STYLE-SOULS-001 step 2)
+
+### Added
+- Gameplay table `ce-gameplay/3`: `souls_like_rules` (tuning, per-weapon moves with energy and impacts, 9 reference
+  scenarios). Godot `ce_souls_combat.gd` port + `CEGameplayData.souls_rules()`; runner checks: all 9 scenarios
+  identical to Python. Shenmue fights unchanged.
+
 ## [Unreleased] — 2026-10-25 · Souls-like domain (STYLE-SOULS-001 step 1)
 
 ### Added

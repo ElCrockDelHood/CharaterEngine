@@ -7,7 +7,7 @@ class_name CEGameplayData
 extends RefCounted
 
 const DEFAULT_PATH := "res://addons/character_engine/data/gameplay_shenmue.json"
-const SCHEMA := "ce-gameplay/2"
+const SCHEMA := "ce-gameplay/3"
 
 var table: Dictionary = {}
 var path: String = ""
@@ -112,6 +112,15 @@ func weapon_impact(weapon_id: String, move_id: String, bone: String) -> Dictiona
 	if impacts.has(bone):
 		return impacts[bone]
 	return impacts.get(table.get("fallback_bone", "STERNUM"), {})
+
+
+## Souls-like rules (STYLE-SOULS-001): tuning, per-weapon moves with energy and impacts, reference scenarios.
+func souls_rules() -> Dictionary:
+	return table.get("souls_like_rules", {})
+
+
+func souls_reference_scenarios() -> Array:
+	return souls_rules().get("reference_scenarios", [])
 
 
 func reference_scenarios() -> Array:

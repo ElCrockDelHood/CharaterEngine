@@ -149,3 +149,23 @@ def test_tuning_is_placeholder_and_shenmue_untouched():
     assert PROVENANCE.value == "placeholder"
     table = gameplay_runtime_table()
     assert "souls_like" in table["styles"] and table["styles"]["souls_like"]["moves"] == []   # JSON is step 2
+
+
+def test_runtime_table_carries_the_souls_rules_for_godot():
+    from character_engine.domain.gameplay import gameplay_runtime_table
+    from character_engine.domain.gameplay.runtime_table import SCHEMA
+    from character_engine.domain.gameplay.souls import move_energy
+
+    table = gameplay_runtime_table()
+    assert SCHEMA == "ce-gameplay/3"
+    block = table["souls_like_rules"]
+    assert block["provenance"] == "placeholder" and set(block["moves"]) == set(SOULS_MOVES)
+    for mid, entry in block["moves"].items():
+        mv = SOULS_MOVES[mid]
+        assert entry["energy_j"] == move_energy(WEAPONS[mv.weapon_id], mv)
+        assert mv.target_bone in entry["impacts"] and entry["impacts"][mv.target_bone]["health_cost"] > 0
+    assert [sc["spec"]["scenario_id"] for sc in block["reference_scenarios"]] == list(SPECS)
+    for sc in block["reference_scenarios"]:
+        assert sc["expected"] == run_souls_scenario(SPECS[sc["spec"]["scenario_id"]])
+    wound_types = {e["impacts"]["RIB_08_L"]["wound_type"] for mid, e in block["moves"].items() if "short_blade" in mid}
+    assert wound_types == {"incision"}

@@ -899,6 +899,8 @@ as Shenmue: Python domain is the truth → JSON → Godot port → parity on 9 r
 identical. Cinematography / animation stay in Blender (owner rule); Godot plays baked clips by state.
 Step 1 done: `domain/gameplay/souls.py`, `tests/unit/test_souls.py` (engage range corrected to 1.3 m, within the
 staff reach). Steps 2–5 each need owner approval.
+Step 2 (2026-10-25, owner "sigamos adelante"): gameplay table `ce-gameplay/3` with `souls_like_rules`; Godot
+`ce_souls_combat.gd` replays the 9 reference scenarios identically to Python; Shenmue fights unchanged.
 
 **Date**: 2026-10-25 · **Status**: FINAL (values reversible)
 

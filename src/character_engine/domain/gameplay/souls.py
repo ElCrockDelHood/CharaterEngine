@@ -165,6 +165,23 @@ def _r(v: float) -> float:
     return round(v, 6)
 
 
+def move_energy(weapon: Weapon, mv: SoulsMove) -> float:
+    """Strike energy (J) of ``mv`` with ``weapon``: base × weapon multiplier × light / heavy multiplier."""
+    return _r(BASE_ENERGY_J * weapon.energy_multiplier * mv.energy_multiplier)
+
+
+def souls_assessment(weapon: Weapon, bone: str, energy_j: float) -> WoundAssessment:
+    """Wound of a Souls strike: unarmed = blunt with the punch contact radius, otherwise the weapon's path."""
+    if weapon.category is WeaponCategory.UNARMED:
+        return assess_wound(blunt_impact_to_wound(bone, contact_radius_m=UNARMED_CONTACT_RADIUS_M, energy_j=energy_j))
+    return assess_wound(weapon.strike_wound(bone, energy_j))
+
+
+def souls_health_cost(a: WoundAssessment, energy_j: float) -> float:
+    """Same health formula as Shenmue (severity + energy term + fracture)."""
+    return _health_cost(a, None, energy_j)  # type: ignore[arg-type]
+
+
 class SoulsCombat:
     """Fixed-step Souls-like duel between N fighters (lock-on to the nearest living opponent)."""
 
@@ -336,7 +353,7 @@ class SoulsCombat:
                 and self.t["iframe_start"] <= target.state_frames <= self.t["iframe_end"]):
             self._emit(target.fighter_id, "dodged", mv.move_id)
             return
-        energy = _r(BASE_ENERGY_J * a.weapon.energy_multiplier * mv.energy_multiplier)
+        energy = move_energy(a.weapon, mv)
         if target.state == SoulsState.GUARD:
             target.stamina = _r(target.stamina - energy / self.t["block_divisor"])
             target.since_spend = 0
@@ -348,13 +365,9 @@ class SoulsCombat:
                 self._emit(target.fighter_id, "blocked", mv.move_id)
             return
         bone = mv.target_bone if mv.target_bone in target.hitboxes else "STERNUM"
-        if a.weapon.category is WeaponCategory.UNARMED:
-            wound = blunt_impact_to_wound(bone, contact_radius_m=UNARMED_CONTACT_RADIUS_M, energy_j=energy)
-        else:
-            wound = a.weapon.strike_wound(bone, energy)
-        assessment = assess_wound(wound)
+        assessment = souls_assessment(a.weapon, bone, energy)
         target.wounds.append(assessment)
-        target.health = _r(max(0.0, target.health - _health_cost(assessment, None, energy)))  # type: ignore[arg-type]
+        target.health = _r(max(0.0, target.health - souls_health_cost(assessment, energy)))
         target.poise = _r(target.poise - mv.poise_damage)
         target.since_poise_hit = 0
         self.hits.append(SoulsHit(self.frame, a.fighter_id, target.fighter_id, mv.move_id, bone, energy, assessment))

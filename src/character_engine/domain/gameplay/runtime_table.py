@@ -25,9 +25,22 @@ from .combat import (
     _health_cost,
     default_hitboxes,
 )
+from .souls import (
+    BASE_REACH_M,
+    SOULS_MOVES,
+    SOULS_TUNING,
+    move_energy,
+    run_souls_scenario,
+    souls_assessment,
+    souls_health_cost,
+    souls_reference_specs,
+)
+from .souls import (
+    PROVENANCE as SOULS_PROVENANCE,
+)
 from .weapons import NUMERIC_FIELDS, UNARMED, WEAPONS, Weapon
 
-SCHEMA = "ce-gameplay/2"   # /2: weapons table + optional "weapons" in scenario specs (Decision 50)
+SCHEMA = "ce-gameplay/3"   # /2: weapons (Decision 50); /3: souls_like_rules (STYLE-SOULS-001, Decision 53)
 
 
 def _impact(bone: str, mv: Move, weapon: Weapon = UNARMED) -> Dict[str, object]:
@@ -152,6 +165,30 @@ def run_scenario(spec: Mapping[str, object], moves: Mapping[str, Move] = SHENMUE
     }
 
 
+def _souls_block(hitbox_bones: List[str]) -> Dict[str, object]:
+    """Souls-like rules for runtimes: tuning, per-weapon moves with energy and impacts, reference scenarios."""
+    moves = {}
+    for mid, mv in SOULS_MOVES.items():
+        weapon = WEAPONS[mv.weapon_id]
+        energy = move_energy(weapon, mv)
+        impacts = {}
+        for bone in hitbox_bones:
+            a = souls_assessment(weapon, bone, energy)
+            impacts[bone] = {"severity": a.severity.value, "is_lethal": a.is_lethal, "fracture": a.fracture,
+                             "region": a.region.value, "wound_type": a.wound.wound_type.value,
+                             "health_cost": souls_health_cost(a, energy), "provenance": a.provenance.value}
+        moves[mid] = {"move_id": mid, "weapon_id": mv.weapon_id, "kind": mv.kind, "startup": mv.startup,
+                      "active": mv.active, "recovery": mv.recovery, "stamina_cost": mv.stamina_cost,
+                      "poise_damage": mv.poise_damage, "hitstun": mv.hitstun, "target_bone": mv.target_bone,
+                      "armour_from": mv.armour_from, "energy_j": energy, "impacts": impacts}
+    scenarios = []
+    for spec in souls_reference_specs():
+        scenarios.append({"spec": {**spec, "script": {str(k): v for k, v in dict(spec.get("script", {})).items()}},
+                          "expected": run_souls_scenario(spec)})
+    return {"tuning": dict(SOULS_TUNING), "base_reach_m": BASE_REACH_M, "provenance": SOULS_PROVENANCE.value,
+            "moves": moves, "reference_scenarios": scenarios}
+
+
 def gameplay_runtime_table() -> Dict[str, object]:
     hitboxes = default_hitboxes(1.80)
     bones = sorted(hitboxes)
@@ -169,6 +206,7 @@ def gameplay_runtime_table() -> Dict[str, object]:
         "hitboxes_1p80": hitboxes,
         "weapons": {wid: _weapon_entry(w, bones) for wid, w in WEAPONS.items()},
         "default_weapon": UNARMED.weapon_id,
+        "souls_like_rules": _souls_block(bones),
         "fallback_bone": "STERNUM",
         "knockdown_frames": 60,
         "reference_scenarios": scenarios,
