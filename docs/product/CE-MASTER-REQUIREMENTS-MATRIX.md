@@ -117,6 +117,8 @@ movement cinematography — slight, continuous changes of camera/motion paramete
 direction and combat state; presets authored in Blender, selected/blended deterministically in Godot (L1). Phase E6
 may become the core (flagged, not reordered). Open questions 10–14 in the draft §10.
 
+Update 2026-10-28 — owner answered Q10–Q14 (verbatim in the draft §11): Q10 camera framing, camera speeds/effects (ultra-speed power seen as slow motion, fatality-type), body animation blending; Q11 accepts the PROPOSED 4 distance bands (far / mid / close / clinch, multiples of weapon + arm reach, ESTIMATE) and 3 sectors (front / side / back); Q12 depends on the rival (vulnerabilities and strengths); Q13 camera, movements and cinematics; Q14 first scenario = Granadero approaching with ranged weapons, exchanging shots, until melee — ranged weapons PENDING sourced data. Work order: enrich the reactions first, then polish; first experiment easy, then tactical/strategic mobility, then combat areas and distances.
+
 ---
 
 ## Rows ANATOMY / RIG / TISSUE / TREATMENTS / FK — DRAFT (owner request, Decision 44)

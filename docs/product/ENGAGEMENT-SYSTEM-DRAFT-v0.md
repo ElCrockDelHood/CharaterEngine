@@ -213,3 +213,43 @@ Open questions (owner):
 12. Do NPC type or number of enemies change it?
 13. Is it only the player's camera, or the motion of every fighter (and the Blender cinematics too)?
 14. First concrete scenario to specify (e.g. one enemy approaching frontally)?
+
+## 11. Owner answers to Q10–Q14 and work order (verbatim, 2026-10-28 15:45 UTC)
+
+> "q10, los encuadres de camara, las velocidades los efectos de la misma, si aplicamos algun poder que me da ultra
+> velocidad y se ve como camara lenta o tipo fatality etc, mezcla de animaciones del cuerpo, busca ejemplos exitosos
+> de esto tambien.
+> q11 me gustatu recomendacion
+> q12 si, cambia segun el rival ya que cada uno cuenta con vulnerabilidades y fortalezas.
+> q13 la camara y tambien los movimientos y las cinematicas
+> q14 que el granadero se aproxme usando armas de distancia cambiando movimientos intercambiando disparos hasta que
+> entran en zona de combate cuerpo a cuerpo
+> 1ro enriquescamos las reacciones y luego las pulimos.
+> el 1er experimento tiene que ser algo facil y luego activar con todo lo que tiene que ver con movilidad tactica
+> estrategica y luego con las areas y distancias del combate"
+
+Recorded (no acceptance criteria invented):
+
+| Question | Owner answer | Notes |
+|----------|--------------|-------|
+| Q10 what changes | camera framing; camera speeds and effects (e.g. an "ultra speed" power seen as slow motion, or a fatality-type moment); body animation blending | owner asked for successful examples (see below) |
+| Q11 bands / sectors | accepts the recommendation | **PROPOSED**: 4 distance bands — far / mid / close / clinch — defined as multiples of weapon + arm reach, values to be measured and marked ESTIMATE; 3 direction sectors — front / side / back |
+| Q12 rival dependence | yes, it changes per rival, each with vulnerabilities and strengths | rival profiles not specified yet |
+| Q13 scope | the camera and also the movements and the cinematics | both Godot runtime and Blender cinematics |
+| Q14 first scenario | a Granadero approaches using ranged weapons, changing movements and exchanging shots until both enter the melee zone | **PENDING data**: period firearms (musket, saddle pistol) need sourced range / reload / speed data; no ranged-weapon models exist yet — nothing invented |
+| Work order | first enrich the reactions, then polish them | answers draft open question 6: the experiment library **enriches** the reaction library |
+| First experiment | something easy; then tactical and strategic mobility; then combat areas and distances | order recorded; the easy first experiment is still to be chosen |
+
+Successful examples found (research, 2026-10-28; to discuss, not requirements):
+* **Max Payne** (Remedy): slow-motion dives ("bullet time"); slow motion also used for finishing certain characters
+  (3D Realms special report, 2001).
+* **Dead to Rights**: slow-motion dives limited by an adrenaline bar, a resource-gated slow motion like an "ultra
+  speed" power (Gaming Nexus review).
+* **Assassin's Creed**: dynamic combat camera that frames the fight and shows finishers, moving closer as enemies
+  fall (gameanim.com, animation write-up).
+* **God of War (2018)**: one continuous camera without cuts, combat redesigned for the closer perspective (GDC 2019
+  talks by Dori Arazi and Mihir Sheth).
+* **Ghost of Tsushima**: standoffs and assassinations as cinematic lethal moments; two lock-on modes (duel vs
+  multiple opponents) (GDC talk "Honoring the Blade", Theodore Fishman).
+Not found in this search: Batman Arkham, Bayonetta Witch Time, Sekiro deathblow, Mortal Kombat fatality camera,
+Mount & Blade ranged → melee; a follow-up search is needed.
