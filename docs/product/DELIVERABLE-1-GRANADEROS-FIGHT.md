@@ -230,6 +230,32 @@ Limitations: the defender reacts only after contact (no anticipation, parry or d
 and reaction; the attacker keeps playing its clip unchanged; envelope capsules (ESTIMATE), PLACEHOLDER sabre, energy
 UNKNOWN; the reaction rule and clips are ASSUMED stand-ins for baked L2/L3 manifestations.
 
+### 3.7 Blend-in and attacker reaction — reaction library schema 3 (owner approval 2026-10-28)
+
+(a) The defender's reaction strip now blends in over **4 frames** (NLA `blend_in`, ASSUMED, `--blend-in`).
+(b) After a landed body hit, the attacker switches to the sword recovery clip `Sword_Regular_A_Rec` from the frame
+after contact, with the same blend (`attacker_reaction_for`, ASSUMED; `--no-attacker-reaction` turns it off).
+Blade-on-blade contact (a parry) is not detected, so every contact counts as a body hit and the attacker always
+plays the same recovery clip. Schema bumped to 3 (`attacker_reaction`, `settings`); validator, tests and the Godot
+check updated. Final run twice: identical SHA-256 for all 42 entries (logs `20261028T154545Z`, `20261028T154938Z`).
+Blend-only variant for comparison: `20261028T154218Z`.
+
+Signed sabre-to-body distance after contact (m), first frames:
+
+| Contact | No blend (schema 2) | Blend 4, attacker unchanged | Blend 4 + attacker recovery (final) |
+|---------|---------------------|-----------------------------|-------------------------------------|
+| Sword_Attack vs Idle, f22 | f23 +0.30, f26 +0.11 | f23 +0.20, f26 +0.28 | f23 +0.20, f24 +0.19, f27 +0.12 |
+| Regular_Combo vs Idle, f37 | f38 +0.53 | f38 +0.55, f40 +1.09 | f38 +0.55, f42 +0.12 |
+| Sword_Attack vs Block, f21 | f22 **+0.12 (out)** | f22 **−0.034 (still in)**, f23 +0.17 | f22 **−0.034**, f23 +0.12 |
+
+Findings: the blend removes the pose jump but, against Sword_Block, it costs the immediate evasion. For one more
+frame the blade is as deep as with no reaction at all, because the knockback only phases in. The attacker's
+recovery brings the sabre back towards the defender (0.12–0.20 m, 5–7 frames after contact) without re-entering.
+In every case the wound bone stays consistent (100 %) and nothing is still inside at the end.
+Renders: `builds/renders/reactions/*_contact.png`, `*_reaction.png` (both fighters reacting).
+Limitations: no reaction before contact; one fixed blend length; one recovery clip for every hit; no parry
+detection; envelope capsules (ESTIMATE), PLACEHOLDER sabre, energy UNKNOWN.
+
 ## 4. What Mariano must provide or decide first
 
 1. Base mesh origin: artist-made (by you, from your drawings) or generated (MPFB2/other) — and licence policy

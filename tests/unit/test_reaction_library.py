@@ -50,7 +50,10 @@ def _entry(contact=True):
         e["reaction_playback"] = {"start_frame": 1, "clip": clip, "blend_in_frames": 0, "frames": [1, 2, 3],
                                   "signed_distance_m": [-0.01, 0.02, 0.2], "separated_at_frame": 2,
                                   "max_penetration_after_m": 0.01, "penetrating_at_end": False,
-                                  "wound_bone_consistent_ratio": 1.0, "provenance": "ASSUMED"}
+                                  "wound_bone_consistent_ratio": 1.0, "provenance": "ASSUMED",
+                                  "attacker_reaction": {"clip": "Sword_Regular_A_Rec", "rule": "landed_hit_recovery",
+                                                        "starts_frame": 2, "blend_in_frames": 0,
+                                                        "provenance": "ASSUMED"}}
     else:
         e["signed_distance_m"], e["min_distance_m"] = [0.5, 0.3], 0.3
     e["sha256"] = entry_sha256(e)
@@ -66,6 +69,19 @@ def test_valid_document_and_summary():
     doc = _doc(_entry(True), {**_entry(False), "id": "y"} | {"sha256": entry_sha256({**_entry(False), "id": "y"})})
     assert validate_library(doc) == []
     assert summary(doc) == {"entries": 2, "contacts": 1, "reactions": {"Hit_Chest": 1}, "separated_after_reaction": 1}
+
+
+def test_attacker_reaction_rule_and_start_frame():
+    from character_engine.domain.gameplay.reaction_library import attacker_reaction_for
+    assert attacker_reaction_for("Sword_Block", "thorax") == ("Sword_Regular_A_Rec", "landed_hit_recovery")
+    e = _entry(True)
+    e["reaction_playback"]["attacker_reaction"]["starts_frame"] = 1      # must be contact + 1
+    e["sha256"] = entry_sha256(e)
+    assert any("frame after contact" in p for p in validate_library(_doc(e)))
+    e2 = _entry(True)
+    e2["reaction_playback"]["blend_in_frames"] = -1
+    e2["sha256"] = entry_sha256(e2)
+    assert any("blend_in_frames" in p for p in validate_library(_doc(e2)))
 
 
 def test_playback_must_start_at_the_contact_with_the_reaction_clip():

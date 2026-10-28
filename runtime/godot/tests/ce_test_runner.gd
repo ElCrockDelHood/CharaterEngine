@@ -10,8 +10,8 @@
 ##   - CEBreathing modifier displaces the sternum over time
 ##   - CEShenmueCombat replays every reference fight identically to the Python simulation (incl. weapons)
 ##   - CESoulsCombat replays the 9 Souls-like reference scenarios identically to Python
-##   - the D1 reaction library JSON (generated offline in Blender, schema 2) loads with a wound, a reaction and its
-##     playback (defender reacting from the first contact) per contact
+##   - the D1 reaction library JSON (generated offline in Blender, schema 3) loads with a wound, a reaction and its
+##     playback per contact (defender and attacker reacting from the frame after contact, NLA blend-in)
 ##   - weapons table complete; weapon placeholder mounts on the grip bone and follows it when posed
 ##   - CEArena builds two characters + controllers, autoplay lands hits and creates wound markers
 ##   - face: 20 game shapes only (52 stay in Blender), jaw / eye rotations equal to Python, eyes aim with the neck turned
@@ -330,13 +330,13 @@ class Runner extends Node:
 						"" if same else "  diff: " + str(diff)]])
 
 		# ---- D1 reaction library (generated offline in Blender, read as plain JSON) -
-		runner.check("D1 reaction library: schema 2, every contact has a wound, a known reaction clip and its playback", func():
+		runner.check("D1 reaction library: schema 3, every contact has a wound, a reaction, its playback and the attacker reaction", func():
 			var path := "res://addons/character_engine/data/reaction_library_d1.json"
 			if not FileAccess.file_exists(path):
 				return [false, "missing " + path]
 			var lib = JSON.parse_string(FileAccess.get_file_as_string(path))
-			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 2:
-				return [false, "not a schema-2 document"]
+			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 3:
+				return [false, "not a schema-3 document"]
 			var known := ["Death01", "Hit_Knockback", "Hit_Head", "Hit_Chest"]
 			var contacts := 0
 			var bad: Array = []
@@ -349,7 +349,9 @@ class Runner extends Node:
 					if e["wound"] == null or not (e["reaction"]["clip"] in known) or pb == null \
 							or int(pb["start_frame"]) != int(e["first_contact"]["frame"]) \
 							or pb["clip"] != e["reaction"]["clip"] \
-							or (pb["frames"] as Array).size() != (pb["signed_distance_m"] as Array).size():
+							or (pb["frames"] as Array).size() != (pb["signed_distance_m"] as Array).size() \
+							or int(pb["blend_in_frames"]) < 0 \
+							or (pb["attacker_reaction"] != null and int(pb["attacker_reaction"]["starts_frame"]) != int(e["first_contact"]["frame"]) + 1):
 						bad.append(e["id"])
 				elif e["reaction_playback"] != null:
 					bad.append(e["id"])

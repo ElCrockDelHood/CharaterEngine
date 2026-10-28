@@ -88,39 +88,62 @@ def render_sample(scene, path: Path, distance: float) -> None:
     bpy.ops.render.render(write_still=True)
 
 
-def play_back_stance(defender) -> None:
-    """Undo the reaction set-up: drop the NLA tracks and put the stance action back."""
-    ad = defender.animation_data
-    for t in list(ad.nla_tracks):
-        ad.nla_tracks.remove(t)
-    ad.action = defender["ce_stance_action"] and bpy.data.actions[defender["ce_stance_action"]]
+def play_back_stance(*fighters) -> None:
+    """Undo the reaction set-up: drop the NLA tracks and put each fighter's base action back."""
+    for fighter in fighters:
+        ad = fighter.animation_data
+        if not ad.nla_tracks:
+            continue                       # nothing was layered on this fighter
+        for t in list(ad.nla_tracks):
+            ad.nla_tracks.remove(t)
+        ad.action = bpy.data.actions[fighter["ce_base_action"]]
     for o in list(bpy.data.objects):
         if o.get("ce_role") == "wound":
             bpy.data.objects.remove(o, do_unlink=True)
 
 
-def reaction_playback(build, props, sources, scene, attacker, defender, first, hit_point, wound, clip: str,
-                      attack_end: int, renders: Path, render_tag, distance: float) -> dict:
-    """Defender plays ``clip`` from the frame after the first contact; re-measure until both clips end.
+def layer_reaction(props, sources, fighter, clip: str, start: int, blend_in: int):
+    """Base action (held) underneath, ``clip`` retargeted onto ``fighter`` on top from ``start``.
 
-    NLA: the stance strip (held) underneath, the reaction strip on top starting at contact + 1, no blend-in
-    (pose switch, ASSUMED). The wound point is carried by the wounded bone from the contact pose.
+    Returns (reaction action name, reaction length in frames). ``blend_in`` frames of NLA blend (ASSUMED).
     """
-    f_contact = first["frame"]
-    stance_action = defender.animation_data.action
-    stance_action.use_fake_user = True
-    defender["ce_stance_action"] = stance_action.name
-    _, _, react_name = play(props, defender, sources[clip], clip)
-    react_action = defender.animation_data.action
-    react_action.use_fake_user = True
-    react_len = int(react_action.frame_range[1] - react_action.frame_range[0])
-    ad = defender.animation_data
+    base = fighter.animation_data.action
+    base.use_fake_user = True
+    fighter["ce_base_action"] = base.name
+    _, _, react_name = play(props, fighter, sources[clip], clip)
+    react = fighter.animation_data.action
+    react.use_fake_user = True
+    ad = fighter.animation_data
     ad.action = None
-    stance_strip = ad.nla_tracks.new().strips.new("stance", int(stance_action.frame_range[0]), stance_action)
-    stance_strip.extrapolation = "HOLD"
-    react_strip = ad.nla_tracks.new().strips.new("reaction", f_contact + 1, react_action)
+    base_strip = ad.nla_tracks.new().strips.new("base", int(base.frame_range[0]), base)
+    base_strip.extrapolation = "HOLD"
+    react_strip = ad.nla_tracks.new().strips.new("reaction", start, react)
     react_strip.extrapolation = "HOLD_FORWARD"
-    react_strip.blend_in = 0.0
+    react_strip.use_auto_blend = False
+    react_strip.blend_in = float(blend_in)
+    return react_name, int(react.frame_range[1] - react.frame_range[0])
+
+
+def reaction_playback(build, props, sources, scene, attacker, defender, first, hit_point, wound, clip: str,
+                      attack_end: int, renders: Path, render_tag, distance: float, blend_in: int,
+                      attacker_reaction: bool, defender_stance: str) -> dict:
+    """Defender plays ``clip`` from the frame after the first contact; re-measure until every clip ends.
+
+    NLA per fighter: base strip (held) underneath, reaction strip on top from contact + 1 with ``blend_in``
+    frames (ASSUMED). With ``attacker_reaction`` the attacker switches to its recovery clip the same way.
+    The wound point is carried by the wounded bone from the contact pose.
+    """
+    from character_engine.domain.gameplay.reaction_library import attacker_reaction_for
+    f_contact = first["frame"]
+    react_name, react_len = layer_reaction(props, sources, defender, clip, f_contact + 1, blend_in)
+    att = None
+    end = max(attack_end, f_contact + 1 + react_len)
+    if attacker_reaction:
+        a_clip, a_rule = attacker_reaction_for(defender_stance, wound_region(wound))
+        a_name, a_len = layer_reaction(props, sources, attacker, a_clip, f_contact + 1, blend_in)
+        att = {"clip": a_clip, "clip_action": a_name, "rule": a_rule, "starts_frame": f_contact + 1,
+               "blend_in_frames": blend_in, "provenance": "ASSUMED"}
+        end = max(end, f_contact + 1 + a_len)
 
     scene.frame_set(f_contact)
     bpy.context.view_layer.update()
@@ -132,7 +155,7 @@ def reaction_playback(build, props, sources, scene, attacker, defender, first, h
         render_sample(scene, renders / f"{render_tag}_f{f_contact:03d}_contact.png", distance)
 
     frames, signed, consistent = [], [], 0
-    for fr in range(f_contact, max(attack_end, f_contact + 1 + react_len) + 1):
+    for fr in range(f_contact, end + 1):
         scene.frame_set(fr)
         bpy.context.view_layer.update()
         gap, _, _ = mock.closest_sabre_contact(attacker, defender)
@@ -147,13 +170,20 @@ def reaction_playback(build, props, sources, scene, attacker, defender, first, h
     separated = next((f for f, g in zip(frames[1:], after) if g > 0.0), None)
     return {
         "start_frame": f_contact, "clip": clip, "clip_action": react_name, "reaction_starts_frame": f_contact + 1,
-        "blend_in_frames": 0, "frames": frames, "signed_distance_m": signed, "separated_at_frame": separated,
+        "blend_in_frames": blend_in, "frames": frames, "signed_distance_m": signed, "separated_at_frame": separated,
         "max_penetration_after_m": round(max([0.0] + [-g for g in after]), 4),
         "penetrating_at_end": signed[-1] <= 0.0,
         "wound_bone_consistent_ratio": round(consistent / len(frames), 4),
         "provenance": "ASSUMED",
-        "note": "pose switch without blending; the attacker's clip keeps playing unchanged (no reaction to the hit)",
+        "attacker_reaction": att,
+        "note": f"NLA blend-in {blend_in} frames; "
+                + ("attacker switches to its recovery clip" if att else "attacker keeps playing its clip unchanged"),
     }
+
+
+def wound_region(wound) -> str:
+    from character_engine.domain.trauma import assess_wound
+    return assess_wound(wound).region.value
 
 
 def camera_for(distance: float):
@@ -180,6 +210,8 @@ def main() -> int:
                     / "reaction_library_d1.json")
     ap.add_argument("--renders", type=Path, default=ROOT / "builds" / "renders" / "reactions")
     ap.add_argument("--save", type=Path, default=None, help="optional .blend of the final scene (inspection)")
+    ap.add_argument("--blend-in", type=int, default=4, help="NLA blend-in frames into the reactions (ASSUMED)")
+    ap.add_argument("--no-attacker-reaction", action="store_true", help="attacker keeps playing its clip after a hit")
     a = ap.parse_args(argv)
 
     from character_engine.domain.gameplay.reaction_library import (
@@ -247,9 +279,10 @@ def main() -> int:
                                 "note": "placeholder for a baked L2/L3 manifestation (Decisions 44-45)"}
                     render_tag = None if rendered else f"{attack}__vs__{stance}__{d:.1f}m"
                     playback = reaction_playback(build, props, sources, scene, attacker, defender, first, hit_point,
-                                                 w, clip, f1, a.renders, render_tag, d)
+                                                 w, clip, f1, a.renders, render_tag, d, a.blend_in,
+                                                 not a.no_attacker_reaction, stance)
                     rendered = rendered or render_tag is not None
-                    play_back_stance(defender)
+                    play_back_stance(defender, attacker)
                 entry = {
                     "id": f"{attack}__vs__{stance}__{d:.1f}m", "attack_clip": attack, "attack_action": act_name,
                     "defender_stance": stance, "distance_m": d, "distance_provenance": "ESTIMATE",
@@ -281,9 +314,12 @@ def main() -> int:
                     for p in a.lib],
         "rule": "reaction_for (ASSUMED): lethal -> Death01; incapacitating/severe -> Hit_Knockback; "
                 "head/neck -> Hit_Head; else Hit_Chest",
+        "settings": {"blend_in_frames": a.blend_in, "attacker_reaction": not a.no_attacker_reaction,
+                     "provenance": "ASSUMED"},
         "limitations": ["defender reacts only after the first contact (no anticipation, no parry)",
-                        "reaction starts the frame after contact with no blending (pose switch)",
-                        "the attacker keeps playing its clip unchanged after the hit",
+                        "reactions start the frame after contact with a fixed NLA blend-in (ASSUMED)",
+                        "blade-on-blade contact (parry) is not detected: every contact is a body hit",
+                        "attacker reaction is one recovery clip for every hit (ASSUMED)",
                         "stance shorter than the attack holds its last pose",
                         "contact measured against block-dummy capsules (envelope radii ESTIMATE)",
                         "PLACEHOLDER sabre; no energy model"],

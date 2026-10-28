@@ -19,6 +19,10 @@ Schema 2 adds ``reaction_playback``: from the first-contact frame the defender p
 blade leaves the body, the deepest penetration after contact, and how often the wound point carried by the
 wounded bone still has that bone as its nearest canonical bone.
 
+Schema 3 blends the reaction in over ``blend_in_frames`` (ASSUMED) and adds ``attacker_reaction``: after a landed
+body hit the attacker switches to the sword recovery clip (``attacker_reaction_for``, ASSUMED) from the frame after
+contact, with the same blend.
+
 Pure Python, no engine code. The JSON written from it is read by Godot (plain JSON, no engine types).
 """
 
@@ -30,19 +34,24 @@ from typing import Any, Dict, List, Mapping, Tuple
 
 from ..trauma import Severity
 
-SCHEMA_VERSION = 2   # 2: reaction_playback (defender plays the reaction clip from the first contact)
+SCHEMA_VERSION = 3   # 2: reaction_playback; 3: blend-in and attacker_reaction
 
 REACTION_CLIPS: Mapping[str, str] = {
     "death": "Death01", "knockback": "Hit_Knockback", "head": "Hit_Head", "body": "Hit_Chest",
 }
 HEAD_REGIONS = ("head", "neck")
 
+#: Attacker after a landed body hit: recovery clip of the sword library (ASSUMED stand-in for an impact recoil).
+ATTACKER_RECOVERY_CLIP = "Sword_Regular_A_Rec"
+
 ENTRY_KEYS = ("id", "attack_clip", "defender_stance", "distance_m", "distance_provenance", "frames",
               "signed_distance_m", "min_distance_m", "first_contact", "wound", "reaction", "reaction_playback", "energy_j",
               "energy_basis", "seed", "provenance", "sha256")
 CONTACT_KEYS = ("frame", "segment", "bone", "penetration_m", "entry_point")
 PLAYBACK_KEYS = ("start_frame", "clip", "blend_in_frames", "frames", "signed_distance_m", "separated_at_frame",
-                 "max_penetration_after_m", "penetrating_at_end", "wound_bone_consistent_ratio", "provenance")
+                 "max_penetration_after_m", "penetrating_at_end", "wound_bone_consistent_ratio", "provenance",
+                 "attacker_reaction")
+ATTACKER_REACTION_KEYS = ("clip", "rule", "starts_frame", "blend_in_frames", "provenance")
 WOUND_KEYS = ("type", "bone", "region", "depth_m", "width_m", "layers_breached", "severity", "lethality",
               "bleeding_rate", "fracture", "incapacitating", "provenance")
 
@@ -56,6 +65,15 @@ def reaction_for(region: str, severity: int, lethality: float, incapacitating: b
     if region in HEAD_REGIONS:
         return REACTION_CLIPS["head"], "head_or_neck"
     return REACTION_CLIPS["body"], "body"
+
+
+def attacker_reaction_for(defender_stance: str, wound_region: str) -> Tuple[str, str]:
+    """(clip, rule) for the attacker after a landed body hit — ASSUMED: always the sword recovery clip.
+
+    Blade-on-blade contact (a parry) is not modelled, so every contact here is a hit on the body, whatever the
+    defender's stance; a "blocked" attacker reaction would need that detection first.
+    """
+    return ATTACKER_RECOVERY_CLIP, "landed_hit_recovery"
 
 
 def entry_sha256(entry: Mapping[str, Any]) -> str:
@@ -113,6 +131,16 @@ def validate_library(data: Mapping[str, Any]) -> List[str]:
                     problems.append(f"{eid}: one playback distance per frame")
                 if not 0.0 <= p["wound_bone_consistent_ratio"] <= 1.0:
                     problems.append(f"{eid}: wound_bone_consistent_ratio out of [0, 1]")
+                if not isinstance(p["blend_in_frames"], int) or p["blend_in_frames"] < 0:
+                    problems.append(f"{eid}: blend_in_frames must be a non-negative integer")
+                ar = p["attacker_reaction"]
+                if ar is not None:
+                    if [k for k in ATTACKER_REACTION_KEYS if k not in ar]:
+                        problems.append(f"{eid}: bad attacker_reaction")
+                    elif (ar["clip"], ar["rule"]) != attacker_reaction_for(e["defender_stance"], (w or {}).get("region", "")):
+                        problems.append(f"{eid}: attacker reaction does not follow the rule")
+                    elif ar["starts_frame"] != c["frame"] + 1:
+                        problems.append(f"{eid}: attacker reaction must start the frame after contact")
         if e["provenance"] != "estimate":
             problems.append(f"{eid}: provenance must be estimate")
         if e["sha256"] != entry_sha256(e):
