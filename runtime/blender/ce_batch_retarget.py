@@ -122,6 +122,8 @@ def main() -> int:
     ap.add_argument("--out-dir", type=Path, required=True)
     ap.add_argument("--samples", type=Path, required=True)
     ap.add_argument("--no-export", action="store_true")
+    ap.add_argument("--foot-lock", action="store_true",
+                    help="lock planted feet with two-bone IK (root-motion variant only; addon foot_lock.py)")
     ap.add_argument("--root-scale", default="stature", choices=("leg", "stature", "none", "stance"),
                     help="root translation scale (domain.animation.retarget_scale)")
     a = ap.parse_args(argv)
@@ -148,7 +150,8 @@ def main() -> int:
           f"source turned 180: {bool(src.get('ce_turned_180'))}", flush=True)
 
     result = {"glb": str(a.glb), "library": a.library, "variant": a.variant, "bone_map": a.bone_map,
-              "fps": a.fps, "root_scale_mode": a.root_scale, "blender": bpy.app.version_string, "armature": ARMATURE,
+              "fps": a.fps, "root_scale_mode": a.root_scale,
+              "foot_lock": bool(a.foot_lock and a.variant == "rm"), "blender": bpy.app.version_string, "armature": ARMATURE,
               "stature_m": float(dst.get("ce_stature_m", 0.0)),
               "source_rest": rest_points(src, SOURCE_JOINTS), "target_rest": rest_points(dst, TARGET_BONES),
               "clips": []}
@@ -164,6 +167,9 @@ def main() -> int:
                        duration_s=round((float(f1) - float(f0)) / a.fps, 5))
             stats = build.retarget_mocap(bpy.context, src, dst, bone_map, root_scale_mode=a.root_scale)
             rec.update(stats)
+            if a.foot_lock and a.variant == "rm":   # world-space lock; in place the foot must move back
+                from character_engine_blender import foot_lock  # type: ignore
+                rec["foot_lock"] = foot_lock.lock_feet(bpy.context, dst, loop="_Loop" in clip)
             frames = list(range(int(f0), int(f1) + 1))
             source, target = [], []
             for f in frames:

@@ -2,6 +2,29 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-29 · Retarget: IK foot locking (opt-in)
+
+### Added
+- `domain/animation/foot_lock.py` (pure): contact plan on heel / ball pivots (mean correction of the pivots on
+  the ground, anchor = their mean XY per contact phase, 2-frame blend, loop clips merge the phase cut by the
+  wrap using the cycle's root displacement, phases needing > 10 cm correction are left alone) and two-bone IK
+  (knee kept in its bending plane). Thresholds ESTIMATE.
+- Addon `foot_lock.py`: keys FEMUR / TIBIA / TALUS over the retarget keys (foot keeps its world orientation).
+  World space only, so it runs on the root-motion variant. `scripts/retarget_batch.py --foot-lock`. Not a default.
+
+### Findings (86 clips, foot lock vs. the default batch; ESTIMATE)
+- QA 28 / 14 / 44 → 42 / 14 / 30 (ok / warn / fail); foot_sliding fails 35 → 13; 51 clips slide less, none more;
+  no new penetration. Walk 0.31 → 0.09, Walk_Formal 0.27 → 0.09, Walk_Carry 0.20 → 0.05, Jog 0.88 → 0.00,
+  Sprint 0.93 → 0.00, Zombie_Walk 0.72 → 0.03 m/s (source 0.11 / 0.11 / 0.10 / 0.59 / 1.74 / 2.40).
+- Not locked by the 10 cm guard: Slide_*, Swim_Fwd_Loop, Push_Loop (feet move on purpose / no ground).
+- Cost: knee accelerations rise on some clips (worst Walk_Formal 57 → 118 m/s², below Jog's 200 unlocked);
+  near-straight standing legs hit the IK reach limit a few frames (e.g. Idle_No_Loop 1 → 15 m/s²).
+  Not checked visually yet.
+- QA contact and lock use the same height rule (3 cm), so the sliding gain is partly by construction.
+
+### Tests
+- `tests/unit/test_foot_lock.py` (10); Blender addon headless suite 37/37 (3.6.23).
+
 ## [Unreleased] — 2026-10-29 · Math follow-ups F-3 / F-4 (CE-Q4 review)
 
 ### Tests

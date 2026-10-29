@@ -4,6 +4,7 @@
     python scripts/retarget_batch.py --libraries ual1 --clips Jog_Fwd,Sprint
     python scripts/retarget_batch.py --report-only            # recompute QA from the last samples (no Blender)
     python scripts/retarget_batch.py --no-export              # QA only, no per-clip GLB
+    python scripts/retarget_batch.py --foot-lock              # IK foot locking on the root-motion variant
 
 Each (library, variant) runs in its own Blender 3.6 process (``runtime/blender/ce_batch_retarget.py``) through
 ``_logrun`` (``logs/<UTC>_retarget_batch.log``). Outputs (git-ignored): ``builds/animations/<lib>/<clip>.glb``
@@ -156,6 +157,8 @@ def evaluate_library(lib: str, samples: dict[str, dict], glb_checks: dict[str, d
         rec["glb"] = {v: c.get("glb_out") for v, c in (("standard", s), ("rm", r)) if c and c.get("glb_out")}
         rec["mapped_bones"] = base.get("mapped_bones")
         rec["root_scale"] = {k: base.get(k) for k in ("root_scale", "root_scale_mode", "followers", "stance")}
+        if r and r.get("foot_lock"):
+            rec["foot_lock"] = r["foot_lock"]
         tips = [f[n][2] - meta["target_rest"][n][2] for f in base["target"] for n in UNDRIVEN_TOE_TIPS
                 if n in f and n in meta["target_rest"]]
         if tips:   # diagnostic only: toes 1, 2, 4, 5 do not bend with the source ball joint
@@ -209,6 +212,7 @@ def main(argv=None) -> int:
     ap.add_argument("--out-dir", type=Path, default=OUT_DIR)
     ap.add_argument("--timeout", type=int, default=3600, help="seconds per Blender process")
     ap.add_argument("--no-export", action="store_true")
+    ap.add_argument("--foot-lock", action="store_true", help="IK foot locking on the root-motion variant")
     ap.add_argument("--root-scale", default="stature", choices=("leg", "stature", "none", "stance"),
                     help="root scale: whole-height ratio (default, as the addon), leg-length ratio, none, or per-clip stance")
     ap.add_argument("--report-only", action="store_true", help="skip Blender; reuse samples in <out-dir>/samples")
@@ -246,6 +250,8 @@ def main(argv=None) -> int:
                     cmd += ["--clips", a.clips]
                 if a.no_export:
                     cmd.append("--no-export")
+                if a.foot_lock:
+                    cmd.append("--foot-lock")
                 print(f"\n[retarget] {lib} {v}: {glb.name}", flush=True)
                 code, _secs, log = run_logged(cmd, "retarget_batch", timeout=a.timeout, echo=not a.quiet)
                 logs.append(str(log))
@@ -260,7 +266,7 @@ def main(argv=None) -> int:
         if sample_dir.exists() else {}
     report = {"started": stamp, "blender": meta.get("blender"), "bone_map": meta.get("bone_map"), "fps": a.fps,
               "stature_m": meta.get("stature_m"),
-              "root_scale_mode": meta.get("root_scale_mode", "stature"), "provenance": clip_qa.PROVENANCE,
+              "root_scale_mode": meta.get("root_scale_mode", "stature"), "foot_lock": a.foot_lock, "provenance": clip_qa.PROVENANCE,
               "thresholds": {**asdict(clip_qa.DEFAULT_THRESHOLDS), "provenance": clip_qa.PROVENANCE},
               "libraries": libs, "variants": variants, "logs": logs, "run_failures": failures,
               "summary": clip_qa.summarize(records), "clips": records}
