@@ -63,27 +63,26 @@ el hueso) se queda en grasa / severidad 1 hasta 14 m/s (118 J), porque 400 J es 
 en este rango nunca llega a la capa de costillas.
 
 Reproducibilidad: dos corridas de la simulación dieron el mismo `sha256` del resultado (`e75bfcc7…` sin chaleco,
-`acab4965…` con chaleco). Renders a 1920×1080, Cycles 128 samples (pasada final): EEVEE 21,1 s; Cycles 294,6 s (comparación), 329,5 s y
-389,2 s (primeros planos); total de Blender 1038,6 s. Pasadas anteriores, para el registro: la primera (EEVEE 9,9 s,
+`acab4965…` con chaleco). Renders a 1920×1080, Cycles 128 samples (pasada final): EEVEE 10,6 s; Cycles 319,1 s (comparación), 311,9 s y
+316,0 s (primeros planos); total de Blender 960,7 s. Pasadas anteriores, para el registro: la primera (EEVEE 9,9 s,
 Cycles 243,5 / 284,6 / 293,5 s, total 836 s) mostraba el abrigo parpadeando contra la piel y el chaleco
-(z-fighting); las dos siguientes arreglaron la tela y el encuadre, pero seguían viéndose lavadas. Cambios solo de
-presentación en `ce_material_sample.py` (el resultado del dominio y su hash no cambian): los vértices de la tela se
-empujan radialmente justo por fuera de la capa sólida más externa; hueso / tendón / vísceras tienen colores base y de
-subsurface de presentación; el impactor de acero es más rugoso (0,45) para que deje de reflejar el abrigo como un
-espejo; la cámara de comparación está más cerca y los primeros planos usan lente de 75 mm; la exposición de la
-escena es −1,5 EV, porque a 0 EV Filmic lavaba todas las capas a tonos pastel (la lana azul marino oscuro del abrigo
-salía lavanda, el marrón del chaleco acolchado salía crema; verificado en el `.blend` guardado, donde los valores de
-los materiales son correctos).
+(z-fighting); las tres siguientes arreglaron la tela, el encuadre y la exposición, pero seguían viéndose lavadas.
+Cambios solo de presentación en `ce_material_sample.py` (el resultado del dominio y su hash no cambian): los vértices
+de la tela se empujan radialmente justo por fuera de la capa sólida más externa; el impactor de acero es más rugoso
+(0,45); la cámara de comparación está más cerca y los primeros planos usan lente de 75 mm; la exposición de la escena
+es −1,5 EV; hueso / tendón / vísceras / chaleco acolchado tienen colores de presentación **en espacio lineal**
+(Blender lee Base Color como lineal de escena, así que los colores del catálogo, que parecen valores sRGB, salen
+demasiado pálidos: el marrón del chaleco salía crema y el azul marino del abrigo, lavanda); el impactor se dibuja con
+la cara en el desplazamiento del modelo contundente (radio externo − `displacement_m`: a 115 mm del eje con chaleco,
+en la grasa por encima de las costillas; a 86 mm sin chaleco, dentro de la cavidad) en lugar de donde lo frenó el
+XPBD de la tela.
 
-Qué muestran las imágenes: el corte se lee, de adentro hacia afuera, cavidad, cáscara de costillas, tendón, músculo,
-grasa, piel, (chaleco), abrigo; el abrigo es una lámina azul limpia y el músculo y la cavidad se ven rojos. Sin
-chaleco: la punta del impactor queda dentro de la cavidad, coherente con "atraviesa". Con chaleco: el impactor
-termina en la superficie del chaleco y no aparece en el corte, coherente con "las costillas aguantan". Sigue mal: el
-aplastamiento de 48,7 mm **no se dibuja** (las capas no se deforman y la barra queda donde la frenó el XPBD de la
-tela, unos 20 mm bajo la superficie del abrigo, no a la profundidad afectada del modelo contundente); la cáscara de
-costillas y el tendón siguen casi blancos y el chaleco sigue viéndose crema; la cavidad es apenas más oscura que el
-músculo; la barra todavía toma un tinte azul junto al abrigo, y en EEVEE la barra se ve oscura y borroneada donde
-toca la tela.
+Qué muestran las imágenes: el corte se lee, de adentro hacia afuera, cavidad bordó, cáscara de costillas beige,
+tendón blanco fino, músculo rojo, grasa amarilla, piel, (chaleco marrón), abrigo azul. Sin chaleco: la punta del
+impactor queda dentro de la cavidad, coherente con "atraviesa". Con chaleco: el impactor atraviesa abrigo y chaleco
+y no aparece en el corte, coherente con "las costillas aguantan". Sigue mal: el aplastamiento **no se dibuja** (las
+capas no se deforman, así que la barra simplemente las atraviesa); la barra todavía toma un tinte azul junto al
+abrigo; en EEVEE la barra sigue viéndose oscura y borroneada donde toca la tela.
 
 ## 4. Qué es ajuste y no medición (leer antes de citar cualquier número)
 
@@ -123,6 +122,6 @@ quita la velocidad de separación que la proyección de posición agrega de otro
 4. Placa de acero / armadura laminar bajo carga contundente.
 5. Port a Godot del contacto por capas (primero GDScript) cuando se acuerde la interfaz con el hilo de heridas.
 6. Dibujar el aplastamiento contundente (abollar las capas hasta la profundidad afectada) en la escena de Blender.
-7. Presentación: los colores de hueso / tendón / chaleco siguen lavados (revisar los pesos de subsurface, no solo
-   los colores); ubicar la barra a la profundidad afectada del modelo contundente; quitar el tinte azul de la barra y
-   el borroneo en EEVEE.
+7. Presentación: quitar el tinte azul de la barra y el borroneo en EEVEE.
+8. Espacio de color de `optical_openpbr.base_color` en `domain/materials/catalog.py`: OpenPBR lo define lineal y los
+   valores parecen sRGB. Decisión de datos del dueño; la escena de Blender hoy pisa cuatro de ellos.

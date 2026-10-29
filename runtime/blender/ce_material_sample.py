@@ -232,7 +232,15 @@ def build_variant(r: dict, mats: dict, spec: dict, side: float):
     sl.data.materials.append(mats["cloth_wool"])
     objs.append(sl)
     if "impactor" in last:
-        im = impactor_objects(f"{r['variant']}_impactor", last["impactor"], r["config"]["impactor_radius_m"], shift)
+        ends = last["impactor"]
+        if "blunt" in r and "tip_to_axis_m" in last:
+            # presentation only: the cloth XPBD stops the rod at the coat; draw its face where the blunt model says the
+            # crushed stack ends (outer radius minus displacement). The layers themselves are not dented.
+            tip, back = Vector(ends[0]), Vector(ends[1])
+            d = (tip - back).normalized()
+            push = last["tip_to_axis_m"] - max(0.0, r_max - r["blunt"]["displacement_m"])
+            ends = [tuple(tip + d * push), tuple(back + d * push)]
+        im = impactor_objects(f"{r['variant']}_impactor", ends, r["config"]["impactor_radius_m"], shift)
         for o in im:
             o.data.materials.append(mats["armor_steel"])
             o["ce_provenance"] = "PLACEHOLDER impactor"
@@ -379,8 +387,9 @@ def main() -> int:
     mats = {row["kind"]: principled_from_openpbr(row["kind"], row["optical_openpbr"])
             for row in variants[0]["materials"] if row["optical_openpbr"]}
     if a.sample == "thorax":                       # presentation only: rib shell, tendon and cavity read apart
-        for kind, colour in (("bone", (0.78, 0.70, 0.52, 1.0)), ("tendon", (0.93, 0.90, 0.84, 1.0)),
-                             ("viscera", (0.30, 0.04, 0.05, 1.0))):
+        # Blender reads Base Color as scene-linear: these are linear values (sRGB tan, ivory, maroon, brown)
+        for kind, colour in (("bone", (0.45, 0.33, 0.16, 1.0)), ("tendon", (0.80, 0.76, 0.66, 1.0)),
+                             ("viscera", (0.12, 0.01, 0.015, 1.0)), ("padded_cloth", (0.20, 0.12, 0.06, 1.0))):
             if kind in mats:
                 bsdf = mats[kind].node_tree.nodes["Principled BSDF"]
                 _set(bsdf, ["Base Color"], colour)
