@@ -22,22 +22,19 @@ EXPECTED_BONES = 208
 
 
 def reset_scene(context) -> None:
-    """Remove every object and the data blocks a previous job may have left (actions, meshes, collections)."""
+    """Remove every object and the data blocks a previous job may have left (actions, meshes, lights, cameras…)."""
     if context.object and context.object.mode != "OBJECT":
         bpy.ops.object.mode_set(mode="OBJECT")
     for obj in list(bpy.data.objects):
         bpy.data.objects.remove(obj, do_unlink=True)
-    for blocks in (bpy.data.actions, bpy.data.armatures, bpy.data.meshes, bpy.data.materials, bpy.data.collections):
+    for blocks in (bpy.data.actions, bpy.data.armatures, bpy.data.meshes, bpy.data.materials, bpy.data.collections,
+                   bpy.data.lights, bpy.data.cameras):
         for block in list(blocks):
             blocks.remove(block)
 
 
-def run_job(context, job: BatchJob, out_dir: Path, root: Path | None = None, repo_commit: str = "") -> dict:
-    """Build and export one job. Raises on failure (the caller records FAIL and goes on)."""
-    t0 = time.time()
-    root = Path(root) if root else _bootstrap.repo_root()
-    out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
+def build_body(context, job: BatchJob, repo_commit: str = ""):
+    """Empty the scene and build the job's armature (+ block dummy). Returns (armature, provenance extras)."""
     reset_scene(context)
     props = context.scene.character_engine
     props.template = job.template_id
@@ -56,6 +53,17 @@ def run_job(context, job: BatchJob, out_dir: Path, root: Path | None = None, rep
     if job.mesh == "block_dummy":
         blocks, _ = build.build_block_dummy(context, arm, with_collision=False)
         extra["mesh_vertices"] = len(blocks.data.vertices)
+    return arm, extra
+
+
+def run_job(context, job: BatchJob, out_dir: Path, root: Path | None = None, repo_commit: str = "") -> dict:
+    """Build and export one job. Raises on failure (the caller records FAIL and goes on)."""
+    t0 = time.time()
+    root = Path(root) if root else _bootstrap.repo_root()
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    arm, extra = build_body(context, job, repo_commit)
+    props = context.scene.character_engine
     if job.clip is not None:
         clip_path = resolve(root, job.clip.path)
         props.bone_map, props.bvh_path, props.mocap_action = job.clip.bone_map, str(clip_path), job.clip.clip

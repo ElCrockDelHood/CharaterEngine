@@ -33,12 +33,13 @@ from . import _bootstrap  # noqa: E402  (must run before importing the domain)
 
 _bootstrap.ensure_domain_importable()
 
-from . import (  # noqa: E402,F401  (batch: no classes)
+from . import (  # noqa: E402,F401  (batch, render: no classes)
     batch,
     game_rig,
     operators,
     panels,
     properties,
+    render,
     runtime_upbge,
 )
 

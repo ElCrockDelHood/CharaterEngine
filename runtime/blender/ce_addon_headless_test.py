@@ -1135,6 +1135,27 @@ def main(reset: bool = True) -> int:
     if not skipped(args, "batch"):
         check("batch export: one job -> GLB + provenance, a failing job does not stop the next", _batch_job)
 
+    def _render_views():
+        """scripts/render_views.py executor at thumbnail size: 3 Workbench stills, contact sheet, turntable + mp4."""
+        from character_engine.pipeline.render_views import output_names, parse
+        spec = parse({"matrices": [{"templates": ["human_male_adult"], "poses": ["tpose"]}], "resolution": [192, 108],
+                      "turntable": {"frames": 4, "resolution": [96, 54], "mp4": True}})
+        out = out_dir / f"{args.engine}_render_views"
+        res = addon["mod"].render.render_job(ctx, spec.jobs[0], spec, out)
+        folder = Path(res["folder"])
+        missing = [n for n in output_names(spec) if not (folder / n).exists()]
+        assert not missing, missing
+        sheet = bpy.data.images.load(str(folder / "contact_sheet.png"))
+        size = tuple(sheet.size)
+        bpy.data.images.remove(sheet)
+        assert size == (3 * 96, 54), size
+        rec = json.loads((folder / "render.json").read_text(encoding="utf-8"))
+        assert rec["engine_used"]["blender_engine"] == "BLENDER_WORKBENCH" and set(rec["files"]) >= {"front.png", "turntable.mp4"}
+        assert rec["provenance"]["mesh"] == "estimate", rec["provenance"]
+        return f"{len(output_names(spec))} files, sheet {size}, times {res['times']}, mp4 by {rec['encoder']}"
+    if not skipped(args, "render"):
+        check("render views: front/side/back + contact sheet + turntable mp4 (Workbench)", _render_views)
+
     return finish(args)
 
 

@@ -1,0 +1,13 @@
+{
+  "spec_version": 1,
+  "output_dir": "builds/renders/views",
+  "engine": "WORKBENCH",
+  "resolution": [1920, 1080],
+  "views": ["front", "side", "back"],
+  "contact_sheet": true,
+  "turntable": {"frames": 24, "resolution": [960, 540], "mp4": false},
+  "matrices": [
+    {"templates": ["human_male_adult"], "statures_m": [1.80], "poses": ["tpose"]},
+    {"templates": ["human_female_adult"], "statures_m": [1.65], "poses": ["tpose"]}
+  ]
+}

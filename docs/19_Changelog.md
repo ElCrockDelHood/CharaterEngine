@@ -2,6 +2,38 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-29 · Automatic render views (stills, contact sheet, turntable, engine presets)
+
+### Added
+- `character_engine/pipeline/render_views.py` (pure Python): render spec over the batch-export body matrices
+  (engine, device, samples, resolution, views `front` / `side` / `back`, contact sheet, turntable), engine presets
+  WORKBENCH (default) / EEVEE / CYCLES, orbit camera in the canonical frame (front on −Y, side on the body's left
+  +X, back on +Y) and a framing distance that fits the body from every azimuth. Refuses unavailable templates,
+  unknown engines / devices / views, a device on a non-Cycles engine and clips (not rendered yet).
+  Tests: `tests/unit/test_render_views.py` (10).
+- `scripts/render_views.py` (through `_logrun`) + `runtime/blender/ce_render_views.py` + addon module `render.py`:
+  per job the batch body builder + the *Cinematic preset* (floor, key / fill / rim lights, camera), then front /
+  side / back stills, `contact_sheet.png`, `turntable/####.png` and, opt-in, `turntable.mp4` encoded by Blender's
+  bundled FFmpeg (no external ffmpeg, nothing downloaded); `render.json` (body provenance, settings, engine and
+  device used, seconds, sha256) per job and `manifest.json` (PASS/FAIL, one failing job does not stop the rest).
+  Spec `scripts/render_specs/default.json` (male 1.80 + female 1.65 T-pose, Workbench, 24-frame turntable).
+- `batch.build_body()` split out of `batch.run_job()` so renders and exports build bodies the same way;
+  `reset_scene()` also clears lights and cameras.
+- Measurement `docs/audit/RENDER-ENGINES-2026-10-29.md` (Blender 3.6.23, i3-3120M, GT 740M driver 388.73):
+  Workbench, EEVEE, Cycles CPU and Cycles CUDA (precompiled sm_30 kernel) all render; OptiX unavailable.
+  Body at 1920×1080, three stills: Workbench 9.2 / 2.2 / 2.1 s, EEVEE 16 spp 13.6 / 5.9 / 5.7 s,
+  Cycles 32 spp GPU 201 / 217 / 155 s, CPU 254 / 214 / 207 s (first still of each process includes start-up).
+  CYCLES `GPU` is refused without a CUDA device; `AUTO` falls back to CPU and records it.
+- Headless check *render views: front/side/back + contact sheet + turntable mp4 (Workbench)*.
+
+### Test status
+- `python scripts/test.py`: 1022 passed. `python scripts/lint.py`: clean.
+- `python scripts/engine_tests.py blender --blender C:/DEV/Tools/Blender/blender.exe` (3.6.23): 36 passed, 0 failed
+  on the working tree. That tree held another session's uncommitted `game_rig.py` pole-angle change, which is
+  what made the two *game rig* checks pass; they are not part of this commit.
+- `python scripts/render_views.py --mp4` (default spec, Workbench): 2/2 PASS in 136 s (turntable 1.4–1.9 s per
+  960×540 frame, mp4 encode 2.9–4.2 s).
+
 ## [Unreleased] — 2026-10-29 · Retarget: toe followers and root-scale modes (batch QA follow-up)
 
 ### Added

@@ -74,6 +74,38 @@ A failing job is recorded as FAIL and the next job runs. `--validate-godot` runs
 -- --glb <file>` on each PASS GLB (Godot via `$CE_GODOT` / `C:/Tools/Godot` / PATH) and marks every job SKIPPED when
 Godot is not found. Logs: `logs/<UTC>_batch_export.log`, `logs/<UTC>_batch_godot.log`.
 
+## Render views (automatic renders)
+
+```bash
+python scripts/render_views.py --check                        # validate scripts/render_specs/default.json
+python scripts/render_views.py                                # Workbench: stills, contact sheet, turntable
+python scripts/render_views.py --mp4                          # + turntable.mp4 (Blender's bundled FFmpeg)
+python scripts/render_views.py --engine EEVEE                 # opt-in
+python scripts/render_views.py --engine CYCLES --device AUTO  # opt-in; AUTO | CPU | GPU (CUDA)
+```
+
+A render spec (`scripts/render_specs/*.json`, `character_engine.pipeline.render_views`) takes the same body
+matrices as the batch export (no clips yet) plus `engine`, `device`, `samples`, `resolution`, `views`
+(`front` / `side` / `back`), `contact_sheet` and `turntable` (`frames`, `resolution`, `mp4`; `null` = none).
+Each job builds the body with the batch builder, adds the *Cinematic preset* (floor, key / fill / rim lights,
+camera) and orbits the camera around the body's vertical axis (front on −Y, side on the body's left +X, back on
++Y; lights stay fixed). The distance fits the body from every azimuth, so all views and turntable frames share
+one scale. Outputs (git-ignored) in `builds/renders/views/<job>/`:
+
+| File | Content |
+|------|---------|
+| `front.png`, `side.png`, `back.png` | stills at `resolution` (default 1920×1080) |
+| `contact_sheet.png` | the stills side by side at half size |
+| `turntable/0001.png…` | `frames` evenly spaced azimuths (default 24 at 960×540), loops without a repeated frame |
+| `turntable.mp4` | only with `--mp4` / `"mp4": true`; encoded by Blender's bundled FFmpeg from the PNG frames (no re-render, nothing downloaded) |
+| `render.json` | body provenance (as the batch sidecar), render settings, engine and device actually used, seconds per view, sha256 per file |
+
+Engines: **WORKBENCH** (default; studio light, material colours, no textures or shaders), **EEVEE** and
+**CYCLES** (opt-in). Measured on the reference PC in `docs/audit/RENDER-ENGINES-2026-10-29.md`: Workbench ≈ 2 s
+per 1080p still, EEVEE ≈ 6 s, Cycles 32 samples several minutes (CUDA on the GT 740M works). CYCLES `GPU` is
+refused when Cycles sees no CUDA device; `AUTO` falls back to CPU and records it. A failing job is recorded as
+FAIL in `manifest.json` and the next one runs. Log: `logs/<UTC>_render_views.log`.
+
 ## Headless tests
 
 ```bash
