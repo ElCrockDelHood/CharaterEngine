@@ -65,5 +65,7 @@ builds/tests/upbge_validation.blend
 # Engine test outputs (scripts/engine_tests.py): reports, .blend, .glb, logs
 builds/tests/
 builds/benchmarks/
+# Batch retarget outputs (scripts/retarget_batch.py): per-clip GLB, samples, QA report
+builds/animations/
 builds/material_sample/
 builds/reactions/

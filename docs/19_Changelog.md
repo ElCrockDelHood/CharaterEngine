@@ -2,6 +2,39 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-29 · Batch retarget + clip QA (Quaternius UAL1/UAL2)
+
+### Added
+- `scripts/retarget_batch.py` + `runtime/blender/ce_batch_retarget.py`: every clip of UAL1/UAL2 (`*_Standard.glb`
+  in place and `*_Standard_RM.glb` root motion, 86 clips, read in place) retargeted with the addon's
+  `retarget_mocap` (bone map `quaternius_ual`) onto a 1.80 m canonical T-pose armature; one GLB per clip and variant
+  in `builds/animations/<lib>/` (git-ignored), QA in `builds/animations/retarget_report.json` / `.md`. One Blender
+  process per library and variant through `_logrun` (`logs/<UTC>_retarget_batch.log`); `--report-only` recomputes
+  the QA from the stored samples. Scene at 30 fps before import, so the glTF seconds land on whole frames.
+- `domain/animation/clip_qa.py` (pure Python): height-based foot contact, foot sliding, ground penetration /
+  floating, loop seam (pose + velocity), root speed from the RM variant vs. the stance speed of the in-place feet,
+  "glide" detection (root travels over planted feet), per-category summary. All thresholds ESTIMATE.
+- The driver also reads each clip's `root` translation channel straight from the GLB (stdlib parser, no Blender).
+
+### Findings (first run, Blender 3.6.23, all values ESTIMATE)
+- 86/86 clips retargeted and exported (172 GLB), 0 errors; QA 28 ok / 14 warn / 44 fail. By category
+  (ok / warn / fail): combat 8/6/17, idle 10/1/1, jump 0/0/4, locomotion 3/1/5, other 2/4/14, pose 2/0/0,
+  seated 2/1/2, swim 1/0/1, traversal 0/1/0. Foot sliding is the most common failure (height-only contact also
+  catches feet that skim the floor while stepping); the loop-seam check is the least robust (one-frame
+  differences at 30 fps).
+- Jog_Fwd_Loop (5.0 m in 0.933 s) and Sprint_Loop (5.5 m in 0.667 s) are not misread: the raw GLB channel holds
+  exactly those values (29 / 21 keys) and the in-place feet move back at 5.90 / 8.90 m/s while planted (root /
+  stance ratio 0.91 / 0.93). The clips really travel 5.36 / 8.25 m/s; stride 5.0 / 5.5 m per cycle, stance
+  0.79 / ~0.9 m, so most of each step is flight. Whether that suits a "jog" is not checked against a source.
+- Retarget: root motion is scaled by the whole-height ratio (×1.126), but the canonical feet imply about the
+  source speed on walks, so retargeted walks over-travel ~11 % and slide 0.27–0.31 m/s (source 0.08–0.11 m/s).
+- Retarget: only toe 3 follows the source ball joint; toes 1, 2, 4, 5 stay rigid and their tips go below the
+  ground at toe-off (`undriven_toe_tip_min_height_m`, ungraded).
+- Source: dash / attack clips (e.g. Sword_Dash, Shield_Dash, Roll, Sword_Attack) move the RM root while the
+  in-place feet stay planted (glide).
+- Export: sampled glTF export of the 208-bone armature took ~260 s per clip; keys are now exported as keyed
+  (`export_force_sampling=False`, 3–5 s per clip).
+
 ## [Unreleased] — 2026-10-29 · Foot layout rebuilt (finding A13)
 
 ### Changed
