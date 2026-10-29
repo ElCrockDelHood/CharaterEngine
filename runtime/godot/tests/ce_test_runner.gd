@@ -333,13 +333,13 @@ class Runner extends Node:
 						"" if same else "  diff: " + str(diff)]])
 
 		# ---- D1 reaction library (generated offline in Blender, read as plain JSON) -
-		runner.check("D1 reaction library: schema 5, body hits carry wound + reaction + per-clip blend, parries carry recoil and no wound", func():
+		runner.check("D1 reaction library: schema 6 (subframes), body hits carry wound + reaction + per-clip blend, parries carry recoil and no wound", func():
 			var path := "res://addons/character_engine/data/reaction_library_d1.json"
 			if not FileAccess.file_exists(path):
 				return [false, "missing " + path]
 			var lib = JSON.parse_string(FileAccess.get_file_as_string(path))
-			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 5:
-				return [false, "not a schema-5 document"]
+			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 6:
+				return [false, "not a schema-6 document"]
 			var blend := {"Death01": 2, "Hit_Knockback": 2, "Hit_Head": 4, "Hit_Chest": 6}
 			var hits := 0
 			var parries := 0

@@ -12,13 +12,17 @@ from character_engine.domain.gameplay.reaction_library import (
     PARRY_CONTACT_M,
     REACTION_CLIPS,
     SCHEMA_VERSION,
+    SUBSTEPS,
     attacker_reaction_for,
     blend_in_for,
+    contact_frame,
+    deepest_penetration,
     entry_sha256,
     first_event,
     parry_frames,
     parry_reaction_for,
     reaction_for,
+    sample_times,
     segment_distance,
     strike_phase,
     summary,
@@ -90,10 +94,22 @@ def test_blend_per_clip():
     assert blend_in_for("Death01") <= blend_in_for("Hit_Head") <= blend_in_for("Hit_Chest")
 
 
+def test_subframe_sampling():
+    assert sample_times(20, 21) == [20.0, 20.25, 20.5, 20.75, 21.0]
+    assert [contact_frame(t) for t in (20.0, 20.25, 20.75, 21.0)] == [20, 21, 21, 21]
+    # Decision 56 case: contact at 20.75, deepest 6.9 cm at 21.5 before the reaction starts at 22; later dips ignored
+    times = sample_times(20, 23)
+    signed = [0.19, 0.096, 0.005, -0.012, -0.026, -0.045, -0.069, -0.053, -0.034, -0.022, 0.0, -0.003, 0.039]
+    assert deepest_penetration(times, signed, 20.75) == pytest.approx(0.069)
+    assert deepest_penetration(times, signed, 22.75) == pytest.approx(0.003)
+    assert first_event(times, signed, [1.0] * len(times)) == ("body_hit", 20.75)
+
+
 def _base(eid="x"):
     return {"id": eid, "attack_clip": "Sword_Attack", "defender_stance": "Sword_Idle", "distance_m": 1.2,
-            "distance_provenance": "ESTIMATE", "frames": [0, 1], "signed_distance_m": [0.5, 0.3],
-            "blade_distance_m": [1.0, 0.8], "blade_approach_m": [0.0, 0.01], "blade_forward": [0.5, 0.5], "filtered_parry_frames": [],
+            "distance_provenance": "ESTIMATE", "substeps": SUBSTEPS, "frames": sample_times(0, 1),
+            "signed_distance_m": [0.5, 0.45, 0.4, 0.35, 0.3], "blade_distance_m": [1.0, 0.95, 0.9, 0.85, 0.8],
+            "blade_approach_m": [0.0, 0.01, 0.01, 0.01, 0.01], "blade_forward": [0.5] * 5, "filtered_parry_frames": [],
             "min_distance_m": 0.3, "event": "none", "first_contact": None,
             "first_parry": None, "wound": None, "reaction": None, "reaction_playback": None, "parry_playback": None,
             "energy_j": None, "energy_basis": "UNKNOWN", "seed": None, "provenance": "estimate"}
@@ -101,9 +117,9 @@ def _base(eid="x"):
 
 def _hit(eid="hit"):
     e = _base(eid)
-    e.update(signed_distance_m=[0.5, -0.01], min_distance_m=-0.01, event="body_hit")
-    e["first_contact"] = {"frame": 1, "segment": "forearm.L", "bone": "RADIUS_L", "penetration_m": 0.01,
-                          "entry_point": [0, 0, 1]}
+    e.update(signed_distance_m=[0.5, 0.2, -0.01, -0.03, -0.02], min_distance_m=-0.03, event="body_hit")
+    e["first_contact"] = {"time": 0.5, "frame": 1, "segment": "forearm.L", "bone": "RADIUS_L", "penetration_m": 0.03,
+                          "penetration_at_contact_m": 0.01, "entry_point": [0, 0, 1]}
     e["wound"] = {"type": "incision", "bone": "RADIUS_L", "region": "forearm", "depth_m": 0.01, "width_m": 0.035,
                   "layers_breached": ["skin"], "severity": 2, "lethality": 0.01, "bleeding_rate": 0.2,
                   "fracture": False, "incapacitating": False, "provenance": "estimate"}
@@ -122,8 +138,8 @@ def _hit(eid="hit"):
 
 def _parry(eid="parry", reached=False):
     e = _base(eid)
-    e.update(blade_distance_m=[1.0, 0.02], event="parry")
-    e["first_parry"] = {"frame": 1, "blade_distance_m": 0.02, "point": [0, -0.5, 1.2]}
+    e.update(blade_distance_m=[1.0, 0.5, 0.2, 0.02, 0.01], event="parry")
+    e["first_parry"] = {"time": 0.75, "frame": 1, "blade_distance_m": 0.02, "point": [0, -0.5, 1.2]}
     e["parry_playback"] = {"start_frame": 1, "attacker_clip": "Hit_Chest", "rule": "parried_recoil",
                            "blend_in_frames": 4, "frames": [1, 2], "signed_distance_m": [0.3, -0.01 if reached else 0.4],
                            "body_reached_after_parry": reached, "provenance": "ASSUMED"}
@@ -151,7 +167,7 @@ def test_valid_document_and_summary():
 
 def test_parry_while_withdrawing_is_rejected():
     e = _parry()
-    e["blade_approach_m"] = [0.0, -0.02]                    # blades met but the tip moves away: no parry event
+    e["blade_approach_m"] = [0.0, 0.01, 0.01, -0.02, -0.02]   # blades met but the tip moves away: no parry event
     e["sha256"] = entry_sha256(e)
     assert any("does not match" in p for p in validate_library(_doc(e)))
 
@@ -162,6 +178,10 @@ def test_parry_while_withdrawing_is_rejected():
     (lambda e: e["reaction_playback"]["attacker_reaction"].__setitem__("starts_frame", 1), "frame after contact"),
     (lambda e: e["reaction_playback"].__setitem__("blend_in_frames", 4), "per-clip table"),
     (lambda e: e.__setitem__("filtered_parry_frames", [0]), "filtered_parry_frames"),
+    (lambda e: e["first_contact"].__setitem__("frame", 0), "whole frame after its time"),
+    (lambda e: e["first_contact"].__setitem__("penetration_m", 0.01), "deepest sampled"),
+    (lambda e: e["first_contact"].__setitem__("time", 0.75), "first body contact"),
+    (lambda e: e.__setitem__("substeps", 1), "sample times"),
     (lambda e: e.__setitem__("event", "parry"), "does not match"),
 ])
 def test_body_hit_tampering_is_detected(mutate, message):

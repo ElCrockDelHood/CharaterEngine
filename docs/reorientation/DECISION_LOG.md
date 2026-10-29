@@ -978,12 +978,41 @@ Open for the wound thread: whether the single legacy constant should be replaced
 
 ---
 
+## 56. D1 REACTION LIBRARY SCANS IN SUBFRAMES (SCHEMA 6)
+
+**Decision** (owner approval, 2026-10-29 "me gusta sigamos adelante", thread "Debug visual en vivo"): the live
+visual debug showed that the 30 fps scan undersamples the blade. Sword_Attack vs Sword_Block at 0.9 m touches the
+body at frame 20.6, peaks at 6.9 cm at frame 21.5 and the integer frames only saw 2.6 / 3.4 cm, so wound depth (and
+severity) was underestimated, and a blade passing through a body between two frames could be missed. Schema 6:
+
+* the attack is scanned at `SUBSTEPS` = 4 samples per frame (Blender subframes); `frames` holds the sample times and
+  every per-sample array follows it; `substeps` is stored on each entry;
+* `first_contact` / `first_parry` gain `time` (the first sample of the event); their `frame` is the integer frame
+  that shows it, `ceil(time)`, so reactions and Godot keep starting on whole frames (reaction at `frame + 1`);
+* `first_contact.penetration_m` (the wound depth) is the **deepest** penetration sampled from `time` until the
+  reaction starts (`frame + 1`), not the penetration at the first sample; the depth at `time` is kept in
+  `penetration_at_contact_m`. ASSUMED: the blade meets no resistance, so this is an upper bound until offline
+  simulation (Decisions 44-45).
+
+Subframes exposed a retarget defect: the bake could store a quaternion key with the opposite sign of the previous
+one (same rotation), so the interpolation between them spun the bone (Sword_Heavy_Combo: 5 flips, a 1.5 m blade jump
+at frame 14.5 and two false hits). `build.import_mocap` now keeps each bone's keys sign-continuous; this also protects
+any engine that interpolates the clips (Godot at 60 fps). Result: 7 body hits instead of 3 (four were blades passing
+through a thigh or arm between two frames), wound depths up to 2x deeper.
+
+Playback re-measurements after contact stay on whole frames. Experiment 001 keeps its own integer scan (separate
+record, not changed). Tests: `tests/unit/test_reaction_library.py`; Godot runner checks schema 6.
+
+**Date**: 2026-10-29 · **Status**: FINAL (sampling rate reversible)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 55
-**Final Decisions**: 51 (+4 deferred)
+**Total Decisions**: 56
+**Final Decisions**: 52 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 4 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values)

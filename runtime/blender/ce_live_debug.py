@@ -246,27 +246,29 @@ def video(tag: str = "", slow: float = 4.0, window: int = 6, bullet: int = 72, f
     attacker, defender = bpy.data.objects["CE_Fighter_B"], bpy.data.objects["CE_Fighter_A"]
     f0, f1 = STATE["range"]
     c = STATE["contact"]
+    fc = (STATE["entry"] or {}).get("first_contact") or {}
+    tc = float(fc.get("time", c)) if c is not None else None          # schema 6: contact time between frames
     times = []
     t = float(f0)
     while t <= f1 + 1e-6:
-        near = c is not None and abs(t - c) <= window
+        near = c is not None and abs(t - tc) <= window
         times.append((t, near))
         t += 1.0 / slow if near else 1.0
     d = STATE["distance"] or 1.0
     mid = Vector((0.0, -d / 2, 1.05))
-    hit = Vector(STATE["table"][c]["point"]) if c is not None else mid
+    hit = Vector(fc["entry_point"]) if fc.get("entry_point") else Vector(STATE["table"][c]["point"]) if c is not None else mid
     plan = []
     for i, (t, near) in enumerate(times):
         a = math.radians(-20.0 + 80.0 * i / max(1, len(times) - 1))
         if near:
-            k = 1.0 - abs(t - c) / window                       # 0 at the edges of the window, 1 at contact
+            k = 1.0 - abs(t - tc) / window                       # 0 at the edges of the window, 1 at contact
             loc = orbit(mid, 3.6, 1.4, a).lerp(orbit(hit, 2.3, hit.z + 0.5, a), k)
             plan.append((t, loc, mid.lerp(hit, k), f"x{slow:g} camara lenta"))
         else:
             plan.append((t, orbit(mid, 3.6, 1.4, a), mid, ""))
     for j in range(bullet if c is not None else 0):
         a = math.radians(60.0 + 360.0 * j / bullet)
-        plan.append((float(c), orbit(hit, 2.2, hit.z + 0.5, a), hit, "contacto congelado"))
+        plan.append((tc, orbit(hit, 2.2, hit.z + 0.5, a), hit, "contacto congelado"))
 
     folder = SHOTS / f"video_{tag or 'clip'}"
     folder.mkdir(parents=True, exist_ok=True)

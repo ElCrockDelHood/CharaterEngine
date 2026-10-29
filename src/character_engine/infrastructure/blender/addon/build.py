@@ -995,8 +995,11 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
                 else:
                     basis = (inv_dst_world @ rest).inverted() @ pose_mat
                 p = pb[n]
-                p.rotation_quaternion = basis.to_quaternion()
-                local_rot[n] = p.rotation_quaternion.copy()
+                q = basis.to_quaternion()
+                if n in local_rot and local_rot[n].dot(q) < 0.0:
+                    q.negate()      # same rotation; keeps the keys continuous so subframes do not spin (Decision 56)
+                p.rotation_quaternion = q
+                local_rot[n] = q.copy()
                 p.keyframe_insert("rotation_quaternion", frame=frame)
                 keyed += 1
     scene.frame_set(frame_start)

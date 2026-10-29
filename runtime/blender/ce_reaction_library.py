@@ -5,8 +5,8 @@
         --lib "C:/DEV/Assets/descargas/quaternius_ual2/.../UAL2_Standard.glb"
 
 Builds the two D1-2 fighters (``ce_fight_mockup.py``), then for every attack clip and defender stance found
-in the given glTF animation libraries and every spacing, scans all frames of the attack: signed distance from
-the attacker's PLACEHOLDER sabre to the defender's collision capsules (negative = penetration). The first
+in the given glTF animation libraries and every spacing, scans the attack at 4 subframes per frame (schema 6, Decision 56):
+signed distance from the attacker's PLACEHOLDER sabre to the defender's collision capsules (negative = penetration). The first
 contact becomes a wound (domain ``blade_contact_to_wound`` + ``assess_wound``, layer 1) and the wound picks a
 reaction clip (domain ``reaction_for``, ASSUMED). Writes a JSON document Godot reads, renders one Workbench
 sample per contacting (attack, stance) pair and logs one line per entry.
@@ -146,7 +146,8 @@ def reaction_playback(build, props, sources, scene, attacker, defender, first, h
                "blend_in_frames": blend_in, "provenance": "ASSUMED"}
         end = max(end, f_contact + 1 + a_len)
 
-    scene.frame_set(f_contact)
+    t = first["time"]                            # the hit point was sampled at this subframe (Decision 56)
+    scene.frame_set(int(math.floor(t)), subframe=t - math.floor(t))
     bpy.context.view_layer.update()
     pb = defender.pose.bones[first["bone"]]
     local = (defender.matrix_world @ pb.matrix).inverted() @ hit_point
@@ -256,10 +257,14 @@ def main() -> int:
 
     from character_engine.domain.gameplay.reaction_library import (
         SCHEMA_VERSION,
+        SUBSTEPS,
+        contact_frame,
+        deepest_penetration,
         entry_sha256,
         first_event,
         parry_frames,
         reaction_for,
+        sample_times,
         summary,
         validate_library,
     )
@@ -297,8 +302,8 @@ def main() -> int:
                 toward = (defender.location - attacker.location)
                 toward.z = 0.0
                 toward.normalize()
-                for fr in range(f0, f1 + 1):
-                    scene.frame_set(fr)
+                for fr in sample_times(f0, f1, SUBSTEPS):          # subframes (Decision 56)
+                    scene.frame_set(int(math.floor(fr)), subframe=fr - math.floor(fr))
                     bpy.context.view_layer.update()
                     gap, seg, point = mock.closest_sabre_contact(attacker, defender)
                     bd, mid = blade_to_blade(attacker, defender)
@@ -313,20 +318,23 @@ def main() -> int:
                     prev_tip = tip.copy()
                     if first is None and gap <= 0.0:
                         bone, _ = build.nearest_canonical_bone(defender, point, posed=True)
-                        first = {"frame": fr, "segment": seg, "bone": bone, "penetration_m": round(-gap, 4),
+                        first = {"time": fr, "frame": contact_frame(fr), "segment": seg, "bone": bone,
+                                 "penetration_m": None, "penetration_at_contact_m": round(-gap, 4),
                                  "entry_point": [round(c, 4) for c in point]}
                         hit_point = point
                     parry_at.setdefault(fr, [round(c, 4) for c in mid])
                 event, event_frame = first_event(frames, signed, blade, approach, forward)
+                if first:
+                    first["penetration_m"] = round(deepest_penetration(frames, signed, first["time"]), 4)
                 _, filtered = parry_frames(frames, blade, approach, forward)
                 first_parry = parry_play = None
                 if event != "body_hit":
                     first = None                         # a parry came first, or nothing happened
                 if event == "parry":
-                    first_parry = {"frame": event_frame, "blade_distance_m": blade[frames.index(event_frame)],
-                                   "point": parry_at[event_frame]}
+                    first_parry = {"time": event_frame, "frame": contact_frame(event_frame),
+                                   "blade_distance_m": blade[frames.index(event_frame)], "point": parry_at[event_frame]}
                     render_tag = None if rendered else f"{attack}__vs__{stance}__{d:.1f}m"
-                    parry_play = parry_playback(props, sources, scene, attacker, defender, event_frame, f1,
+                    parry_play = parry_playback(props, sources, scene, attacker, defender, first_parry["frame"], f1,
                                                 a.renders, render_tag, d, a.blend_in, stance)
                     rendered = rendered or render_tag is not None
                     play_back_stance(defender, attacker)
@@ -353,7 +361,7 @@ def main() -> int:
                 entry = {
                     "id": f"{attack}__vs__{stance}__{d:.1f}m", "attack_clip": attack, "attack_action": act_name,
                     "defender_stance": stance, "distance_m": d, "distance_provenance": "ESTIMATE",
-                    "frames": frames, "signed_distance_m": signed, "blade_distance_m": blade,
+                    "substeps": SUBSTEPS, "frames": frames, "signed_distance_m": signed, "blade_distance_m": blade,
                     "blade_approach_m": approach, "blade_forward": forward, "filtered_parry_frames": filtered,
                     "min_distance_m": min(signed), "event": event,
                     "first_contact": first, "first_parry": first_parry, "wound": wound, "reaction": reaction,
@@ -375,7 +383,7 @@ def main() -> int:
                 if filtered:
                     after += f", filtered parry frames {filtered}"
                 print(f"[reactions] {entry['id']}: event {event}, min body {entry['min_distance_m']} m, "
-                      f"min blade {min(blade)} m, contact {first['frame'] if first else None}, "
+                      f"min blade {min(blade)} m, contact {first['time'] if first else None}, "
                       f"reaction {reaction['clip'] if reaction else None}{after}, sha256 {entry['sha256'][:12]}",
                       flush=True)
 
@@ -396,6 +404,8 @@ def main() -> int:
                      "provenance": "ASSUMED"},
         "limitations": ["defender reacts only after the first contact (no anticipation)",
                         "reactions start the frame after contact; NLA blend-in per clip (ASSUMED table)",
+                        "scan at 4 subframes per frame; wound depth = deepest penetration sampled until the reaction "
+                        "starts, the blade meeting no resistance (ASSUMED upper bound, Decision 56)",
                         "strike-phase filter uses only signs (ASSUMED): tip motion towards the defender and blade direction "
                         "along the facing axis; a cut moving sideways at the moment of contact may be filtered",
                         "parry = blade centre lines within the PLACEHOLDER blade width; the defender plays no "

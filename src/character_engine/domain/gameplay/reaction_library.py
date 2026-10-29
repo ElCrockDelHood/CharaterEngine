@@ -31,7 +31,10 @@ History: schema 2 added ``reaction_playback`` (the defender plays the reaction f
 the NLA blend-in and ``attacker_reaction`` (recovery clip after a landed hit), schema 4 the parry detection
 (``event``, ``blade_distance_m``, ``first_parry``, ``parry_playback``) and the reaction rule above (schema 3:
 any incapacitating wound -> knockback), schema 5 the strike-phase parry filter (``blade_approach_m``,
-``blade_forward``, ``filtered_parry_frames``) and the blend-in per reaction clip (schema 4: one blend for every clip).
+``blade_forward``, ``filtered_parry_frames``) and the blend-in per reaction clip (schema 4: one blend for every clip),
+schema 6 the subframe scan (Decision 56): ``SUBSTEPS`` samples per frame, ``frames`` holds the sample times, events
+carry ``time`` and the whole ``frame`` that shows them (``contact_frame``), and the wound depth is the deepest
+penetration sampled until the reaction starts (``deepest_penetration``).
 
 Pure Python, no engine code. The JSON written from it is read by Godot (plain JSON, no engine types).
 """
@@ -40,11 +43,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..trauma import Severity
 
-SCHEMA_VERSION = 5   # 2: reaction_playback; 3: blend-in, attacker_reaction; 4: parry, rule by region; 5: filter, blends
+SCHEMA_VERSION = 6   # 2: playback; 3: blend-in, attacker reaction; 4: parry, rule by region; 5: filter, blends; 6: subframes
+#: Scan samples per animation frame (Decision 56): the blade is measured at Blender subframes, 1/SUBSTEPS apart.
+SUBSTEPS = 4
 
 REACTION_CLIPS: Mapping[str, str] = {
     "death": "Death01", "knockback": "Hit_Knockback", "head": "Hit_Head", "body": "Hit_Chest",
@@ -62,13 +68,13 @@ PARRY_CONTACT_M = 0.035
 BLEND_IN_FRAMES: Mapping[str, int] = {"Death01": 2, "Hit_Knockback": 2, "Hit_Head": 4, "Hit_Chest": 6}
 
 EVENTS = ("body_hit", "parry", "none")
-ENTRY_KEYS = ("id", "attack_clip", "defender_stance", "distance_m", "distance_provenance", "frames",
+ENTRY_KEYS = ("id", "attack_clip", "defender_stance", "distance_m", "distance_provenance", "substeps", "frames",
               "signed_distance_m", "blade_distance_m", "blade_approach_m", "blade_forward", "filtered_parry_frames",
               "min_distance_m", "event", "first_contact", "first_parry",
               "wound", "reaction", "reaction_playback", "parry_playback", "energy_j", "energy_basis", "seed",
               "provenance", "sha256")
-CONTACT_KEYS = ("frame", "segment", "bone", "penetration_m", "entry_point")
-PARRY_KEYS = ("frame", "blade_distance_m", "point")
+CONTACT_KEYS = ("time", "frame", "segment", "bone", "penetration_m", "penetration_at_contact_m", "entry_point")
+PARRY_KEYS = ("time", "frame", "blade_distance_m", "point")
 PLAYBACK_KEYS = ("start_frame", "clip", "blend_in_frames", "frames", "signed_distance_m", "separated_at_frame",
                  "max_penetration_after_m", "penetrating_at_end", "wound_bone_consistent_ratio", "provenance",
                  "attacker_reaction")
@@ -79,6 +85,23 @@ WOUND_KEYS = ("type", "bone", "region", "depth_m", "width_m", "layers_breached",
               "bleeding_rate", "fracture", "incapacitating", "provenance")
 
 Vec = Sequence[float]
+
+
+def sample_times(f0: int, f1: int, substeps: int = SUBSTEPS) -> List[float]:
+    """Scan times from frame ``f0`` to ``f1`` inclusive, ``substeps`` per frame (rounded, JSON-stable)."""
+    return [round(f0 + i / substeps, 4) for i in range((f1 - f0) * substeps + 1)]
+
+
+def contact_frame(time: float) -> int:
+    """The whole frame that shows an event sampled at ``time``: the first frame at or after it."""
+    return int(math.ceil(time - 1e-6))
+
+
+def deepest_penetration(times: Sequence[float], signed: Sequence[float], start: float) -> float:
+    """Deepest penetration (m, >= 0) sampled from ``start`` until the reaction starts (``contact_frame + 1``).
+    ASSUMED: the blade meets no resistance, so this is an upper bound of the cut depth (Decision 56)."""
+    end = contact_frame(start) + 1
+    return max([0.0] + [-s for t, s in zip(times, signed) if start <= t <= end and s < 0.0])
 
 
 def reaction_for(region: str, severity: int, lethality: float, incapacitating: bool) -> Tuple[str, str]:
@@ -191,6 +214,10 @@ def _check_body_hit(e: Mapping[str, Any], eid: str) -> List[str]:
     c, w, r = e["first_contact"], e["wound"], e["reaction"]
     if not c or [k for k in CONTACT_KEYS if k not in c] or c["penetration_m"] <= 0:
         return [f"{eid}: bad first_contact"]
+    if c["frame"] != contact_frame(c["time"]):
+        problems.append(f"{eid}: first_contact frame must be the whole frame after its time")
+    if c["penetration_m"] != round(deepest_penetration(e["frames"], e["signed_distance_m"], c["time"]), 4):
+        problems.append(f"{eid}: penetration_m is not the deepest sampled before the reaction")
     if not w or [k for k in WOUND_KEYS if k not in w]:
         problems.append(f"{eid}: bad wound")
     elif r is None or r.get("clip") not in REACTION_CLIPS.values():
@@ -226,6 +253,8 @@ def _check_parry(e: Mapping[str, Any], eid: str) -> List[str]:
     fp, pp = e["first_parry"], e["parry_playback"]
     if not fp or [k for k in PARRY_KEYS if k not in fp] or fp["blade_distance_m"] > PARRY_CONTACT_M:
         return [f"{eid}: bad first_parry"]
+    if fp["frame"] != contact_frame(fp["time"]):
+        problems.append(f"{eid}: first_parry frame must be the whole frame after its time")
     if any(e[k] is not None for k in ("first_contact", "wound", "reaction", "reaction_playback")):
         problems.append(f"{eid}: a parry carries no wound or reaction")
     if not pp or [k for k in PARRY_PLAYBACK_KEYS if k not in pp]:
@@ -263,6 +292,9 @@ def validate_library(data: Mapping[str, Any]) -> List[str]:
             problems.append(f"duplicate id {eid}")
         ids.add(eid)
         n = len(e["frames"])
+        if e["substeps"] != SUBSTEPS or e["frames"] != sample_times(math.floor(e["frames"][0]),
+                                                                    math.floor(e["frames"][-1]), e["substeps"]):
+            problems.append(f"{eid}: frames must be the {SUBSTEPS}-per-frame sample times")
         if any(len(e[k]) != n for k in ("signed_distance_m", "blade_distance_m", "blade_approach_m", "blade_forward")):
             problems.append(f"{eid}: one signed distance, blade distance, approach and forward per frame")
             continue
@@ -275,12 +307,12 @@ def validate_library(data: Mapping[str, Any]) -> List[str]:
             problems.append(f"{eid}: event {e['event']} does not match the scan ({event})")
         elif event == "body_hit":
             problems += _check_body_hit(e, eid)
-            if e["first_contact"] and e["first_contact"]["frame"] != frame:
-                problems.append(f"{eid}: first_contact frame is not the first body contact")
+            if e["first_contact"] and e["first_contact"]["time"] != frame:
+                problems.append(f"{eid}: first_contact time is not the first body contact")
         elif event == "parry":
             problems += _check_parry(e, eid)
-            if e["first_parry"] and e["first_parry"]["frame"] != frame:
-                problems.append(f"{eid}: first_parry frame is not the first blade contact")
+            if e["first_parry"] and e["first_parry"]["time"] != frame:
+                problems.append(f"{eid}: first_parry time is not the first blade contact")
         elif any(e[k] is not None for k in ("first_contact", "first_parry", "wound", "reaction",
                                             "reaction_playback", "parry_playback")):
             problems.append(f"{eid}: no event but contact data present")
