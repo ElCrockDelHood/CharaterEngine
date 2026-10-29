@@ -7,6 +7,7 @@
     python scripts/live_debug.py screen
     python scripts/live_debug.py load --attack Sword_Regular_A --distance 0.9
     python scripts/live_debug.py play | stop
+    python scripts/live_debug.py video --tag d1_block --slow 4
 
 ``open`` starts Blender with its UI (``runtime/blender/ce_live_debug.py``), logging through ``_logrun.py`` to
 ``logs/<UTC>_live_debug.log``. Other commands drop ``logs/live_debug/inbox/<id>.json`` and wait for the reply in
@@ -50,7 +51,7 @@ def send(cmd: dict, timeout: float) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("cmd", choices=["open", "info", "frame", "shot", "screen", "load", "play", "stop", "eval"])
+    ap.add_argument("cmd", choices=["open", "info", "frame", "shot", "screen", "load", "play", "stop", "video", "eval"])
     ap.add_argument("value", nargs="?", help="frame number (frame) or code (eval)")
     ap.add_argument("--attack")
     ap.add_argument("--stance")
@@ -58,7 +59,8 @@ def main() -> int:
     ap.add_argument("--frame", type=int)
     ap.add_argument("--views", default="side,contact")
     ap.add_argument("--tag", default="")
-    ap.add_argument("--timeout", type=float, default=120.0)
+    ap.add_argument("--slow", type=float, default=4.0, help="slow-motion factor around the contact (video)")
+    ap.add_argument("--timeout", type=float, default=900.0)
     a = ap.parse_args()
 
     if a.cmd == "open":
@@ -80,6 +82,8 @@ def main() -> int:
         cmd.update(views=a.views.split(","), tag=a.tag)
         if a.frame is not None:
             cmd["frame"] = a.frame
+    elif a.cmd == "video":
+        cmd.update(tag=a.tag, slow=a.slow)
     elif a.cmd == "screen":
         cmd["tag"] = a.tag
     elif a.cmd == "load":

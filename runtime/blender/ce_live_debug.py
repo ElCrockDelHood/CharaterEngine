@@ -15,7 +15,9 @@ bone. Timeline markers name the first contact and the reaction start. Measuremen
 
 Command bridge (``logs/live_debug``): a timer reads ``inbox/<id>.json`` and writes ``outbox/<id>.json``.
 Commands: ``info``, ``frame`` {frame}, ``shot`` {frame?, views?, tag?}, ``screen`` (screenshot of the 3D view
-the person sees), ``load`` {attack?, stance?, distance?}, ``play`` / ``stop``, ``eval`` {code} (local debugging).
+the person sees), ``load`` {attack?, stance?, distance?}, ``play`` / ``stop``, ``video`` {tag?, slow?, window?,
+bullet?} (MP4 with a moving camera and slow motion at the contact), ``eval`` {code} (local debugging).
+The fight loops in the 3D view on open. ``--video TAG`` with ``blender -b`` renders the MP4 and exits.
 Shots are Workbench renders from fixed cameras; Cycles never runs here (Decision: EEVEE/Workbench to iterate).
 """
 
@@ -70,7 +72,7 @@ def marker():
         bpy.context.scene.collection.objects.link(obj)
         import bmesh  # type: ignore
         bm = bmesh.new()
-        bmesh.ops.create_uvsphere(bm, u_segments=12, v_segments=8, radius=0.025)
+        bmesh.ops.create_uvsphere(bm, u_segments=12, v_segments=8, radius=0.04)
         bm.to_mesh(me)
         bm.free()
         for name, col in (("LIVE_hit", (1.0, 0.05, 0.05, 1.0)), ("LIVE_gap", (0.1, 0.9, 0.2, 1.0))):
@@ -218,6 +220,120 @@ def screen(tag: str = "") -> str:
     return str(path)
 
 
+def caption():
+    """3D text parented to the video camera: clip, frame, sabre-to-body gap (shows in Workbench renders)."""
+    obj = bpy.data.objects.get("LIVE_caption")
+    if obj is None:
+        obj = bpy.data.objects.new("LIVE_caption", bpy.data.curves.new("LIVE_caption", "FONT"))
+        bpy.context.scene.collection.objects.link(obj)
+        mat = bpy.data.materials.get("LIVE_caption") or bpy.data.materials.new("LIVE_caption")
+        mat.diffuse_color = (1.0, 1.0, 1.0, 1.0)
+        obj.data.materials.append(mat)
+        obj.data.size = 0.032
+        obj["ce_role"] = "live_debug"
+    return obj
+
+
+def orbit(center, radius: float, height: float, angle: float):
+    return Vector((center[0] + radius * math.cos(angle), center[1] + radius * math.sin(angle), height))
+
+
+def video(tag: str = "", slow: float = 4.0, window: int = 6, bullet: int = 72, fps: int = 30) -> dict:
+    """MP4 of the whole fight: orbiting camera, slow motion (subframes) around the first contact with a push-in
+    on the contact point, then a bullet-time turn around the frozen contact frame. Workbench, then encoded by
+    Blender's own FFMPEG through a temporary sequencer scene (no external tools)."""
+    scene = bpy.context.scene
+    attacker, defender = bpy.data.objects["CE_Fighter_B"], bpy.data.objects["CE_Fighter_A"]
+    f0, f1 = STATE["range"]
+    c = STATE["contact"]
+    times = []
+    t = float(f0)
+    while t <= f1 + 1e-6:
+        near = c is not None and abs(t - c) <= window
+        times.append((t, near))
+        t += 1.0 / slow if near else 1.0
+    d = STATE["distance"] or 1.0
+    mid = Vector((0.0, -d / 2, 1.05))
+    hit = Vector(STATE["table"][c]["point"]) if c is not None else mid
+    plan = []
+    for i, (t, near) in enumerate(times):
+        a = math.radians(-20.0 + 80.0 * i / max(1, len(times) - 1))
+        if near:
+            k = 1.0 - abs(t - c) / window                       # 0 at the edges of the window, 1 at contact
+            loc = orbit(mid, 3.6, 1.4, a).lerp(orbit(hit, 2.3, hit.z + 0.5, a), k)
+            plan.append((t, loc, mid.lerp(hit, k), f"x{slow:g} camara lenta"))
+        else:
+            plan.append((t, orbit(mid, 3.6, 1.4, a), mid, ""))
+    for j in range(bullet if c is not None else 0):
+        a = math.radians(60.0 + 360.0 * j / bullet)
+        plan.append((float(c), orbit(hit, 2.2, hit.z + 0.5, a), hit, "contacto congelado"))
+
+    folder = SHOTS / f"video_{tag or 'clip'}"
+    folder.mkdir(parents=True, exist_ok=True)
+    for old in folder.glob("*.png"):
+        old.unlink()
+    scene.render.engine = "BLENDER_WORKBENCH"
+    scene.display.shading.light, scene.display.shading.color_type = "STUDIO", "MATERIAL"
+    scene.render.resolution_x, scene.render.resolution_y = 960, 540
+    scene.render.image_settings.file_format = "PNG"
+    keep_cam, keep_frame = scene.camera, scene.frame_current
+    cam = camera("LIVE_cam_video", plan[0][1], plan[0][2])
+    text = caption()
+    text.parent = cam
+    text.location, text.rotation_euler = (-0.48, 0.2, -1.0), (0.0, 0.0, 0.0)   # top left of a 35 mm 16:9 frame
+    scene.camera = cam
+    mk = marker()
+    gaps = []
+    for n, (t, loc, target, note) in enumerate(plan, start=1):
+        scene.frame_set(int(math.floor(t)), subframe=t - math.floor(t))
+        bpy.context.view_layer.update()
+        gap, seg, point = mock.closest_sabre_contact(attacker, defender)
+        mk.location = point
+        for poly in mk.data.polygons:
+            poly.material_index = 0 if gap <= 0.0 else 1
+        cam.location = loc
+        cam.rotation_euler = (target - loc).to_track_quat("-Z", "Y").to_euler()
+        text.data.body = (f"{STATE['attack']} vs {STATE['stance']}  {d} m\n"
+                          f"cuadro {t:5.2f}   sable-cuerpo {gap * 100:+5.1f} cm  {seg}\n{note}")
+        scene.render.filepath = str(folder / f"{n:04d}.png")
+        bpy.ops.render.render(write_still=True)
+        gaps.append(round(gap, 4))
+    scene.camera = keep_cam
+    text.parent = None
+    text.hide_render = text.hide_viewport = True
+    scene.frame_set(keep_frame)
+
+    enc = bpy.data.scenes.new("LIVE_encode")
+    enc.sequence_editor_create()
+    files = sorted(folder.glob("*.png"))
+    strip = enc.sequence_editor.sequences.new_image("frames", str(files[0]), channel=1, frame_start=1)
+    for f in files[1:]:
+        strip.elements.append(f.name)
+    enc.frame_start, enc.frame_end = 1, len(files)
+    enc.render.fps = fps
+    enc.render.resolution_x, enc.render.resolution_y = 960, 540
+    enc.render.resolution_percentage = 100
+    enc.render.image_settings.file_format = "FFMPEG"
+    enc.render.ffmpeg.format, enc.render.ffmpeg.codec = "MPEG4", "H264"
+    enc.render.ffmpeg.constant_rate_factor = "HIGH"
+    out = SHOTS / f"{tag or 'clip'}.mp4"
+    enc.render.filepath = str(out)
+    enc.render.use_file_extension = False
+    bpy.ops.render.render(animation=True, scene=enc.name)
+    bpy.data.scenes.remove(enc)
+    return {"file": str(out), "frames": len(files), "seconds": round(len(files) / fps, 1), "contact_frame": c,
+            "slow_motion": f"x{slow:g} within +-{window} frames of contact", "bullet_time_frames": len(plan) - len(times),
+            "min_gap_m": min(gaps)}
+
+
+def autoplay():
+    """Loop the fight in the 3D view (the person watches it move)."""
+    win = bpy.context.window_manager.windows[0]
+    if not win.screen.is_animation_playing:
+        with bpy.context.temp_override(window=win, screen=win.screen):
+            bpy.ops.screen.animation_play()
+
+
 # ---------------------------------------------------------------- bridge
 
 def info() -> dict:
@@ -255,6 +371,13 @@ def run(cmd: dict):
             with bpy.context.temp_override(window=win, screen=win.screen):
                 bpy.ops.screen.animation_play()
         return {"playing": kind == "play"}
+    if kind == "video":
+        win = bpy.context.window_manager.windows[0] if bpy.context.window_manager.windows else None
+        if win and win.screen.is_animation_playing:
+            with bpy.context.temp_override(window=win, screen=win.screen):
+                bpy.ops.screen.animation_cancel(restore_frame=False)
+        return video(cmd.get("tag", ""), float(cmd.get("slow", 4.0)), int(cmd.get("window", 6)),
+                     int(cmd.get("bullet", 72)))
     if kind == "eval":
         scope = {"bpy": bpy, "STATE": STATE, "Vector": Vector}
         exec(cmd["code"], scope)
@@ -292,7 +415,7 @@ def frame_viewport():
             r3d.view_perspective = "PERSP"
             d = STATE["distance"] or 1.0
             r3d.view_location = (0.0, -d / 2, 1.0)
-            r3d.view_distance = 4.5
+            r3d.view_distance = 3.2
             r3d.view_rotation = Vector((1.0, 0.0, 0.25)).normalized().to_track_quat("Z", "Y")   # from +X
 
 
@@ -303,6 +426,7 @@ def main() -> int:
     ap.add_argument("--attack", default="Sword_Attack")
     ap.add_argument("--stance", default="Sword_Idle")
     ap.add_argument("--distance", type=float, default=0.9, help="spacing in metres (ESTIMATE)")
+    ap.add_argument("--video", metavar="TAG", help="render the MP4 and exit (use with blender -b)")
     a = ap.parse_args(argv)
 
     for d in (INBOX, OUTBOX, SHOTS, LIVE / "from_mariano"):
@@ -321,10 +445,13 @@ def main() -> int:
     bpy.ops.mesh.primitive_plane_add(size=12.0)
     marker()
     load_fight(a.attack, a.stance, a.distance)
+    if a.video:
+        log(f"video {json.dumps(video(a.video))}")
+        return 0
     bpy.app.handlers.frame_change_post.append(on_frame)
     on_frame(bpy.context.scene)
     STATE["hud"] = bpy.types.SpaceView3D.draw_handler_add(hud, (), "WINDOW", "POST_PIXEL")
-    bpy.app.timers.register(lambda: (frame_viewport(), None)[1], first_interval=1.0)
+    bpy.app.timers.register(lambda: (frame_viewport(), autoplay(), None)[2], first_interval=1.0)
     bpy.app.timers.register(poll, first_interval=1.5, persistent=True)
     (LIVE / "READY").write_text(json.dumps(info()), encoding="utf-8")
     log(f"ready; commands in {INBOX}")
