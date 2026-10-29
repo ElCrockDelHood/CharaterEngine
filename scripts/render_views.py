@@ -10,7 +10,8 @@ The spec (``character_engine.pipeline.render_views``) takes the same body matric
 validated before Blender starts (unavailable templates, unknown engine / device / view refuse the run, exit 2).
 Outputs (git-ignored) in ``builds/renders/views/<job>/``: ``front.png``, ``side.png``, ``back.png``,
 ``contact_sheet.png``, ``turntable/0001.png…`` and, with ``--mp4``, ``turntable.mp4`` encoded by Blender's
-bundled FFmpeg (nothing is downloaded); ``render.json`` per job, ``manifest.json`` for the run.
+bundled FFmpeg (nothing is downloaded); ``render.json`` per job, ``manifest_<spec>_<UTC>.json`` per run (newest copied to
+``manifest.json``).
 CYCLES ``GPU`` is refused when Cycles sees no CUDA device; ``AUTO`` falls back to CPU and says so.
 Every run is logged through ``_logrun`` (``logs/<UTC>_render_views.log``).
 """
@@ -72,13 +73,12 @@ def main(argv=None) -> int:
     if blender is None:
         print("no Blender executable found (--blender or $CE_BLENDER)")
         return 1
-    manifest_path = out / "manifest.json"
-    if manifest_path.exists():
-        manifest_path.unlink()
+    run = batch_export.run_id()
+    manifest_path = out / batch_export.manifest_name(a.spec, run)
     passed = {k: v for k, v in overrides.items() if v is not None}
     code, secs, log = run_logged([blender, "-b", "--factory-startup", "--python", SCRIPT, "--", "--spec", a.spec,
                                   "--out", out, "--only", ",".join(only), "--overrides", json.dumps(passed),
-                                  "--commit", _git_commit()],
+                                  "--commit", _git_commit(), "--run-id", run],
                                  "render_views", env={"CHARACTER_ENGINE_SRC": str(ROOT / "src")}, timeout=a.timeout)
     results, meta = {}, {}
     if manifest_path.exists():
@@ -92,7 +92,7 @@ def main(argv=None) -> int:
     doc = batch_export.manifest(jobs, results, **meta, blender_exit_code=code, blender_seconds=round(secs, 1),
                                 blender_log=str(log))
     out.mkdir(parents=True, exist_ok=True)
-    manifest_path.write_text(json.dumps(doc, indent=2), encoding="utf-8")
+    batch_export.write_manifest(out, manifest_path.name, doc)
     print("\n== render views ==")
     for row in doc["jobs"]:
         print(f"  {row['status']:4s}  {row['name']}  {row.get('times', '')}"

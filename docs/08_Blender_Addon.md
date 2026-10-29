@@ -76,7 +76,8 @@ animation*) plus the block dummy, and writes to `builds/exports/batch/` (git-ign
 |------|---------|
 | `<job>.glb` | Blender glTF export (`build.export_scene_glb`): 208-bone armature, block dummy, the retargeted clip (keyed, not re-sampled) |
 | `<job>.provenance.json` | template, stature, pose, clip, bone map, provenance states (stature: template's or `user_input` when overridden; proportions; mesh), Blender and addon version, repo commit, GLB sha256 and size, clip source sha256 |
-| `manifest.json` | PASS/FAIL per job with error, timings, Blender log path, optional Godot verdict; rewritten after every job, describes the last run only |
+| `manifest_<spec>_<UTC>.json` | one per run: PASS/FAIL per job with error, timings, run id, Blender log path, optional Godot verdict; rewritten after every job of that run. Earlier runs are kept |
+| `manifest.json` | copy of the newest run's manifest (until 2026-10-29 this single file was overwritten by every run) |
 
 A failing job is recorded as FAIL and the next job runs. `--validate-godot` runs `runtime/godot/ce_skeleton_validator.gd
 -- --glb <file>` on each PASS GLB (Godot via `$CE_GODOT` / `C:/Tools/Godot` / PATH) and marks every job SKIPPED when
@@ -112,7 +113,8 @@ Engines: **WORKBENCH** (default; studio light, material colours, no textures or 
 **CYCLES** (opt-in). Measured on the reference PC in `docs/audit/RENDER-ENGINES-2026-10-29.md`: Workbench ≈ 2 s
 per 1080p still, EEVEE ≈ 6 s, Cycles 32 samples several minutes (CUDA on the GT 740M works). CYCLES `GPU` is
 refused when Cycles sees no CUDA device; `AUTO` falls back to CPU and records it. A failing job is recorded as
-FAIL in `manifest.json` and the next one runs. Log: `logs/<UTC>_render_views.log`.
+FAIL in `manifest_<spec>_<UTC>.json` (newest copied to `manifest.json`) and the next one runs. Log:
+`logs/<UTC>_render_views.log`.
 
 ## Headless tests
 

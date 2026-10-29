@@ -25,7 +25,9 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import shutil
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Mapping, Optional, Sequence
 
@@ -43,6 +45,8 @@ ANIMATION_SUFFIXES = (".bvh", ".fbx", ".glb", ".gltf")   # same list as build.AN
 # tissue layers are not offered yet: they mix PROVEN lengths with ESTIMATE/PLACEHOLDER shapes in one mesh set.
 MESH_MODES = {"block_dummy": ProvenanceState.ESTIMATE, "none": None}
 DEFAULT_MESH = "block_dummy"
+# Each run writes manifest_<spec>_<UTC>.json; this name always holds a copy of the newest one (the pre-run-id file).
+LATEST_MANIFEST = "manifest.json"
 
 
 class BatchSpecError(ValueError):
@@ -245,6 +249,26 @@ def provenance_record(job: BatchJob, *, blender_version: str, addon_version: str
     if extra:
         rec.update(extra)
     return rec
+
+
+def run_id(now: Optional[datetime] = None) -> str:
+    """UTC stamp of a run, ``yyyymmddTHHMMSSZ`` (sorts chronologically as text)."""
+    return (now or datetime.now(timezone.utc)).astimezone(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+
+def manifest_name(spec_path, run: str) -> str:
+    """``manifest_<spec stem>_<run id>.json`` — one file per run, so earlier runs are kept."""
+    return f"manifest_{_slug(Path(spec_path).stem)}_{run}.json"
+
+
+def write_manifest(out_dir: Path, name: str, doc: Mapping) -> Path:
+    """Write the run's manifest and refresh the ``manifest.json`` copy of the newest run. Returns the run file."""
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    path = out_dir / name
+    path.write_text(json.dumps(doc, indent=2), encoding="utf-8")
+    shutil.copyfile(path, out_dir / LATEST_MANIFEST)
+    return path
 
 
 def manifest(jobs: Sequence[BatchJob], results: Mapping[str, Mapping], **meta) -> dict:

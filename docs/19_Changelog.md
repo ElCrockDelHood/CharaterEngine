@@ -2,6 +2,21 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-29 · Batch follow-up 1: one manifest per run
+
+### Changed
+- `scripts/batch_export.py` and `scripts/render_views.py` no longer overwrite a single `manifest.json`: each run
+  writes `manifest_<spec stem>_<UTC run id>.json` (rewritten after every job of that run) and copies it to
+  `manifest.json`, which keeps the old name for anything that read it. The run id is created by the CLI, passed to
+  Blender (`--run-id`) and stored in the manifest. Helpers `run_id`, `manifest_name`, `write_manifest` in
+  `pipeline/batch_export.py`; 2 new tests.
+
+### Test status
+- `python scripts/test.py`: 1062 passed. `python scripts/engine_tests.py blender --blender
+  C:/DEV/Tools/Blender/blender.exe`: 37 passed, 0 failed. Two consecutive batch runs kept both manifests.
+- `python scripts/lint.py`: this change is clean; the run fails on two F821 (`tc`) in `runtime/blender/ce_live_debug.py`,
+  which is another session's uncommitted work.
+
 ## [Unreleased] — 2026-10-29 · Retarget: IK foot locking (opt-in)
 
 ### Added

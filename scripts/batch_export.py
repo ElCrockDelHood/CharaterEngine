@@ -9,9 +9,10 @@
 The spec is validated in pure Python first (``character_engine.pipeline.batch_export``): unknown or unavailable
 templates (horse, dog), poses, bone maps or missing clip files refuse the whole run (exit 2). Blender then runs
 in background (``runtime/blender/ce_batch_export.py``) and writes ``<out>/<job>.glb``,
-``<out>/<job>.provenance.json`` and ``<out>/manifest.json`` (PASS/FAIL per job; a failing job does not stop
-the others). Default output ``builds/exports/batch/`` (git-ignored). Every run is logged through ``_logrun``
-(``logs/<UTC>_batch_export.log``; Godot runs in ``logs/<UTC>_batch_godot.log``).
+``<out>/<job>.provenance.json`` and ``<out>/manifest_<spec>_<UTC>.json`` (PASS/FAIL per job, one file per run so
+earlier runs are kept; the newest is also copied to ``manifest.json``, the single file older versions overwrote).
+A failing job does not stop the others. Default output ``builds/exports/batch/`` (git-ignored). Every run is
+logged through ``_logrun`` (``logs/<UTC>_batch_export.log``; Godot runs in ``logs/<UTC>_batch_godot.log``).
 
 ``--validate-godot`` runs ``runtime/godot/ce_skeleton_validator.gd`` on each PASS GLB when Godot is found
 (``$CE_GODOT``, ``C:/Tools/Godot``, PATH; same discovery as ``engine_tests.py``); otherwise every job is marked SKIPPED.
@@ -93,11 +94,10 @@ def main(argv=None) -> int:
     if blender is None:
         print("no Blender executable found (--blender or $CE_BLENDER)")
         return 1
-    manifest_path = out / "manifest.json"
-    if manifest_path.exists():
-        manifest_path.unlink()
+    run = batch_export.run_id()
+    manifest_path = out / batch_export.manifest_name(a.spec, run)
     code, secs, log = run_logged([blender, "-b", "--factory-startup", "--python", SCRIPT, "--", "--spec", a.spec,
-                                  "--out", out, "--only", ",".join(only), "--commit", _git_commit()],
+                                  "--out", out, "--only", ",".join(only), "--commit", _git_commit(), "--run-id", run],
                                  "batch_export", env={"CHARACTER_ENGINE_SRC": str(ROOT / "src")}, timeout=a.timeout)
     results = {}
     meta = {}
@@ -113,7 +113,7 @@ def main(argv=None) -> int:
                                 blender_log=str(log))
     godot_failures = validate_godot(doc, a.timeout) if a.validate_godot else 0
     out.mkdir(parents=True, exist_ok=True)
-    manifest_path.write_text(json.dumps(doc, indent=2), encoding="utf-8")
+    batch_export.write_manifest(out, manifest_path.name, doc)
     print("\n== batch export ==")
     for row in doc["jobs"]:
         g = f"  godot {row['godot']['status']}" if "godot" in row else ""

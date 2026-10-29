@@ -1,11 +1,13 @@
 """Batch export job spec (pipeline/batch_export.py): matrix expansion, names, refusals, provenance, manifest."""
 
 import json
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
 
 from character_engine.pipeline.batch_export import (
+    LATEST_MANIFEST,
     BatchJob,
     BatchSpecError,
     ClipSpec,
@@ -13,8 +15,11 @@ from character_engine.pipeline.batch_export import (
     job_name,
     load_spec,
     manifest,
+    manifest_name,
     provenance_record,
+    run_id,
     sha256_file,
+    write_manifest,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -125,3 +130,21 @@ def test_invalid_json_spec(tmp_path):
     p.write_text("{nope", encoding="utf-8")
     with pytest.raises(BatchSpecError, match="not valid JSON"):
         load_spec(p)
+
+
+def test_run_ids_are_utc_and_sort_chronologically():
+    t = datetime(2026, 10, 29, 20, 5, 7, tzinfo=timezone(timedelta(hours=-3)))
+    assert run_id(t) == "20261029T230507Z"
+    assert run_id(t) < run_id(t + timedelta(seconds=1)) < run_id(t + timedelta(days=1))
+    assert manifest_name("scripts/batch_specs/UAL1 Local.json", "20261029T230507Z") ==         "manifest_ual1_local_20261029T230507Z.json"
+
+
+def test_each_run_keeps_its_manifest_and_the_latest_copy_follows(tmp_path):
+    first = write_manifest(tmp_path, manifest_name("default.json", "20261029T000000Z"), {"run": 1})
+    second = write_manifest(tmp_path, manifest_name("other.json", "20261029T000001Z"), {"run": 2})
+    assert json.loads(first.read_text(encoding="utf-8")) == {"run": 1}          # earlier run not overwritten
+    assert json.loads((tmp_path / LATEST_MANIFEST).read_text(encoding="utf-8")) == {"run": 2}
+    write_manifest(tmp_path, second.name, {"run": 2, "jobs_done": 3})          # same run rewritten after each job
+    assert json.loads((tmp_path / LATEST_MANIFEST).read_text(encoding="utf-8"))["jobs_done"] == 3
+    assert sorted(p.name for p in tmp_path.iterdir()) == [
+        LATEST_MANIFEST, "manifest_default_20261029T000000Z.json", "manifest_other_20261029T000001Z.json"]

@@ -3,7 +3,8 @@
     blender -b --factory-startup --python runtime/blender/ce_batch_export.py -- \
         --spec scripts/batch_specs/default.json --out builds/exports/batch [--only NAME,...] [--commit abc123]
 
-Writes ``<out>/<job>.glb`` + ``<out>/<job>.provenance.json`` per job and ``<out>/manifest.json``
+Writes ``<out>/<job>.glb`` + ``<out>/<job>.provenance.json`` per job and ``<out>/manifest_<spec>_<run>.json``
+(copied to ``manifest.json``)
 (rewritten after every job, so a crash still leaves the finished jobs recorded). A failing job is
 recorded as FAIL and the next one runs. Exit code 0 = every job passed.
 """
@@ -11,7 +12,6 @@ recorded as FAIL and the next one runs. Exit code 0 = every job passed.
 from __future__ import annotations
 
 import argparse
-import json
 import shutil
 import sys
 import tempfile
@@ -39,6 +39,7 @@ def parse_args():
     ap.add_argument("--out", type=Path, default=None, help="default: the spec's output_dir")
     ap.add_argument("--only", default="", help="comma-separated job names to run")
     ap.add_argument("--commit", default="")
+    ap.add_argument("--run-id", default="", help="UTC run stamp (default: now); names manifest_<spec>_<run>.json")
     return ap.parse_args(argv)
 
 
@@ -69,12 +70,13 @@ def main() -> int:
           flush=True)
     bpy.ops.wm.read_factory_settings(use_empty=True)
     addon = load_addon()
-    meta = {"spec": str(args.spec), "spec_sha256": batch_export.sha256_file(args.spec),
+    run = args.run_id or batch_export.run_id()
+    meta = {"run_id": run, "spec": str(args.spec), "spec_sha256": batch_export.sha256_file(args.spec),
             "blender_version": bpy.app.version_string, "addon_version": addon.batch.ADDON_VERSION,
             "repo_commit": args.commit, "output_dir": str(out),
             "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())}
     results: dict = {}
-    manifest_path = out / "manifest.json"
+    manifest_name = batch_export.manifest_name(args.spec, run)
     t0 = time.time()
     for i, job in enumerate(jobs, 1):
         print(f"-- [{i}/{len(jobs)}] {job.name}", flush=True)
@@ -90,9 +92,9 @@ def main() -> int:
             print(f"   FAIL  {job.name}  {results[job.name]['error']}", flush=True)
         results[job.name]["job"] = job.to_dict()
         doc = batch_export.manifest(jobs, results, **meta, seconds=round(time.time() - t0, 1))
-        manifest_path.write_text(json.dumps(doc, indent=2), encoding="utf-8")
+        manifest_path = batch_export.write_manifest(out, manifest_name, doc)
     doc = batch_export.manifest(jobs, results, **meta, seconds=round(time.time() - t0, 1))
-    manifest_path.write_text(json.dumps(doc, indent=2), encoding="utf-8")
+    manifest_path = batch_export.write_manifest(out, manifest_name, doc)
     print(f"== batch: {doc['passed']} passed, {doc['failed']} failed in {doc['seconds']} s; manifest {manifest_path} ==",
           flush=True)
     return 0 if doc["failed"] == 0 else 1
