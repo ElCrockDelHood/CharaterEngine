@@ -1,0 +1,217 @@
+{
+  "finding": "A13 foot layout (synthetic ramp, tarsals/metatarsals/toes parented to TIBIA)",
+  "file": "src/character_engine/data/anatomy/human_adult_206.json",
+  "sha256_before": "348719c37b929b43a46779b54b218de63f9d8f3f190dae3db2755b38749df6bc",
+  "sha256_after": "71c42ca0d83fdaf7cca6fbe44e43b9abc8e316fcd68caa5d9df1f1116439e55d",
+  "sha256_note": "LF-normalised, as pinned by tests/anatomy/test_contract_fingerprint.py",
+  "bones": 206,
+  "changed_bones": 52,
+  "changed": [
+    "CALCANEUS_L",
+    "CALCANEUS_R",
+    "CUBOID_L",
+    "CUBOID_R",
+    "CUNEIFORM_INTERMEDIATE_L",
+    "CUNEIFORM_INTERMEDIATE_R",
+    "CUNEIFORM_LATERAL_L",
+    "CUNEIFORM_LATERAL_R",
+    "CUNEIFORM_MEDIAL_L",
+    "CUNEIFORM_MEDIAL_R",
+    "METATARSAL_1_L",
+    "METATARSAL_1_R",
+    "METATARSAL_2_L",
+    "METATARSAL_2_R",
+    "METATARSAL_3_L",
+    "METATARSAL_3_R",
+    "METATARSAL_4_L",
+    "METATARSAL_4_R",
+    "METATARSAL_5_L",
+    "METATARSAL_5_R",
+    "NAVICULAR_L",
+    "NAVICULAR_R",
+    "TALUS_L",
+    "TALUS_R",
+    "TOE_PHALANX_DISTAL_1_L",
+    "TOE_PHALANX_DISTAL_1_R",
+    "TOE_PHALANX_DISTAL_2_L",
+    "TOE_PHALANX_DISTAL_2_R",
+    "TOE_PHALANX_DISTAL_3_L",
+    "TOE_PHALANX_DISTAL_3_R",
+    "TOE_PHALANX_DISTAL_4_L",
+    "TOE_PHALANX_DISTAL_4_R",
+    "TOE_PHALANX_DISTAL_5_L",
+    "TOE_PHALANX_DISTAL_5_R",
+    "TOE_PHALANX_INTERMEDIATE_2_L",
+    "TOE_PHALANX_INTERMEDIATE_2_R",
+    "TOE_PHALANX_INTERMEDIATE_3_L",
+    "TOE_PHALANX_INTERMEDIATE_3_R",
+    "TOE_PHALANX_INTERMEDIATE_4_L",
+    "TOE_PHALANX_INTERMEDIATE_4_R",
+    "TOE_PHALANX_INTERMEDIATE_5_L",
+    "TOE_PHALANX_INTERMEDIATE_5_R",
+    "TOE_PHALANX_PROXIMAL_1_L",
+    "TOE_PHALANX_PROXIMAL_1_R",
+    "TOE_PHALANX_PROXIMAL_2_L",
+    "TOE_PHALANX_PROXIMAL_2_R",
+    "TOE_PHALANX_PROXIMAL_3_L",
+    "TOE_PHALANX_PROXIMAL_3_R",
+    "TOE_PHALANX_PROXIMAL_4_L",
+    "TOE_PHALANX_PROXIMAL_4_R",
+    "TOE_PHALANX_PROXIMAL_5_L",
+    "TOE_PHALANX_PROXIMAL_5_R"
+  ],
+  "parameters": {
+    "stature_m": 1.8,
+    "foot_length_m": 0.2736,
+    "foot_breadth_m": 0.099,
+    "unit_m": 0.010523,
+    "ray_spacing_m": 0.0198,
+    "units_tarsal_metatarsal_phalanx": [
+      3,
+      5,
+      3
+    ],
+    "sides": {
+      "L": {
+        "ankle_anchor_tibia_tail_m": [
+          0.0666,
+          0.0,
+          0.0702
+        ],
+        "heel_y_m": 0.0316,
+        "toe_tip_y_m": -0.242
+      },
+      "R": {
+        "ankle_anchor_tibia_tail_m": [
+          -0.0666,
+          0.0,
+          0.0702
+        ],
+        "heel_y_m": 0.0316,
+        "toe_tip_y_m": -0.242
+      }
+    }
+  },
+  "provenance": {
+    "ankle_anchor": "existing data (TIBIA tail at 0.039 H, DRILLIS_CONTINI_1966)",
+    "foot_length_and_breadth": "DERIVED from PROVEN DRILLIS_CONTINI_1966 ratios (0.152 H, 0.055 H)",
+    "tarsal_metatarsal_phalangeal_parents_and_ray_order": "PROVEN topology (anatomy atlas)",
+    "segment_split_3_5_3": "PLACEHOLDER — existing data bone lengths, pending FOOT_SEGMENT_PROPORTIONS",
+    "ray_spacing_ankle_offset_arch_profile": "ESTIMATE — geometric conventions, no source"
+  },
+  "samples": {
+    "TALUS_L": {
+      "before": {
+        "parent": "TIBIA_L",
+        "head": {
+          "x": 0.0999,
+          "y": -0.0,
+          "z": 0.0517
+        },
+        "tail": {
+          "x": 0.0999,
+          "y": -0.0,
+          "z": 0.0462
+        }
+      },
+      "after": {
+        "parent": "TIBIA_L",
+        "head": {
+          "x": 0.0666,
+          "y": 0.0,
+          "z": 0.0702
+        },
+        "tail": {
+          "x": 0.0468,
+          "y": -0.0316,
+          "z": 0.0552
+        }
+      }
+    },
+    "CALCANEUS_L": {
+      "before": {
+        "parent": "TIBIA_L",
+        "head": {
+          "x": 0.1032,
+          "y": -0.0133,
+          "z": 0.0499
+        },
+        "tail": {
+          "x": 0.1032,
+          "y": -0.0133,
+          "z": 0.0443
+        }
+      },
+      "after": {
+        "parent": "TALUS_L",
+        "head": {
+          "x": 0.0666,
+          "y": 0.0316,
+          "z": 0.0
+        },
+        "tail": {
+          "x": 0.0963,
+          "y": -0.0316,
+          "z": 0.0
+        }
+      }
+    },
+    "METATARSAL_3_R": {
+      "before": {
+        "parent": "TIBIA_R",
+        "head": {
+          "x": -0.0733,
+          "y": 0.0,
+          "z": 0.0277
+        },
+        "tail": {
+          "x": -0.0733,
+          "y": 0.0,
+          "z": 0.0185
+        }
+      },
+      "after": {
+        "parent": "CUNEIFORM_LATERAL_R",
+        "head": {
+          "x": -0.0666,
+          "y": -0.0947,
+          "z": 0.0251
+        },
+        "tail": {
+          "x": -0.0666,
+          "y": -0.1473,
+          "z": 0.0
+        }
+      }
+    },
+    "TOE_PHALANX_DISTAL_2_L": {
+      "before": {
+        "parent": "TOE_PHALANX_INTERMEDIATE_2_L",
+        "head": {
+          "x": 0.0466,
+          "y": 0.0,
+          "z": 0.0111
+        },
+        "tail": {
+          "x": 0.0466,
+          "y": 0.0,
+          "z": 0.0055
+        }
+      },
+      "after": {
+        "parent": "TOE_PHALANX_INTERMEDIATE_2_L",
+        "head": {
+          "x": 0.0468,
+          "y": -0.2105,
+          "z": 0.0
+        },
+        "tail": {
+          "x": 0.0468,
+          "y": -0.242,
+          "z": 0.0
+        }
+      }
+    }
+  },
+  "applied": true
+}

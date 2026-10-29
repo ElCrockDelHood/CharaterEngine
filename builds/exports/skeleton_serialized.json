@@ -2327,104 +2327,104 @@
         "name": "Talus I",
         "parent": "TIBIA_L",
         "head": {
-          "x": 0.0999,
-          "y": -0.0,
-          "z": 0.0517
+          "x": 0.0666,
+          "y": 0.0,
+          "z": 0.0702
         },
         "tail": {
-          "x": 0.0999,
-          "y": -0.0,
-          "z": 0.0462
+          "x": 0.0468,
+          "y": -0.0316,
+          "z": 0.0552
         }
       },
       {
         "canonical_name": "CALCANEUS_L",
         "name": "Calcaneus I",
-        "parent": "TIBIA_L",
+        "parent": "TALUS_L",
         "head": {
-          "x": 0.1032,
-          "y": -0.0133,
-          "z": 0.0499
+          "x": 0.0666,
+          "y": 0.0316,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.1032,
-          "y": -0.0133,
-          "z": 0.0443
+          "x": 0.0963,
+          "y": -0.0316,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "NAVICULAR_L",
         "name": "Navicular I",
-        "parent": "TIBIA_L",
+        "parent": "TALUS_L",
         "head": {
-          "x": 0.1066,
-          "y": -0.0266,
-          "z": 0.048
+          "x": 0.0468,
+          "y": -0.0316,
+          "z": 0.0552
         },
         "tail": {
-          "x": 0.1066,
-          "y": -0.0266,
-          "z": 0.0425
+          "x": 0.0468,
+          "y": -0.0631,
+          "z": 0.0401
         }
       },
       {
         "canonical_name": "CUBOID_L",
         "name": "Cuboid I",
-        "parent": "TIBIA_L",
+        "parent": "CALCANEUS_L",
         "head": {
-          "x": 0.1099,
-          "y": -0.04,
-          "z": 0.0462
+          "x": 0.0963,
+          "y": -0.0316,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.1099,
-          "y": -0.04,
-          "z": 0.0406
+          "x": 0.0963,
+          "y": -0.0947,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "CUNEIFORM_MEDIAL_L",
         "name": "Cuneiform_Medial I",
-        "parent": "TIBIA_L",
+        "parent": "NAVICULAR_L",
         "head": {
-          "x": 0.1132,
-          "y": -0.0533,
-          "z": 0.0443
+          "x": 0.027,
+          "y": -0.0631,
+          "z": 0.0401
         },
         "tail": {
-          "x": 0.1132,
-          "y": -0.0533,
-          "z": 0.0388
+          "x": 0.027,
+          "y": -0.0947,
+          "z": 0.0251
         }
       },
       {
         "canonical_name": "CUNEIFORM_INTERMEDIATE_L",
         "name": "Cuneiform_Intermediate I",
-        "parent": "TIBIA_L",
+        "parent": "NAVICULAR_L",
         "head": {
-          "x": 0.1166,
-          "y": -0.0666,
-          "z": 0.0425
+          "x": 0.0468,
+          "y": -0.0631,
+          "z": 0.0401
         },
         "tail": {
-          "x": 0.1166,
-          "y": -0.0666,
-          "z": 0.0369
+          "x": 0.0468,
+          "y": -0.0947,
+          "z": 0.0251
         }
       },
       {
         "canonical_name": "CUNEIFORM_LATERAL_L",
         "name": "Cuneiform_Lateral I",
-        "parent": "TIBIA_L",
+        "parent": "NAVICULAR_L",
         "head": {
-          "x": 0.1199,
-          "y": -0.0799,
-          "z": 0.0406
+          "x": 0.0666,
+          "y": -0.0631,
+          "z": 0.0401
         },
         "tail": {
-          "x": 0.1199,
-          "y": -0.0799,
-          "z": 0.0351
+          "x": 0.0666,
+          "y": -0.0947,
+          "z": 0.0251
         }
       },
       {
@@ -2432,269 +2432,269 @@
         "name": "Talus D",
         "parent": "TIBIA_R",
         "head": {
-          "x": -0.0999,
-          "y": -0.0,
-          "z": 0.0517
+          "x": -0.0666,
+          "y": 0.0,
+          "z": 0.0702
         },
         "tail": {
-          "x": -0.0999,
-          "y": -0.0,
-          "z": 0.0462
+          "x": -0.0468,
+          "y": -0.0316,
+          "z": 0.0552
         }
       },
       {
         "canonical_name": "CALCANEUS_R",
         "name": "Calcaneus D",
-        "parent": "TIBIA_R",
+        "parent": "TALUS_R",
         "head": {
-          "x": -0.1032,
-          "y": -0.0133,
-          "z": 0.0499
+          "x": -0.0666,
+          "y": 0.0316,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.1032,
-          "y": -0.0133,
-          "z": 0.0443
+          "x": -0.0963,
+          "y": -0.0316,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "NAVICULAR_R",
         "name": "Navicular D",
-        "parent": "TIBIA_R",
+        "parent": "TALUS_R",
         "head": {
-          "x": -0.1066,
-          "y": -0.0266,
-          "z": 0.048
+          "x": -0.0468,
+          "y": -0.0316,
+          "z": 0.0552
         },
         "tail": {
-          "x": -0.1066,
-          "y": -0.0266,
-          "z": 0.0425
+          "x": -0.0468,
+          "y": -0.0631,
+          "z": 0.0401
         }
       },
       {
         "canonical_name": "CUBOID_R",
         "name": "Cuboid D",
-        "parent": "TIBIA_R",
+        "parent": "CALCANEUS_R",
         "head": {
-          "x": -0.1099,
-          "y": -0.04,
-          "z": 0.0462
+          "x": -0.0963,
+          "y": -0.0316,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.1099,
-          "y": -0.04,
-          "z": 0.0406
+          "x": -0.0963,
+          "y": -0.0947,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "CUNEIFORM_MEDIAL_R",
         "name": "Cuneiform_Medial D",
-        "parent": "TIBIA_R",
+        "parent": "NAVICULAR_R",
         "head": {
-          "x": -0.1132,
-          "y": -0.0533,
-          "z": 0.0443
+          "x": -0.027,
+          "y": -0.0631,
+          "z": 0.0401
         },
         "tail": {
-          "x": -0.1132,
-          "y": -0.0533,
-          "z": 0.0388
+          "x": -0.027,
+          "y": -0.0947,
+          "z": 0.0251
         }
       },
       {
         "canonical_name": "CUNEIFORM_INTERMEDIATE_R",
         "name": "Cuneiform_Intermediate D",
-        "parent": "TIBIA_R",
+        "parent": "NAVICULAR_R",
         "head": {
-          "x": -0.1166,
-          "y": -0.0666,
-          "z": 0.0425
+          "x": -0.0468,
+          "y": -0.0631,
+          "z": 0.0401
         },
         "tail": {
-          "x": -0.1166,
-          "y": -0.0666,
-          "z": 0.0369
+          "x": -0.0468,
+          "y": -0.0947,
+          "z": 0.0251
         }
       },
       {
         "canonical_name": "CUNEIFORM_LATERAL_R",
         "name": "Cuneiform_Lateral D",
-        "parent": "TIBIA_R",
+        "parent": "NAVICULAR_R",
         "head": {
-          "x": -0.1199,
-          "y": -0.0799,
-          "z": 0.0406
+          "x": -0.0666,
+          "y": -0.0631,
+          "z": 0.0401
         },
         "tail": {
-          "x": -0.1199,
-          "y": -0.0799,
-          "z": 0.0351
+          "x": -0.0666,
+          "y": -0.0947,
+          "z": 0.0251
         }
       },
       {
         "canonical_name": "METATARSAL_1_L",
         "name": "Metatarsal1 I",
-        "parent": "TIBIA_L",
+        "parent": "CUNEIFORM_MEDIAL_L",
         "head": {
-          "x": 0.0466,
-          "y": 0.0,
-          "z": 0.0314
+          "x": 0.027,
+          "y": -0.0947,
+          "z": 0.0251
         },
         "tail": {
-          "x": 0.0466,
-          "y": 0.0,
-          "z": 0.0222
+          "x": 0.027,
+          "y": -0.1473,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "METATARSAL_2_L",
         "name": "Metatarsal2 I",
-        "parent": "TIBIA_L",
+        "parent": "CUNEIFORM_INTERMEDIATE_L",
         "head": {
-          "x": 0.0599,
-          "y": 0.0,
-          "z": 0.0296
+          "x": 0.0468,
+          "y": -0.0947,
+          "z": 0.0251
         },
         "tail": {
-          "x": 0.0599,
-          "y": 0.0,
-          "z": 0.0203
+          "x": 0.0468,
+          "y": -0.1473,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "METATARSAL_3_L",
         "name": "Metatarsal3 I",
-        "parent": "TIBIA_L",
+        "parent": "CUNEIFORM_LATERAL_L",
         "head": {
-          "x": 0.0733,
-          "y": 0.0,
-          "z": 0.0277
+          "x": 0.0666,
+          "y": -0.0947,
+          "z": 0.0251
         },
         "tail": {
-          "x": 0.0733,
-          "y": 0.0,
-          "z": 0.0185
+          "x": 0.0666,
+          "y": -0.1473,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "METATARSAL_4_L",
         "name": "Metatarsal4 I",
-        "parent": "TIBIA_L",
+        "parent": "CUBOID_L",
         "head": {
-          "x": 0.0866,
-          "y": 0.0,
-          "z": 0.0259
+          "x": 0.0864,
+          "y": -0.0947,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0866,
-          "y": 0.0,
-          "z": 0.0166
+          "x": 0.0864,
+          "y": -0.1473,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "METATARSAL_5_L",
         "name": "Metatarsal5 I",
-        "parent": "TIBIA_L",
+        "parent": "CUBOID_L",
         "head": {
-          "x": 0.0999,
-          "y": 0.0,
-          "z": 0.024
+          "x": 0.1062,
+          "y": -0.0947,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0999,
-          "y": 0.0,
-          "z": 0.0148
+          "x": 0.1062,
+          "y": -0.1473,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "METATARSAL_1_R",
         "name": "Metatarsal1 D",
-        "parent": "TIBIA_R",
+        "parent": "CUNEIFORM_MEDIAL_R",
         "head": {
-          "x": -0.0466,
-          "y": 0.0,
-          "z": 0.0314
+          "x": -0.027,
+          "y": -0.0947,
+          "z": 0.0251
         },
         "tail": {
-          "x": -0.0466,
-          "y": 0.0,
-          "z": 0.0222
+          "x": -0.027,
+          "y": -0.1473,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "METATARSAL_2_R",
         "name": "Metatarsal2 D",
-        "parent": "TIBIA_R",
+        "parent": "CUNEIFORM_INTERMEDIATE_R",
         "head": {
-          "x": -0.0599,
-          "y": 0.0,
-          "z": 0.0296
+          "x": -0.0468,
+          "y": -0.0947,
+          "z": 0.0251
         },
         "tail": {
-          "x": -0.0599,
-          "y": 0.0,
-          "z": 0.0203
+          "x": -0.0468,
+          "y": -0.1473,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "METATARSAL_3_R",
         "name": "Metatarsal3 D",
-        "parent": "TIBIA_R",
+        "parent": "CUNEIFORM_LATERAL_R",
         "head": {
-          "x": -0.0733,
-          "y": 0.0,
-          "z": 0.0277
+          "x": -0.0666,
+          "y": -0.0947,
+          "z": 0.0251
         },
         "tail": {
-          "x": -0.0733,
-          "y": 0.0,
-          "z": 0.0185
+          "x": -0.0666,
+          "y": -0.1473,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "METATARSAL_4_R",
         "name": "Metatarsal4 D",
-        "parent": "TIBIA_R",
+        "parent": "CUBOID_R",
         "head": {
-          "x": -0.0866,
-          "y": 0.0,
-          "z": 0.0259
+          "x": -0.0864,
+          "y": -0.0947,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0866,
-          "y": 0.0,
-          "z": 0.0166
+          "x": -0.0864,
+          "y": -0.1473,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "METATARSAL_5_R",
         "name": "Metatarsal5 D",
-        "parent": "TIBIA_R",
+        "parent": "CUBOID_R",
         "head": {
-          "x": -0.0999,
-          "y": 0.0,
-          "z": 0.024
+          "x": -0.1062,
+          "y": -0.0947,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0999,
-          "y": 0.0,
-          "z": 0.0148
+          "x": -0.1062,
+          "y": -0.1473,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "TOE_PHALANX_PROXIMAL_1_L",
         "name": "HALLUX Prox I",
-        "parent": "TIBIA_L",
+        "parent": "METATARSAL_1_L",
         "head": {
-          "x": 0.0333,
-          "y": 0.0,
-          "z": 0.024
+          "x": 0.027,
+          "y": -0.1473,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0333,
-          "y": 0.0,
-          "z": 0.0185
+          "x": 0.027,
+          "y": -0.1789,
+          "z": 0.0
         }
       },
       {
@@ -2702,29 +2702,29 @@
         "name": "HALLUX Dist I",
         "parent": "TOE_PHALANX_PROXIMAL_1_L",
         "head": {
-          "x": 0.0333,
-          "y": 0.0,
-          "z": 0.0185
+          "x": 0.027,
+          "y": -0.1789,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0333,
-          "y": 0.0,
-          "z": 0.0129
+          "x": 0.027,
+          "y": -0.2105,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "TOE_PHALANX_PROXIMAL_2_L",
         "name": "SECOND Prox I",
-        "parent": "TIBIA_L",
+        "parent": "METATARSAL_2_L",
         "head": {
-          "x": 0.0466,
-          "y": 0.0,
-          "z": 0.0222
+          "x": 0.0468,
+          "y": -0.1473,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0466,
-          "y": 0.0,
-          "z": 0.0166
+          "x": 0.0468,
+          "y": -0.1789,
+          "z": 0.0
         }
       },
       {
@@ -2732,14 +2732,14 @@
         "name": "SECOND Inter I",
         "parent": "TOE_PHALANX_PROXIMAL_2_L",
         "head": {
-          "x": 0.0466,
-          "y": 0.0,
-          "z": 0.0166
+          "x": 0.0468,
+          "y": -0.1789,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0466,
-          "y": 0.0,
-          "z": 0.0111
+          "x": 0.0468,
+          "y": -0.2105,
+          "z": 0.0
         }
       },
       {
@@ -2747,29 +2747,29 @@
         "name": "SECOND Dist I",
         "parent": "TOE_PHALANX_INTERMEDIATE_2_L",
         "head": {
-          "x": 0.0466,
-          "y": 0.0,
-          "z": 0.0111
+          "x": 0.0468,
+          "y": -0.2105,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0466,
-          "y": 0.0,
-          "z": 0.0055
+          "x": 0.0468,
+          "y": -0.242,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "TOE_PHALANX_PROXIMAL_3_L",
         "name": "THIRD Prox I",
-        "parent": "TIBIA_L",
+        "parent": "METATARSAL_3_L",
         "head": {
-          "x": 0.0599,
-          "y": 0.0,
-          "z": 0.0203
+          "x": 0.0666,
+          "y": -0.1473,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0599,
-          "y": 0.0,
-          "z": 0.0148
+          "x": 0.0666,
+          "y": -0.1789,
+          "z": 0.0
         }
       },
       {
@@ -2777,14 +2777,14 @@
         "name": "THIRD Inter I",
         "parent": "TOE_PHALANX_PROXIMAL_3_L",
         "head": {
-          "x": 0.0599,
-          "y": 0.0,
-          "z": 0.0148
+          "x": 0.0666,
+          "y": -0.1789,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0599,
-          "y": 0.0,
-          "z": 0.0092
+          "x": 0.0666,
+          "y": -0.2105,
+          "z": 0.0
         }
       },
       {
@@ -2792,29 +2792,29 @@
         "name": "THIRD Dist I",
         "parent": "TOE_PHALANX_INTERMEDIATE_3_L",
         "head": {
-          "x": 0.0599,
-          "y": 0.0,
-          "z": 0.0092
+          "x": 0.0666,
+          "y": -0.2105,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0599,
-          "y": 0.0,
-          "z": 0.0037
+          "x": 0.0666,
+          "y": -0.242,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "TOE_PHALANX_PROXIMAL_4_L",
         "name": "FOURTH Prox I",
-        "parent": "TIBIA_L",
+        "parent": "METATARSAL_4_L",
         "head": {
-          "x": 0.0733,
-          "y": 0.0,
-          "z": 0.0185
+          "x": 0.0864,
+          "y": -0.1473,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0733,
-          "y": 0.0,
-          "z": 0.0129
+          "x": 0.0864,
+          "y": -0.1789,
+          "z": 0.0
         }
       },
       {
@@ -2822,14 +2822,14 @@
         "name": "FOURTH Inter I",
         "parent": "TOE_PHALANX_PROXIMAL_4_L",
         "head": {
-          "x": 0.0733,
-          "y": 0.0,
-          "z": 0.0129
+          "x": 0.0864,
+          "y": -0.1789,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0733,
-          "y": 0.0,
-          "z": 0.0074
+          "x": 0.0864,
+          "y": -0.2105,
+          "z": 0.0
         }
       },
       {
@@ -2837,29 +2837,29 @@
         "name": "FOURTH Dist I",
         "parent": "TOE_PHALANX_INTERMEDIATE_4_L",
         "head": {
-          "x": 0.0733,
-          "y": 0.0,
-          "z": 0.0074
+          "x": 0.0864,
+          "y": -0.2105,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0733,
-          "y": 0.0,
-          "z": 0.0018
+          "x": 0.0864,
+          "y": -0.242,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "TOE_PHALANX_PROXIMAL_5_L",
         "name": "FIFTH Prox I",
-        "parent": "TIBIA_L",
+        "parent": "METATARSAL_5_L",
         "head": {
-          "x": 0.0866,
-          "y": 0.0,
-          "z": 0.0166
+          "x": 0.1062,
+          "y": -0.1473,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0866,
-          "y": 0.0,
-          "z": 0.0111
+          "x": 0.1062,
+          "y": -0.1789,
+          "z": 0.0
         }
       },
       {
@@ -2867,14 +2867,14 @@
         "name": "FIFTH Inter I",
         "parent": "TOE_PHALANX_PROXIMAL_5_L",
         "head": {
-          "x": 0.0866,
-          "y": 0.0,
-          "z": 0.0111
+          "x": 0.1062,
+          "y": -0.1789,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0866,
-          "y": 0.0,
-          "z": 0.0055
+          "x": 0.1062,
+          "y": -0.2105,
+          "z": 0.0
         }
       },
       {
@@ -2882,29 +2882,29 @@
         "name": "FIFTH Dist I",
         "parent": "TOE_PHALANX_INTERMEDIATE_5_L",
         "head": {
-          "x": 0.0866,
-          "y": 0.0,
-          "z": 0.0055
+          "x": 0.1062,
+          "y": -0.2105,
+          "z": 0.0
         },
         "tail": {
-          "x": 0.0866,
-          "y": 0.0,
+          "x": 0.1062,
+          "y": -0.242,
           "z": 0.0
         }
       },
       {
         "canonical_name": "TOE_PHALANX_PROXIMAL_1_R",
         "name": "HALLUX Prox D",
-        "parent": "TIBIA_R",
+        "parent": "METATARSAL_1_R",
         "head": {
-          "x": -0.0333,
-          "y": 0.0,
-          "z": 0.024
+          "x": -0.027,
+          "y": -0.1473,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0333,
-          "y": 0.0,
-          "z": 0.0185
+          "x": -0.027,
+          "y": -0.1789,
+          "z": 0.0
         }
       },
       {
@@ -2912,29 +2912,29 @@
         "name": "HALLUX Dist D",
         "parent": "TOE_PHALANX_PROXIMAL_1_R",
         "head": {
-          "x": -0.0333,
-          "y": 0.0,
-          "z": 0.0185
+          "x": -0.027,
+          "y": -0.1789,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0333,
-          "y": 0.0,
-          "z": 0.0129
+          "x": -0.027,
+          "y": -0.2105,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "TOE_PHALANX_PROXIMAL_2_R",
         "name": "SECOND Prox D",
-        "parent": "TIBIA_R",
+        "parent": "METATARSAL_2_R",
         "head": {
-          "x": -0.0466,
-          "y": 0.0,
-          "z": 0.0222
+          "x": -0.0468,
+          "y": -0.1473,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0466,
-          "y": 0.0,
-          "z": 0.0166
+          "x": -0.0468,
+          "y": -0.1789,
+          "z": 0.0
         }
       },
       {
@@ -2942,14 +2942,14 @@
         "name": "SECOND Inter D",
         "parent": "TOE_PHALANX_PROXIMAL_2_R",
         "head": {
-          "x": -0.0466,
-          "y": 0.0,
-          "z": 0.0166
+          "x": -0.0468,
+          "y": -0.1789,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0466,
-          "y": 0.0,
-          "z": 0.0111
+          "x": -0.0468,
+          "y": -0.2105,
+          "z": 0.0
         }
       },
       {
@@ -2957,29 +2957,29 @@
         "name": "SECOND Dist D",
         "parent": "TOE_PHALANX_INTERMEDIATE_2_R",
         "head": {
-          "x": -0.0466,
-          "y": 0.0,
-          "z": 0.0111
+          "x": -0.0468,
+          "y": -0.2105,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0466,
-          "y": 0.0,
-          "z": 0.0055
+          "x": -0.0468,
+          "y": -0.242,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "TOE_PHALANX_PROXIMAL_3_R",
         "name": "THIRD Prox D",
-        "parent": "TIBIA_R",
+        "parent": "METATARSAL_3_R",
         "head": {
-          "x": -0.0599,
-          "y": 0.0,
-          "z": 0.0203
+          "x": -0.0666,
+          "y": -0.1473,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0599,
-          "y": 0.0,
-          "z": 0.0148
+          "x": -0.0666,
+          "y": -0.1789,
+          "z": 0.0
         }
       },
       {
@@ -2987,14 +2987,14 @@
         "name": "THIRD Inter D",
         "parent": "TOE_PHALANX_PROXIMAL_3_R",
         "head": {
-          "x": -0.0599,
-          "y": 0.0,
-          "z": 0.0148
+          "x": -0.0666,
+          "y": -0.1789,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0599,
-          "y": 0.0,
-          "z": 0.0092
+          "x": -0.0666,
+          "y": -0.2105,
+          "z": 0.0
         }
       },
       {
@@ -3002,29 +3002,29 @@
         "name": "THIRD Dist D",
         "parent": "TOE_PHALANX_INTERMEDIATE_3_R",
         "head": {
-          "x": -0.0599,
-          "y": 0.0,
-          "z": 0.0092
+          "x": -0.0666,
+          "y": -0.2105,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0599,
-          "y": 0.0,
-          "z": 0.0037
+          "x": -0.0666,
+          "y": -0.242,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "TOE_PHALANX_PROXIMAL_4_R",
         "name": "FOURTH Prox D",
-        "parent": "TIBIA_R",
+        "parent": "METATARSAL_4_R",
         "head": {
-          "x": -0.0733,
-          "y": 0.0,
-          "z": 0.0185
+          "x": -0.0864,
+          "y": -0.1473,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0733,
-          "y": 0.0,
-          "z": 0.0129
+          "x": -0.0864,
+          "y": -0.1789,
+          "z": 0.0
         }
       },
       {
@@ -3032,14 +3032,14 @@
         "name": "FOURTH Inter D",
         "parent": "TOE_PHALANX_PROXIMAL_4_R",
         "head": {
-          "x": -0.0733,
-          "y": 0.0,
-          "z": 0.0129
+          "x": -0.0864,
+          "y": -0.1789,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0733,
-          "y": 0.0,
-          "z": 0.0074
+          "x": -0.0864,
+          "y": -0.2105,
+          "z": 0.0
         }
       },
       {
@@ -3047,29 +3047,29 @@
         "name": "FOURTH Dist D",
         "parent": "TOE_PHALANX_INTERMEDIATE_4_R",
         "head": {
-          "x": -0.0733,
-          "y": 0.0,
-          "z": 0.0074
+          "x": -0.0864,
+          "y": -0.2105,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0733,
-          "y": 0.0,
-          "z": 0.0018
+          "x": -0.0864,
+          "y": -0.242,
+          "z": 0.0
         }
       },
       {
         "canonical_name": "TOE_PHALANX_PROXIMAL_5_R",
         "name": "FIFTH Prox D",
-        "parent": "TIBIA_R",
+        "parent": "METATARSAL_5_R",
         "head": {
-          "x": -0.0866,
-          "y": 0.0,
-          "z": 0.0166
+          "x": -0.1062,
+          "y": -0.1473,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0866,
-          "y": 0.0,
-          "z": 0.0111
+          "x": -0.1062,
+          "y": -0.1789,
+          "z": 0.0
         }
       },
       {
@@ -3077,14 +3077,14 @@
         "name": "FIFTH Inter D",
         "parent": "TOE_PHALANX_PROXIMAL_5_R",
         "head": {
-          "x": -0.0866,
-          "y": 0.0,
-          "z": 0.0111
+          "x": -0.1062,
+          "y": -0.1789,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0866,
-          "y": 0.0,
-          "z": 0.0055
+          "x": -0.1062,
+          "y": -0.2105,
+          "z": 0.0
         }
       },
       {
@@ -3092,13 +3092,13 @@
         "name": "FIFTH Dist D",
         "parent": "TOE_PHALANX_INTERMEDIATE_5_R",
         "head": {
-          "x": -0.0866,
-          "y": 0.0,
-          "z": 0.0055
+          "x": -0.1062,
+          "y": -0.2105,
+          "z": 0.0
         },
         "tail": {
-          "x": -0.0866,
-          "y": 0.0,
+          "x": -0.1062,
+          "y": -0.242,
           "z": 0.0
         }
       }

@@ -41,6 +41,7 @@ class BlockSegment:
     start: Tuple[Joint, ...]                # averaged joint points
     end: Tuple[Joint, ...]
     weight_bone: str
+    on_ground: bool = False                 # lift the capsule so it never goes below the ground z = 0
 
 
 @dataclass(frozen=True)
@@ -70,7 +71,7 @@ def _side(side: str) -> Tuple[BlockSegment, ...]:
         BlockSegment(f"thigh.{s}", BodyRegion.THIGH, ((f"FEMUR_{s}", "head"),), ((f"FEMUR_{s}", "tail"),), f"FEMUR_{s}"),
         BlockSegment(f"leg.{s}", BodyRegion.LEG, ((f"TIBIA_{s}", "head"),), ((f"TIBIA_{s}", "tail"),), f"TIBIA_{s}"),
         BlockSegment(f"foot.{s}", BodyRegion.FOOT, ((f"CALCANEUS_{s}", "head"),), ((f"METATARSAL_3_{s}", "tail"),),
-                     f"TALUS_{s}"),
+                     f"TALUS_{s}", on_ground=True),
     )
 
 
@@ -113,6 +114,8 @@ def block_placements(points: Mapping[str, Tuple[Vec, Vec]], stature_m: float = R
 
     The capsule spans exactly from the start joint to the end joint: hemisphere centres are inset by
     the radius; when a segment is shorter than its diameter it becomes a sphere at the midpoint.
+    ``on_ground`` segments (the feet, whose joints lie on the sole since A13) are then lifted just enough
+    to keep the capsule above z = 0 (ESTIMATE: the capsule is a proxy, the bones stay where they are).
     """
     missing = [b for b in required_bones(segments) if b not in points]
     if missing:
@@ -135,6 +138,10 @@ def block_placements(points: Mapping[str, Tuple[Vec, Vec]], stature_m: float = R
             u = (d[0] / length, d[1] / length, d[2] / length)
             a = (p0[0] + u[0] * r, p0[1] + u[1] * r, p0[2] + u[2] * r)
             b = (p1[0] - u[0] * r, p1[1] - u[1] * r, p1[2] - u[2] * r)
+        if seg.on_ground:
+            lift = r - min(a[2], b[2])
+            if lift > 0:
+                a, b = (a[0], a[1], a[2] + lift), (b[0], b[1], b[2] + lift)
         out.append(BlockPlacement(seg.name, seg.region, seg.weight_bone, a, b, r))
     return out
 

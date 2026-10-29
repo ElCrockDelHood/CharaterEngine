@@ -77,3 +77,14 @@ def test_missing_bone_is_reported(points):
         block_placements(broken)
     with pytest.raises(ValueError):
         block_placements(points, 0.0)
+
+
+def test_foot_capsule_stays_above_the_ground(points):
+    by = placements_by_name(block_placements(points))
+    for side in ("L", "R"):
+        foot = by[f"foot.{side}"]
+        assert min(foot.a[2], foot.b[2]) - foot.radius_m == pytest.approx(0.0, abs=1e-9)   # touches, never below
+        heel, toe = points[f"CALCANEUS_{side}"][0], points[f"METATARSAL_3_{side}"][1]
+        assert foot.extent_m == pytest.approx(_dist(heel, toe), abs=1e-6)                  # still heel -> forefoot
+        assert foot.a[1] > foot.b[1]                                                        # points forward (−Y)
+    assert [s.name for s in BLOCK_SEGMENTS if s.on_ground] == ["foot.L", "foot.R"]

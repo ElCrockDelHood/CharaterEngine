@@ -6,8 +6,9 @@ vertebrae + sacrum + coccyx. Left is +X (Decision 33 / D-13). Hand parents and c
 A10 (Decision 35); `tests/unit/test_hand_layout.py` already covers metacarpal / phalanx parents and
 wrist distances, so they are not repeated here.
 
-Known data defects are recorded as strict xfail: they must be fixed in the data (with the owner's
-OK and a DECISION_LOG entry), never by editing these expectations.
+The foot parents were a data defect (everything on TIBIA) until finding A13 (Decision 54); a data
+defect is fixed in the data (with the owner's OK and a DECISION_LOG entry), never by editing these
+expectations. Foot geometry is tested in `tests/unit/test_foot_layout.py`.
 """
 
 import json
@@ -157,8 +158,6 @@ def test_toe_chains_follow_the_atlas(B, side):
             assert B[n]["head"] == B[parent]["tail"], f"{n} not continuous with {parent}"
 
 
-@pytest.mark.xfail(strict=True, reason="data defect: every tarsal, metatarsal and proximal toe phalanx is "
-                   "parented to TIBIA_* (no tarsal / tarsometatarsal / metatarsophalangeal chain)")
 @pytest.mark.parametrize("side", SIDES)
 def test_tarsal_and_metatarsal_parents_follow_the_atlas(B, side):
     wrong = {f"{bone}_{side}": B[f"{bone}_{side}"]["parent"] for bone, parent in FOOT_PARENTS.items()

@@ -928,12 +928,38 @@ Step 2 (2026-10-25, owner "sigamos adelante"): gameplay table `ce-gameplay/3` wi
 
 ---
 
+## 54. FINDING A13 — FOOT LAYOUT REBUILT FROM SOURCED LENGTH AND ATLAS TOPOLOGY
+
+**Finding**: the 26 bones of each foot were a synthetic ramp (tarsals stepping 0.0133 m in −Y, every bone
+vertical, toes at y = 0 under the ankle) and every tarsal except the talus, every metatarsal and every proximal
+toe phalanx was parented to `TIBIA_*` (strict xfail in `tests/unit/test_extremity_spine_topology.py`).
+
+**Decision** (owner, 2026-10-25 "ok sigamos adelante con tu recomendacion de A13 del pie y
+foot_segment_proportions", option (b) "aplicar y ajustar el dummy", confirmed 2026-10-28/29): rebuild the 26 foot
+bones per side with `scripts/rebuild_foot_layout.py`: ankle anchor = TIBIA tail (0.039 H), heel → longest toe tip
+= 0.152 H and ray span from the foot breadth 0.055 H (Drillis & Contini, PROVEN → DERIVED); atlas topology
+(PROVEN): talus ← tibia; calcaneus, navicular ← talus; cuboid ← calcaneus; cuneiforms ← navicular; MT1/2/3 ←
+medial / intermediate / lateral cuneiform; MT4/5 ← cuboid; proximal phalanx ← its metatarsal, then proximal →
+(intermediate) → distal, hallux medial with two phalanges; foot forward (−Y), sole on z = 0, exact L/R mirror
+(left = +X). The split tarsal : metatarsal : phalanx = 3 : 5 : 3 is the **pre-existing PLACEHOLDER** bone-length
+ratio, re-arranged only; ray spacing (breadth / 5, ray 3 under the ankle), ankle one tarsal unit in front of the
+heel and a linear medial arch are ESTIMATE conventions. `FOOT_SEGMENT_PROPORTIONS` registered as NOT_ACQUIRED in
+`references/source_registry.json`. Block dummy: foot capsules (`on_ground`) are lifted by at most their radius so
+they never go below z = 0 (ESTIMATE proxy; bones unchanged). Fingerprints updated (Decision 52).
+Only the 52 foot bones change; gameplay table regenerated: unchanged (moves resolve bones by name). Geometry
+consumers move with the foot: kick contact (`METATARSAL_3_R`) ~0.15 m forward, game rig `calf`/`foot`/`ball`,
+mocap rest pose (clips to be re-baked in Blender). Audit: `docs/audit/A13_FOOT_LAYOUT.md`.
+
+**Date**: 2026-10-29 · **Status**: FINAL (topology); proportions PLACEHOLDER / ESTIMATE, source pending
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 53
-**Final Decisions**: 49 (+4 deferred)
+**Total Decisions**: 54
+**Final Decisions**: 50 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 3 (base stature value; tissue/wound estimate values; material values)

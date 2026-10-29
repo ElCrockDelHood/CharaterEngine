@@ -2,6 +2,24 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-29 · Foot layout rebuilt (finding A13)
+
+### Changed
+- `human_adult_206.json`: the 26 bones of each foot rebuilt by `scripts/rebuild_foot_layout.py` — atlas parents
+  (tarsal, tarsometatarsal, metatarsophalangeal chains; were all on `TIBIA_*`), foot forward on the ground,
+  heel → toe 0.152 H, rays within 0.055 H (Drillis & Contini); split 3 : 5 : 3 PLACEHOLDER, spacing / heel offset /
+  arch ESTIMATE. Report `docs/audit/A13_FOOT_LAYOUT_REPORT.json`, audit `docs/audit/A13_FOOT_LAYOUT.md`.
+- `source_registry.json`: `FOOT_SEGMENT_PROPORTIONS` registered as NOT_ACQUIRED.
+- Block dummy: foot capsules stay above z = 0 (`BlockSegment.on_ground`).
+- Fingerprints of `human_adult_206.json` and `source_registry.json` updated; gameplay table unchanged.
+
+### Tests
+- `tests/unit/test_foot_layout.py` (new); foot parents in `test_extremity_spine_topology.py` no longer xfail;
+  `test_block_dummy.py::test_foot_capsule_stays_above_the_ground`.
+
+### Decisions
+- Decision 54: finding A13, foot layout.
+
 ## [Unreleased] — 2026-10-25 · Souls-like in Godot (STYLE-SOULS-001 step 2)
 
 ### Added
