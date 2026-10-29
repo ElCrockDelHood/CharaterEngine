@@ -2,6 +2,25 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-29 · Retarget: per-clip "stance" root scale (diagnostic)
+
+### Added
+- `domain/animation/stance_scale.py`: planted-foot speed relative to the hips on source and target, ratio as the
+  clip's root scale (thresholds ESTIMATE; no stepping / too few planted frames / ratio outside 0.5–2 → none).
+- `retarget_mocap(..., root_scale_mode="stance")` (first discarded pass at the stature scale, then the measured
+  scale; falls back to "stature") and `root_scale=` override; stats carry the measurement. Batch `--root-scale
+  stance`. Default unchanged ("stature").
+
+### Findings (ual1 Walk / Jog / Sprint, ESTIMATE)
+- Measured scales: walk 1.077, jog 1.128 (stature 1.126), sprint too few planted frames (fallback). Target
+  sliding barely moves: walk 0.31 → 0.28 m/s (source 0.11), jog 0.88 → 0.87. With the root matched to the
+  canonical feet's median stance speed the feet still slide, so the cause is the pose (copied rotations on
+  different leg proportions make the planted foot's speed vary within the stance), not the root scale. Fix
+  proposed: foot locking (IK) during contact. Not a default.
+
+### Tests
+- `tests/unit/test_stance_scale.py`; pytest 1035 passed; Blender addon headless suite 36/36 (3.6.23).
+
 ## [Unreleased] — 2026-10-29 · Game rig fixed: headless suite green again
 
 ### Fixed

@@ -122,7 +122,7 @@ def main() -> int:
     ap.add_argument("--out-dir", type=Path, required=True)
     ap.add_argument("--samples", type=Path, required=True)
     ap.add_argument("--no-export", action="store_true")
-    ap.add_argument("--root-scale", default="stature", choices=("leg", "stature", "none"),
+    ap.add_argument("--root-scale", default="stature", choices=("leg", "stature", "none", "stance"),
                     help="root translation scale (domain.animation.retarget_scale)")
     a = ap.parse_args(argv)
 

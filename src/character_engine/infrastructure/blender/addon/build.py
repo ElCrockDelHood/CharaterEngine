@@ -18,7 +18,7 @@ from mathutils import Matrix, Quaternion, Vector
 
 from character_engine.domain.anatomy.osteometry import LONG_BONES, load_osteometry
 from character_engine.domain.anatomy.reference.source import ProvenanceState
-from character_engine.domain.animation import BoneMap, retarget_scale
+from character_engine.domain.animation import BoneMap, retarget_scale, stance_scale
 from character_engine.domain.assets import normalization
 from character_engine.domain.rigging import (
     ENVELOPE_RADIUS_M,
@@ -870,14 +870,16 @@ def _hierarchy_order(bones) -> List:
 
 def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Optional[int] = None,
                    frame_end: Optional[int] = None, root_location: bool = True,
-                   root_scale_mode: str = "stature") -> Dict[str, object]:
+                   root_scale_mode: str = "stature", root_scale: Optional[float] = None) -> Dict[str, object]:
     """Bake source animation onto canonical bones via rest-to-rest rotation offsets.
 
     For each mapped pair  dst_world(t) = src_world(t) · (src_rest⁻¹ · dst_rest).
     Unmapped canonical bones keep their rest-relative transform (children follow parents), except the
     ``bone_map.followers``, which copy the local rotation of their mapped leader (toes bend with toe 3).
     ``root_scale_mode`` ("stature" | "leg" | "none", ``domain.animation.retarget_scale``) scales the root
-    translation; "leg" keeps planted feet planted when the rigs' proportions differ.
+    translation; "leg" keeps planted feet planted when the rigs' proportions differ; "stance" measures the
+    scale per clip with a first retarget pass (``_measure_stance_scale``) and falls back to "stature" when the
+    feet do not step. An explicit ``root_scale`` overrides the mode.
     """
     scene = context.scene
     action = src_arm.animation_data.action if src_arm.animation_data else None
@@ -886,6 +888,10 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
     f0, f1 = action.frame_range
     frame_start = int(f0) if frame_start is None else frame_start
     frame_end = int(f1) if frame_end is None else frame_end
+    stance = None
+    if root_location and root_scale_mode == "stance" and root_scale is None:
+        stance = _measure_stance_scale(context, src_arm, dst_arm, bone_map, frame_start, frame_end)
+        root_scale = stance.scale
 
     mapping: Dict[str, str] = {}      # dst canonical -> src bone
     for sb in src_arm.data.bones:
@@ -931,6 +937,10 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
         stature_scale = retarget_scale.root_scale(root_scale_mode, src_height_m=src_h, dst_height_m=dst_h,
                                                   src_leg_m=src_leg, dst_leg_m=dst_leg)
         scale_used = root_scale_mode if root_scale_mode != "leg" or (src_leg and dst_leg) else "stature"
+        if root_scale is not None:
+            stature_scale, scale_used = float(root_scale), ("stance" if stance is not None else "explicit")
+        elif root_scale_mode == "stance":
+            scale_used = "stature"      # no stepping to measure: fallback
     else:
         src_root = None
 
@@ -994,8 +1004,49 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
     dst_arm["ce_bone_map"] = bone_map.map_id
     dst_arm["ce_root_scale"] = round(stature_scale, 4)
     dst_arm["ce_root_scale_mode"] = scale_used
-    return {"mapped_bones": len(mapping), "frames": frame_end - frame_start + 1, "keys": keyed,
-            "followers": len(follow), "root_scale": round(stature_scale, 4), "root_scale_mode": scale_used}
+    stats = {"mapped_bones": len(mapping), "frames": frame_end - frame_start + 1, "keys": keyed,
+             "followers": len(follow), "root_scale": round(stature_scale, 4), "root_scale_mode": scale_used}
+    if stance is not None:
+        stats["stance"] = {"reason": stance.reason, "source_m_s": stance.source.speed_m_s,
+                           "target_m_s": stance.target.speed_m_s, "steps": [stance.source.steps, stance.target.steps]}
+    return stats
+
+
+_STANCE_POINTS = ("TALUS_L", "TALUS_R", "TOE_PHALANX_PROXIMAL_3_L", "TOE_PHALANX_PROXIMAL_3_R")
+
+
+def _measure_stance_scale(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: int, frame_end: int):
+    """First pass for root_scale_mode="stance": retarget at the stature scale, sample the planted ankle / ball
+    joints relative to the hips on both rigs, and return ``stance_scale.stance_scale`` (the pass is discarded)."""
+    scene = context.scene
+    inv = {}
+    for b in src_arm.data.bones:
+        c = bone_map.canonical(b.name)
+        if c and c not in inv:
+            inv[c] = b.name
+    points = [c for c in _STANCE_POINTS if c in inv and c in dst_arm.data.bones]
+    src_hips = bone_map.root_joint if bone_map.root_joint in src_arm.data.bones else None
+    dst_hips = bone_map.canonical(bone_map.root_joint) if src_hips else None
+    previous = dst_arm.animation_data.action if dst_arm.animation_data else None
+    if not points or src_hips is None or dst_hips not in dst_arm.data.bones:
+        return stance_scale.stance_scale([], {}, [], [], {}, [], 1.0)
+    retarget_mocap(context, src_arm, dst_arm, bone_map, frame_start, frame_end, True, "stature")
+    trial = dst_arm.animation_data.action
+    sw, dw = src_arm.matrix_world, dst_arm.matrix_world
+    src_frames, dst_frames = [], []
+    for f in range(frame_start, frame_end + 1):
+        scene.frame_set(f)
+        src_frames.append({**{c: tuple(sw @ src_arm.pose.bones[inv[c]].head) for c in points},
+                           stance_scale.HIPS: tuple(sw @ src_arm.pose.bones[src_hips].head)})
+        dst_frames.append({**{c: tuple(dw @ dst_arm.pose.bones[c].head) for c in points},
+                           stance_scale.HIPS: tuple(dw @ dst_arm.pose.bones[dst_hips].head)})
+    src_rest = {c: tuple(sw @ src_arm.data.bones[inv[c]].head_local) for c in points}
+    dst_rest = {c: tuple(dw @ dst_arm.data.bones[c].head_local) for c in points}
+    dst_arm.animation_data.action = previous
+    bpy.data.actions.remove(trial)
+    scene.frame_set(frame_start)
+    dt = scene.render.fps_base / scene.render.fps
+    return stance_scale.stance_scale(src_frames, src_rest, points, dst_frames, dst_rest, points, dt)
 
 
 # --------------------------------------------------------------------------- wounds --------

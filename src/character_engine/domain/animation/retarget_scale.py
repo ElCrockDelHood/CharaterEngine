@@ -8,6 +8,8 @@ to the target's leg length. The root translation must be scaled by the same rati
 * ``"stature"``  — whole-armature height ratio (historical default of the addon retarget; on the Quaternius
                    UAL clips it over-travels ~11 % on walks, see the batch QA).
 * ``"none"``     — source metres unchanged.
+* ``"stance"``   — measured per clip by the caller (``stance_scale.py``); here it behaves as ``"stature"``,
+                   the fallback when a clip has no stepping to measure.
 
 The chain uses the canonical bones the mocap maps target (``FEMUR``, ``TIBIA``, ``TALUS`` heads = hip, knee,
 ankle joint centres). No anatomical number is introduced here: both lengths are measured on the two rigs.
@@ -19,7 +21,7 @@ import math
 from typing import Mapping, Optional, Sequence
 
 Vec3 = Sequence[float]
-ROOT_SCALE_MODES = ("leg", "stature", "none")
+ROOT_SCALE_MODES = ("leg", "stature", "none", "stance")   # "stance": per clip, see stance_scale.py
 LEG_CHAIN = ("FEMUR", "TIBIA", "TALUS")
 
 
