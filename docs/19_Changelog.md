@@ -2,6 +2,15 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-29 · Math follow-ups F-3 / F-4 (CE-Q4 review)
+
+### Tests
+- `tests/math/test_quaternion_sign_continuity.py`: covers the sign-continuity branch of
+  `integrate_quaternion_angular_velocity` with a case that reaches it (F-3); no behaviour change.
+
+### Docs
+- `geodesic_distance` docstring: SO(3) rotation angle in [0, π], not the S³ geodesic (F-4, R10 #9); API unchanged.
+
 ## [Unreleased] — 2026-10-29 · Retarget: per-clip "stance" root scale (diagnostic)
 
 ### Added

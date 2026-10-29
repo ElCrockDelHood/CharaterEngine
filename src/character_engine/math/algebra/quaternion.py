@@ -507,11 +507,15 @@ def integrate_quaternion_angular_velocity(
 
 
 def geodesic_distance(q1: UnitQuaternion, q2: UnitQuaternion) -> float:
-    """Compute geodesic distance on S³.
+    """Rotation angle between the rotations q₁ and q₂, in radians, in [0, π].
 
-    Distance = arccos(2(q₁·q₂)² - 1) = 2 * arccos(|q₁·q₂|)
+    angle = arccos(2(q₁·q₂)² - 1) = 2 * arccos(|q₁·q₂|): the angle of the relative rotation q₁⁻¹·q₂,
+    i.e. the geodesic distance on SO(3) (bi-invariant metric). It is **not** the geodesic distance on S³
+    (arccos(q₁·q₂), which depends on the sign of each quaternion); it is twice the S³ distance between
+    the closest representatives ±q₁, ±q₂, so q and −q are at distance 0 (Decision 28). The name is kept
+    for API stability (CE-Q4 review F-4, R10 #9).
 
-    Provenance: PROVEN (standard geodesic distance on S³)
+    Provenance: PROVEN (standard rotation-angle metric on SO(3))
     """
     # Use absolute dot product to handle double cover
     dot = abs(q1.dot(q2))
