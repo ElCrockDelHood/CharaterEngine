@@ -104,6 +104,9 @@ Souls-like (STYLE-SOULS-001, Decision 53): `gameplay/ce_souls_combat.gd` is the 
 energies and pre-computed impacts come from the table's `souls_like_rules` (`CEGameplayData.souls_rules()`); the
 runner replays its 9 reference scenarios against the Python expectations. Godot decides state only; animation
 clips are authored and baked in Blender (owner rule).
+Playable arena: `res://souls_arena.tscn` (`CESoulsArena`, open and press F6) — W/S/A/D move, J light, K heavy,
+Space dodge, L guard (hold), Tab lock-on (always on in v1); Sentinel with the bo; HUD shows health, stamina, poise
+and state. Kept apart from the Shenmue arena (`ce_arena.gd`, also edited by the audio branch).
 
 Hardware benchmark (windowed, needs the GPU): `python scripts/godot_perf.py` → `builds/tests/godot_perf.json`,
 canonical vs game rig and face blend shapes; results on the GT 740M in `docs/audit/A12_GODOT_PERF_GT740M.md`.

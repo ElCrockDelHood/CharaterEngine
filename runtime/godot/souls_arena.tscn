@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/character_engine/gameplay/ce_souls_arena.gd" id="1_souls"]
+
+[node name="SoulsArena" type="Node3D"]
+
+[node name="CESoulsArena" type="Node3D" parent="."]
+script = ExtResource("1_souls")

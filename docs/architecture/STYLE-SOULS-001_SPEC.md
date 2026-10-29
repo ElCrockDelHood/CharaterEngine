@@ -1,6 +1,6 @@
 # STYLE-SOULS-001 — `souls_like` gameplay style (SPECIFICATION, awaiting owner approval)
 
-**Date:** 2026-10-25 · **Status:** APPROVED (Decision 53: Sentinel with the bo, keyboard only in v1); steps 1–2
+**Date:** 2026-10-25 · **Status:** APPROVED (Decision 53: Sentinel with the bo, keyboard only in v1); steps 1–3
 implemented · **Context:** the owner chose the Souls-like as the first
 genre to develop (option A). This spec turns the planned `souls_like` entry of `GAMEPLAY_STYLES` into a playable
 style: stamina, dodge with invulnerability frames, light / heavy attacks with the staff and the short blade, and one
@@ -141,7 +141,13 @@ Godot replays every scenario and must reproduce frames, stamina, poise, health a
    positions) replays all 9 identically; Shenmue fights and the rest of the table unchanged. `GAMEPLAY_STYLES`
    still lists `souls_like` as planned until the arena switch (step 3).
    JSON `ce-gameplay/3` + Godot port + parity checks (Shenmue fights still identical).
-3. Godot arena: style switch, player controls, Sentinel controller, HUD (health, stamina, poise).
+3. **DONE** — own files to stay clear of the audio branch (owner OK): `gameplay/ce_souls_arena.gd` +
+   `runtime/godot/souls_arena.tscn` (open it and press F6). Keyboard W/S/A/D, J light, K heavy, Space dodge, L guard,
+   Tab lock-on (always on in v1); Sentinel driven by its pattern; game-rig characters with their weapons; wound
+   markers; HUD with health, stamina, poise and state per fighter (states stand in for the Blender clips of step 4).
+   Runner: arena builds, keys map to the scenario commands, `sentinel_cycle_600` and `sentinel_punished` played
+   through the arena equal Python. Windowed smoke on the GT 740M: 300 frames, no errors. `ce_arena.gd` untouched.
+   Godot arena: style switch, player controls, Sentinel controller, HUD (health, stamina, poise).
 4. Blender placeholder clips on the game rig (grips from the pose library), baked glTF; Godot plays them by state.
 5. Play-testing pass on the GT 740M and value tuning (values stay PLACEHOLDER until then).
 

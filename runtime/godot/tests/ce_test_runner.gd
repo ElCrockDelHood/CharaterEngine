@@ -10,6 +10,7 @@
 ##   - CEBreathing modifier displaces the sternum over time
 ##   - CEShenmueCombat replays every reference fight identically to the Python simulation (incl. weapons)
 ##   - CESoulsCombat replays the 9 Souls-like reference scenarios identically to Python
+##   - CESoulsArena builds, maps keys to scenario commands, and plays the Sentinel scenarios like Python
 ##   - the D1 reaction library JSON (generated offline in Blender, schema 5) loads: body hits carry a wound, a reaction
 ##     and its playback (per-clip blend-in); parries carry the attacker recoil and no wound
 ##   - the D1 experiments JSON (exp001 contact threshold) has a threshold consistent with its measurements
@@ -399,6 +400,64 @@ class Runner extends Node:
 			return [ok, "%s: contact up to %.4f m, none from %.4f m (%d grid + %d bisection points)%s" % [
 					r["id"], hit, miss, (r["grid"] as Array).size(), (r["bisection"]["steps"] as Array).size(),
 					"" if bad.is_empty() else "  bad: " + str(bad)]])
+
+		# ---- souls arena (STYLE-SOULS-001 step 3) ---------------------------------
+		var sarena := CESoulsArena.build(data, game_tpose)
+		sarena.autostep = false
+		sarena.show_hud = true
+		tree_root.add_child(sarena)
+		runner.check("souls arena builds: game-rig player and Sentinel with weapons, HUD", func():
+			var p: CECharacter = sarena.characters["player"]
+			var s: CECharacter = sarena.characters["opponent"]
+			var txt := sarena.hud_text()
+			return [p.is_game_rig() and s.is_game_rig() and p.weapon_attachment != null and s.weapon_attachment != null
+					and txt.contains("ST") and txt.contains("POISE") and txt.contains("sentinel"),
+					"%s / %s, weapons on %s, HUD %d lines" % [p.glb_path.get_file(), s.glb_path.get_file(),
+					p.weapon_attachment.bone_name, txt.count("\n") + 1]])
+		Input.action_press("ce_souls_forward")
+		Input.action_press("ce_souls_guard")
+		Input.action_press("ce_souls_light")
+		var cmd := sarena.player_command(1)
+		Input.action_release("ce_souls_forward")
+		Input.action_release("ce_souls_guard")
+		Input.action_release("ce_souls_light")
+		await t.process_frame                       # "just pressed" lasts until the next frame
+		var idle := sarena.player_command(2)
+		runner.check("souls arena: keys map to the scenario commands", func():
+			var ok := true
+			for a in CESoulsArena.ACTIONS:
+				ok = ok and InputMap.has_action(a)
+			ok = ok and cmd["direction"] == "F" and cmd["guard"] and cmd["light"] and not cmd["heavy"] and not cmd["dodge"]
+			ok = ok and idle["direction"] == "" and not idle["guard"] and not idle["light"]
+			return [ok, "pressed %s; released %s" % [cmd, idle]])
+		sarena.queue_free()
+		for sid in ["sentinel_cycle_600", "sentinel_punished"]:
+			var sc: Dictionary = {}
+			for cand in data.souls_reference_scenarios():
+				if cand["spec"]["scenario_id"] == sid:
+					sc = cand
+			var spec: Dictionary = sc["spec"]
+			var a2 := CESoulsArena.build(data, game_tpose)
+			a2.autostep = false
+			a2.show_hud = false
+			a2.player_weapon = str((spec.get("weapons", {}) as Dictionary).get("player", "unarmed"))
+			a2.sentinel_weapon = str((spec.get("weapons", {}) as Dictionary).get("opponent", "unarmed"))
+			a2.start_distance_m = float(spec["distance_m"])
+			a2.autoplay_script = (spec.get("script", {}) as Dictionary).duplicate(true)
+			if a2.autoplay_script.is_empty():
+				a2.autoplay_script = {"0": {}}       # scripted mode with no input (no keyboard)
+			tree_root.add_child(a2)
+			for _i in range(int(spec["frames"])):
+				a2.step_once()
+			var got := a2.combat.summary()
+			got["scenario_id"] = sid
+			var markers: int = (a2.characters["player"] as CECharacter).wound_markers.size() + (a2.characters["opponent"] as CECharacter).wound_markers.size()
+			runner.check("souls arena equals Python: " + sid, func():
+				var diff: Array = []
+				var same := CEGameplayData.deep_equal(got, sc["expected"], diff)
+				return [same and markers == got["hits"].size(), "%d frames, %d hits, %d wound markers%s" % [
+						got["frames"], got["hits"].size(), markers, "" if same else "  diff: " + str(diff)]])
+			a2.queue_free()
 
 		# ---- arena ---------------------------------------------------------------
 		CEFighterController.ensure_input_map()

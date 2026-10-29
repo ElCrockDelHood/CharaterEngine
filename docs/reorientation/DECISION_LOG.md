@@ -923,6 +923,9 @@ Step 1 done: `domain/gameplay/souls.py`, `tests/unit/test_souls.py` (engage rang
 staff reach). Steps 2–5 each need owner approval.
 Step 2 (2026-10-25, owner "sigamos adelante"): gameplay table `ce-gameplay/3` with `souls_like_rules`; Godot
 `ce_souls_combat.gd` replays the 9 reference scenarios identically to Python; Shenmue fights unchanged.
+Step 3 (2026-10-29, owner "me gusta tu idea, sigamos adelante"): playable arena in its own files
+(`ce_souls_arena.gd`, `souls_arena.tscn`) so the Shenmue arena and the audio branch are not touched; Sentinel
+scenarios played through the arena equal Python.
 
 **Date**: 2026-10-25 · **Status**: FINAL (values reversible)
 

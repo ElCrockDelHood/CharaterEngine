@@ -82,6 +82,13 @@ All notable changes to Character Engine. Dates are ISO 8601.
 ### Decisions
 - Decision 54: finding A13, foot layout.
 
+## [Unreleased] — 2026-10-29 · Playable Souls-like arena (STYLE-SOULS-001 step 3)
+
+### Added
+- Godot `gameplay/ce_souls_arena.gd` + `souls_arena.tscn`: player vs Sentinel on the game rig, keyboard controls,
+  HUD (health, stamina, poise, state), wound markers. Runner checks: arena builds, keys → scenario commands, two
+  Sentinel scenarios through the arena equal Python. Shenmue arena untouched.
+
 ## [Unreleased] — 2026-10-25 · Souls-like in Godot (STYLE-SOULS-001 step 2)
 
 ### Added
