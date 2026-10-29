@@ -2,6 +2,23 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-29 · Game rig fixed: headless suite green again
+
+### Fixed
+- *game rig: build* and *game rig: hand pose library* (failing since the A13 foot rebuild, Decision 54; seen at
+  `0644517`) are fixed by `0df8488`: `game_rig._refine_pole_angles` compared only heads and tails of the IK chain
+  bones, so a twist about the bone axis passed unnoticed and swung the child bones (forward-pointing foot / ball,
+  canonical toes off by up to 0.65 m; hand FK off by 0.34 m). It now compares each chain bone's full rest matrix
+  and searches the whole circle before refining. The two headless checks are the regression tests (IK rest
+  error 0.0003 mm, canonical layer at rest 0.0007 mm, hand FK 0.0004 mm).
+- Note on the render-views entry below: its 36/36 relied on that change while it was still uncommitted; it is
+  now in history.
+
+### Test status
+- Clean checkout of `de84d6c`: Blender 3.6.23 headless suite 35/35 (no `--save` check).
+- Working tree: `python scripts/engine_tests.py blender --blender C:/DEV/Tools/Blender/blender.exe` 36 passed,
+  0 failed; `python scripts/test.py` 1031 passed; `python scripts/lint.py` clean.
+
 ## [Unreleased] — 2026-10-29 · Automatic render views (stills, contact sheet, turntable, engine presets)
 
 ### Added
