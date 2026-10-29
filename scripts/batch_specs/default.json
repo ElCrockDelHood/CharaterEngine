@@ -1,0 +1,8 @@
+{
+  "spec_version": 1,
+  "output_dir": "builds/exports/batch",
+  "matrices": [
+    {"templates": ["human_male_adult"], "statures_m": [1.80], "poses": ["tpose", "anatomical"]},
+    {"templates": ["human_female_adult"], "statures_m": [1.65], "poses": ["tpose", "anatomical"]}
+  ]
+}

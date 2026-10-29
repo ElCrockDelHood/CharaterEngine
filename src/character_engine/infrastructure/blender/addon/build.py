@@ -1084,6 +1084,25 @@ def build_placeholder_sabre(context, armature, socket_name: str = "SOCKET-sabre_
 
 # --------------------------------------------------------------------------- cinematic -----
 
+def export_scene_glb(context, armature, out: Path, force_sampling: bool = True) -> Path:
+    """Blender glTF export of one character: its visible objects and active actions, mocap sources excluded.
+
+    ``force_sampling=False`` exports a retargeted (per-frame keyed) action as keyed: same keys, ~3-5 s instead of
+    ~260 s for a 208-bone clip on the reference PC (see runtime/blender/ce_batch_retarget.py)."""
+    out = Path(out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    for obj in bpy.data.objects:
+        obj.select_set(obj.get("ce_character") == armature["ce_character"] and obj.get("ce_role") != "mocap_source"
+                       and obj.visible_get())
+    kwargs = dict(filepath=str(out), use_selection=True, export_format="GLB", export_animations=True,
+                  export_skins=True, export_yup=True, export_force_sampling=force_sampling)
+    try:
+        bpy.ops.export_scene.gltf(**kwargs, export_animation_mode="ACTIVE_ACTIONS")
+    except TypeError:   # older exporter without export_animation_mode
+        bpy.ops.export_scene.gltf(**kwargs)
+    return out
+
+
 def armature_points_world(armature, canonical_only: bool = True) -> List[Vector]:
     mw = armature.matrix_world
     pts = []

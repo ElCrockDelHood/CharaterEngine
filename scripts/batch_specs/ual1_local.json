@@ -1,0 +1,9 @@
+{
+  "spec_version": 1,
+  "output_dir": "builds/exports/batch",
+  "matrices": [
+    {"templates": ["human_male_adult"], "statures_m": [1.80], "poses": ["tpose"],
+     "clips": [{"path": "C:/DEV/Assets/descargas/quaternius_ual1/extracted/Universal Animation Library[Standard]/Unreal-Godot/UAL1_Standard.glb",
+                "bone_map": "quaternius_ual", "clip": "Jog_Fwd"}]}
+  ]
+}

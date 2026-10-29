@@ -30,8 +30,13 @@ const GAME_REQUIRED_BONES := ["root", "pelvis", "spine_03", "head", "jaw", "eye_
 
 
 func _init() -> void:
-	# Running as main script (headless). Try common locations.
+	# Running as main script (headless). `-- --glb <path>` validates that file (scripts/batch_export.py);
+	# otherwise try common locations.
 	var candidates := [glb_path, "res://human_adult_206.glb", "res://../../builds/gltf/human_adult_206.glb"]
+	var args := OS.get_cmdline_user_args()
+	var at := args.find("--glb")
+	if at != -1 and at + 1 < args.size():
+		candidates = [args[at + 1]]
 	var report: Dictionary = {}
 	for candidate in candidates:
 		if FileAccess.file_exists(candidate):

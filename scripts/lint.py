@@ -9,12 +9,12 @@ import sys
 from _common import ROOT, venv_python
 
 DOMAIN_DIRS = [ROOT / "src" / "character_engine" / "domain", ROOT / "src" / "character_engine" / "export",
-               ROOT / "src" / "character_engine" / "math", ROOT / "backend"]
+               ROOT / "src" / "character_engine" / "math", ROOT / "src" / "character_engine" / "pipeline", ROOT / "backend"]
 BPY_IMPORT = re.compile(r"^\s*(import bpy|from bpy\b|import bmesh|from bmesh\b|import mathutils|from mathutils\b)", re.M)
 
 
 def architecture_guard() -> int:
-    """Domain, export, math and backend must never import Blender modules."""
+    """Domain, export, math, pipeline and backend must never import Blender modules."""
     violations = []
     for base in DOMAIN_DIRS:
         for path in base.rglob("*.py"):
@@ -25,7 +25,7 @@ def architecture_guard() -> int:
         for v in violations:
             print(f"  - {v}")
         return 1
-    print("architecture guard: OK (no bpy in domain/export/math/backend)")
+    print("architecture guard: OK (no bpy in domain/export/math/pipeline/backend)")
     return 0
 
 

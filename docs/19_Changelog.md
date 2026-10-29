@@ -2,6 +2,35 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-29 · Batch asset export pipeline
+
+### Added
+- `character_engine/pipeline/batch_export.py` (pure Python, now under the lint `bpy` guard): JSON job spec, matrix
+  expansion template × stature × pose × optional clip (file + bone map + clip name), deterministic names
+  `<template>_<stature mm>mm_<pose>[__<bone map>_<clip>]`, validation that reports every error at once and
+  **refuses** unknown or unavailable templates (horse, dog), poses, bone maps, missing clip files and duplicate jobs;
+  provenance record and manifest builders. Tests: `tests/unit/test_batch_export.py` (12).
+- `scripts/batch_export.py` (through `_logrun`) + `runtime/blender/ce_batch_export.py` + addon module `batch.py`:
+  one Blender process runs every job from an emptied scene with the panel operators (Generate body, Import &
+  retarget animation) and the block dummy; writes `builds/exports/batch/<job>.glb`, `<job>.provenance.json`
+  (template, stature, pose, clip, bone map, provenance states, Blender/addon version, repo commit, sha256) and
+  `manifest.json` (PASS/FAIL per job, rewritten after each job; a failing job does not stop the others).
+  `--check` validates and lists jobs without Blender; `--validate-godot` runs `ce_skeleton_validator.gd` (new
+  `-- --glb <path>` argument) on each GLB, SKIPPED when Godot is not found.
+- Specs: `scripts/batch_specs/default.json` (male 1.80 / female 1.65 × tpose / anatomical, no clip; the repo
+  ships no animation fixture) and `ual1_local.json` (Jog_Fwd from the owner's local UAL1 file, outside the repo).
+- `build.export_scene_glb()` (shared by *Export scene GLB* and the batch); `force_sampling=False` for retargeted
+  clips: the Jog_Fwd job went from 268 s to 8.9 s.
+- Headless check *batch export: one job -> GLB + provenance, a failing job does not stop the next*.
+
+### Test status
+- `python scripts/test.py`: 988 passed. `python scripts/lint.py`: clean.
+- `python scripts/engine_tests.py blender --blender C:/DEV/Tools/Blender/blender.exe` (3.6.23): 33 passed,
+  2 failed; the failures (*game rig: build*, *game rig: hand pose library*) fail the same way on a clean
+  checkout of `0644517`, so this change did not cause them, and they are still open.
+- Batch on Blender 3.6.23 + Godot 4.7.2: `default.json` 4/4 PASS, Godot 4/4 PASS (208 bones), 6.7 s in Blender;
+  `ual1_local.json` 1/1 PASS, Godot PASS, 8.9 s.
+
 ## [Unreleased] — 2026-10-29 · Batch retarget + clip QA (Quaternius UAL1/UAL2)
 
 ### Added

@@ -45,6 +45,35 @@ Every generated object carries custom properties (`ce_canonical`, `ce_rig_id`, `
 diameters, muscle bellies, skin thickness and tissue depths are ESTIMATE/PLACEHOLDER
 (`docs/audit/A08_OSTEOMETRY_TISSUES_TPOSE.md`). Sculpt on top; the addon never invents anatomy.
 
+## Batch export
+
+```bash
+python scripts/batch_export.py --check                       # validate scripts/batch_specs/default.json, list jobs
+python scripts/batch_export.py                               # run it (Blender 3.6 in background)
+python scripts/batch_export.py --spec scripts/batch_specs/ual1_local.json --validate-godot
+python scripts/batch_export.py --only human_male_adult_1800mm_tpose
+```
+
+A spec (`scripts/batch_specs/*.json`) lists *matrices*; each is the product `templates × statures_m × poses × clips`
+(`statures_m` omitted or `null` = the template's stature; `clips` omitted = no clip; a clip is
+`{"path", "bone_map", "clip"}`, relative paths resolve against the repo root). `mesh` is `block_dummy` (default,
+ESTIMATE radii) or `none`; tissue layers are not offered in batch yet. The spec is validated in pure Python
+(`character_engine.pipeline.batch_export`) before Blender starts: unknown or unavailable templates (horse, dog),
+poses, bone maps, missing clip files or duplicate jobs refuse the whole run (exit 2), with every error listed.
+
+Each job runs from an emptied scene through the same operators as the panel (*Generate body*, *Import & retarget
+animation*) plus the block dummy, and writes to `builds/exports/batch/` (git-ignored):
+
+| File | Content |
+|------|---------|
+| `<job>.glb` | Blender glTF export (`build.export_scene_glb`): 208-bone armature, block dummy, the retargeted clip (keyed, not re-sampled) |
+| `<job>.provenance.json` | template, stature, pose, clip, bone map, provenance states (stature: template's or `user_input` when overridden; proportions; mesh), Blender and addon version, repo commit, GLB sha256 and size, clip source sha256 |
+| `manifest.json` | PASS/FAIL per job with error, timings, Blender log path, optional Godot verdict; rewritten after every job, describes the last run only |
+
+A failing job is recorded as FAIL and the next job runs. `--validate-godot` runs `runtime/godot/ce_skeleton_validator.gd
+-- --glb <file>` on each PASS GLB (Godot via `$CE_GODOT` / `C:/Tools/Godot` / PATH) and marks every job SKIPPED when
+Godot is not found. Logs: `logs/<UTC>_batch_export.log`, `logs/<UTC>_batch_godot.log`.
+
 ## Headless tests
 
 ```bash

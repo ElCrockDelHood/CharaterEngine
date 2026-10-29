@@ -1103,6 +1103,38 @@ def main(reset: bool = True) -> int:
             return f"{args.save} {args.save.stat().st_size // 1024} kB"
         check("save .blend", _save)
 
+    def _batch_job():
+        """scripts/batch_export.py executor: one clip job -> GLB + provenance; a broken clip fails alone."""
+        from character_engine.pipeline.batch_export import expand
+        glb = Path(tempfile.gettempdir()) / "ce_synthetic_ue.glb"
+        if not glb.exists():
+            glb = _write_synthetic_ue_glb(glb)
+        broken = Path(tempfile.gettempdir()) / "ce_batch_broken.glb"
+        broken.write_bytes(b"not a glTF file")
+        good_job, bad_job = expand({"matrices": [{"templates": ["human_female_adult"], "poses": ["tpose"], "clips": [
+            {"path": str(glb), "bone_map": "quaternius_ual", "clip": "swing"},
+            {"path": str(broken), "bone_map": "quaternius_ual"}]}]}, root=ROOT)
+        out = out_dir / f"{args.engine}_batch"
+        batch = addon["mod"].batch
+        try:
+            batch.run_job(ctx, bad_job, out, ROOT)
+            raise AssertionError("a broken clip file must fail its job")
+        except AssertionError:
+            raise
+        except Exception as exc:  # noqa: BLE001 - expected: the batch runner records FAIL and moves on
+            bad = f"{type(exc).__name__}"
+        res = batch.run_job(ctx, good_job, out, ROOT)    # runs after the failure, from an emptied scene
+        assert res["status"] == "PASS", res
+        rec = json.loads(Path(res["provenance"]).read_text(encoding="utf-8"))
+        assert rec["glb_sha256"] == res["sha256"] and rec["bones"] == 208, rec
+        assert rec["bone_map"] == "quaternius_ual" and "Swing" in (rec["clip_resolved"] or ""), rec
+        assert rec["provenance"] == {"stature": "user_input", "proportions": "estimate", "mesh": "estimate"}, rec
+        assert rec["blender_version"] == bpy.app.version_string
+        return (f"{good_job.name}: {res['bytes']} bytes, clip '{rec['clip_resolved']}' frames {rec['clip_frames']}; "
+                f"broken clip job failed alone ({bad})")
+    if not skipped(args, "batch"):
+        check("batch export: one job -> GLB + provenance, a failing job does not stop the next", _batch_job)
+
     return finish(args)
 
 

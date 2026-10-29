@@ -301,17 +301,7 @@ class CE_OT_export_scene_gltf(bpy.types.Operator):
         out = Path(bpy.path.abspath(props.export_path))
         if not out.is_absolute():
             out = _bootstrap.repo_root() / out
-        out = out.with_name(out.stem + "_scene.glb")
-        out.parent.mkdir(parents=True, exist_ok=True)
-        for obj in bpy.data.objects:
-            obj.select_set(obj.get("ce_character") == arm["ce_character"] and obj.get("ce_role") != "mocap_source"
-                           and obj.visible_get())
-        kwargs = dict(filepath=str(out), use_selection=True, export_format="GLB", export_animations=True,
-                      export_skins=True, export_yup=True)
-        try:
-            bpy.ops.export_scene.gltf(**kwargs, export_animation_mode="ACTIVE_ACTIONS")
-        except TypeError:   # older exporter without export_animation_mode
-            bpy.ops.export_scene.gltf(**kwargs)
+        out = build.export_scene_glb(context, arm, out.with_name(out.stem + "_scene.glb"))
         self.report({"INFO"}, f"scene GLB written: {out}")
         return {"FINISHED"}
 
