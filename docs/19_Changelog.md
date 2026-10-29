@@ -2,6 +2,30 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-29 · Retarget: toe followers and root-scale modes (batch QA follow-up)
+
+### Added
+- Bone maps with a toe joint (`quaternius_ual`, `mixamo`, `cmu_bvh`, `rokoko`, `rigify_def`) carry
+  `followers` (`TOE_FOLLOWERS`): toes 1, 2, 4, 5 copy the local rotation of toe 3 (ASSUMED: same flexion). The
+  game-rig maps keep the field and skip it (no such bones).
+- `domain/animation/retarget_scale.py`: root translation scale `"stature"` (whole-height ratio), `"leg"`
+  (hip → knee → ankle chain ratio) or `"none"`. `retarget_mocap(..., root_scale_mode=...)` records
+  `ce_root_scale` / `ce_root_scale_mode`; `scripts/retarget_batch.py --root-scale`.
+
+### Unchanged
+- Default root scale stays `"stature"` in the addon and the batch (D1 fight / reaction-library results do not move).
+
+### Findings (batch QA, 86 clips, leg mode vs. the first run; ESTIMATE)
+- Toe followers: clips whose big-toe tip goes > 1 cm below the ground 27 → 19; walks −5.0 → −3.9 cm. The driven
+  foot points still sink ~2.5 cm on walks (foot geometry differs from the source), so toes alone do not fix it.
+- `"leg"` (×1.065 instead of ×1.126) is not a net gain: walk sliding 0.31 → 0.26 m/s, but jog 0.88 → 1.20 and
+  sprint 0.93 → 1.42 m/s, and seated clips float 2.3 cm more. On the canonical armature a walk implies ~1.0× the
+  source speed and a run ~1.15×: no single constant ratio keeps every gait planted. Next step proposed: per-clip
+  scale from the measured stance speed, or foot locking (IK).
+
+### Tests
+- `tests/unit/test_retarget_scale.py`; Blender addon headless suite 35/35 (3.6.23).
+
 ## [Unreleased] — 2026-10-29 · Batch asset export pipeline
 
 ### Added

@@ -122,6 +122,8 @@ def main() -> int:
     ap.add_argument("--out-dir", type=Path, required=True)
     ap.add_argument("--samples", type=Path, required=True)
     ap.add_argument("--no-export", action="store_true")
+    ap.add_argument("--root-scale", default="stature", choices=("leg", "stature", "none"),
+                    help="root translation scale (domain.animation.retarget_scale)")
     a = ap.parse_args(argv)
 
     t_start = time.time()
@@ -146,7 +148,7 @@ def main() -> int:
           f"source turned 180: {bool(src.get('ce_turned_180'))}", flush=True)
 
     result = {"glb": str(a.glb), "library": a.library, "variant": a.variant, "bone_map": a.bone_map,
-              "fps": a.fps, "blender": bpy.app.version_string, "armature": ARMATURE,
+              "fps": a.fps, "root_scale_mode": a.root_scale, "blender": bpy.app.version_string, "armature": ARMATURE,
               "stature_m": float(dst.get("ce_stature_m", 0.0)),
               "source_rest": rest_points(src, SOURCE_JOINTS), "target_rest": rest_points(dst, TARGET_BONES),
               "clips": []}
@@ -160,7 +162,7 @@ def main() -> int:
             f0, f1 = action.frame_range
             rec.update(frame_start_raw=float(f0), frame_end_raw=float(f1),
                        duration_s=round((float(f1) - float(f0)) / a.fps, 5))
-            stats = build.retarget_mocap(bpy.context, src, dst, bone_map)
+            stats = build.retarget_mocap(bpy.context, src, dst, bone_map, root_scale_mode=a.root_scale)
             rec.update(stats)
             frames = list(range(int(f0), int(f1) + 1))
             source, target = [], []

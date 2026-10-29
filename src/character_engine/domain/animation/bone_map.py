@@ -12,7 +12,7 @@ Blender/UPBGE "Rigify DEF-" prefix for round-tripping.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Dict, Mapping, Optional
 
 
@@ -29,6 +29,8 @@ class BoneMap:
     notes: str = ""
     aliases: Mapping[str, str] = field(default_factory=dict)  # alternate source spellings
     target_rig: str = "canonical"     # "canonical" (206 bones) or "CE-GAME-v1" (game rig, game_bone_map.py)
+    # unmapped canonical bone -> mapped canonical bone whose local rotation it copies (see TOE_FOLLOWERS)
+    followers: Mapping[str, str] = field(default_factory=dict)
 
     def canonical(self, source_joint: str) -> Optional[str]:
         name = source_joint
@@ -139,6 +141,14 @@ BONE_MAPS: Dict[str, BoneMap] = {
         prefix="DEF-", forward_axis="-Y", up_axis="+Z", scale_to_m=1.0,
         notes="Blender native axes; used to drive the canonical DEF layer from a Rigify control rig."),
 }
+
+# Mocap rigs carry one toe joint (ball / MTP), mapped to toe 3. The other proximal phalanges copy its local
+# rotation so the toes bend together at toe-off (ASSUMED: same flexion for every toe; without it toes 1, 2, 4, 5
+# stay rigid with the foot and their tips go below the ground, batch QA 2026-10-29).
+TOE_FOLLOWERS: Dict[str, str] = {f"TOE_PHALANX_PROXIMAL_{i}_{s}": f"TOE_PHALANX_PROXIMAL_3_{s}"
+                                 for i in (1, 2, 4, 5) for s in ("L", "R")}
+BONE_MAPS = {k: replace(m, followers=TOE_FOLLOWERS)
+             if "TOE_PHALANX_PROXIMAL_3_L" in m.source_to_canonical.values() else m for k, m in BONE_MAPS.items()}
 
 
 def get_bone_map(map_id: str) -> BoneMap:

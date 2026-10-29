@@ -155,6 +155,7 @@ def evaluate_library(lib: str, samples: dict[str, dict], glb_checks: dict[str, d
         rec["integer_frames"] = abs(base.get("frame_end_raw", 0) - round(base.get("frame_end_raw", 0))) < 1e-3
         rec["glb"] = {v: c.get("glb_out") for v, c in (("standard", s), ("rm", r)) if c and c.get("glb_out")}
         rec["mapped_bones"] = base.get("mapped_bones")
+        rec["root_scale"] = {k: base.get(k) for k in ("root_scale", "root_scale_mode", "followers")}
         tips = [f[n][2] - meta["target_rest"][n][2] for f in base["target"] for n in UNDRIVEN_TOE_TIPS
                 if n in f and n in meta["target_rest"]]
         if tips:   # diagnostic only: toes 1, 2, 4, 5 do not bend with the source ball joint
@@ -208,6 +209,8 @@ def main(argv=None) -> int:
     ap.add_argument("--out-dir", type=Path, default=OUT_DIR)
     ap.add_argument("--timeout", type=int, default=3600, help="seconds per Blender process")
     ap.add_argument("--no-export", action="store_true")
+    ap.add_argument("--root-scale", default="stature", choices=("leg", "stature", "none"),
+                    help="root translation scale: whole-height ratio (default, as the addon), leg-length ratio, or none")
     ap.add_argument("--report-only", action="store_true", help="skip Blender; reuse samples in <out-dir>/samples")
     ap.add_argument("--quiet", action="store_true")
     a = ap.parse_args(argv)
@@ -238,7 +241,7 @@ def main(argv=None) -> int:
             glb_checks[v] = glb_root_channels(glb)
             if not a.report_only:
                 cmd = [exe, "-b", "--factory-startup", "--python", SCRIPT, "--", "--glb", glb, "--library", lib,
-                       "--variant", v, "--fps", str(a.fps), "--out-dir", a.out_dir, "--samples", out]
+                       "--variant", v, "--fps", str(a.fps), "--root-scale", a.root_scale, "--out-dir", a.out_dir, "--samples", out]
                 if a.clips:
                     cmd += ["--clips", a.clips]
                 if a.no_export:
@@ -256,7 +259,8 @@ def main(argv=None) -> int:
     meta = next(iter(json.loads(p.read_text(encoding="utf-8")) for p in sorted(sample_dir.glob("*.json"))), {}) \
         if sample_dir.exists() else {}
     report = {"started": stamp, "blender": meta.get("blender"), "bone_map": meta.get("bone_map"), "fps": a.fps,
-              "stature_m": meta.get("stature_m"), "provenance": clip_qa.PROVENANCE,
+              "stature_m": meta.get("stature_m"),
+              "root_scale_mode": meta.get("root_scale_mode", "stature"), "provenance": clip_qa.PROVENANCE,
               "thresholds": {**asdict(clip_qa.DEFAULT_THRESHOLDS), "provenance": clip_qa.PROVENANCE},
               "libraries": libs, "variants": variants, "logs": logs, "run_failures": failures,
               "summary": clip_qa.summarize(records), "clips": records}

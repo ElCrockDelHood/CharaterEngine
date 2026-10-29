@@ -18,7 +18,7 @@ from mathutils import Matrix, Quaternion, Vector
 
 from character_engine.domain.anatomy.osteometry import LONG_BONES, load_osteometry
 from character_engine.domain.anatomy.reference.source import ProvenanceState
-from character_engine.domain.animation import BoneMap
+from character_engine.domain.animation import BoneMap, retarget_scale
 from character_engine.domain.assets import normalization
 from character_engine.domain.rigging import (
     ENVELOPE_RADIUS_M,
@@ -869,11 +869,15 @@ def _hierarchy_order(bones) -> List:
 
 
 def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Optional[int] = None,
-                   frame_end: Optional[int] = None, root_location: bool = True) -> Dict[str, int]:
+                   frame_end: Optional[int] = None, root_location: bool = True,
+                   root_scale_mode: str = "stature") -> Dict[str, object]:
     """Bake source animation onto canonical bones via rest-to-rest rotation offsets.
 
     For each mapped pair  dst_world(t) = src_world(t) · (src_rest⁻¹ · dst_rest).
-    Unmapped canonical bones keep their rest-relative transform (children follow parents).
+    Unmapped canonical bones keep their rest-relative transform (children follow parents), except the
+    ``bone_map.followers``, which copy the local rotation of their mapped leader (toes bend with toe 3).
+    ``root_scale_mode`` ("stature" | "leg" | "none", ``domain.animation.retarget_scale``) scales the root
+    translation; "leg" keeps planted feet planted when the rigs' proportions differ.
     """
     scene = context.scene
     action = src_arm.animation_data.action if src_arm.animation_data else None
@@ -904,12 +908,29 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
     src_rest = {b.name: src_arm.matrix_world @ b.matrix_local for b in src_arm.data.bones}
     offset = {c: src_rest[s].to_3x3().inverted() @ dst_rest[c].to_3x3() for c, s in mapping.items()}
     order = _hierarchy_order(dst_arm.data.bones)
+    follow = {f: lead for f, lead in getattr(bone_map, "followers", {}).items()
+              if f in dst_arm.data.bones and lead in mapping and f not in mapping}
+    if follow:
+        # followers (and their children) after every leader, so the leader's local rotation is known
+        def _under_follower(b) -> bool:
+            while b is not None:
+                if b.name in follow:
+                    return True
+                b = b.parent
+            return False
+        order = [b for b in order if not _under_follower(b)] + [b for b in order if _under_follower(b)]
+    local_rot: Dict[str, Quaternion] = {}
     stature_scale = 1.0
+    scale_used = "none"
     if root_location:
         src_root = src_arm.data.bones.get(bone_map.root_joint) or src_arm.data.bones[0]
         src_h = max((b.head_local.z for b in src_arm.data.bones), default=1.0) - min((b.head_local.z for b in src_arm.data.bones), default=0.0)
         dst_h = max(b.head_local.z for b in dst_arm.data.bones) - min(b.head_local.z for b in dst_arm.data.bones)
-        stature_scale = dst_h / src_h if src_h > 1e-6 else 1.0
+        src_leg = retarget_scale.leg_length({c: src_rest[s].to_translation() for c, s in mapping.items()})
+        dst_leg = retarget_scale.leg_length({c: dst_rest[c].to_translation() for c in mapping})
+        stature_scale = retarget_scale.root_scale(root_scale_mode, src_height_m=src_h, dst_height_m=dst_h,
+                                                  src_leg_m=src_leg, dst_leg_m=dst_leg)
+        scale_used = root_scale_mode if root_scale_mode != "leg" or (src_leg and dst_leg) else "stature"
     else:
         src_root = None
 
@@ -946,6 +967,13 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
                 m = rot.to_4x4()
                 m.translation = default_world.to_translation()
                 world[n] = m
+            elif n in follow:
+                q = local_rot[follow[n]]
+                world[n] = default_world @ q.to_matrix().to_4x4()
+                p = pb[n]
+                p.rotation_quaternion = q
+                p.keyframe_insert("rotation_quaternion", frame=frame)
+                keyed += 1
             else:
                 world[n] = default_world
             if n in mapping:
@@ -958,12 +986,16 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
                     basis = (inv_dst_world @ rest).inverted() @ pose_mat
                 p = pb[n]
                 p.rotation_quaternion = basis.to_quaternion()
+                local_rot[n] = p.rotation_quaternion.copy()
                 p.keyframe_insert("rotation_quaternion", frame=frame)
                 keyed += 1
     scene.frame_set(frame_start)
     dst_arm["ce_mocap_source"] = action.name
     dst_arm["ce_bone_map"] = bone_map.map_id
-    return {"mapped_bones": len(mapping), "frames": frame_end - frame_start + 1, "keys": keyed}
+    dst_arm["ce_root_scale"] = round(stature_scale, 4)
+    dst_arm["ce_root_scale_mode"] = scale_used
+    return {"mapped_bones": len(mapping), "frames": frame_end - frame_start + 1, "keys": keyed,
+            "followers": len(follow), "root_scale": round(stature_scale, 4), "root_scale_mode": scale_used}
 
 
 # --------------------------------------------------------------------------- wounds --------
