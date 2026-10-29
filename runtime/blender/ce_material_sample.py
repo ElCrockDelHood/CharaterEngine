@@ -336,7 +336,7 @@ def main() -> int:
         print(f"[material] {json.dumps(report['renders'][-1])}", flush=True)
     if "cycles" in engines:
         for v, c in centres.items():
-            close = camera(f"cam_{v}", c + Vector((0.22, -0.16, 0.08)), c, 85.0)
+            close = camera(f"cam_{v}", c + Vector((0.35, -0.26, 0.13)), c, 50.0)
             scene.camera = close
             report["renders"].append(render_still(scene, a.out / f"closeup_{v}_cycles.png", "cycles", a.samples,
                                                   device))
