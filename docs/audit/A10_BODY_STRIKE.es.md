@@ -71,3 +71,39 @@ Garrote: 1,2 kg (PLACEHOLDER) a 9 m/s (ESTIMATE), 48,6 J, radio de contacto 30 m
 2. Longitud de cuerda para golpes descentrados y una componente de tajo para cortes rasantes.
 3. Portar a Godot (donde vive el mockup de pelea): el modelo es aritmética simple sobre capas, sin solver, así que se porta directo; la parte de tela no.
 4. Las constantes ajustadas (energía de fractura y de corte del hueso, mesetas de aplastamiento) necesitan fuentes antes de afirmar nada sobre cuerpos reales.
+
+## Apéndice: el modelo en capas contra la tabla de gameplay vigente
+
+`scripts/gameplay_vs_layered.py` (solo lectura) convierte cada uno de los 168 pares (movimiento, hueso de hitbox) de `gameplay_shenmue.json` en un golpe contundente frontal central (energía cinética y radio de contacto del movimiento) y compara la severidad con la conversión legacy de 400 J que ya está en la tabla.
+
+Catálogo por defecto (una sola energía de 25 J para la cáscara rígida en todo el cuerpo):
+
+| Move | Energy (J) | Legacy severity | Layered severity | Layered fractures (of 21) |
+|---|---|---|---|---|
+| crescent_kick | 220.0 | 1x1, 2x20 | 2x8, 4x2, 5x11 | 21 |
+| elbow_assault | 170.0 | 1x5, 2x16 | 2x8, 4x2, 5x11 | 21 |
+| front_kick | 150.0 | 1x13, 2x8 | 2x8, 4x2, 5x11 | 21 |
+| hook | 130.0 | 1x13, 2x8 | 2x8, 4x2, 5x11 | 21 |
+| jab | 60.0 | 1x21 | 2x9, 4x1, 5x11 | 18 |
+| shoulder_throw | 260.0 | 2x21 | 2x8, 4x2, 5x11 | 21 |
+| straight | 90.0 | 1x21 | 2x8, 4x2, 5x11 | 21 |
+| sweep | 140.0 | 1x13, 2x8 | 2x8, 4x2, 5x11 | 21 |
+
+168 pairs: layered higher in 120, lower in 0.
+
+Con energías por región (`FIGHT_RIGID_SHELL_ENERGY_J`, opt-in, ASSUMED: órdenes de magnitud recordados de la literatura de biomecánica, NO verificados contra fuentes; cabeza 80 J, tórax 150 J, pelvis y muslo 300 J, mano 20 J ...):
+
+| Move | Energy (J) | Legacy severity | Layered severity | Layered fractures (of 21) |
+|---|---|---|---|---|
+| crescent_kick | 220.0 | 1x1, 2x20 | 2x9, 4x1, 5x11 | 16 |
+| elbow_assault | 170.0 | 1x5, 2x16 | 2x16, 4x1, 5x4 | 9 |
+| front_kick | 150.0 | 1x13, 2x8 | 2x16, 4x1, 5x4 | 7 |
+| hook | 130.0 | 1x13, 2x8 | 2x16, 4x1, 5x4 | 7 |
+| jab | 60.0 | 1x21 | 2x20, 4x1 | 5 |
+| shoulder_throw | 260.0 | 2x21 | 2x16, 4x1, 5x4 | 9 |
+| straight | 90.0 | 1x21 | 2x20, 4x1 | 5 |
+| sweep | 140.0 | 1x13, 2x8 | 2x16, 4x1, 5x4 | 7 |
+
+168 pairs: layered higher in 103, lower in 0.
+
+Lectura: con el valor por defecto el modelo es degenerado (cualquier movimiento fractura casi todo). Los valores por región lo hacen discriminar (un jab fractura 5 de 21 zonas, una patada creciente 16) y nunca queda por debajo de la tabla legacy, pero siguen varios problemas que impiden conectarlo al juego: toda fractura de una región hueca da severidad 5 (al romperse la cáscara las vísceras casi no cuestan, así que el golpe "atraviesa"), y el radio de contacto cambia el resultado tanto como la energía (un shoulder throw de 260 J se lee como un hook de 130 J). Los valores no tienen fuente. Recomendación: no reemplazar todavía la constante de 400 J; dejar esto como herramienta de comparación.

@@ -24,6 +24,7 @@ from typing import Dict, List, Mapping, Optional, Sequence, Tuple, Union
 
 from ..materials.layered_capsule import LayeredCapsule, OuterLayer, layered_capsule
 from ..rigging.block_dummy import BlockPlacement, block_placements
+from ..tissue import BodyRegion
 from ..trauma import WoundAssessment, assess_wound, blade_contact_to_wound, blunt_impact_to_wound
 from .blunt import BluntResult, Impactor, blunt_through, blunt_wound
 from .cut import Blade, CutResult, cut_through
@@ -55,8 +56,12 @@ class LayeredBody:
     """Layered capsules for every block segment of one posed skeleton."""
 
     def __init__(self, points: Mapping[str, Tuple[Vec, Vec]], stature_m: float = 1.80,
-                 garments: Optional[Mapping[str, Sequence[OuterLayer]]] = None) -> None:
+                 garments: Optional[Mapping[str, Sequence[OuterLayer]]] = None,
+                 rigid_shell_energy_j: Optional[Mapping[BodyRegion, float]] = None) -> None:
+        """``rigid_shell_energy_j``: optional per-region fracture energy of the rigid shell (rib cage, skull, long
+        bone) for blunt hits; default None = the single catalog value (sample 2 behaviour)."""
         garments = garments or {}
+        self.rigid_shell_energy_j = dict(rigid_shell_energy_j or {})
         self.placements: Dict[str, BlockPlacement] = {p.name: p for p in block_placements(points, stature_m)}
         self.capsules: Dict[str, LayeredCapsule] = {
             name: layered_capsule(p, tuple(garments.get(name, ()))) for name, p in self.placements.items()}
@@ -115,7 +120,8 @@ class LayeredBody:
                                 round(energy, 4), round(energy * scale, 4), cut.stopped_in, cut.skin_depth_m, "cut",
                                 cut, assess_wound(wound, lc.profile) if wound else None)
         eff_i = Impactor(weapon.effective_mass_kg, weapon.speed_m_s * cos, weapon.contact_radius_m)
-        res = blunt_through(lc, eff_i, t_axial=t)
+        res = blunt_through(lc, eff_i, t_axial=t,
+                            rigid_shell_energy_j=self.rigid_shell_energy_j.get(lc.placement.region))
         wound = blunt_wound(bone, eff_i, res)
         return StrikeResult(name, bone, tuple(round(c, 6) for c in point), round(t, 4), round(cos, 4),
                             round(energy, 4), round(energy * scale, 4), res.stopped_in, res.affected_depth_m, "blunt",
@@ -170,3 +176,13 @@ def _norm(a: Vec) -> float:
 def _unit(a: Vec) -> Vec:
     n = _norm(a)
     return (a[0] / n, a[1] / n, a[2] / n)
+
+
+# Per-region fracture energy of the rigid shell under a blunt blow (J). ASSUMED: orders of magnitude recalled from the
+# blunt-trauma biomechanics literature, NOT verified against sources in this repository; ranges are wide on purpose.
+# Used only when passed to ``LayeredBody``; the catalog default (25 J, sample 2) stays the default.
+FIGHT_RIGID_SHELL_ENERGY_J: Dict[BodyRegion, float] = {
+    BodyRegion.HEAD: 80.0, BodyRegion.NECK: 40.0, BodyRegion.THORAX: 150.0, BodyRegion.ABDOMEN: 150.0,
+    BodyRegion.PELVIS: 300.0, BodyRegion.UPPER_ARM: 120.0, BodyRegion.FOREARM: 80.0, BodyRegion.HAND: 20.0,
+    BodyRegion.THIGH: 300.0, BodyRegion.LEG: 200.0, BodyRegion.FOOT: 30.0,
+}

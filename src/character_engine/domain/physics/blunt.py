@@ -69,7 +69,9 @@ class BluntResult:
     provenance: ProvenanceState = ProvenanceState.ESTIMATE
 
 
-def blunt_through(lc: LayeredCapsule, imp: Impactor, t_axial: float = 0.5) -> BluntResult:
+def blunt_through(lc: LayeredCapsule, imp: Impactor, t_axial: float = 0.5,
+                  rigid_shell_energy_j: Optional[float] = None) -> BluntResult:
+    """``rigid_shell_energy_j`` overrides the catalog fracture energy of rigid shells (per-region calibration)."""
     shells = [s for s in lc.shells if s.z_range is None or s.z_range[0] <= t_axial <= s.z_range[1]]
     energy = imp.kinetic_energy_j
     area = imp.contact_area_m2
@@ -87,7 +89,7 @@ def blunt_through(lc: LayeredCapsule, imp: Impactor, t_axial: float = 0.5) -> Bl
             continue
         mech = material(s.material).mechanical
         if mech.fracture_energy is not None:     # rigid shell: all or nothing
-            cap = mech.fracture_energy.value
+            cap = mech.fracture_energy.value if rigid_shell_energy_j is None else rigid_shell_energy_j
             if left >= cap:
                 left -= cap
                 fractured = True

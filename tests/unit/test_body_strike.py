@@ -100,3 +100,24 @@ def test_harder_blow_never_hurts_less(body):
     fast = body.central_strike("abdomen", Impactor(1.2, 12.0, 0.03))
     assert fast.depth_below_skin_m >= slow.depth_below_skin_m
     assert fast.assessment.severity.value >= slow.assessment.severity.value
+
+
+def test_calibrated_rigid_shell_energy_is_opt_in_and_region_specific():
+    from character_engine.domain.physics.body_strike import FIGHT_RIGID_SHELL_ENERGY_J
+    default = LayeredBody(_points())
+    calibrated = LayeredBody(_points(), rigid_shell_energy_j=FIGHT_RIGID_SHELL_ENERGY_J)
+    jab = Impactor(120.0, 1.0, 0.03)                       # 60 J
+    assert default.central_strike("thorax", jab).assessment.fracture            # 25 J default breaks the ribs
+    assert not calibrated.central_strike("thorax", jab).assessment.fracture    # 150 J does not
+    assert calibrated.central_strike("hand.L", jab).assessment.fracture        # 20 J hand bones still do
+
+
+def test_calibrated_fracture_is_monotone_in_energy():
+    from character_engine.domain.physics.body_strike import FIGHT_RIGID_SHELL_ENERGY_J
+    cal = LayeredBody(_points(), rigid_shell_energy_j=FIGHT_RIGID_SHELL_ENERGY_J)
+    seen = False
+    for e in (20.0, 60.0, 150.0, 300.0, 600.0):
+        broke = cal.central_strike("thorax", Impactor(2 * e, 1.0, 0.03)).assessment.fracture
+        assert broke or not seen                                   # once it breaks it stays broken
+        seen = seen or broke
+    assert seen
