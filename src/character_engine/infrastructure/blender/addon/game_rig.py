@@ -128,7 +128,12 @@ def build_game_rig(context, canonical_arm):
 
 
 def _refine_pole_angles(context, arm) -> None:
-    """The shared builder picks pole angles on a 15 degree grid; refine them so IK at rest is a no-op."""
+    """The shared builder picks pole angles on a 15 degree grid; refine them so IK at rest is a no-op.
+
+    The error compares each chain bone's full rest matrix (position *and* orientation): a twist about the bone
+    axis keeps heads / tails in place but swings the child (the forward-pointing foot, the hand), so heads and
+    tails alone are not enough. The search covers the whole circle before refining.
+    """
     import math
 
     for pb in arm.pose.bones:
@@ -141,11 +146,14 @@ def _refine_pole_angles(context, arm) -> None:
             def err(angle, ik=ik, names=names):
                 ik.pole_angle = angle
                 context.view_layer.update()
-                return sum((arm.pose.bones[n].head - arm.data.bones[n].head_local).length
-                           + (arm.pose.bones[n].tail - arm.data.bones[n].tail_local).length for n in names)
+                total = 0.0
+                for n in names:
+                    pose, rest = arm.pose.bones[n].matrix, arm.data.bones[n].matrix_local
+                    total += sum(abs(pose[i][j] - rest[i][j]) for i in range(4) for j in range(4))
+                return total
 
-            best = ik.pole_angle
-            for step in (math.radians(1.0), math.radians(0.05), math.radians(0.0025)):
+            best = min((math.radians(d) for d in range(-180, 180, 5)), key=err)
+            for step in (math.radians(0.25), math.radians(0.0125), math.radians(0.000625)):
                 cands = [best + k * step for k in range(-20, 21)]
                 best = min(cands, key=err)
             ik.pole_angle = best
