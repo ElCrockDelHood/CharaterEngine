@@ -1,0 +1,191 @@
+{
+ "schema_version": 1,
+ "library": "D1 experiment library (offline, Blender)",
+ "generated_utc": "2026-10-29T00:47:01Z",
+ "experiments": [
+  {
+   "id": "exp001_contact_threshold__Sword_Attack__vs__Sword_Idle",
+   "title": "Contact threshold over spacing",
+   "question": "Up to which spacing does this attack reach the defender's body?",
+   "conditions": {
+    "attack_clip": "Sword_Attack",
+    "attack_action": "CE_Fighter_B_Sword_Attack_Armature.001",
+    "defender_stance": "Sword_Idle",
+    "frames": [
+     0,
+     36
+    ],
+    "spacing_axis": "attacker root at (0, -d, 0) facing +Y; defender at origin",
+    "spacing_provenance": "ESTIMATE",
+    "measure": "minimum over the clip of the signed distance from the attacker's PLACEHOLDER sabre (40 samples on the blade centre line) to the defender's collision capsules",
+    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
+    "capsules": "block-dummy envelope radii ESTIMATE",
+    "bone_map": "quaternius_ual",
+    "sources": [
+     {
+      "file": "UAL1_Standard.glb",
+      "sha256": "69591853d817488edaa8fd9bf8fc1d821eaeaf789f8627b3cd23b41c4ed67997",
+      "licence": "CC0 1.0 (Quaternius)"
+     },
+     {
+      "file": "UAL2_Standard.glb",
+      "sha256": "8cee20ab1bc55130092447e810e26df22dd2803eccc54f52137a7d54d7ab88a8",
+      "licence": "CC0 1.0 (Quaternius)"
+     }
+    ],
+    "generated_by": "runtime/blender/ce_experiment_contact_threshold.py (Blender 3.6.23)"
+   },
+   "grid": [
+    {
+     "distance_m": 0.7,
+     "min_signed_distance_m": -0.0471,
+     "contact": true,
+     "first_contact_frame": 10,
+     "bone": "THORACIC_12",
+     "min_frame": 10
+    },
+    {
+     "distance_m": 0.7444,
+     "min_signed_distance_m": -0.0798,
+     "contact": true,
+     "first_contact_frame": 10,
+     "bone": "THORACIC_11",
+     "min_frame": 10
+    },
+    {
+     "distance_m": 0.7889,
+     "min_signed_distance_m": -0.0732,
+     "contact": true,
+     "first_contact_frame": 10,
+     "bone": "STERNUM",
+     "min_frame": 10
+    },
+    {
+     "distance_m": 0.8333,
+     "min_signed_distance_m": -0.0604,
+     "contact": true,
+     "first_contact_frame": 10,
+     "bone": "STERNUM",
+     "min_frame": 22
+    },
+    {
+     "distance_m": 0.8778,
+     "min_signed_distance_m": -0.0346,
+     "contact": true,
+     "first_contact_frame": 10,
+     "bone": "STERNUM",
+     "min_frame": 22
+    },
+    {
+     "distance_m": 0.9222,
+     "min_signed_distance_m": 0.0025,
+     "contact": false,
+     "first_contact_frame": null,
+     "bone": null,
+     "min_frame": 22
+    },
+    {
+     "distance_m": 0.9667,
+     "min_signed_distance_m": 0.0437,
+     "contact": false,
+     "first_contact_frame": null,
+     "bone": null,
+     "min_frame": 22
+    },
+    {
+     "distance_m": 1.0111,
+     "min_signed_distance_m": 0.0878,
+     "contact": false,
+     "first_contact_frame": null,
+     "bone": null,
+     "min_frame": 22
+    },
+    {
+     "distance_m": 1.0556,
+     "min_signed_distance_m": 0.1313,
+     "contact": false,
+     "first_contact_frame": null,
+     "bone": null,
+     "min_frame": 22
+    },
+    {
+     "distance_m": 1.1,
+     "min_signed_distance_m": 0.1749,
+     "contact": false,
+     "first_contact_frame": null,
+     "bone": null,
+     "min_frame": 22
+    }
+   ],
+   "bisection": {
+    "tolerance_m": 0.001,
+    "tolerance_provenance": "measurement resolution (choice)",
+    "steps": [
+     {
+      "distance_m": 0.9,
+      "min_signed_distance_m": -0.0161,
+      "contact": true,
+      "first_contact_frame": 22,
+      "bone": "NASAL_R",
+      "min_frame": 22
+     },
+     {
+      "distance_m": 0.9111,
+      "min_signed_distance_m": -0.0068,
+      "contact": true,
+      "first_contact_frame": 22,
+      "bone": "NASAL_R",
+      "min_frame": 22
+     },
+     {
+      "distance_m": 0.9166,
+      "min_signed_distance_m": -0.0022,
+      "contact": true,
+      "first_contact_frame": 22,
+      "bone": "NASAL_R",
+      "min_frame": 22
+     },
+     {
+      "distance_m": 0.9194,
+      "min_signed_distance_m": 0.0001,
+      "contact": false,
+      "first_contact_frame": null,
+      "bone": null,
+      "min_frame": 22
+     },
+     {
+      "distance_m": 0.918,
+      "min_signed_distance_m": -0.001,
+      "contact": true,
+      "first_contact_frame": 22,
+      "bone": "NASAL_R",
+      "min_frame": 22
+     },
+     {
+      "distance_m": 0.9187,
+      "min_signed_distance_m": -0.0005,
+      "contact": true,
+      "first_contact_frame": 22,
+      "bone": "NASAL_R",
+      "min_frame": 22
+     }
+    ]
+   },
+   "threshold": {
+    "contact_up_to_m": 0.9187,
+    "no_contact_from_m": 0.9194,
+    "width_m": 0.0007,
+    "interpolated_m": 0.9192,
+    "grid_monotonic": true
+   },
+   "provenance": "estimate",
+   "limitations": [
+    "one attack, one stance, one facing; spacing only along the facing axis",
+    "defender does not react; contact = blade inside an envelope capsule (ESTIMATE radii)",
+    "frame sampling at the clip's frames: a contact between two frames is not seen",
+    "PLACEHOLDER sabre; no energy or wound assessed in this experiment"
+   ],
+   "sha256": "f1780580be6b5abf51594335053519c563a961812d475bd5b97a1bedaf94e2b5"
+  }
+ ]
+}

@@ -133,9 +133,10 @@ def reaction_playback(build, props, sources, scene, attacker, defender, first, h
     frames (ASSUMED). With ``attacker_reaction`` the attacker switches to its recovery clip the same way.
     The wound point is carried by the wounded bone from the contact pose.
     """
-    from character_engine.domain.gameplay.reaction_library import attacker_reaction_for
+    from character_engine.domain.gameplay.reaction_library import attacker_reaction_for, blend_in_for
     f_contact = first["frame"]
-    react_name, react_len = layer_reaction(props, sources, defender, clip, f_contact + 1, blend_in)
+    d_blend = blend_in_for(clip)                 # defender: per-clip table (ASSUMED); attacker: ``blend_in``
+    react_name, react_len = layer_reaction(props, sources, defender, clip, f_contact + 1, d_blend)
     att = None
     end = max(attack_end, f_contact + 1 + react_len)
     if attacker_reaction:
@@ -170,13 +171,13 @@ def reaction_playback(build, props, sources, scene, attacker, defender, first, h
     separated = next((f for f, g in zip(frames[1:], after) if g > 0.0), None)
     return {
         "start_frame": f_contact, "clip": clip, "clip_action": react_name, "reaction_starts_frame": f_contact + 1,
-        "blend_in_frames": blend_in, "frames": frames, "signed_distance_m": signed, "separated_at_frame": separated,
+        "blend_in_frames": d_blend, "frames": frames, "signed_distance_m": signed, "separated_at_frame": separated,
         "max_penetration_after_m": round(max([0.0] + [-g for g in after]), 4),
         "penetrating_at_end": signed[-1] <= 0.0,
         "wound_bone_consistent_ratio": round(consistent / len(frames), 4),
         "provenance": "ASSUMED",
         "attacker_reaction": att,
-        "note": f"NLA blend-in {blend_in} frames; "
+        "note": f"NLA blend-in {d_blend} frames (defender, per clip), {blend_in} (attacker); "
                 + ("attacker switches to its recovery clip" if att else "attacker keeps playing its clip unchanged"),
     }
 
@@ -249,7 +250,7 @@ def main() -> int:
                     / "reaction_library_d1.json")
     ap.add_argument("--renders", type=Path, default=ROOT / "builds" / "renders" / "reactions")
     ap.add_argument("--save", type=Path, default=None, help="optional .blend of the final scene (inspection)")
-    ap.add_argument("--blend-in", type=int, default=4, help="NLA blend-in frames into the reactions (ASSUMED)")
+    ap.add_argument("--blend-in", type=int, default=4, help="NLA blend-in frames of the attacker reactions (ASSUMED; defender: per clip)")
     ap.add_argument("--no-attacker-reaction", action="store_true", help="attacker keeps playing its clip after a hit")
     a = ap.parse_args(argv)
 
@@ -257,6 +258,7 @@ def main() -> int:
         SCHEMA_VERSION,
         entry_sha256,
         first_event,
+        parry_frames,
         reaction_for,
         summary,
         validate_library,
@@ -291,7 +293,10 @@ def main() -> int:
             rendered = False
             for d in distances:
                 attacker.location = (0.0, -d, 0.0)
-                frames, signed, blade, first, parry_at = [], [], [], None, {}
+                frames, signed, blade, approach, forward, first, parry_at, prev_tip = [], [], [], [], [], None, {}, None
+                toward = (defender.location - attacker.location)
+                toward.z = 0.0
+                toward.normalize()
                 for fr in range(f0, f1 + 1):
                     scene.frame_set(fr)
                     bpy.context.view_layer.update()
@@ -300,13 +305,20 @@ def main() -> int:
                     frames.append(fr)
                     signed.append(round(gap, 4))
                     blade.append(round(bd, 4))
+                    base, tip = blade_line(attacker)
+                    approach.append(round((tip - prev_tip).dot(toward), 4) if prev_tip is not None else 0.0)
+                    flat = tip - base
+                    flat.z = 0.0
+                    forward.append(round(flat.normalized().dot(toward), 4) if flat.length > 1e-9 else 0.0)
+                    prev_tip = tip.copy()
                     if first is None and gap <= 0.0:
                         bone, _ = build.nearest_canonical_bone(defender, point, posed=True)
                         first = {"frame": fr, "segment": seg, "bone": bone, "penetration_m": round(-gap, 4),
                                  "entry_point": [round(c, 4) for c in point]}
                         hit_point = point
                     parry_at.setdefault(fr, [round(c, 4) for c in mid])
-                event, event_frame = first_event(frames, signed, blade)
+                event, event_frame = first_event(frames, signed, blade, approach, forward)
+                _, filtered = parry_frames(frames, blade, approach, forward)
                 first_parry = parry_play = None
                 if event != "body_hit":
                     first = None                         # a parry came first, or nothing happened
@@ -342,6 +354,7 @@ def main() -> int:
                     "id": f"{attack}__vs__{stance}__{d:.1f}m", "attack_clip": attack, "attack_action": act_name,
                     "defender_stance": stance, "distance_m": d, "distance_provenance": "ESTIMATE",
                     "frames": frames, "signed_distance_m": signed, "blade_distance_m": blade,
+                    "blade_approach_m": approach, "blade_forward": forward, "filtered_parry_frames": filtered,
                     "min_distance_m": min(signed), "event": event,
                     "first_contact": first, "first_parry": first_parry, "wound": wound, "reaction": reaction,
                     "reaction_playback": playback, "parry_playback": parry_play,
@@ -359,6 +372,8 @@ def main() -> int:
                 if parry_play:
                     after = (f", parry f{first_parry['frame']} blade {first_parry['blade_distance_m']} m, body reached "
                              f"after: {parry_play['body_reached_after_parry']}")
+                if filtered:
+                    after += f", filtered parry frames {filtered}"
                 print(f"[reactions] {entry['id']}: event {event}, min body {entry['min_distance_m']} m, "
                       f"min blade {min(blade)} m, contact {first['frame'] if first else None}, "
                       f"reaction {reaction['clip'] if reaction else None}{after}, sha256 {entry['sha256'][:12]}",
@@ -374,11 +389,15 @@ def main() -> int:
                     for p in a.lib],
         "rule": "reaction_for (ASSUMED): lethal -> Death01; head/neck -> Hit_Head; incapacitating leg -> "
                 "Hit_Knockback (fall); severe -> Hit_Knockback; else Hit_Chest. Parry (blade-to-blade distance <= "
-                "PLACEHOLDER blade width before any body contact) -> attacker Hit_Chest recoil, no wound",
-        "settings": {"blend_in_frames": a.blend_in, "attacker_reaction": not a.no_attacker_reaction,
+                "PLACEHOLDER blade width before any body contact, in the strike phase: tip approaching the defender and blade pointing at it) -> "
+                "attacker Hit_Chest recoil, no wound. Defender blend-in per clip: Death01 2, Hit_Knockback 2, "
+                "Hit_Head 4, Hit_Chest 6 frames",
+        "settings": {"attacker_blend_in_frames": a.blend_in, "defender_blend_in": "per clip (BLEND_IN_FRAMES)", "attacker_reaction": not a.no_attacker_reaction,
                      "provenance": "ASSUMED"},
         "limitations": ["defender reacts only after the first contact (no anticipation)",
-                        "reactions start the frame after contact with a fixed NLA blend-in (ASSUMED)",
+                        "reactions start the frame after contact; NLA blend-in per clip (ASSUMED table)",
+                        "strike-phase filter uses only signs (ASSUMED): tip motion towards the defender and blade direction "
+                        "along the facing axis; a cut moving sideways at the moment of contact may be filtered",
                         "parry = blade centre lines within the PLACEHOLDER blade width; the defender plays no "
                         "parry clip and only the attacker recoils (no blocked-hit clip in the CC0 libraries)",
                         "no dedicated fall/stagger clips: Hit_Knockback stands in for a fall, Hit_Chest for a stagger",

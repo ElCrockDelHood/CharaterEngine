@@ -8,15 +8,19 @@ from pathlib import Path
 import pytest
 
 from character_engine.domain.gameplay.reaction_library import (
+    BLEND_IN_FRAMES,
     PARRY_CONTACT_M,
     REACTION_CLIPS,
     SCHEMA_VERSION,
     attacker_reaction_for,
+    blend_in_for,
     entry_sha256,
     first_event,
+    parry_frames,
     parry_reaction_for,
     reaction_for,
     segment_distance,
+    strike_phase,
     summary,
     validate_library,
 )
@@ -66,10 +70,31 @@ def test_first_event_order():
     assert first_event([0, 1], [0.5, 0.4], [1.0, 0.9]) == ("none", None)
 
 
+def test_strike_phase_filter():
+    # blades touch at f1 during the wind-up (tip moving away), the body is reached at f2
+    frames, signed, blade = [0, 1, 2], [0.5, 0.3, -0.01], [1.0, 0.02, 0.5]
+    fwd = [0.5, 0.5, 0.5]
+    assert first_event(frames, signed, blade, [0.0, -0.05, 0.08], fwd) == ("body_hit", 2)
+    assert first_event(frames, signed, blade, [0.0, 0.05, 0.08], fwd) == ("parry", 1)
+    assert first_event(frames, signed, blade, [0.0, 0.0, 0.08], fwd) == ("body_hit", 2)   # standing still
+    # tip moving towards the defender but the blade cocked back (wind-up, Sword_Regular_C f5): not a parry
+    assert first_event(frames, signed, blade, [0.0, 0.16, 0.08], [0.5, -0.29, 0.5]) == ("body_hit", 2)
+    assert not strike_phase(0.16, -0.29) and strike_phase(0.01, 0.2)
+    assert parry_frames([0, 1, 2], [0.02, 0.5, 0.01], [0.0, 0.1, 0.03], fwd) == ([2], [0])
+    assert parry_frames([0, 1], [0.02, 0.01], [0.1, 0.1], [-0.3, 0.3]) == ([1], [0])
+
+
+def test_blend_per_clip():
+    assert set(BLEND_IN_FRAMES) == set(REACTION_CLIPS.values())
+    assert blend_in_for("Hit_Knockback") < blend_in_for("Hit_Chest")         # knock-down short, stagger long
+    assert blend_in_for("Death01") <= blend_in_for("Hit_Head") <= blend_in_for("Hit_Chest")
+
+
 def _base(eid="x"):
     return {"id": eid, "attack_clip": "Sword_Attack", "defender_stance": "Sword_Idle", "distance_m": 1.2,
             "distance_provenance": "ESTIMATE", "frames": [0, 1], "signed_distance_m": [0.5, 0.3],
-            "blade_distance_m": [1.0, 0.8], "min_distance_m": 0.3, "event": "none", "first_contact": None,
+            "blade_distance_m": [1.0, 0.8], "blade_approach_m": [0.0, 0.01], "blade_forward": [0.5, 0.5], "filtered_parry_frames": [],
+            "min_distance_m": 0.3, "event": "none", "first_contact": None,
             "first_parry": None, "wound": None, "reaction": None, "reaction_playback": None, "parry_playback": None,
             "energy_j": None, "energy_basis": "UNKNOWN", "seed": None, "provenance": "estimate"}
 
@@ -84,7 +109,7 @@ def _hit(eid="hit"):
                   "fracture": False, "incapacitating": False, "provenance": "estimate"}
     clip, rule = reaction_for("forearm", 2, 0.01, False)
     e["reaction"] = {"clip": clip, "rule": rule, "provenance": "ASSUMED"}
-    e["reaction_playback"] = {"start_frame": 1, "clip": clip, "blend_in_frames": 4, "frames": [1, 2, 3],
+    e["reaction_playback"] = {"start_frame": 1, "clip": clip, "blend_in_frames": blend_in_for(clip), "frames": [1, 2, 3],
                               "signed_distance_m": [-0.01, 0.02, 0.2], "separated_at_frame": 2,
                               "max_penetration_after_m": 0.0, "penetrating_at_end": False,
                               "wound_bone_consistent_ratio": 1.0, "provenance": "ASSUMED",
@@ -121,14 +146,22 @@ def test_valid_document_and_summary():
     doc = _doc(_hit(), _parry(), _parry("p2", reached=True), _none())
     assert validate_library(doc) == []
     assert summary(doc) == {"entries": 4, "body_hits": 1, "parries": 2, "reactions": {"Hit_Chest": 1},
-                            "parries_reaching_body_after": 1}
+                            "parries_reaching_body_after": 1, "filtered_parry_contacts": 0}
+
+
+def test_parry_while_withdrawing_is_rejected():
+    e = _parry()
+    e["blade_approach_m"] = [0.0, -0.02]                    # blades met but the tip moves away: no parry event
+    e["sha256"] = entry_sha256(e)
+    assert any("does not match" in p for p in validate_library(_doc(e)))
 
 
 @pytest.mark.parametrize("mutate, message", [
     (lambda e: e["wound"].__setitem__("severity", 5), "rule"),
     (lambda e: e["reaction_playback"].__setitem__("start_frame", 0), "first contact"),
     (lambda e: e["reaction_playback"]["attacker_reaction"].__setitem__("starts_frame", 1), "frame after contact"),
-    (lambda e: e["reaction_playback"].__setitem__("blend_in_frames", -1), "blend_in_frames"),
+    (lambda e: e["reaction_playback"].__setitem__("blend_in_frames", 4), "per-clip table"),
+    (lambda e: e.__setitem__("filtered_parry_frames", [0]), "filtered_parry_frames"),
     (lambda e: e.__setitem__("event", "parry"), "does not match"),
 ])
 def test_body_hit_tampering_is_detected(mutate, message):

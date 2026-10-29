@@ -301,6 +301,43 @@ Limitations: no blocked-hit, fall or stagger clips (stand-ins listed above); the
 the threshold is the PLACEHOLDER blade width; no reaction before contact; envelope capsules (ESTIMATE); energy
 UNKNOWN.
 
+### Schema 5: strike-phase parry filter and blend-in per reaction (2026-10-29)
+
+- **Parry filter (ASSUMED, signs only).** A blade-on-blade contact counts as a parry only in the strike phase: the
+  attacker's tip moves towards the defender (`blade_approach_m` > 0) **and** the blade points towards the defender
+  (`blade_forward` > 0, horizontal cosine of grip→tip with the facing axis). Contacts outside it are listed in
+  `filtered_parry_frames`. The tip-motion sign alone did not remove the Regular_C f5 crossing (tip +0.16 m/frame
+  towards the defender while the blade was cocked back, forward −0.29); the blade-direction sign does.
+- **Blend-in per clip (ASSUMED):** Death01 2, Hit_Knockback 2, Hit_Head 4, Hit_Chest 6 frames (short for a fall,
+  longer for a light stagger); the attacker keeps 4.
+- Result: 42 entries, 3 body hits (unchanged), **0 parries**, 1 filtered contact (Regular_C vs Block 0.9 m, f5).
+  Identical SHA-256 on two runs (logs `20261029T003715Z`, `20261029T004108Z`).
+
+### Experiment 001: contact threshold (2026-10-29)
+
+Sword_Attack against Sword_Idle, attacker at 10 spacings from 0.7 to 1.1 m (ESTIMATE spacing, facing axis only),
+then bisection to 1 mm. Measure: minimum over the clip of the signed sabre-to-capsule distance. Record:
+`runtime/godot/addons/character_engine/data/experiments_d1.json` (domain `experiments`, SHA-256 `f1780580be6b…`,
+identical on two runs: logs `20261029T004458Z`, `20261029T004557Z`). Table: `python scripts/plot_experiment.py`.
+
+| d (m) | min signed (m) | frame | contact | bone |
+|---|---|---|---|---|
+| 0.7000 | −0.0471 | 10 | yes | THORACIC_12 |
+| 0.7444 | −0.0798 | 10 | yes | THORACIC_11 |
+| 0.7889 | −0.0732 | 10 | yes | STERNUM |
+| 0.8333 | −0.0604 | 22 | yes | STERNUM (first f10) |
+| 0.8778 | −0.0346 | 22 | yes | STERNUM (first f10) |
+| 0.9222 | +0.0025 | 22 | no | |
+| 0.9667 | +0.0437 | 22 | no | |
+| 1.0111 | +0.0878 | 22 | no | |
+| 1.0556 | +0.1313 | 22 | no | |
+| 1.1000 | +0.1749 | 22 | no | |
+
+**Threshold:** contact up to **0.9187 m**, none from **0.9194 m** (bisection, 0.7 mm interval); linear interpolation
+of the grid gives 0.9192 m. The series is monotonic. Two strikes matter: the early one (f10) reaches the trunk only
+below ~0.88 m; the late one (f22, the head cut, NASAL_R) is what reaches up to the threshold. Limitations: one attack,
+one stance, one facing; no reaction; envelope capsules (ESTIMATE); frame sampling may miss a contact between frames.
+
 ## 4. What Mariano must provide or decide first
 
 1. Base mesh origin: artist-made (by you, from your drawings) or generated (MPFB2/other) — and licence policy

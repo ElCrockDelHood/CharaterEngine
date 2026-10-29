@@ -42,11 +42,9 @@ Reemplaza al hilo largo "Evaluar Character Engine y entorno C:\DEV".
 
 ## 4. Trabajo a medias SIN commitear en `main` (no perder, no mezclar)
 
-- **Pulido de reacciones + experimento de umbral** (iniciado 2026-10-28 ~23:00 UTC, la sesión se cortó):
-  `domain/gameplay/reaction_library.py` (esquema 5: filtro de parry en preparación y mezcla por tipo),
-  `runtime/blender/ce_reaction_library.py`, `tests/unit/test_reaction_library.py`, `runtime/godot/tests/ce_test_runner.gd`,
-  y nuevos `domain/gameplay/experiments.py`, `runtime/blender/ce_experiment_contact_threshold.py`,
-  `scripts/plot_experiment.py`, `tests/unit/test_experiments.py`. Estado de tests desconocido.
+- ~~Pulido de reacciones + experimento de umbral~~: **cerrado y commiteado el 2026-10-29** (esquema 5 y experimento 001;
+  umbral de contacto de Sword_Attack contra Sword_Idle = 0,9187 a 0,9194 m). Detalle en
+  `docs/product/DELIVERABLE-1-GRANADEROS-FIGHT.md`.
 - **Pies A13**: `scripts/rebuild_foot_layout.py`, `tests/unit/test_foot_layout.py`, `docs/audit/A13_FOOT_LAYOUT_REPORT.json`,
   cambios en `human_adult_206.json` (52 huesos), `source_registry.json`, `skeleton_serialized.json`,
   `test_contract_fingerprint.py`, `test_extremity_spine_topology.py`. Cambia datos canónicos (Decisión 52).

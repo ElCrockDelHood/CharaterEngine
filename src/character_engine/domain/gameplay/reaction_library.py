@@ -7,8 +7,11 @@ the defender's own sabre. The **first event** decides the entry:
 * ``body_hit`` — the blade enters a capsule first: the contact becomes a wound through the domain wound model
   (layer 1, deterministic, the same code the Godot gameplay table is generated from) and the wound selects a
   reaction clip (``reaction_for``);
-* ``parry`` — the two blades touch first (blade centre lines closer than ``PARRY_CONTACT_M``): no wound, the
-  attacker plays the recoil clip (``parry_reaction_for``) and the scan checks whether the body is reached later;
+* ``parry`` — the two blades touch first (blade centre lines closer than ``PARRY_CONTACT_M``) **in the strike
+  phase**: the attacker's blade tip moves towards the defender and the blade points towards the defender (schema 5,
+  ASSUMED filter: a crossing during the wind-up, blade cocked back, or the withdrawal is recorded in
+  ``filtered_parry_frames`` and ignored): no wound, the attacker plays the recoil clip (``parry_reaction_for``) and
+  the scan checks whether the body is reached later;
 * ``none`` — neither happens.
 
 The reaction rules are **ASSUMED**: they stand in for the baked L2/L3 manifestations of Decisions 44-45 until
@@ -21,10 +24,14 @@ UAL1/UAL2), which have no dedicated "blocked hit", "fall" or "stagger" clips. De
 * severity >= SEVERE elsewhere -> ``Hit_Knockback``
 * anything else -> ``Hit_Chest`` (stagger)
 
+The defender's reaction blends in over ``blend_in_for(clip)`` frames (schema 5, ASSUMED): short for a knock-down or
+death, so the body leaves the blade at once, longer for a light stagger, so the pose change stays smooth.
+
 History: schema 2 added ``reaction_playback`` (the defender plays the reaction from the first contact), schema 3
 the NLA blend-in and ``attacker_reaction`` (recovery clip after a landed hit), schema 4 the parry detection
 (``event``, ``blade_distance_m``, ``first_parry``, ``parry_playback``) and the reaction rule above (schema 3:
-any incapacitating wound -> knockback).
+any incapacitating wound -> knockback), schema 5 the strike-phase parry filter (``blade_approach_m``,
+``blade_forward``, ``filtered_parry_frames``) and the blend-in per reaction clip (schema 4: one blend for every clip).
 
 Pure Python, no engine code. The JSON written from it is read by Godot (plain JSON, no engine types).
 """
@@ -37,7 +44,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..trauma import Severity
 
-SCHEMA_VERSION = 4   # 2: reaction_playback; 3: blend-in, attacker_reaction; 4: parry, reaction rule by region
+SCHEMA_VERSION = 5   # 2: reaction_playback; 3: blend-in, attacker_reaction; 4: parry, rule by region; 5: filter, blends
 
 REACTION_CLIPS: Mapping[str, str] = {
     "death": "Death01", "knockback": "Hit_Knockback", "head": "Hit_Head", "body": "Hit_Chest",
@@ -51,10 +58,13 @@ ATTACKER_RECOVERY_CLIP = "Sword_Regular_A_Rec"
 ATTACKER_PARRIED_CLIP = "Hit_Chest"
 #: Blade-on-blade contact when the blade centre lines come this close (= PLACEHOLDER blade width), ASSUMED.
 PARRY_CONTACT_M = 0.035
+#: Defender reaction blend-in in frames per clip (ASSUMED): knock-down/death short, light stagger long.
+BLEND_IN_FRAMES: Mapping[str, int] = {"Death01": 2, "Hit_Knockback": 2, "Hit_Head": 4, "Hit_Chest": 6}
 
 EVENTS = ("body_hit", "parry", "none")
 ENTRY_KEYS = ("id", "attack_clip", "defender_stance", "distance_m", "distance_provenance", "frames",
-              "signed_distance_m", "blade_distance_m", "min_distance_m", "event", "first_contact", "first_parry",
+              "signed_distance_m", "blade_distance_m", "blade_approach_m", "blade_forward", "filtered_parry_frames",
+              "min_distance_m", "event", "first_contact", "first_parry",
               "wound", "reaction", "reaction_playback", "parry_playback", "energy_j", "energy_basis", "seed",
               "provenance", "sha256")
 CONTACT_KEYS = ("frame", "segment", "bone", "penetration_m", "entry_point")
@@ -82,6 +92,11 @@ def reaction_for(region: str, severity: int, lethality: float, incapacitating: b
     if severity >= Severity.SEVERE.value:
         return REACTION_CLIPS["knockback"], "severe"
     return REACTION_CLIPS["body"], "body_stagger"
+
+
+def blend_in_for(clip: str) -> int:
+    """Blend-in frames of the defender's reaction clip (ASSUMED table ``BLEND_IN_FRAMES``)."""
+    return BLEND_IN_FRAMES[clip]
 
 
 def attacker_reaction_for(defender_stance: str, wound_region: str) -> Tuple[str, str]:
@@ -131,10 +146,34 @@ def segment_distance(p0: Vec, p1: Vec, q0: Vec, q1: Vec) -> Tuple[float, Tuple[f
     return dot(diff, diff) ** 0.5, mid
 
 
-def first_event(frames: Sequence[int], signed: Sequence[float], blade: Sequence[float]) -> Tuple[str, Optional[int]]:
-    """('body_hit' | 'parry' | 'none', frame): whichever happens first; a tie counts as a parry (blade met first)."""
-    for fr, s, b in zip(frames, signed, blade):
+def strike_phase(approach: float, forward: float) -> bool:
+    """True while the attacker strikes (ASSUMED, signs only, no thresholds): its blade tip moves towards the
+    defender (``approach`` > 0, m per frame along the facing axis) and the blade points towards the defender
+    (``forward`` > 0, cosine between grip->tip and the facing axis, horizontal). A blade cocked back (wind-up) or a
+    withdrawing tip is not a strike."""
+    return approach > 0.0 and forward > 0.0
+
+
+def parry_frames(frames: Sequence[int], blade: Sequence[float], approach: Sequence[float],
+                 forward: Sequence[float]) -> Tuple[List[int], List[int]]:
+    """(accepted, filtered) frames where the blades touch: accepted only in the strike phase (``strike_phase``)."""
+    accepted: List[int] = []
+    filtered: List[int] = []
+    for fr, b, v, f in zip(frames, blade, approach, forward):
         if b <= PARRY_CONTACT_M:
+            (accepted if strike_phase(v, f) else filtered).append(fr)
+    return accepted, filtered
+
+
+def first_event(frames: Sequence[int], signed: Sequence[float], blade: Sequence[float],
+                approach: Optional[Sequence[float]] = None,
+                forward: Optional[Sequence[float]] = None) -> Tuple[str, Optional[int]]:
+    """('body_hit' | 'parry' | 'none', frame): whichever happens first; a tie counts as a parry (blade met first).
+    With ``approach`` and ``forward`` a blade contact counts only in the strike phase (``strike_phase``)."""
+    approach = approach if approach is not None else [1.0] * len(frames)
+    forward = forward if forward is not None else [1.0] * len(frames)
+    for fr, s, b, v, f in zip(frames, signed, blade, approach, forward):
+        if b <= PARRY_CONTACT_M and strike_phase(v, f):
             return "parry", fr
         if s <= 0.0:
             return "body_hit", fr
@@ -167,8 +206,8 @@ def _check_body_hit(e: Mapping[str, Any], eid: str) -> List[str]:
         problems.append(f"{eid}: one playback distance per frame")
     if not 0.0 <= p["wound_bone_consistent_ratio"] <= 1.0:
         problems.append(f"{eid}: wound_bone_consistent_ratio out of [0, 1]")
-    if not isinstance(p["blend_in_frames"], int) or p["blend_in_frames"] < 0:
-        problems.append(f"{eid}: blend_in_frames must be a non-negative integer")
+    if r and r.get("clip") in BLEND_IN_FRAMES and p["blend_in_frames"] != blend_in_for(r["clip"]):
+        problems.append(f"{eid}: blend_in_frames does not follow the per-clip table")
     ar = p["attacker_reaction"]
     if ar is not None:
         if [k for k in ATTACKER_REACTION_KEYS if k not in ar]:
@@ -223,9 +262,15 @@ def validate_library(data: Mapping[str, Any]) -> List[str]:
         if eid in ids:
             problems.append(f"duplicate id {eid}")
         ids.add(eid)
-        if not len(e["signed_distance_m"]) == len(e["blade_distance_m"]) == len(e["frames"]):
-            problems.append(f"{eid}: one signed and one blade distance per frame")
-        event, frame = first_event(e["frames"], e["signed_distance_m"], e["blade_distance_m"])
+        n = len(e["frames"])
+        if any(len(e[k]) != n for k in ("signed_distance_m", "blade_distance_m", "blade_approach_m", "blade_forward")):
+            problems.append(f"{eid}: one signed distance, blade distance, approach and forward per frame")
+            continue
+        scan = (e["frames"], e["signed_distance_m"], e["blade_distance_m"], e["blade_approach_m"], e["blade_forward"])
+        event, frame = first_event(*scan)
+        _, filtered = parry_frames(scan[0], *scan[2:])
+        if e["filtered_parry_frames"] != filtered:
+            problems.append(f"{eid}: filtered_parry_frames do not match the scan")
         if e["event"] not in EVENTS or e["event"] != event:
             problems.append(f"{eid}: event {e['event']} does not match the scan ({event})")
         elif event == "body_hit":
@@ -255,4 +300,5 @@ def summary(data: Mapping[str, Any]) -> Dict[str, Any]:
     for e in hits:
         per_clip[e["reaction"]["clip"]] = per_clip.get(e["reaction"]["clip"], 0) + 1
     return {"entries": len(entries), "body_hits": len(hits), "parries": len(parries), "reactions": per_clip,
-            "parries_reaching_body_after": sum(1 for e in parries if e["parry_playback"]["body_reached_after_parry"])}
+            "parries_reaching_body_after": sum(1 for e in parries if e["parry_playback"]["body_reached_after_parry"]),
+            "filtered_parry_contacts": sum(len(e.get("filtered_parry_frames", [])) for e in entries)}
