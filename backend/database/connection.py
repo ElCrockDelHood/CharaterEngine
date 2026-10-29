@@ -119,6 +119,17 @@ class DatabaseManager:
         from backend.database.models import Base
         Base.metadata.drop_all(bind=self.get_engine())
 
+    def dispose(self):
+        """Close every pooled connection and forget the engine.
+
+        The next ``get_engine()`` / ``get_session()`` creates a fresh engine (for the in-memory test
+        database this means an empty database). Used by test fixtures so no SQLite connection is left open.
+        """
+        if self._engine is not None:
+            self._engine.dispose()
+        self._engine = None
+        self._session_factory = None
+
 
 # Global database manager instance
 _db_manager: Optional[DatabaseManager] = None

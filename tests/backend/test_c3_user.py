@@ -199,6 +199,7 @@ class TestUserServiceIntegration:
         manager.create_tables()
         yield manager
         manager.drop_tables()
+        manager.dispose()
 
     @pytest.fixture
     def session(self, db_manager):

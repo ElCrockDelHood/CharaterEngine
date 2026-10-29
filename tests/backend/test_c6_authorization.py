@@ -52,6 +52,7 @@ def db_manager():
     manager.create_tables()
     yield manager
     manager.drop_tables()
+    manager.dispose()
 
 
 @pytest.fixture

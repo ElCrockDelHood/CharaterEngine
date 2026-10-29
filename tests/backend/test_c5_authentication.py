@@ -95,6 +95,7 @@ class TestCredentialService:
         manager.create_tables()
         yield manager
         manager.drop_tables()
+        manager.dispose()
 
     @pytest.fixture
     def session(self, db_manager):
@@ -168,6 +169,7 @@ class TestSessionService:
         manager.create_tables()
         yield manager
         manager.drop_tables()
+        manager.dispose()
 
     @pytest.fixture
     def session(self, db_manager):
@@ -271,6 +273,7 @@ class TestAuthenticationService:
         manager.create_tables()
         yield manager
         manager.drop_tables()
+        manager.dispose()
 
     @pytest.fixture
     def session(self, db_manager):
@@ -392,6 +395,7 @@ class TestTransactionBehavior:
         manager.create_tables()
         yield manager
         manager.drop_tables()
+        manager.dispose()
 
     @pytest.fixture
     def session(self, db_manager):
@@ -479,6 +483,7 @@ class TestSessionLifecycle:
         manager.create_tables()
         yield manager
         manager.drop_tables()
+        manager.dispose()
 
     @pytest.fixture
     def session(self, db_manager):
@@ -575,6 +580,7 @@ class TestEnumerationResistance:
         manager.create_tables()
         yield manager
         manager.drop_tables()
+        manager.dispose()
 
     @pytest.fixture
     def session(self, db_manager):
@@ -642,6 +648,7 @@ class TestAdditionalSecurity:
         manager.create_tables()
         yield manager
         manager.drop_tables()
+        manager.dispose()
 
     @pytest.fixture
     def session(self, db_manager):
@@ -710,6 +717,7 @@ class TestConcurrency:
         manager.create_tables()
         yield manager
         manager.drop_tables()
+        manager.dispose()
 
     @pytest.fixture
     def session(self, db_manager):
@@ -834,6 +842,7 @@ class TestSecurityBoundaries:
         manager.create_tables()
         yield manager
         manager.drop_tables()
+        manager.dispose()
 
     @pytest.fixture
     def session(self, db_manager):
