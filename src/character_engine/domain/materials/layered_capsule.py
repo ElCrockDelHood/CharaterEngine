@@ -106,6 +106,8 @@ def segment_distance(p: Vec, a: Vec, b: Vec) -> Tuple[float, float]:
 def layered_capsule(placement: BlockPlacement, outer: Sequence[OuterLayer] = (),
                     profile: Optional[TissueProfile] = None) -> LayeredCapsule:
     profile = profile or tissue_profile(placement.region)
+    if profile.has_cavity:
+        return _hollow_capsule(placement, outer, profile)
     r_skin = placement.radius_m
     bone_core = profile.thickness_m.get(TissueLayer.BONE, 0.0) / 2.0
     if bone_core >= r_skin:
@@ -140,3 +142,47 @@ def layered_capsule(placement: BlockPlacement, outer: Sequence[OuterLayer] = (),
                                    has_cavity=profile.has_cavity, provenance=ProvenanceState.ESTIMATE,
                                    notes=f"fitted to envelope radius {r_skin} m (soft scale {scale:.3f})")
     return LayeredCapsule(placement, tuple(shells), round(scale, 6), fitted_profile)
+
+
+def _hollow_capsule(placement: BlockPlacement, outer: Sequence[OuterLayer], profile: TissueProfile) -> LayeredCapsule:
+    """Regions with a cavity (thorax, head, pelvis, abdomen): wall layers keep their regional thickness, the
+    cavity content fills the rest down to the axis.
+
+    Outside → in: skin, fat, muscle, tendon, bone shell (ribs / skull / pelvic ring, full thickness), cavity.
+    The wall is scaled down only if it would not leave a cavity (wall > 90 % of the envelope radius).
+    """
+    r_skin = placement.radius_m
+    wall_layers = [layer for layer in (TissueLayer.SKIN, TissueLayer.FAT, TissueLayer.MUSCLE, TissueLayer.TENDON,
+                                       TissueLayer.BONE) if layer in profile.thickness_m]
+    wall = sum(profile.thickness_m[layer] for layer in wall_layers)
+    scale = min(1.0, 0.9 * r_skin / wall)
+    thick = {layer: profile.thickness_m[layer] * scale for layer in wall_layers}
+    r = r_skin
+    bounds: Dict[TissueLayer, Tuple[float, float]] = {}
+    for layer in wall_layers:                       # skin → bone, outside in
+        bounds[layer] = (r - thick[layer], r)
+        r -= thick[layer]
+    r_cavity = r
+    shells: List[Shell] = [Shell("viscera", TISSUE_MATERIAL[TissueLayer.VISCERA], 0.0, r_cavity,
+                                 TissueLayer.VISCERA)]
+    for layer in reversed(wall_layers):             # bone → skin, inside out
+        if thick[layer] > 0.0:
+            lo, hi = bounds[layer]
+            shells.append(Shell(layer.value, TISSUE_MATERIAL[layer], lo, hi, layer))
+    r = r_skin
+    for o in outer:
+        if o.gap_m > 0:
+            shells.append(Shell(f"{o.name}_gap", MaterialKind.AIR, r, r + o.gap_m, None, o.z_range, o.provenance))
+            r += o.gap_m
+        shells.append(Shell(o.name, o.material, r, r + o.thickness_m, None, o.z_range, o.provenance))
+        r += o.thickness_m
+    thickness = {layer: round(thick[layer], 6) for layer in wall_layers}
+    thickness[TissueLayer.VISCERA] = round(r_cavity, 6)
+    ranges = {layer: (lo * scale, hi * scale) for layer, (lo, hi) in profile.thickness_range_m.items()
+              if layer in wall_layers}
+    ranges[TissueLayer.VISCERA] = (round(r_cavity, 6), round(r_cavity, 6))
+    fitted = TissueProfile(region=profile.region, thickness_m=thickness, thickness_range_m=ranges, has_cavity=True,
+                           provenance=ProvenanceState.ESTIMATE,
+                           notes=f"hollow fit to envelope radius {r_skin} m; cavity radius {r_cavity:.4f} m "
+                                 f"(wall scale {scale:.3f})")
+    return LayeredCapsule(placement, tuple(shells), round(scale, 6), fitted)

@@ -1,13 +1,14 @@
 """Material sample 1 — Blender scene + EEVEE / Cycles renders of the pure-Python result.
 
     blender -b --factory-startup --python runtime/blender/ce_material_sample.py -- \
-        --input builds/material_sample/<UTC> --out builds/material_sample/<UTC> \
+        --input builds/material_sample/<UTC> --out builds/material_sample/<UTC> [--sample forearm|thorax] \
         --engines eevee,cycles --samples 256 --resolution 1920x1080 [--turntable 48]
     blender -b --factory-startup --python runtime/blender/ce_material_sample.py -- --gpu-probe --out <dir>
 
 Driven by ``scripts/material_sample.py``. Blender computes nothing physical here: it draws the layered capsule
-(cutaway specimen: bone, tendon, muscle, fat, skin, sleeve, bracer), the settled and cut XPBD sleeve and the blade
-at its stopping depth, all read from the variant JSON files. Both variants sit side by side (unarmored on the left, seen from +X).
+(cutaway specimen: bone, tendon, muscle, fat, skin, garments), the settled XPBD cloth and the blade (sample 1,
+forearm) or end-on impactor (sample 2, thorax) at its stopping depth, all read from the variant JSON files. The two
+variants sit side by side (first one on the left, seen from +X).
 
 Materials map OpenPBR parameters from ``domain/materials/catalog.py`` onto the Principled BSDF (both the 3.x and
 the 4.x+ socket names). Optical values are ASSUMED look-dev, not measurements.
@@ -32,7 +33,12 @@ except ImportError as exc:  # pragma: no cover
 
 WEDGE_HALF_ANGLE = math.radians(50.0)    # cutaway opening around +X (lateral), presentation only
 SEGMENTS = 64
-VARIANT_Y = {"unarmored": -0.12, "armored": 0.12}  # axes moved to x = 0, side by side in Y (presentation)
+SAMPLES = {   # file prefix, cloth key in the JSON, config key of the cloth thickness, variant names (left, right)
+    "forearm": {"prefix": "forearm", "cloth": "sleeve", "thickness": "sleeve_thickness_m",
+                "variants": ("unarmored", "armored")},
+    "thorax": {"prefix": "thorax", "cloth": "coat", "thickness": "coat_thickness_m",
+               "variants": ("unvested", "vested")},
+}
 
 
 # --------------------------------------------------------------------------- materials (OpenPBR → Principled)
@@ -143,6 +149,24 @@ def sleeve_object(name: str, verts, faces, thickness: float, axis_a: Vector, axi
     return obj
 
 
+def impactor_objects(name: str, ends, radius: float, shift: Vector):
+    """End-on impactor (rod with a rounded tip): tip centre = where the domain says it stopped."""
+    tip, back = Vector(ends[0]) + shift, Vector(ends[1]) + shift
+    axis = tip - back
+    bpy.ops.mesh.primitive_cylinder_add(radius=radius, depth=axis.length, location=(tip + back) / 2)
+    rod = bpy.context.active_object
+    rod.name = name
+    rod.rotation_mode = "QUATERNION"
+    rod.rotation_quaternion = Vector((0.0, 0.0, 1.0)).rotation_difference(axis.normalized())
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=radius, location=tip)
+    ball = bpy.context.active_object
+    ball.name = name + "_tip"
+    for o in (rod, ball):
+        for poly in o.data.polygons:
+            poly.use_smooth = True
+    return [rod, ball]
+
+
 def blade_object(name: str, ends, width: float, thickness: float, strike_dir: Vector, shift: Vector):
     """Sabre section: the edge line is where the domain says it stopped; the blade body trails behind it."""
     a, b = Vector(ends[0]) + shift, Vector(ends[1]) + shift
@@ -161,8 +185,9 @@ def blade_object(name: str, ends, width: float, thickness: float, strike_dir: Ve
 
 
 # --------------------------------------------------------------------------- scene
-def build_variant(r: dict, mats: dict):
-    shift = Vector((-r["placement"]["a"][0], VARIANT_Y[r["variant"]], 0.0))
+def build_variant(r: dict, mats: dict, spec: dict, side: float):
+    r_max = max(sh["r_outer_m"] for sh in r["shells"])
+    shift = Vector((-r["placement"]["a"][0], side * (r_max + 0.03), 0.0))
     a = Vector(r["placement"]["a"]) + shift
     b = Vector(r["placement"]["b"]) + shift
     objs = []
@@ -175,11 +200,18 @@ def build_variant(r: dict, mats: dict):
         o["ce_provenance"] = s["provenance"]
         objs.append(o)
     last = r["frames"][-1]
-    sl = sleeve_object(f"{r['variant']}_sleeve", last["sleeve"], r["sleeve"]["faces"],
-                       r["config"]["sleeve_thickness_m"], Vector(r["placement"]["a"]), Vector(r["placement"]["b"]),
+    cloth = spec["cloth"]
+    sl = sleeve_object(f"{r['variant']}_{cloth}", last[cloth], r[cloth]["faces"],
+                       r["config"][spec["thickness"]], Vector(r["placement"]["a"]), Vector(r["placement"]["b"]),
                        shift)
     sl.data.materials.append(mats["cloth_wool"])
     objs.append(sl)
+    if "impactor" in last:
+        im = impactor_objects(f"{r['variant']}_impactor", last["impactor"], r["config"]["impactor_radius_m"], shift)
+        for o in im:
+            o.data.materials.append(mats["armor_steel"])
+            o["ce_provenance"] = "PLACEHOLDER impactor"
+        objs += im
     if "blade" in last:
         bl = blade_object(f"{r['variant']}_blade", last["blade"], r["config"]["blade_width_m"], 0.005,
                           Vector((0.0, 1.0, 0.0)), shift)
@@ -189,20 +221,22 @@ def build_variant(r: dict, mats: dict):
     return objs, (a + b) / 2
 
 
-def setup_world_and_lights(target: Vector):
+def setup_world_and_lights(target: Vector, k: float = 1.0):
     world = bpy.data.worlds.new("CE_world")
     bpy.context.scene.world = world
     world.use_nodes = True
     world.node_tree.nodes["Background"].inputs["Color"].default_value = (0.02, 0.022, 0.026, 1.0)
-    for name, loc, energy, size in (("key", (0.9, -0.7, 1.6), 120.0, 0.6), ("fill", (-0.8, -0.9, 1.1), 35.0, 0.9),
-                                    ("rim", (0.2, 0.9, 1.4), 80.0, 0.4)):
+    # offsets from the target; the forearm target sits at z ~ 1.0, so these equal the former absolute positions
+    for name, rel, energy, size in (("key", (0.9, -0.7, 0.6), 120.0, 0.6), ("fill", (-0.8, -0.9, 0.1), 35.0, 0.9),
+                                    ("rim", (0.2, 0.9, 0.4), 80.0, 0.4)):
         light = bpy.data.lights.new(name, "AREA")
-        light.energy, light.size = energy, size
+        light.energy, light.size = energy * k * k, size * k
         obj = bpy.data.objects.new(name, light)
         bpy.context.scene.collection.objects.link(obj)
+        loc = tuple(target[i] + rel[i] * k for i in range(3))
         obj.location = loc
         obj.rotation_euler = (target - Vector(loc)).to_track_quat("-Z", "Y").to_euler()
-    bpy.ops.mesh.primitive_plane_add(size=6.0, location=(0.0, 0.0, target.z - 0.18))
+    bpy.ops.mesh.primitive_plane_add(size=6.0, location=(0.0, 0.0, target.z - 0.18 * k))
     floor = bpy.context.active_object
     fm = bpy.data.materials.new("floor")
     fm.use_nodes = True
@@ -301,6 +335,7 @@ def main() -> int:
     ap.add_argument("--samples", type=int, default=256)
     ap.add_argument("--resolution", default="1920x1080")
     ap.add_argument("--turntable", type=int, default=0)
+    ap.add_argument("--sample", choices=sorted(SAMPLES), default="forearm")
     ap.add_argument("--gpu-probe", action="store_true")
     a = ap.parse_args(argv)
     a.out.mkdir(parents=True, exist_ok=True)
@@ -313,16 +348,19 @@ def main() -> int:
 
     bpy.ops.wm.read_factory_settings(use_empty=True)
     scene = bpy.context.scene
-    variants = [json.loads((a.input / f"forearm_{v}.json").read_text(encoding="utf-8"))
-                for v in ("unarmored", "armored")]
+    spec = SAMPLES[a.sample]
+    names = spec["variants"]
+    variants = [json.loads((a.input / f"{spec['prefix']}_{v}.json").read_text(encoding="utf-8")) for v in names]
     mats = {row["kind"]: principled_from_openpbr(row["kind"], row["optical_openpbr"])
             for row in variants[0]["materials"] if row["optical_openpbr"]}
     centres = {}
-    for r in variants:
-        _, centres[r["variant"]] = build_variant(r, mats)
-    target = (centres["unarmored"] + centres["armored"]) / 2
-    setup_world_and_lights(target)
-    wide = camera("cam_comparison", target + Vector((0.62, -0.18, 0.2)), target, 50.0)  # +X: wedges face it
+    for r, side in zip(variants, (-1.0, 1.0)):
+        _, centres[r["variant"]] = build_variant(r, mats, spec, side)
+    target = (centres[names[0]] + centres[names[1]]) / 2
+    r_max = max(sh["r_outer_m"] for r in variants for sh in r["shells"])
+    k = max(1.0, r_max / 0.06)                       # forearm sample (outer radius 0.0515 m) keeps k = 1
+    setup_world_and_lights(target, k)
+    wide = camera("cam_comparison", target + Vector((0.62, -0.18, 0.2)) * k, target, 50.0)  # +X: wedges face it
     w, h = (int(x) for x in a.resolution.lower().split("x"))
     scene.render.resolution_x, scene.render.resolution_y = w, h
     scene.render.image_settings.file_format = "PNG"
@@ -336,7 +374,7 @@ def main() -> int:
         print(f"[material] {json.dumps(report['renders'][-1])}", flush=True)
     if "cycles" in engines:
         for v, c in centres.items():
-            close = camera(f"cam_{v}", c + Vector((0.35, -0.26, 0.13)), c, 50.0)
+            close = camera(f"cam_{v}", c + Vector((0.35, -0.26, 0.13)) * k, c, 50.0)
             scene.camera = close
             report["renders"].append(render_still(scene, a.out / f"closeup_{v}_cycles.png", "cycles", a.samples,
                                                   device))
@@ -345,7 +383,7 @@ def main() -> int:
         pivot = bpy.data.objects.new("turntable_pivot", None)
         scene.collection.objects.link(pivot)
         pivot.location = target
-        orbit = camera("cam_turntable", target + Vector((0.6, 0.0, 0.2)), target, 60.0)
+        orbit = camera("cam_turntable", target + Vector((0.6, 0.0, 0.2)) * k, target, 60.0)
         orbit.parent = pivot
         orbit.matrix_parent_inverse = pivot.matrix_world.inverted()
         scene.camera = orbit

@@ -957,15 +957,33 @@ mocap rest pose (clips to be re-baked in Blender). Audit: `docs/audit/A13_FOOT_L
 
 ---
 
+## 55. HOLLOW LAYERED CAPSULES AND A PLATEAU BLUNT MODEL FEEDING THE UNCHANGED WOUND ENTRY
+
+**Decision** (owner approval, 2026-10-28 "me gusta el plan propuesto", thread "Diseñar física materialística y
+colisiones"): regions with a cavity use a **hollow** layered capsule (skin, fat, muscle, tendon, rib / skull shell at
+full thickness, cavity down to the axis; the wall is scaled only if it would leave no cavity). Blunt impacts use a
+**plateau crush** model (`domain/physics/blunt.py`): a layer of thickness `t` costs `σ·A·ε·t`, a rigid shell costs its
+fracture energy all-or-nothing, air gaps cost nothing. The affected depth becomes `Wound(BLUNT, depth_m=…)` and goes
+through the unchanged `assess_wound`; `blunt_impact_to_wound` and `REFERENCE_BLUNT_ENERGY_J` are **not modified** and
+the legacy mapping is reported next to the new result for comparison. Provenance: rib fracture energy, crush
+stresses and strains **ASSUMED** (tuning), garment thicknesses **ESTIMATE**; nothing PROVEN. The thorax block is a
+sphere, so sample 2 stacks the layers on a cylinder along the T12–T1 span (documented limit).
+Evidence: `docs/audit/A09_MATERIAL_SAMPLE_2.md`. Tests: `tests/unit/test_blunt_torso.py`.
+Open for the wound thread: whether the single legacy constant should be replaced by this model (its call, not ours).
+
+**Date**: 2026-10-29 · **Status**: FINAL (values reversible)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 54
-**Final Decisions**: 50 (+4 deferred)
+**Total Decisions**: 55
+**Final Decisions**: 51 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
-**Reversible Decisions**: 3 (base stature value; tissue/wound estimate values; material values)
+**Reversible Decisions**: 4 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values)
 **Critical Decisions**: 6 (Source of Truth, Architecture Direction, Backend Priority, Provenance System, Mesh Generation, Data Invention Rule)
 
 ### 14.2 Decision Impact

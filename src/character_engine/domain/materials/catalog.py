@@ -52,6 +52,8 @@ class MaterialKind(Enum):
     BONE = "bone"
     CLOTH_WOOL = "cloth_wool"
     ARMOR_STEEL = "armor_steel"
+    PADDED_CLOTH = "padded_cloth"    # quilted vest / gambeson
+    VISCERA = "viscera"              # cavity content (lung-dominated thorax mix, pending organ-level data)
     AIR = "air"                      # gap between garment layers (no resistance, not rendered)
 
 
@@ -61,6 +63,7 @@ TISSUE_MATERIAL: Mapping[TissueLayer, MaterialKind] = {
     TissueLayer.MUSCLE: MaterialKind.MUSCLE,
     TissueLayer.TENDON: MaterialKind.TENDON,
     TissueLayer.BONE: MaterialKind.BONE,
+    TissueLayer.VISCERA: MaterialKind.VISCERA,
 }
 
 
@@ -75,6 +78,9 @@ class MechanicalParams:
     stretch_compliance: Optional[Quantity] = None   # m/N, XPBD distance constraint (cloth)
     bend_compliance: Optional[Quantity] = None      # m/N, XPBD second-neighbour constraint (cloth)
     damping: Optional[Quantity] = None              # 1/s velocity damping (cloth)
+    crush_stress: Optional[Quantity] = None         # Pa: plateau stress while a blunt impactor compresses the layer
+    crush_strain: Optional[Quantity] = None         # max compressive strain before the layer is "bottomed out"
+    fracture_energy: Optional[Quantity] = None      # J: energy to break a rigid shell (rib-scale bending fracture)
 
 
 @dataclass(frozen=True)
@@ -113,13 +119,18 @@ _SOFT_NOTE = "order of magnitude from general soft-tissue biomechanics; not yet 
 _CUT_NOTE = ("blade cutting energy per unit area, order of magnitude from cutting / fracture-toughness "
              "literature; very wide spread with rate and blade sharpness; to be sourced")
 
+_CRUSH_NOTE = ("blunt-impact plateau model (energy to crush a layer = stress x contact area x strain x thickness); "
+               "tuning value in the order of magnitude of soft-tissue compression tests, NOT sourced yet")
+
 MATERIALS: Dict[MaterialKind, Material] = {
     MaterialKind.SKIN: Material(MaterialKind.SKIN, MechanicalParams(
         density=_q(1100, 1050, 1150, "kg/m^3", note=_SOFT_NOTE),
         youngs_modulus=_q(1.0e6, 1.0e5, 1.0e8, "Pa", note=_SOFT_NOTE + "; strongly non-linear, anisotropic"),
         poisson_ratio=_q(0.48, 0.40, 0.49, "", note=_SOFT_NOTE),
         friction=_q(0.5, 0.3, 0.9, "", note="skin against fabric; humidity dependent"),
-        cut_energy=_q(5.0e3, 1.0e3, 2.0e4, "J/m^2", note=_CUT_NOTE)),
+        cut_energy=_q(5.0e3, 1.0e3, 2.0e4, "J/m^2", note=_CUT_NOTE),
+        crush_stress=_q(1.0e6, 2.0e5, 5.0e6, "Pa", A, _CRUSH_NOTE),
+        crush_strain=_q(0.3, 0.1, 0.5, "", A, _CRUSH_NOTE)),
         OpticalParams(base_color=(0.80, 0.58, 0.47), specular_roughness=0.45, specular_ior=1.4,
                       subsurface_weight=1.0, subsurface_color=(0.85, 0.45, 0.35), subsurface_radius=0.004,
                       subsurface_radius_scale=(1.0, 0.45, 0.25))),
@@ -128,7 +139,9 @@ MATERIALS: Dict[MaterialKind, Material] = {
         youngs_modulus=_q(3.0e3, 1.0e3, 1.0e4, "Pa", note=_SOFT_NOTE),
         poisson_ratio=_q(0.49, 0.45, 0.499, "", note=_SOFT_NOTE + "; near incompressible"),
         friction=_q(0.3, 0.1, 0.5, ""),
-        cut_energy=_q(5.0e2, 1.0e2, 2.0e3, "J/m^2", note=_CUT_NOTE)),
+        cut_energy=_q(5.0e2, 1.0e2, 2.0e3, "J/m^2", note=_CUT_NOTE),
+        crush_stress=_q(5.0e4, 1.0e4, 3.0e5, "Pa", A, _CRUSH_NOTE),
+        crush_strain=_q(0.6, 0.4, 0.8, "", A, _CRUSH_NOTE)),
         OpticalParams(base_color=(0.95, 0.82, 0.50), specular_roughness=0.35, specular_ior=1.45,
                       subsurface_weight=1.0, subsurface_color=(0.95, 0.80, 0.45), subsurface_radius=0.005,
                       subsurface_radius_scale=(1.0, 0.8, 0.5), coat_weight=0.3, coat_roughness=0.2)),
@@ -137,7 +150,9 @@ MATERIALS: Dict[MaterialKind, Material] = {
         youngs_modulus=_q(5.0e4, 1.0e4, 5.0e5, "Pa", note=_SOFT_NOTE + "; passive, along fibre"),
         poisson_ratio=_q(0.49, 0.45, 0.499, "", note=_SOFT_NOTE),
         friction=_q(0.3, 0.1, 0.5, ""),
-        cut_energy=_q(2.0e3, 5.0e2, 5.0e3, "J/m^2", note=_CUT_NOTE)),
+        cut_energy=_q(2.0e3, 5.0e2, 5.0e3, "J/m^2", note=_CUT_NOTE),
+        crush_stress=_q(2.0e5, 5.0e4, 1.0e6, "Pa", A, _CRUSH_NOTE),
+        crush_strain=_q(0.5, 0.3, 0.7, "", A, _CRUSH_NOTE)),
         OpticalParams(base_color=(0.50, 0.07, 0.06), specular_roughness=0.35, specular_ior=1.4,
                       subsurface_weight=0.6, subsurface_color=(0.60, 0.10, 0.08), subsurface_radius=0.002,
                       coat_weight=0.4, coat_roughness=0.15)),
@@ -146,7 +161,9 @@ MATERIALS: Dict[MaterialKind, Material] = {
         youngs_modulus=_q(1.2e9, 0.5e9, 2.0e9, "Pa", note=_SOFT_NOTE + "; along fibre"),
         poisson_ratio=_q(0.45, 0.3, 0.49, "", note=_SOFT_NOTE),
         friction=_q(0.2, 0.05, 0.4, ""),
-        cut_energy=_q(1.5e4, 5.0e3, 3.0e4, "J/m^2", note=_CUT_NOTE)),
+        cut_energy=_q(1.5e4, 5.0e3, 3.0e4, "J/m^2", note=_CUT_NOTE),
+        crush_stress=_q(2.0e6, 5.0e5, 1.0e7, "Pa", A, _CRUSH_NOTE),
+        crush_strain=_q(0.1, 0.05, 0.2, "", A, _CRUSH_NOTE)),
         OpticalParams(base_color=(0.90, 0.88, 0.80), specular_roughness=0.3, specular_ior=1.45,
                       subsurface_weight=0.3, subsurface_radius=0.001, coat_weight=0.5, coat_roughness=0.1)),
     MaterialKind.BONE: Material(MaterialKind.BONE, MechanicalParams(
@@ -157,7 +174,10 @@ MATERIALS: Dict[MaterialKind, Material] = {
         cut_energy=_q(3.0e5, 2.0e4, 1.0e6, "J/m^2", A,
                       "effective CHOPPING energy, tuning value: fracture toughness alone (order 1e3-2e4 J/m^2) "
                       "would let a 30 J reference cut sever a forearm; chopping also crushes and wedges. Needs a "
-                      "sourced sharp-force bone trauma study before any claim")),
+                      "sourced sharp-force bone trauma study before any claim"),
+        fracture_energy=_q(25.0, 5.0, 100.0, "J", A,
+                           "rib-scale bending fracture energy, tuning value (forearm/long bones differ); not sourced"),
+        crush_strain=_q(0.02, 0.005, 0.05, "", A, _CRUSH_NOTE)),
         OpticalParams(base_color=(0.90, 0.86, 0.74), specular_roughness=0.6, specular_ior=1.5,
                       subsurface_weight=0.2, subsurface_radius=0.001)),
     MaterialKind.CLOTH_WOOL: Material(MaterialKind.CLOTH_WOOL, MechanicalParams(
@@ -169,7 +189,9 @@ MATERIALS: Dict[MaterialKind, Material] = {
         areal_density=_q(0.35, 0.25, 0.50, "kg/m^2", note="heavy uniform broadcloth"),
         stretch_compliance=_q(1.0e-6, 1.0e-8, 1.0e-4, "m/N", A, "XPBD tuning: nearly inextensible"),
         bend_compliance=_q(5.0e-3, 1.0e-4, 1.0e-1, "m/N", A, "XPBD tuning: soft drape"),
-        damping=_q(0.5, 0.0, 5.0, "1/s", A, "XPBD tuning")),
+        damping=_q(0.5, 0.0, 5.0, "1/s", A, "XPBD tuning"),
+        crush_stress=_q(2.0e4, 5.0e3, 1.0e5, "Pa", A, _CRUSH_NOTE),
+        crush_strain=_q(0.7, 0.5, 0.9, "", A, _CRUSH_NOTE)),
         OpticalParams(base_color=(0.04, 0.06, 0.20), specular_roughness=0.85, specular_ior=1.5,
                       fuzz_weight=1.0, fuzz_color=(0.25, 0.30, 0.55), fuzz_roughness=0.5),
         notes="Dark blue uniform wool (granadero coat sleeve)."),
@@ -183,6 +205,29 @@ MATERIALS: Dict[MaterialKind, Material] = {
                       "NOT a material property (plate defeat is plastic deformation, not fracture)")),
         OpticalParams(base_color=(0.62, 0.62, 0.64), base_metalness=1.0, specular_roughness=0.3),
         notes="Plate bracer."),
+    MaterialKind.PADDED_CLOTH: Material(MaterialKind.PADDED_CLOTH, MechanicalParams(
+        density=_q(250, 150, 400, "kg/m^3", note="quilted wool / linen padding, ESTIMATE"),
+        youngs_modulus=_q(1.0e6, 1.0e5, 1.0e7, "Pa", note="in-plane, quilted layers; ESTIMATE"),
+        poisson_ratio=_q(0.3, 0.1, 0.5, ""),
+        friction=_q(0.5, 0.3, 0.8, ""),
+        cut_energy=_q(5.0e3, 1.0e3, 5.0e4, "J/m^2", A, _CUT_NOTE + "; layered quilting"),
+        areal_density=_q(5.0, 3.0, 8.0, "kg/m^2", note="20 mm gambeson-type vest, ESTIMATE"),
+        crush_stress=_q(5.0e5, 1.0e5, 2.0e6, "Pa", A, _CRUSH_NOTE),
+        crush_strain=_q(0.6, 0.4, 0.8, "", A, _CRUSH_NOTE)),
+        OpticalParams(base_color=(0.45, 0.38, 0.28), specular_roughness=0.9, specular_ior=1.5,
+                      fuzz_weight=0.8, fuzz_color=(0.60, 0.52, 0.40), fuzz_roughness=0.6),
+        notes="Quilted padded vest (gambeson-type) worn under the coat."),
+    MaterialKind.VISCERA: Material(MaterialKind.VISCERA, MechanicalParams(
+        density=_q(600, 300, 1060, "kg/m^3", note="lung-dominated thorax mix; " + _SOFT_NOTE),
+        youngs_modulus=_q(1.0e4, 3.0e3, 1.0e5, "Pa", note=_SOFT_NOTE),
+        poisson_ratio=_q(0.45, 0.3, 0.49, ""),
+        friction=_q(0.1, 0.05, 0.3, ""),
+        cut_energy=_q(1.0e3, 2.0e2, 5.0e3, "J/m^2", note=_CUT_NOTE),
+        crush_stress=_q(2.0e4, 5.0e3, 1.0e5, "Pa", A, _CRUSH_NOTE),
+        crush_strain=_q(0.5, 0.3, 0.7, "", A, _CRUSH_NOTE)),
+        OpticalParams(base_color=(0.45, 0.12, 0.12), specular_roughness=0.4, specular_ior=1.4,
+                      subsurface_weight=0.5, subsurface_color=(0.55, 0.15, 0.12), subsurface_radius=0.003,
+                      coat_weight=0.3, coat_roughness=0.2)),
     MaterialKind.AIR: Material(MaterialKind.AIR, MechanicalParams(
         density=_q(1.2, 1.1, 1.3, "kg/m^3"), youngs_modulus=_q(0, 0, 0, "Pa"),
         poisson_ratio=_q(0, 0, 0, ""), friction=_q(0, 0, 0, ""), cut_energy=_q(0, 0, 0, "J/m^2")), None),

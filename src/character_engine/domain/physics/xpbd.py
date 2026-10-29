@@ -48,6 +48,10 @@ class CapsuleCollider:
     friction: float = 0.0
     motion: Optional[Callable[[float], Tuple[Vec, Vec]]] = None
     enabled: bool = True
+    # Particles closer than ``skip.radius + skip_margin`` to ``skip`` are not pushed out of this collider: lets an
+    # impactor indent cloth locally without fighting the body underneath it.
+    skip: Optional[CapsuleCollider] = None
+    skip_margin: float = 0.0
 
 
 @dataclass
@@ -142,6 +146,9 @@ class ParticleSystem:
                 continue
             d, t = segment_distance((p[0], p[1], p[2]), a, b)
             if d >= r:
+                continue
+            if col.skip is not None and segment_distance((p[0], p[1], p[2]), col.skip.a, col.skip.b)[0] < (
+                    col.skip.radius + self.contact_offset + col.skip_margin):
                 continue
             c = (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t)
             if d < 1e-12:
