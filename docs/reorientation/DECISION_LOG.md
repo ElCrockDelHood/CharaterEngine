@@ -926,6 +926,9 @@ Step 2 (2026-10-25, owner "sigamos adelante"): gameplay table `ce-gameplay/3` wi
 Step 3 (2026-10-29, owner "me gusta tu idea, sigamos adelante"): playable arena in its own files
 (`ce_souls_arena.gd`, `souls_arena.tscn`) so the Shenmue arena and the audio branch are not touched; Sentinel
 scenarios played through the arena equal Python.
+Step 4 (2026-10-29, owner "sigamos adelante"): placeholder clips authored in the domain, baked in Blender 3.6
+(`souls_clips.glb`, game-rig bones only, lengths = Python frame data) and played by state in Godot after a
+rest-frame retarget; parity Blender ↔ Python ↔ Godot at every key. Blender-first rule kept.
 
 **Date**: 2026-10-25 · **Status**: FINAL (values reversible)
 

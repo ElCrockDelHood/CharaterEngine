@@ -38,6 +38,14 @@ Enable *Character Engine* in Preferences → Add-ons; the panel appears in the 3
 | **Export → Equipment / Cinematic** | Add equipment sockets, Cinematic preset: full body, Workbench | Sockets `SOCKET-sabre_hip.L` / `SOCKET-hand_grip.R` as MCH bones (ASSUMED placement) + PLACEHOLDER sabre; floor, key/fill/rim lights, framed front camera, Workbench 1920×1080, optional render to `builds/renders/`. |
 | **Runtime** | Set up UPBGE scene, Attach runtime logic, Launch game, Open Godot project | Arena + two fighters with `ce_combat.CEFighter` (UPBGE only, UI mode) and game properties; Godot shortcut opens `runtime/godot`. |
 
+### Souls-like clips (STYLE-SOULS-001 step 4)
+
+`python scripts/bake_souls_clips.py` runs Blender 3.6 headless (`runtime/blender/ce_bake_souls_clips.py`):
+`game_rig.build_game_armature_from_points()` builds the bare 66-bone game armature at the Python game GLB's
+T-pose points, `bake_souls_clips()` keys one action per clip from `domain/animation/souls_clips.py` and
+`export_souls_clips()` writes `runtime/godot/addons/character_engine/data/souls_clips.glb` (game bones only, no
+shape keys, spec SHA-256 in extras; pytest flags a stale bake). The bake prints its Blender-vs-Python parity.
+
 ## Provenance in the viewport
 
 Every generated object carries custom properties (`ce_canonical`, `ce_rig_id`, `ce_report`,

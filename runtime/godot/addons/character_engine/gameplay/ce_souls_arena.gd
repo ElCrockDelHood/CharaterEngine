@@ -4,6 +4,7 @@
 ## CESoulsCombat (port of the Python domain) runs at 60 Hz in _physics_process; the characters follow the
 ## fighter positions and face each other. Animation clips are authored and baked in Blender (step 4); until
 ## then the HUD shows each fighter's state. Visuals are Workbench-level (plain meshes, flat colours).
+## Step 4: CESoulsAnimator plays the Blender-baked placeholder clips (data/souls_clips.glb) by combat state.
 ##
 ## Keys: W/S forward-back (towards / away from the lock-on target), A/D strafe, J light, K heavy, Space dodge
 ## (+ direction; none = back-step), L guard (hold), Tab lock-on (always on in v1: the domain locks on to the
@@ -31,6 +32,10 @@ var autoplay_script: Dictionary = {}
 var combat: CESoulsCombat
 var sentinel: CESoulsCombat.Sentinel
 var characters: Dictionary = {}          # fighter_id -> CECharacter
+var animators: Dictionary = {}           # fighter_id -> CESoulsAnimator
+var _move_start := {"player": -1, "opponent": -1}
+## false: no clip playback (pure state tests).
+@export var animate: bool = true
 var hud: Label
 var camera: Camera3D
 var frames_stepped := 0
@@ -88,6 +93,12 @@ func _build_scene() -> void:
 		add_child(ch)
 		characters[f.fighter_id] = ch
 		ch.equip_weapon(data.weapon(f.weapon["weapon_id"]))
+		if animate:
+			var an := CESoulsAnimator.new()
+			an.name = "Animator_" + f.fighter_id
+			add_child(an)
+			if an.setup(ch) == OK:
+				animators[f.fighter_id] = an
 	camera = Camera3D.new()
 	camera.name = "Camera"
 	add_child(camera)
@@ -137,10 +148,15 @@ func step_once() -> void:
 	combat.feed("player", CESoulsCombat.SoulsInput.from_dict(player_command(combat.frame + 1)))
 	combat.step()
 	frames_stepped += 1
+	for fid in animators:
+		var telegraph: bool = fid == sentinel.fighter_id and sentinel.phase == "telegraph"
+		(animators[fid] as CESoulsAnimator).update_from(combat.fighters[fid], combat.frame, _move_start[fid], telegraph)
 	_sync_scene()
 
 
 func _on_event(ev: Dictionary) -> void:
+	if ev["kind"] == "move_start":
+		_move_start[ev["fighter"]] = int(ev["frame"])
 	if ev["kind"] != "hit" or combat.hits.is_empty():
 		return
 	var hit: Dictionary = combat.hits.back()
@@ -163,7 +179,8 @@ func _sync_scene() -> void:
 	var p: CECharacter = characters["player"]
 	var s: CECharacter = characters["opponent"]
 	var back := (p.position - s.position).normalized() if p.position.distance_to(s.position) > 1e-6 else Vector3(0, 0, -1)
-	camera.position = p.position + back * 3.0 + Vector3(0, 1.9, 0)
+	var side := back.cross(Vector3.UP).normalized()          # over-the-shoulder: both fighters stay in view
+	camera.position = p.position + back * 3.0 + side * 1.2 + Vector3(0, 1.9, 0)
 	camera.look_at((p.position + s.position) * 0.5 + Vector3(0, 1.1, 0), Vector3.UP)
 	_update_hud()
 

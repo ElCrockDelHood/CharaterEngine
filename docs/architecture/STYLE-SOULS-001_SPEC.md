@@ -1,6 +1,6 @@
 # STYLE-SOULS-001 — `souls_like` gameplay style (SPECIFICATION, awaiting owner approval)
 
-**Date:** 2026-10-25 · **Status:** APPROVED (Decision 53: Sentinel with the bo, keyboard only in v1); steps 1–3
+**Date:** 2026-10-25 · **Status:** APPROVED (Decision 53: Sentinel with the bo, keyboard only in v1); steps 1–4
 implemented · **Context:** the owner chose the Souls-like as the first
 genre to develop (option A). This spec turns the planned `souls_like` entry of `GAMEPLAY_STYLES` into a playable
 style: stamina, dodge with invulnerability frames, light / heavy attacks with the staff and the short blade, and one
@@ -148,7 +148,14 @@ Godot replays every scenario and must reproduce frames, stamina, poise, health a
    Runner: arena builds, keys map to the scenario commands, `sentinel_cycle_600` and `sentinel_punished` played
    through the arena equal Python. Windowed smoke on the GT 740M: 300 frames, no errors. `ce_arena.gd` untouched.
    Godot arena: style switch, player controls, Sentinel controller, HUD (health, stamina, poise).
-4. Blender placeholder clips on the game rig (grips from the pose library), baked glTF; Godot plays them by state.
+4. **DONE** — `domain/animation/souls_clips.py` (11 clips: idle, walk, guard, light_1..3, heavy, dodge, hit,
+   stagger, windup; key poses as bone → direction + angle, staff grips; lengths = Python frame data, all
+   PLACEHOLDER) → `scripts/export_souls_clips.py` (`data/souls_clips.json`, reference directions) →
+   `scripts/bake_souls_clips.py` (Blender 3.6 bakes `data/souls_clips.glb`: 66 game bones, no control rig, no
+   shape keys, spec SHA-256 in extras) → Godot `CESoulsAnimator` retargets the keys onto the game GLB's rest
+   frames and the Souls arena plays the clip of each state. Parity: Blender vs Python 0.02°, Godot vs Python
+   0.0000° at every key. Note: Godot's glTF loader resamples at 30 fps unless `generate_scene(state, 60)`.
+   Blender placeholder clips on the game rig (grips from the pose library), baked glTF; Godot plays them by state.
 5. Play-testing pass on the GT 740M and value tuning (values stay PLACEHOLDER until then).
 
 ## 8. Files

@@ -174,6 +174,15 @@ All notable changes to Character Engine. Dates are ISO 8601.
 ### Decisions
 - Decision 54: finding A13, foot layout.
 
+## [Unreleased] — 2026-10-29 · Souls-like placeholder clips baked in Blender (STYLE-SOULS-001 step 4)
+
+### Added
+- `domain/animation/souls_clips.py` (11 PLACEHOLDER clips, lengths from the frame data, staff grips),
+  `scripts/export_souls_clips.py` (`souls_clips.json`), `scripts/bake_souls_clips.py` +
+  `runtime/blender/ce_bake_souls_clips.py` (Blender 3.6 bake → `souls_clips.glb`, 66 game bones only).
+- Godot `ce_souls_animator.gd`: rest-frame retarget of the baked clips; the Souls arena plays the clip of each
+  combat state; over-the-shoulder camera. Checks in pytest, the Blender suite and the Godot runner.
+
 ## [Unreleased] — 2026-10-29 · Playable Souls-like arena (STYLE-SOULS-001 step 3)
 
 ### Added

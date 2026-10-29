@@ -196,6 +196,107 @@ def retarget_to_game_rig(context, src_arm, game_arm, map_id: str, **kwargs) -> D
     return stats
 
 
+# ---- Souls-like placeholder clips (STYLE-SOULS-001 step 4) -----------------------------------------------
+
+def build_game_armature_from_points(context, points, name: str = "CE_GAME_CLIPS"):
+    """Bare 66-bone game armature (deform bones only, no control rig) at exactly ``points`` (canonical = Blender
+    space). The clip bake uses it so the baked rest matches the Python game GLB used by Godot."""
+    from character_engine.domain.rigging import GAME_BONES
+
+    old = bpy.data.objects.get(name)
+    if old is not None:
+        bpy.data.objects.remove(old, do_unlink=True)
+    arm = bpy.data.objects.new(name, bpy.data.armatures.new(name))
+    context.scene.collection.objects.link(arm)
+    arm["ce_role"] = "game_clips_armature"
+    arm["ce_game_rig"] = RIG_ID
+    if context.object and context.object.mode != "OBJECT":
+        bpy.ops.object.mode_set(mode="OBJECT")
+    context.view_layer.objects.active = arm
+    bpy.ops.object.mode_set(mode="EDIT")
+    eb = arm.data.edit_bones
+    for g in GAME_BONES:
+        e = eb.new(g.name)
+        e.head, e.tail = Vector(points[g.name][0]), Vector(points[g.name][1])
+        e.parent = eb[g.parent] if g.parent else None
+    bpy.ops.object.mode_set(mode="OBJECT")
+    for bone in arm.data.bones:
+        bone["ce_game_bone"] = True
+    return arm
+
+
+def action_fcurves(action) -> list:
+    """F-curves of an action on Blender 3.6 (``action.fcurves``) and on 4.4+ / 5.x layered actions."""
+    if hasattr(action, "fcurves"):
+        return list(action.fcurves)
+    return [fc for layer in action.layers for strip in layer.strips for bag in strip.channelbags for fc in bag.fcurves]
+
+
+def bake_souls_clips(context, arm) -> Dict[str, object]:
+    """One action per Souls clip: every key sets all 66 game bones (rest-frame rotations from the domain)."""
+    from character_engine.domain.animation.souls_clips import SOULS_CLIPS, key_rotations
+
+    rest = rest_points(arm)
+    bones = arm.data.bones
+    frame_rest = {b.name: b.matrix_local.to_3x3().to_quaternion() for b in bones}
+    if arm.animation_data is None:
+        arm.animation_data_create()
+    for pb in arm.pose.bones:
+        pb.rotation_mode = "QUATERNION"
+    made = {}
+    for clip in SOULS_CLIPS.values():
+        old = bpy.data.actions.get(clip.clip_id)
+        if old is not None:
+            bpy.data.actions.remove(old)
+        action = bpy.data.actions.new(clip.clip_id)
+        action.use_fake_user = True
+        action["ce_clip_frames"] = clip.frames
+        action["ce_provenance"] = "PLACEHOLDER"
+        arm.animation_data.action = action
+        if hasattr(arm.animation_data, "action_slot") and hasattr(action, "slots") and not action.slots:
+            arm.animation_data.action_slot = action.slots.new(id_type="OBJECT", name=arm.name)
+        for frame, pose in clip.keys:
+            rots = key_rotations(rest, pose)
+            for pb in arm.pose.bones:
+                q = Quaternion(rots[pb.name]) if pb.name in rots else Quaternion()
+                r = frame_rest[pb.name]
+                pb.rotation_quaternion = r.inverted() @ q @ r      # armature-frame rotation -> bone space
+                pb.keyframe_insert("rotation_quaternion", frame=frame, group=pb.name)
+        for fc in action_fcurves(action):
+            for kp in fc.keyframe_points:
+                kp.interpolation = "LINEAR"
+        made[clip.clip_id] = {"frames": clip.frames, "keys": len(clip.keys)}
+    arm.animation_data.action = None
+    for pb in arm.pose.bones:
+        pb.rotation_quaternion = Quaternion()
+    return made
+
+
+def export_souls_clips(context, arm, filepath, spec_sha256: str = "") -> None:
+    """glTF with the baked clips: game-rig bones only (no control rig, no shape keys), one animation per action."""
+    arm["ce_clips_spec_sha256"] = spec_sha256
+    # A skinned carrier mesh makes the exporter write a glTF skin (-> Skeleton3D in Godot), not loose nodes.
+    me = bpy.data.meshes.new(f"{arm.name}_carrier")
+    me.from_pydata([(0.0, 0.0, 0.0), (0.01, 0.0, 0.0), (0.0, 0.01, 0.0)], [], [(0, 1, 2)])
+    carrier = bpy.data.objects.new(me.name, me)
+    context.scene.collection.objects.link(carrier)
+    carrier.parent = arm
+    carrier.vertex_groups.new(name="root").add([0, 1, 2], 1.0, "REPLACE")
+    carrier.modifiers.new("Armature", "ARMATURE").object = arm
+    for o in context.view_layer.objects:
+        o.select_set(o is arm or o is carrier)
+    context.view_layer.objects.active = arm
+    kwargs = dict(filepath=str(filepath), export_format="GLB", use_selection=True, export_animations=True,
+                  export_extras=True, export_force_sampling=True, export_morph=False, export_skins=True)
+    props = bpy.ops.export_scene.gltf.get_rna_type().properties
+    if "export_animation_mode" in props:
+        kwargs["export_animation_mode"] = "ACTIONS"
+    elif "export_nla_strips" in props:
+        kwargs["export_nla_strips"] = False
+    bpy.ops.export_scene.gltf(**kwargs)
+    bpy.data.objects.remove(carrier, do_unlink=True)
+
+
 def _on_hand_change(self, context) -> None:
     if self.get("_ce_batch"):
         return

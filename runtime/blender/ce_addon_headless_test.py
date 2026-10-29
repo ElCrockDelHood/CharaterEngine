@@ -1095,6 +1095,45 @@ def main(reset: bool = True) -> int:
     if not skipped(args, "mocap"):
         check("game rig: glTF retarget (Quaternius UAL map) drives the game rig", _game_retarget_ue)
 
+    def _souls_clips_bake():
+        """STYLE-SOULS-001 step 4: bake the placeholder clips; Blender poses equal the Python FK at every key."""
+        import math as _m
+
+        from character_engine.domain.animation.souls_clips import PROBE_BONES, SOULS_CLIPS, key_rotations
+        from character_engine.domain.rigging.hand_poses import apply_hand_pose
+        from character_engine.export.gltf_game import game_skeleton_points
+
+        gr = addon["mod"].game_rig
+        if bpy.context.object and bpy.context.object.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode="OBJECT")
+        arm = gr.build_game_armature_from_points(ctx, game_skeleton_points(pose="tpose"), "CE_GAME_CLIPS_TEST")
+        made = gr.bake_souls_clips(ctx, arm)
+        rest = gr.rest_points(arm)
+        worst = 0.0
+        for clip in SOULS_CLIPS.values():
+            act = bpy.data.actions[clip.clip_id]
+            assert int(act.frame_range[1]) == clip.frames, (clip.clip_id, act.frame_range[:])
+            assert {fc.data_path.split('"')[1] for fc in gr.action_fcurves(act)} <= {b.name for b in arm.data.bones}
+            arm.animation_data.action = act
+            for frame, pose in clip.keys:
+                scene.frame_set(frame)
+                ctx.view_layer.update()
+                want = apply_hand_pose(rest, key_rotations(rest, pose))
+                for b in PROBE_BONES:
+                    pb = arm.pose.bones[b]
+                    got = (pb.tail - pb.head).normalized()
+                    w = [want[b][1][i] - want[b][0][i] for i in range(3)]
+                    n = _m.sqrt(sum(c * c for c in w))
+                    worst = max(worst, _m.degrees(_m.acos(max(-1.0, min(1.0, sum(got[i] * w[i] / n for i in range(3)))))))
+        arm.animation_data.action = None
+        scene.frame_set(1)
+        bpy.data.objects.remove(arm, do_unlink=True)
+        for cid in made:
+            bpy.data.actions.remove(bpy.data.actions[cid])
+        assert len(made) == len(SOULS_CLIPS) and worst < 0.1, worst
+        return f"{len(made)} clips baked on the 66-bone game armature, poses equal the Python FK (worst {worst:.4f} deg)"
+    check("souls clips: Blender bake equals the Python FK, lengths from the frame data", _souls_clips_bake)
+
     if args.save:
         def _save():
             args.save.parent.mkdir(parents=True, exist_ok=True)

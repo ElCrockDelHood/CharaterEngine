@@ -107,6 +107,10 @@ clips are authored and baked in Blender (owner rule).
 Playable arena: `res://souls_arena.tscn` (`CESoulsArena`, open and press F6) — W/S/A/D move, J light, K heavy,
 Space dodge, L guard (hold), Tab lock-on (always on in v1); Sentinel with the bo; HUD shows health, stamina, poise
 and state. Kept apart from the Shenmue arena (`ce_arena.gd`, also edited by the audio branch).
+Clips (STYLE-SOULS-001 step 4): `gameplay/ce_souls_animator.gd` loads `data/souls_clips.glb` (baked in Blender by
+`scripts/bake_souls_clips.py`), moves every rotation key onto the game GLB's rest frames and plays the clip of the
+fighter's state (moves: light_1..3 / heavy; Sentinel telegraph: windup). Lengths equal the Python frame data, so
+the state machine stays the truth. The loader must bake at 60 fps (`generate_scene(state, 60)`).
 
 Hardware benchmark (windowed, needs the GPU): `python scripts/godot_perf.py` → `builds/tests/godot_perf.json`,
 canonical vs game rig and face blend shapes; results on the GT 740M in `docs/audit/A12_GODOT_PERF_GT740M.md`.

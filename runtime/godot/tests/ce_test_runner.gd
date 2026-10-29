@@ -11,6 +11,7 @@
 ##   - CEShenmueCombat replays every reference fight identically to the Python simulation (incl. weapons)
 ##   - CESoulsCombat replays the 9 Souls-like reference scenarios identically to Python
 ##   - CESoulsArena builds, maps keys to scenario commands, and plays the Sentinel scenarios like Python
+##   - Souls clips (baked in Blender): names, lengths, game-rig tracks; retargeted poses equal Python; clip per state
 ##   - the D1 reaction library JSON (generated offline in Blender, schema 5) loads: body hits carry a wound, a reaction
 ##     and its playback (per-clip blend-in); parries carry the attacker recoil and no wound
 ##   - the D1 experiments JSON (exp001 contact threshold) has a threshold consistent with its measurements
@@ -458,6 +459,93 @@ class Runner extends Node:
 				return [same and markers == got["hits"].size(), "%d frames, %d hits, %d wound markers%s" % [
 						got["frames"], got["hits"].size(), markers, "" if same else "  diff: " + str(diff)]])
 			a2.queue_free()
+
+		# ---- souls clips (STYLE-SOULS-001 step 4: baked in Blender, played by state) ----
+		var ctable := CESoulsAnimator.load_table()
+		var csrc := CESoulsAnimator.load_source()
+		runner.check("souls clips: Blender-baked clips, lengths from the Python frame data, game-rig tracks only", func():
+			if csrc.is_empty() or ctable.is_empty():
+				return [false, "souls_clips.glb / .json missing (run scripts/bake_souls_clips.py)"]
+			var ap: AnimationPlayer = csrc[2]
+			var sk: Skeleton3D = csrc[1]
+			var names := ap.get_animation_list()
+			var ok: bool = names.size() == (ctable["clips"] as Dictionary).size() and sk.get_bone_count() == 66
+			var bad := []
+			for cid in ctable["clips"]:
+				var an: Animation = ap.get_animation(cid) if ap.has_animation(cid) else null
+				if an == null or absf(an.length * 60.0 - float(ctable["clips"][cid]["frames"])) > 0.01:
+					bad.append(cid)
+					continue
+				for tr in range(an.get_track_count()):
+					var bone := String(an.track_get_path(tr).get_concatenated_subnames())
+					if sk.find_bone(bone) < 0 or not [Animation.TYPE_ROTATION_3D, Animation.TYPE_POSITION_3D,
+							Animation.TYPE_SCALE_3D].has(an.track_get_type(tr)):
+						bad.append("%s:%s" % [cid, bone])
+			return [ok and bad.is_empty(), "%d clips %s, %d bones, problems %s" % [names.size(), names, sk.get_bone_count(), bad]])
+		if not csrc.is_empty():
+			(csrc[0] as Node).free()
+		var clipch := CECharacter.new()
+		clipch.glb_path = game_tpose
+		clipch.breathing_enabled = false
+		tree_root.add_child(clipch)
+		var anim := CESoulsAnimator.new()
+		tree_root.add_child(anim)
+		var setup_ok := anim.setup(clipch) == OK
+		var worst := 0.0
+		var worst_at := ""
+		var keys_checked := 0
+		if setup_ok:
+			var rest_dirs: Dictionary = ctable["rest_directions"]
+			for cid in ctable["clips"]:
+				for key in ctable["clips"][cid]["keys"]:
+					anim.player.play(CESoulsAnimator.LIBRARY + "/" + cid)
+					anim.player.seek(float(key["frame"]) / 60.0, true)
+					for b in key["directions"]:
+						var idx := clipch.skeleton.find_bone(b)
+						var rd: Array = rest_dirs[b]
+						var want_c: Array = key["directions"][b]
+						var g := clipch.skeleton.get_bone_global_pose(idx).basis * clipch.skeleton.get_bone_global_rest(idx).basis.inverse()
+						var got: Vector3 = (g * Vector3(rd[0], rd[2], -rd[1])).normalized()
+						var ang := rad_to_deg(got.angle_to(Vector3(want_c[0], want_c[2], -want_c[1])))
+						if ang > worst:
+							worst = ang
+							worst_at = "%s@%d %s" % [cid, key["frame"], b]
+					keys_checked += 1
+		runner.check("souls clips on the game GLB: bone directions at every key equal Python", func():
+			return [setup_ok and keys_checked > 30 and worst < 0.5,
+					"%d keys x %d probe bones, worst %.4f deg (%s)" % [keys_checked, (ctable.get("probe_bones", []) as Array).size(), worst, worst_at]])
+		clipch.queue_free()
+		anim.queue_free()
+		var parena := CESoulsArena.build(data, game_tpose)
+		parena.autostep = false
+		parena.show_hud = false
+		parena.player_weapon = "unarmed"
+		parena.autoplay_script = {"0": {}}
+		tree_root.add_child(parena)
+		var heavy_seen := false
+		for _i in range(600):
+			parena.step_once()
+			var so: CESoulsCombat.Fighter = parena.combat.fighters["opponent"]
+			if so.state_name() == "active" and so.current_move == "staff_heavy":
+				heavy_seen = heavy_seen or (parena.animators["opponent"] as CESoulsAnimator).current == "heavy"
+		runner.check("souls arena plays the clip of each combat state", func():
+			var po: CESoulsAnimator = parena.animators.get("opponent")
+			var pp: CESoulsAnimator = parena.animators.get("player")
+			if po == null or pp == null:
+				return [false, "animators missing"]
+			var opp := {}
+			for e in po.played:
+				opp[e[1]] = true
+			var ply := {}
+			for e in pp.played:
+				ply[e[1]] = true
+			var ok := heavy_seen
+			for c in ["walk", "windup", "light_1", "light_2", "heavy", "idle"]:
+				ok = ok and opp.has(c)
+			for c in ["hit", "stagger", "idle"]:
+				ok = ok and ply.has(c)
+			return [ok, "sentinel %s; player %s" % [opp.keys(), ply.keys()]])
+		parena.queue_free()
 
 		# ---- arena ---------------------------------------------------------------
 		CEFighterController.ensure_input_map()
