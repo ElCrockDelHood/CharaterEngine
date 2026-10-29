@@ -59,19 +59,23 @@ The legacy mapping (`blunt_impact_to_wound`: `E / 400 J` × depth to bone) stays
 (118 J) because 400 J is its single reference constant; it never reaches the rib layer in this range.
 
 Reproducibility: two simulation runs gave identical result `sha256` (`e75bfcc7…` unvested, `acab4965…` vested).
-Renders at 1920×1080, Cycles 128 samples: EEVEE 10.2 s; Cycles 281.6 s (comparison), 332.7 s and 515.8 s (close-ups);
-Blender total 1148.8 s. A first pass (EEVEE 9.9 s, Cycles 243.5 / 284.6 / 293.5 s, total 836 s) showed the coat
-z-fighting with skin and vest, and was re-rendered after presentation-only changes in `ce_material_sample.py`: the
-cloth vertices are clamped radially just outside the outermost solid shell (the domain result and its hash are
-untouched), bone / tendon / viscera get presentation-only base colours, the comparison camera is closer and the
-close-ups use a 75 mm lens.
+Renders at 1920×1080, Cycles 128 samples (final pass): EEVEE 21.1 s; Cycles 294.6 s (comparison), 329.5 s and
+389.2 s (close-ups); Blender total 1038.6 s. Earlier passes, kept for the record: the first (EEVEE 9.9 s, Cycles
+243.5 / 284.6 / 293.5 s, total 836 s) showed the coat z-fighting with skin and vest; the following two fixed the
+cloth and framing but still looked washed out. Presentation-only changes in `ce_material_sample.py` (the domain
+result and its hash are untouched): the cloth vertices are clamped radially just outside the outermost solid shell;
+bone / tendon / viscera get presentation base and subsurface colours; the steel impactor is rougher (0.45) so it
+stops mirroring the coat; the comparison camera is closer and the close-ups use a 75 mm lens; scene exposure is
+−1.5 EV, because at 0 EV Filmic washed every layer to pastel (the coat's dark-navy wool rendered lavender, the
+padded vest's brown rendered cream — checked in the saved `.blend`, where the material values are correct).
 
 What the images show: the cutaway reads cavity, rib shell, tendon, muscle, fat, skin, (vest), coat from the inside
-out. Unvested: the impactor tip sits inside the cavity, matching "through". Vested: the impactor ends at the vest
-surface and does not appear in the cutaway, matching "ribs hold". Still wrong: the 48.7 mm crush is **not drawn**
-(layers stay undeformed, the rod simply sinks into them); the coat forms a blue sleeve around the rod where it
-enters; the presentation colours barely show in Blender 3.6 (subsurface colour dominates), so rib shell and tendon
-are both near-white and the cavity still looks pink.
+out; the coat is a clean blue sheet and muscle / cavity read red. Unvested: the impactor tip sits inside the cavity,
+matching "through". Vested: the impactor ends at the vest surface and does not appear in the cutaway, matching
+"ribs hold". Still wrong: the 48.7 mm crush is **not drawn** (layers stay undeformed and the rod is placed where the
+cloth XPBD stopped it, about 20 mm under the coat surface, not at the blunt model's affected depth); rib shell and
+tendon are still both near-white and the vest still reads cream; the cavity is only slightly darker than muscle; the
+rod still picks up a blue cast next to the coat, and EEVEE shows a dark, smeared rod where it meets the cloth.
 
 ## 4. What is tuned, not measured (read before quoting any number)
 
@@ -103,5 +107,5 @@ Contact velocity projection removes the separating velocity that position projec
 4. Steel plate / lamellar armour under blunt load.
 5. Godot port of the layer contact (GDScript first) once the interface with the wound thread is agreed.
 6. Draw the blunt crush (dent the layers down to the affected depth) in the Blender scene.
-7. Presentation: make the bone / tendon / viscera colours take effect under Blender 3.x subsurface, and stop the
-   coat sleeving around the impactor rod.
+7. Presentation: bone / tendon / vest colours still wash out (look at the subsurface weights, not only the
+   colours); place the rod at the blunt model's affected depth; remove the rod's blue cast and the EEVEE smear.

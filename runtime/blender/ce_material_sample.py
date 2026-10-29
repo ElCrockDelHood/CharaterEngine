@@ -382,7 +382,12 @@ def main() -> int:
         for kind, colour in (("bone", (0.78, 0.70, 0.52, 1.0)), ("tendon", (0.93, 0.90, 0.84, 1.0)),
                              ("viscera", (0.30, 0.04, 0.05, 1.0))):
             if kind in mats:
-                _set(mats[kind].node_tree.nodes["Principled BSDF"], ["Base Color"], colour)
+                bsdf = mats[kind].node_tree.nodes["Principled BSDF"]
+                _set(bsdf, ["Base Color"], colour)
+                _set(bsdf, ["Subsurface Color"], colour)   # 3.x: the subsurface colour dominates the base colour
+        if "armor_steel" in mats:                  # presentation only: a mirror rod reflects the blue coat as a sleeve
+            _set(mats["armor_steel"].node_tree.nodes["Principled BSDF"], ["Roughness"], 0.45)
+        scene.view_settings.exposure = -1.5        # presentation only: at 0 EV Filmic washes every layer to pastel
     centres = {}
     for r, side in zip(variants, (-1.0, 1.0)):
         _, centres[r["variant"]] = build_variant(r, mats, spec, side)
