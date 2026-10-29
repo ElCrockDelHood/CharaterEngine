@@ -41,7 +41,7 @@ quedaron demasiado cerradas; se alejaron (lente de 50 mm) y se rerenderizaron.
 
 ## 3. Muestra 2 — tórax, abrigo de lana, chaleco acolchado opcional, impactor contundente (48,6 J)
 
-Por ahora solo simulación (este documento se actualiza cuando existan los renders). Impactor: 1,2 kg (PLACEHOLDER) a
+Corrida en la PC del dueño el 2026-10-29 (Blender 3.6.23, Cycles CUDA en una GeForce GT 740M, semilla 0). Impactor: 1,2 kg (PLACEHOLDER) a
 9 m/s (ESTIMATE), radio de contacto de punta 30 mm (ESTIMATE). Capacidad de cada capa con esa área de contacto:
 
 | Capa | Capacidad (J) | Sin chaleco | Con chaleco |
@@ -61,6 +61,23 @@ Barrido de energía (1,2 kg, velocidad de 2 a 14 m/s): las costillas se rompen p
 chaleco** y a **10 m/s (60 J) con chaleco**. El mapeo viejo (`blunt_impact_to_wound`: `E / 400 J` × profundidad hasta
 el hueso) se queda en grasa / severidad 1 hasta 14 m/s (118 J), porque 400 J es su única constante de referencia;
 en este rango nunca llega a la capa de costillas.
+
+Reproducibilidad: dos corridas de la simulación dieron el mismo `sha256` del resultado (`e75bfcc7…` sin chaleco,
+`acab4965…` con chaleco). Renders a 1920×1080, Cycles 128 samples: EEVEE 10,2 s; Cycles 281,6 s (comparación),
+332,7 s y 515,8 s (primeros planos); total de Blender 1148,8 s. Una primera pasada (EEVEE 9,9 s, Cycles 243,5 /
+284,6 / 293,5 s, total 836 s) mostraba el abrigo parpadeando contra la piel y el chaleco (z-fighting), y se
+rerenderizó después de cambios solo de presentación en `ce_material_sample.py`: los vértices de la tela se empujan
+radialmente justo por fuera de la capa sólida más externa (el resultado del dominio y su hash no cambian), hueso /
+tendón / vísceras tienen colores base solo de presentación, la cámara de comparación está más cerca y los primeros
+planos usan lente de 75 mm.
+
+Qué muestran las imágenes: el corte se lee, de adentro hacia afuera, cavidad, cáscara de costillas, tendón, músculo,
+grasa, piel, (chaleco), abrigo. Sin chaleco: la punta del impactor queda dentro de la cavidad, coherente con
+"atraviesa". Con chaleco: el impactor termina en la superficie del chaleco y no aparece en el corte, coherente con
+"las costillas aguantan". Sigue mal: el aplastamiento de 48,7 mm **no se dibuja** (las capas no se deforman, la
+barra simplemente se hunde en ellas); el abrigo forma una manga azul alrededor de la barra donde entra; los colores
+de presentación casi no se notan en Blender 3.6 (domina el color de subsurface), así que la cáscara de costillas y
+el tendón siguen casi blancos y la cavidad sigue viéndose rosada.
 
 ## 4. Qué es ajuste y no medición (leer antes de citar cualquier número)
 
@@ -99,3 +116,6 @@ quita la velocidad de separación que la proyección de posición agrega de otro
 3. Una forma real de tórax (el bloque esfera) antes de juzgar siluetas.
 4. Placa de acero / armadura laminar bajo carga contundente.
 5. Port a Godot del contacto por capas (primero GDScript) cuando se acuerde la interfaz con el hilo de heridas.
+6. Dibujar el aplastamiento contundente (abollar las capas hasta la profundidad afectada) en la escena de Blender.
+7. Presentación: que los colores de hueso / tendón / vísceras se apliquen con el subsurface de Blender 3.x, y que el
+   abrigo no forme una manga alrededor de la barra del impactor.

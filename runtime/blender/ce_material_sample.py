@@ -125,9 +125,28 @@ def shell_sector(name: str, a: Vector, b: Vector, r_in: float, r_out: float, t0:
     return obj
 
 
-def sleeve_object(name: str, verts, faces, thickness: float, axis_a: Vector, axis_b: Vector, shift: Vector):
-    """Sleeve mesh from the XPBD positions; faces inside the cutaway wedge are dropped so the layers show."""
+def sleeve_object(name: str, verts, faces, thickness: float, axis_a: Vector, axis_b: Vector, shift: Vector,
+                  floor_radius=None):
+    """Sleeve mesh from the XPBD positions; faces inside the cutaway wedge are dropped so the layers show.
+
+    ``floor_radius(t)`` (t = 0..1 along a→b), when given, pushes vertices radially out to just above the outermost
+    solid shell so the solidified cloth does not z-fight with skin / vest. Presentation only: the domain result
+    and its hash are untouched.
+    """
     u, e1, e2 = _frame(axis_a, axis_b)
+    if floor_radius is not None:
+        span = axis_b - axis_a
+        length2 = max(span.length_squared, 1e-12)
+        pushed = []
+        for v in verts:
+            rel = Vector(v) - axis_a
+            t = min(1.0, max(0.0, rel.dot(span) / length2))
+            radial = rel - u * rel.dot(u)
+            lo = floor_radius(t) + thickness * 0.5 + 0.0005
+            if 1e-9 < radial.length < lo:
+                v = tuple(Vector(v) + radial.normalized() * (lo - radial.length))
+            pushed.append(v)
+        verts = pushed
     keep = []
     for f in faces:
         c = sum((Vector(verts[i]) for i in f), Vector()) / len(f)
@@ -201,9 +220,15 @@ def build_variant(r: dict, mats: dict, spec: dict, side: float):
         objs.append(o)
     last = r["frames"][-1]
     cloth = spec["cloth"]
+    solids = [sh for sh in r["shells"] if sh["material"] not in ("air", "cloth_wool")]
+
+    def floor_radius(t: float) -> float:
+        return max((sh["r_outer_m"] for sh in solids
+                    if sh["z_range"] is None or sh["z_range"][0] <= t <= sh["z_range"][1]), default=0.0)
+
     sl = sleeve_object(f"{r['variant']}_{cloth}", last[cloth], r[cloth]["faces"],
                        r["config"][spec["thickness"]], Vector(r["placement"]["a"]), Vector(r["placement"]["b"]),
-                       shift)
+                       shift, floor_radius)
     sl.data.materials.append(mats["cloth_wool"])
     objs.append(sl)
     if "impactor" in last:
@@ -353,6 +378,11 @@ def main() -> int:
     variants = [json.loads((a.input / f"{spec['prefix']}_{v}.json").read_text(encoding="utf-8")) for v in names]
     mats = {row["kind"]: principled_from_openpbr(row["kind"], row["optical_openpbr"])
             for row in variants[0]["materials"] if row["optical_openpbr"]}
+    if a.sample == "thorax":                       # presentation only: rib shell, tendon and cavity read apart
+        for kind, colour in (("bone", (0.78, 0.70, 0.52, 1.0)), ("tendon", (0.93, 0.90, 0.84, 1.0)),
+                             ("viscera", (0.30, 0.04, 0.05, 1.0))):
+            if kind in mats:
+                _set(mats[kind].node_tree.nodes["Principled BSDF"], ["Base Color"], colour)
     centres = {}
     for r, side in zip(variants, (-1.0, 1.0)):
         _, centres[r["variant"]] = build_variant(r, mats, spec, side)
@@ -360,7 +390,8 @@ def main() -> int:
     r_max = max(sh["r_outer_m"] for r in variants for sh in r["shells"])
     k = max(1.0, r_max / 0.06)                       # forearm sample (outer radius 0.0515 m) keeps k = 1
     setup_world_and_lights(target, k)
-    wide = camera("cam_comparison", target + Vector((0.62, -0.18, 0.2)) * k, target, 50.0)  # +X: wedges face it
+    kc = k * 0.62 if a.sample == "thorax" else k     # thorax: tighter comparison framing
+    wide = camera("cam_comparison", target + Vector((0.62, -0.18, 0.2)) * kc, target, 50.0)  # +X: wedges face it
     w, h = (int(x) for x in a.resolution.lower().split("x"))
     scene.render.resolution_x, scene.render.resolution_y = w, h
     scene.render.image_settings.file_format = "PNG"
@@ -374,7 +405,8 @@ def main() -> int:
         print(f"[material] {json.dumps(report['renders'][-1])}", flush=True)
     if "cycles" in engines:
         for v, c in centres.items():
-            close = camera(f"cam_{v}", c + Vector((0.35, -0.26, 0.13)) * k, c, 50.0)
+            close = camera(f"cam_{v}", c + Vector((0.35, -0.26, 0.13)) * k, c,
+                           75.0 if a.sample == "thorax" else 50.0)
             scene.camera = close
             report["renders"].append(render_still(scene, a.out / f"closeup_{v}_cycles.png", "cycles", a.samples,
                                                   device))
