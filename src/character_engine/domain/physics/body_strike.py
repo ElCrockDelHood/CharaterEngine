@@ -27,6 +27,7 @@ from ..rigging.block_dummy import BlockPlacement, block_placements
 from ..tissue import BodyRegion
 from ..trauma import WoundAssessment, assess_wound, blade_contact_to_wound, blunt_impact_to_wound
 from .blunt import BluntResult, Impactor, blunt_through, blunt_wound
+from .collision import CollisionSplit, split, target_mass_for
 from .cut import Blade, CutResult, cut_through
 
 Vec = Tuple[float, float, float]
@@ -50,6 +51,7 @@ class StrikeResult:
     model: str                               # "cut" or "blunt"
     detail: Union[CutResult, BluntResult]
     assessment: Optional[WoundAssessment]
+    collision: Optional[CollisionSplit] = None   # set when the body has target effective masses (A14)
 
 
 class LayeredBody:
@@ -57,11 +59,17 @@ class LayeredBody:
 
     def __init__(self, points: Mapping[str, Tuple[Vec, Vec]], stature_m: float = 1.80,
                  garments: Optional[Mapping[str, Sequence[OuterLayer]]] = None,
-                 rigid_shell_energy_j: Optional[Mapping[BodyRegion, float]] = None) -> None:
+                 rigid_shell_energy_j: Optional[Mapping[BodyRegion, float]] = None,
+                 target_mass_kg: Optional[Mapping[BodyRegion, float]] = None) -> None:
         """``rigid_shell_energy_j``: optional per-region fracture energy of the rigid shell (rib cage, skull, long
-        bone) for blunt hits; default None = the single catalog value (sample 2 behaviour)."""
+        bone) for blunt hits; default None = the single catalog value (sample 2 behaviour).
+
+        ``target_mass_kg``: optional per-region target effective mass (``collision.regional_target_mass_kg``). When
+        given, the layers only receive the deformation energy ``½ μ v²`` and the rest is reported as momentum
+        (``StrikeResult.collision``); default None = immovable target, ``½ m v²`` (previous behaviour)."""
         garments = garments or {}
         self.rigid_shell_energy_j = dict(rigid_shell_energy_j or {})
+        self.target_mass_kg = dict(target_mass_kg) if target_mass_kg is not None else None
         self.placements: Dict[str, BlockPlacement] = {p.name: p for p in block_placements(points, stature_m)}
         self.capsules: Dict[str, LayeredCapsule] = {
             name: layered_capsule(p, tuple(garments.get(name, ()))) for name, p in self.placements.items()}
@@ -105,8 +113,14 @@ class LayeredBody:
         energy = weapon.kinetic_energy_j
         scale = cos * cos
         bone = lc.placement.weight_bone
+        speed = weapon.speed_m_s * cos
+        coll = None
+        if self.target_mass_kg is not None:
+            coll = split(weapon.effective_mass_kg, speed, target_mass_for(lc.placement.region, self.target_mass_kg))
+            speed = coll.deformation_speed_m_s
+            scale = coll.deformation_j / energy if energy > 0.0 else 0.0
         if isinstance(weapon, Blade):
-            eff = Blade(weapon.effective_mass_kg, weapon.speed_m_s * cos, weapon.edge_width_m)
+            eff = Blade(weapon.effective_mass_kg, speed, weapon.edge_width_m)
             cut = cut_through(lc, eff, t_axial=t)
             if cut.skin_depth_m > 0.0:
                 wound = blade_contact_to_wound(bone, cut.skin_depth_m, weapon.edge_width_m,
@@ -118,14 +132,14 @@ class LayeredBody:
                 wound = None
             return StrikeResult(name, bone, tuple(round(c, 6) for c in point), round(t, 4), round(cos, 4),
                                 round(energy, 4), round(energy * scale, 4), cut.stopped_in, cut.skin_depth_m, "cut",
-                                cut, assess_wound(wound, lc.profile) if wound else None)
-        eff_i = Impactor(weapon.effective_mass_kg, weapon.speed_m_s * cos, weapon.contact_radius_m)
+                                cut, assess_wound(wound, lc.profile) if wound else None, coll)
+        eff_i = Impactor(weapon.effective_mass_kg, speed, weapon.contact_radius_m)
         res = blunt_through(lc, eff_i, t_axial=t,
                             rigid_shell_energy_j=self.rigid_shell_energy_j.get(lc.placement.region))
         wound = blunt_wound(bone, eff_i, res)
         return StrikeResult(name, bone, tuple(round(c, 6) for c in point), round(t, 4), round(cos, 4),
                             round(energy, 4), round(energy * scale, 4), res.stopped_in, res.affected_depth_m, "blunt",
-                            res, assess_wound(wound, lc.profile))
+                            res, assess_wound(wound, lc.profile), coll)
 
     def central_strike(self, segment: str, weapon: Weapon, from_dir: Vec = (0.0, -1.0, 0.0),
                        t_axial: float = 0.5) -> Optional[StrikeResult]:
@@ -150,6 +164,10 @@ def sweep(body: LayeredBody, weapon: Weapon) -> List[Dict[str, object]]:
                      "stopped_in": r.stopped_in, "depth_mm": round(r.depth_below_skin_m * 1000, 1),
                      "severity": a.severity.name if a else None,
                      "deepest": a.deepest_layer.value if a else None, "fracture": a.fracture if a else None})
+        if r.collision is not None:              # only with target masses, so the default rows keep their hash
+            rows[-1].update({"deformation_j": round(r.collision.deformation_j, 2),
+                             "momentum_j": round(r.collision.momentum_j, 2),
+                             "target_speed_m_s": round(r.collision.target_speed_m_s, 3)})
     return rows
 
 

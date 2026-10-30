@@ -49,7 +49,7 @@ the physically consistent choice.
   drops fast toward the tip. No sourced value for swords was found. A blade's effective mass is below its mass
   unless the impact is near the centre of mass or the hand. The arm adds to it only through the wrist's stiffness.
 
-## 4. What this means for the engine (proposal, not applied)
+## 4. What this means for the engine (proposal; item 1 implemented opt-in, see §5)
 
 1. **Energy into the layers should use the reduced mass, not ½ m v².** In a perfectly inelastic contact, the
    energy available to deform tissue is `E_def = ½ μ v²`, with `μ = m_s m_t / (m_s + m_t)` (DERIVED). Today
@@ -75,14 +75,47 @@ the physically consistent choice.
 4. **Contact time** (5–120 ms reported) is what separates peak force from impulse. Keep it as an output, not an
    input, until a compliance model exists.
 
-## 5. Open items
+## 5. Implemented (Decision 58, opt-in)
+
+`domain/physics/collision.py`: `reduced_mass`, `split` (inelastic: deformation / momentum / common speed, energy and
+momentum conserved), `regional_target_mass_kg(body_mass, bracing)` = body mass × segment fraction (ESTIMATE, de Leva
+1996 recalled). `LayeredBody(..., target_mass_kg=regional_target_mass_kg())` feeds the unchanged `cut.py` /
+`blunt.py` with the deformation energy and reports `StrikeResult.collision`. Default off: no existing hash changes.
+
+What it does to the sample weapons (relaxed segments, 75 kg body, frontal centre): the sabre keeps 95 % of its 30 J on
+the trunk and thigh, but only 43 % on a free hand (0.46 kg), because the hand flies away instead of being cut. A
+2.9 kg punch keeps 64 % on the head and 80 % on the thorax.
+
+Gameplay table with calibrated shells plus reduced mass (`python scripts/gameplay_vs_layered.py --calibrated
+--reduced-mass`; striker masses in the script, ESTIMATE):
+
+| Move | Energy (J) | Legacy severity | Layered severity | Layered fractures (of 21) |
+|---|---|---|---|---|
+| crescent_kick | 220.0 | 1x1, 2x20 | 2x20, 4x1 | 5 |
+| elbow_assault | 170.0 | 1x5, 2x16 | 2x16, 4x1, 5x4 | 5 |
+| front_kick | 150.0 | 1x13, 2x8 | 2x20, 4x1 | 5 |
+| hook | 130.0 | 1x13, 2x8 | 2x20, 4x1 | 5 |
+| jab | 60.0 | 1x21 | 2x20, 4x1 | 5 |
+| shoulder_throw | 260.0 | 2x21 | 1x19, 2x2 | 0 |
+| straight | 90.0 | 1x21 | 2x20, 4x1 | 5 |
+| sweep | 140.0 | 1x13, 2x8 | 2x20, 4x1 | 5 |
+
+168 pairs: layered higher in 87, lower in 19.
+
+Reading: with a heavy striker (a whole leg, ≈ 15 kg) against light segments, most of a kick's energy becomes
+knockback, so kicks now read like jabs in tissue damage, and the shoulder throw (whole body) drops to minor. That is
+physically consistent but exposes two gaps: the move energies in the table were never decomposed into mass × speed,
+and the damage a kick or throw does is mostly momentum (knockdown, head acceleration), which no model consumes yet.
+The 5 fractures left on every move are hands and feet (20–30 J calibrated shells).
+
+## 6. Open items
 
 1. Read the full texts (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) and register them in `source_registry`
    with exact tables. Automated access was refused, so this needs PDFs from the owner.
 2. A sourced kick dataset (front / roundhouse / side) with effective mass in kg.
 3. Sword and stick effective mass from mass, inertia and impact point (needs real weapon measurements).
-4. Decide (owner): adopt reduced-mass energy in `blunt.py` / `cut.py` (changes every result hash) and add the
-   regional `m_t` table. This needs a Decision Log entry.
+4. Make the reduced-mass energy the default (changes every result hash) once the fractions and striker masses are
+   verified; feed `momentum_j` / `target_speed_m_s` to a knockdown / concussion model.
 
 Sources: [Walilko et al. 2005 (Semantic Scholar)](https://www.semanticscholar.org/paper/Biomechanics-of-the-head-for-Olympic-boxer-punches-Walilko-Viano/edbd929ed7812c983b4780fc106ecdf716b58a30) ·
 [Lenetsky et al. 2015 (ScienceDirect)](https://www.sciencedirect.com/science/article/abs/pii/S0167945714002140) ·

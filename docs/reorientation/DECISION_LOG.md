@@ -1027,15 +1027,39 @@ Tests: `tests/unit/test_osteometry.py`; headless check *batch export: tissues mo
 
 ---
 
+## 58. TARGET EFFECTIVE MASS: TISSUE GETS THE REDUCED-MASS ENERGY, THE REST IS MOMENTUM (OPT-IN)
+
+**Finding** (A14, 2026-10-29): the layer models (`cut.py`, `blunt.py`) spend the striker's whole `½ m_s v²` on
+tissue, which assumes an immovable target. In an inelastic contact with a free segment of effective mass `m_t`, only
+`½ μ v²` (`μ = m_s m_t / (m_s + m_t)`) deforms tissue; the rest is motion of striker + segment (knockback, head
+acceleration). The literature effective mass of a punch splits by method (≈ 2–7 kg impulse-based vs 15–31 kg
+force/acceleration); the impulse family is the one consistent with momentum transfer.
+
+**Decision** (owner, 2026-10-30 "implementa todo lo que creas pertinente"): new `domain/physics/collision.py`
+(reduced mass, inelastic split, regional target mass = body mass × segment fraction × bracing). `LayeredBody` takes
+an optional `target_mass_kg`; with it, the unchanged layer models receive the deformation energy and
+`StrikeResult.collision` reports deformation / momentum / segment speed. **Default off**: every existing result and
+hash (samples 1 and 2, A10 tables) is unchanged. `scripts/gameplay_vs_layered.py --reduced-mass` compares the
+gameplay table with it. Provenance: physics DERIVED; segment fractions ESTIMATE (de Leva 1996, recalled, not
+verified in the repository); striker masses in the comparison script ESTIMATE (punch 2.9 kg from secondary
+summaries of Walilko et al. 2005; kicks and throw from segment fractions, no sourced kick value). Evidence:
+`docs/audit/A14_EFFECTIVE_MASS.md`. Tests: `tests/unit/test_collision.py`.
+Open: make it the default (changes every hash), feed `momentum_j` / `target_speed_m_s` to a knockdown or concussion
+model, and verify the fractions and the striker masses against full texts.
+
+**Date**: 2026-10-30 · **Status**: FINAL (opt-in; values reversible)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 56
-**Final Decisions**: 52 (+4 deferred)
+**Total Decisions**: 58
+**Final Decisions**: 54 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
-**Reversible Decisions**: 4 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values)
+**Reversible Decisions**: 5 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values)
 **Critical Decisions**: 6 (Source of Truth, Architecture Direction, Backend Priority, Provenance System, Mesh Generation, Data Invention Rule)
 
 ### 14.2 Decision Impact

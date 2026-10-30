@@ -51,7 +51,7 @@ cociente sale grande. Para simular importa la cantidad de movimiento realmente t
   efectiva de una hoja es menor que su masa salvo que el impacto sea cerca del centro de masa o de la mano. El brazo
   suma solo a través de la rigidez de la muñeca.
 
-## 4. Qué significa para el motor (propuesta, no aplicada)
+## 4. Qué significa para el motor (propuesta; el punto 1 está implementado como opción, ver §5)
 
 1. **La energía que entra en las capas debería usar la masa reducida, no ½ m v².** En un contacto perfectamente
    inelástico, la energía disponible para deformar tejido es `E_def = ½ μ v²`, con `μ = m_s m_t / (m_s + m_t)`
@@ -78,14 +78,50 @@ cociente sale grande. Para simular importa la cantidad de movimiento realmente t
 4. **Tiempo de contacto** (se reportan 5–120 ms): es lo que separa fuerza pico de impulso. Conviene dejarlo como
    salida, no como entrada, hasta que exista un modelo de compliance.
 
-## 5. Pendientes
+## 5. Implementado (Decisión 58, opcional)
+
+`domain/physics/collision.py`: `reduced_mass`, `split` (inelástico: deformación / cantidad de movimiento / velocidad
+común, conserva energía y cantidad de movimiento), `regional_target_mass_kg(masa_corporal, bracing)` = masa
+corporal × fracción del segmento (ESTIMATE, de Leva 1996 de memoria). `LayeredBody(...,
+target_mass_kg=regional_target_mass_kg())` le pasa a `cut.py` / `blunt.py` (sin cambios) la energía de deformación y
+reporta `StrikeResult.collision`. Apagado por defecto: ningún hash existente cambia.
+
+Qué les hace a las armas de las muestras (segmentos relajados, cuerpo de 75 kg, golpe frontal al centro): el sable
+conserva el 95 % de sus 30 J en tronco y muslo, pero solo el 43 % en una mano libre (0,46 kg), porque la mano sale
+despedida en vez de cortarse. Una piña de 2,9 kg conserva el 64 % en la cabeza y el 80 % en el tórax.
+
+Tabla de gameplay con cáscaras calibradas más masa reducida (`python scripts/gameplay_vs_layered.py --calibrated
+--reduced-mass`; masas del atacante en el script, ESTIMATE):
+
+| Move | Energy (J) | Legacy severity | Layered severity | Layered fractures (of 21) |
+|---|---|---|---|---|
+| crescent_kick | 220.0 | 1x1, 2x20 | 2x20, 4x1 | 5 |
+| elbow_assault | 170.0 | 1x5, 2x16 | 2x16, 4x1, 5x4 | 5 |
+| front_kick | 150.0 | 1x13, 2x8 | 2x20, 4x1 | 5 |
+| hook | 130.0 | 1x13, 2x8 | 2x20, 4x1 | 5 |
+| jab | 60.0 | 1x21 | 2x20, 4x1 | 5 |
+| shoulder_throw | 260.0 | 2x21 | 1x19, 2x2 | 0 |
+| straight | 90.0 | 1x21 | 2x20, 4x1 | 5 |
+| sweep | 140.0 | 1x13, 2x8 | 2x20, 4x1 | 5 |
+
+168 pairs: layered higher in 87, lower in 19.
+
+Lectura: con un atacante pesado (una pierna entera, ≈ 15 kg) contra segmentos livianos, casi toda la energía de una
+patada pasa a empuje, así que en daño de tejido las patadas ahora se leen como jabs, y la proyección de hombro (cuerpo
+entero) baja a leve. Es físicamente coherente, pero deja ver dos huecos: las energías de los movimientos de la tabla
+nunca se descompusieron en masa × velocidad, y el daño de una patada o una proyección es sobre todo cantidad de
+movimiento (derribo, aceleración de la cabeza), que todavía ningún modelo consume. Las 5 fracturas que quedan en
+todos los movimientos son manos y pies (cáscaras calibradas de 20–30 J).
+
+## 6. Pendientes
 
 1. Leer los textos completos (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) y registrarlos en
    `source_registry` con las tablas exactas. El acceso automatizado fue rechazado, así que hacen falta los PDF que
    pueda conseguir el dueño.
 2. Un conjunto de datos de patadas con fuente (frontal / circular / lateral) con masa efectiva en kg.
 3. Masa efectiva de espada y palo a partir de masa, inercia y punto de impacto (requiere mediciones de armas reales).
-4. Decisión del dueño: adoptar la energía por masa reducida en `blunt.py` / `cut.py` (cambia todos los hashes de
-   resultados) y sumar la tabla regional de `m_t`. Requiere una entrada en el Decision Log.
+4. Hacer que la energía por masa reducida sea la opción por defecto (cambia todos los hashes de resultados) cuando
+   se verifiquen las fracciones y las masas del atacante; pasar `momentum_j` / `target_speed_m_s` a un modelo de
+   derribo / conmoción.
 
 Fuentes: las mismas que la versión en inglés (`A14_EFFECTIVE_MASS.md`, final del documento).
