@@ -41,9 +41,12 @@ DEFAULT_OUTPUT_DIR = "builds/exports/batch"
 # Stature bounds of the addon's Body panel (properties.py); outside them the stature retarget is untested.
 STATURE_RANGE_M = (0.4, 2.6)
 ANIMATION_SUFFIXES = (".bvh", ".fbx", ".glb", ".gltf")   # same list as build.ANIMATION_SUFFIXES
-# What the exported GLB contains besides the armature. Block dummy radii are ESTIMATE (rigging/block_dummy.py);
-# tissue layers are not offered yet: they mix PROVEN lengths with ESTIMATE/PLACEHOLDER shapes in one mesh set.
-MESH_MODES = {"block_dummy": ProvenanceState.ESTIMATE, "none": None}
+# What the exported GLB contains besides the armature. Block dummy radii are ESTIMATE (rigging/block_dummy.py).
+# "tissues" (bones, tendons, muscles, skin) has no single state: each layer's provenance is read from the tags the
+# addon builders put on the objects and reported per layer and per aspect (see ``layer_provenance``).
+MESH_MODES = {"block_dummy": ProvenanceState.ESTIMATE, "tissues": None, "none": None}
+PER_LAYER = "per_layer"
+_STATES = {s.value for s in ProvenanceState}
 DEFAULT_MESH = "block_dummy"
 # Each run writes manifest_<spec>_<UTC>.json; this name always holds a copy of the newest one (the pre-run-id file).
 LATEST_MANIFEST = "manifest.json"
@@ -239,7 +242,7 @@ def provenance_record(job: BatchJob, *, blender_version: str, addon_version: str
         "provenance": {
             "stature": (ProvenanceState.USER_INPUT if job.stature_overridden else t.stature_provenance).value,
             "proportions": t.proportion_provenance.value,
-            "mesh": mesh_prov.value if mesh_prov else None,
+            "mesh": PER_LAYER if job.mesh == "tissues" else (mesh_prov.value if mesh_prov else None),
         },
         "blender_version": blender_version,
         "addon_version": addon_version,
@@ -249,6 +252,30 @@ def provenance_record(job: BatchJob, *, blender_version: str, addon_version: str
     if extra:
         rec.update(extra)
     return rec
+
+
+def layer_provenance(tag: str) -> Dict[str, str]:
+    """Split an addon provenance tag into aspect -> state, e.g. ``PROVEN_ATTACHMENTS/ESTIMATE_GEOMETRY`` ->
+    ``{"attachments": "proven", "geometry": "estimate"}``; a bare state (``ESTIMATE``) is the ``geometry`` state.
+
+    A state that is not a ``ProvenanceState`` becomes ``unknown`` (never guessed).
+    """
+    out: Dict[str, str] = {}
+    for part in (p.strip() for p in str(tag).split("/") if p.strip()):
+        low = part.lower()
+        state = next((s for s in sorted(_STATES, key=len, reverse=True) if low == s or low.startswith(s + "_")), None)
+        if state is None:
+            out[low] = ProvenanceState.UNKNOWN.value
+            continue
+        aspect = low[len(state) + 1:] or "geometry"
+        out[aspect] = state
+    return out
+
+
+def layer_summary(tag_counts: Mapping[str, int]) -> List[dict]:
+    """``{tag: count}`` of one tissue layer -> ``[{"tag", "count", "aspects"}]`` sorted by count, then tag."""
+    return [{"tag": t, "count": n, "aspects": layer_provenance(t)}
+            for t, n in sorted(tag_counts.items(), key=lambda kv: (-kv[1], kv[0]))]
 
 
 def pick_clip(names: Sequence[str], wanted: str) -> Tuple[str, str]:

@@ -1,0 +1,7 @@
+{
+  "spec_version": 1,
+  "output_dir": "builds/exports/batch_tissues",
+  "matrices": [
+    {"templates": ["human_male_adult", "human_female_adult", "human_child_5y"], "poses": ["tpose"], "mesh": "tissues"}
+  ]
+}

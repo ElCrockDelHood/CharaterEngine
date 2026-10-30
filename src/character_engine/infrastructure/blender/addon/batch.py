@@ -17,6 +17,7 @@ import bpy
 from character_engine.domain.animation import get_bone_map
 from character_engine.pipeline.batch_export import (
     BatchJob,
+    layer_summary,
     pick_clip,
     provenance_record,
     resolve,
@@ -61,7 +62,39 @@ def build_body(context, job: BatchJob, repo_commit: str = ""):
     if job.mesh == "block_dummy":
         blocks, _ = build.build_block_dummy(context, arm, with_collision=False)
         extra["mesh_vertices"] = len(blocks.data.vertices)
+    elif job.mesh == "tissues":
+        # the panel's Generate tissues with its default options, set explicitly so an earlier scene state cannot
+        # leave a layer out: bones (asset meshes when present), tendons, muscles, skin (2 subdivisions)
+        props.tissue_bones = props.tissue_tendons = props.tissue_muscles = props.tissue_skin = True
+        props.prefer_asset_meshes, props.skin_subdivisions = True, 2
+        if bpy.ops.character_engine.generate_tissues() != {"FINISHED"}:
+            raise RuntimeError("generate_tissues cancelled (see the Blender log above)")
+        extra["layers"] = tissue_layers(arm)
+        extra["mesh_vertices"] = sum(v["vertices"] for v in extra["layers"].values())
     return arm, extra
+
+
+def tissue_layers(arm) -> dict:
+    """Per tissue layer: objects, vertices and the provenance tags the builders set, split per aspect.
+
+    The bone layer carries one tag per bone (``ce_bone_provenance``), so its counts are bones; the other layers
+    count objects. Nothing is relabelled here: the tags are read as the builders wrote them.
+    """
+    layers: dict = {}
+    for o in bpy.data.objects:
+        if o.get("ce_character") != arm["ce_character"] or o.get("ce_role") != "tissue":
+            continue
+        entry = layers.setdefault(o["ce_layer"], {"objects": 0, "vertices": 0, "tags": {}})
+        entry["objects"] += 1
+        entry["vertices"] += len(o.data.vertices)
+        if "ce_muscle_count" in o:
+            entry["muscles"] = int(o["ce_muscle_count"])
+        tags = list(json.loads(o["ce_bone_provenance"]).values()) if "ce_bone_provenance" in o else [o["ce_provenance"]]
+        for t in tags:
+            entry["tags"][t] = entry["tags"].get(t, 0) + 1
+    for entry in layers.values():
+        entry["provenance"] = layer_summary(entry.pop("tags"))
+    return dict(sorted(layers.items()))
 
 
 def run_job(context, job: BatchJob, out_dir: Path, root: Path | None = None, repo_commit: str = "") -> dict:

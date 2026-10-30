@@ -2,6 +2,31 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-30 · Batch follow-up 3: tissue export with provenance per layer
+
+### Added
+- Batch `mesh: "tissues"`: the panel's *Generate tissues* (bones, tendons, muscles, skin; options set explicitly
+  so an earlier scene state cannot drop a layer) exported with the armature. The sidecar's `provenance.mesh` is
+  `per_layer` and `layers` lists, per layer, objects, vertices and the builders' own provenance tags (read, not
+  relabelled) split per aspect by `pipeline/batch_export.layer_provenance` (a tag that is not a `ProvenanceState`
+  becomes `unknown`). Spec `scripts/batch_specs/tissues.json` (male 1.80, female 1.65, child 5 y; output
+  `builds/exports/batch_tissues/`). Headless check *batch export: tissues mode, provenance per layer*; 7 new tests.
+
+### Results (Blender 3.6.23 + Godot 4.7.2)
+- `tissues.json`: 3/3 PASS, Godot 3/3 PASS, 2.3–3.5 s per job, GLB 1.3–1.4 MB. Per body: bone layer 192 bones
+  (12 `DERIVED_LENGTH/ESTIMATE_SHAPE` osteometric long bones, 180 `ESTIMATE`), muscle 50 muscles
+  `PROVEN_ATTACHMENTS/ESTIMATE_GEOMETRY`, tendon `ESTIMATE`, skin `ESTIMATE` (7 872–9 984 vertices). No layer is
+  `PLACEHOLDER` and no geometry is `PROVEN`; the child's `PLACEHOLDER` stays on its proportions.
+
+### Test status
+- `python scripts/test.py`: 1070 passed. `python scripts/lint.py`: clean.
+  `python scripts/engine_tests.py blender --blender C:/DEV/Tools/Blender/blender.exe`: 38 passed, 0 failed.
+
+### Open
+- The bone builder sizes the child's long bones with the adult Trotter regressions (population `male_white` for
+  an unspecified sex) and tags them `DERIVED_LENGTH`; for a 5-year-old that derivation has no paediatric source.
+  Reported here, not changed (builder in `build.py`).
+
 ## [Unreleased] — 2026-10-30 · Batch follow-up 2: UAL clips on three bodies, exact clip choice
 
 ### Added

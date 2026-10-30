@@ -13,6 +13,8 @@ from character_engine.pipeline.batch_export import (
     ClipSpec,
     expand,
     job_name,
+    layer_provenance,
+    layer_summary,
     load_spec,
     manifest,
     manifest_name,
@@ -69,11 +71,11 @@ def test_unavailable_templates_are_refused_not_guessed(template):
 
 def test_every_error_is_reported_at_once():
     with pytest.raises(BatchSpecError) as exc:
-        expand(_spec(templates=["nope"], statures_m=[9.0, True], poses=["sitting"], mesh="tissues",
+        expand(_spec(templates=["nope"], statures_m=[9.0, True], poses=["sitting"], mesh="plaster",
                      clips=[{"path": "a.txt", "bone_map": "x"}, {"bone_map": "mixamo"}], extra=1))
     text = "\n".join(exc.value.errors)
     for needle in ("unknown template 'nope'", "stature 9.0", "stature True", "unknown pose 'sitting'",
-                   "mesh 'tissues'", "unknown bone map 'x'", "'a.txt' is not one of", "needs 'path'",
+                   "mesh 'plaster'", "unknown bone map 'x'", "'a.txt' is not one of", "needs 'path'",
                    "unknown keys ['extra']"):
         assert needle in text, needle
 
@@ -161,3 +163,26 @@ def test_pick_clip_prefers_exact_then_prefix_over_the_importer_substring_rule():
     with pytest.raises(KeyError, match="no clip matching 'Run'"):
         pick_clip(names, "Run")
 
+
+@pytest.mark.parametrize("tag, aspects", [
+    ("PROVEN_ATTACHMENTS/ESTIMATE_GEOMETRY", {"attachments": "proven", "geometry": "estimate"}),
+    ("DERIVED_LENGTH/ESTIMATE_SHAPE", {"length": "derived", "shape": "estimate"}),
+    ("ESTIMATE", {"geometry": "estimate"}),
+    ("USER_INPUT", {"geometry": "user_input"}),
+    ("PLACEHOLDER_SHAPE", {"shape": "placeholder"}),
+    ("MEASURED", {"measured": "unknown"}),          # not a ProvenanceState: never guessed
+])
+def test_layer_provenance_splits_builder_tags_per_aspect(tag, aspects):
+    assert layer_provenance(tag) == aspects
+
+
+def test_tissues_mode_reports_provenance_per_layer():
+    job = expand(_spec(templates=["human_child_5y"], poses=["tpose"], mesh="tissues"))[0]
+    assert job.mesh == "tissues"
+    layers = {"bone": {"provenance": layer_summary({"ESTIMATE": 150, "DERIVED_LENGTH/ESTIMATE_SHAPE": 42})}}
+    rec = provenance_record(job, blender_version="3.6.23", addon_version="0.3.1", glb_sha256="ab", glb_bytes=3,
+                            extra={"layers": layers})
+    assert rec["provenance"] == {"stature": "estimate", "proportions": "placeholder", "mesh": "per_layer"}
+    assert rec["layers"]["bone"]["provenance"] == [
+        {"tag": "ESTIMATE", "count": 150, "aspects": {"geometry": "estimate"}},
+        {"tag": "DERIVED_LENGTH/ESTIMATE_SHAPE", "count": 42, "aspects": {"length": "derived", "shape": "estimate"}}]

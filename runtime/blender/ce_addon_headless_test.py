@@ -1174,6 +1174,24 @@ def main(reset: bool = True) -> int:
     if not skipped(args, "batch"):
         check("batch export: one job -> GLB + provenance, a failing job does not stop the next", _batch_job)
 
+    def _batch_tissues():
+        """mesh "tissues": bones / tendons / muscles / skin exported, provenance reported per layer and aspect."""
+        from character_engine.pipeline.batch_export import expand
+        job = expand({"matrices": [{"templates": ["human_child_5y"], "poses": ["tpose"], "mesh": "tissues"}]})[0]
+        res = addon["mod"].batch.run_job(ctx, job, out_dir / f"{args.engine}_batch", ROOT)
+        rec = json.loads(Path(res["provenance"]).read_text(encoding="utf-8"))
+        layers = rec["layers"]
+        assert set(layers) == {"bone", "muscle", "tendon", "skin"}, sorted(layers)
+        assert rec["provenance"] == {"stature": "estimate", "proportions": "placeholder", "mesh": "per_layer"}, rec
+        aspects = {layer: {k: v for s in e["provenance"] for k, v in s["aspects"].items()} for layer, e in layers.items()}
+        assert aspects["muscle"] == {"attachments": "proven", "geometry": "estimate"}, aspects
+        assert aspects["skin"] == {"geometry": "estimate"} and aspects["tendon"] == {"geometry": "estimate"}, aspects
+        assert sum(s["count"] for s in layers["bone"]["provenance"]) > 100, layers["bone"]
+        return (f"{res['bytes']} bytes; " + ", ".join(
+            f"{k}: {e['vertices']} v {[(s['tag'], s['count']) for s in e['provenance']]}" for k, e in layers.items()))
+    if not skipped(args, "batch"):
+        check("batch export: tissues mode, provenance per layer (child 5 y, PLACEHOLDER proportions)", _batch_tissues)
+
     def _render_views():
         """scripts/render_views.py executor at thumbnail size: 3 Workbench stills, contact sheet, turntable + mp4."""
         from character_engine.pipeline.render_views import output_names, parse

@@ -60,13 +60,15 @@ python scripts/batch_export.py --check                       # validate scripts/
 python scripts/batch_export.py                               # run it (Blender 3.6 in background)
 python scripts/batch_export.py --spec scripts/batch_specs/ual1_local.json --validate-godot
 python scripts/batch_export.py --spec scripts/batch_specs/ual_bodies_local.json --validate-godot   # 85 UAL clips x 3 bodies
+python scripts/batch_export.py --spec scripts/batch_specs/tissues.json --validate-godot   # tissue layers, 3 bodies
 python scripts/batch_export.py --only human_male_adult_1800mm_tpose
 ```
 
 A spec (`scripts/batch_specs/*.json`) lists *matrices*; each is the product `templates × statures_m × poses × clips`
 (`statures_m` omitted or `null` = the template's stature; `clips` omitted = no clip; a clip is
 `{"path", "bone_map", "clip"}`, relative paths resolve against the repo root). `mesh` is `block_dummy` (default,
-ESTIMATE radii) or `none`; tissue layers are not offered in batch yet. The spec is validated in pure Python
+ESTIMATE radii), `tissues` (the panel's *Generate tissues* with its default options: bones, tendons, muscles, skin)
+or `none`. The spec is validated in pure Python
 (`character_engine.pipeline.batch_export`) before Blender starts: unknown or unavailable templates (horse, dog),
 poses, bone maps, missing clip files or duplicate jobs refuse the whole run (exit 2), with every error listed.
 
@@ -85,7 +87,7 @@ would collide; output `builds/exports/batch_ual/`). The child's proportions stay
 | File | Content |
 |------|---------|
 | `<job>.glb` | Blender glTF export (`build.export_scene_glb`): 208-bone armature, block dummy, the retargeted clip (keyed, not re-sampled) |
-| `<job>.provenance.json` | template, stature, pose, clip, bone map, provenance states (stature: template's or `user_input` when overridden; proportions; mesh), Blender and addon version, repo commit, GLB sha256 and size, clip source sha256 |
+| `<job>.provenance.json` | template, stature, pose, clip, bone map, provenance states (stature: template's or `user_input` when overridden; proportions; mesh), Blender and addon version, repo commit, GLB sha256 and size, clip source sha256. With `mesh: tissues`, `mesh` is `per_layer` and `layers` lists bone / tendon / muscle / skin with objects, vertices and the builders' own tags split per aspect (e.g. muscle `{attachments: proven, geometry: estimate}`; bone counts per bone: `DERIVED_LENGTH/ESTIMATE_SHAPE` for the osteometric long bones, `ESTIMATE` for the rest) |
 | `manifest_<spec>_<UTC>.json` | one per run: PASS/FAIL per job with error, timings, run id, Blender log path, optional Godot verdict; rewritten after every job of that run. Earlier runs are kept |
 | `manifest.json` | copy of the newest run's manifest (until 2026-10-29 this single file was overwritten by every run) |
 
