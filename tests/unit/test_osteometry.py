@@ -6,10 +6,12 @@ from pathlib import Path
 import pytest
 
 from character_engine.domain.anatomy.osteometry import (
+    ADULT_MIN_AGE_YEARS,
     LONG_BONES,
     LongBoneRegression,
     OsteometricTable,
     bone_length_from_stature,
+    length_provenance_for_age,
     load_osteometry,
 )
 from character_engine.domain.anatomy.osteometry.long_bones import default_osteometry_path
@@ -112,3 +114,20 @@ def test_shaft_diameters_are_labelled_estimate():
     assert isinstance(table, OsteometricTable)
     assert table.shaft_diameter_provenance == ProvenanceState.ESTIMATE
     assert set(table.shaft_diameters_m) >= set(LONG_BONES)
+
+
+@pytest.mark.parametrize("age, state", [(5, ProvenanceState.ESTIMATE), (10, ProvenanceState.ESTIMATE),
+                                        (17.9, ProvenanceState.ESTIMATE), (None, ProvenanceState.ESTIMATE),
+                                        (ADULT_MIN_AGE_YEARS, ProvenanceState.DERIVED), (30, ProvenanceState.DERIVED),
+                                        (75, ProvenanceState.DERIVED)])
+def test_adult_regression_lengths_are_estimate_below_adulthood(age, state):
+    """Decision 57: the adult Trotter regressions label child lengths ESTIMATE (no paediatric source)."""
+    assert length_provenance_for_age(age) is state
+
+
+def test_every_template_gets_the_label_for_its_age_and_children_are_estimate():
+    from character_engine.domain.character import TEMPLATES
+    labels = {tid: length_provenance_for_age(t.params.age_years) for tid, t in TEMPLATES.items() if t.available}
+    assert labels["human_child_5y"] is labels["human_child_10y"] is ProvenanceState.ESTIMATE
+    assert labels["human_male_adult"] is labels["human_female_adult"] is ProvenanceState.DERIVED
+    assert labels["human_male_elderly_75y"] is ProvenanceState.DERIVED

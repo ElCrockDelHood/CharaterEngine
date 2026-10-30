@@ -2,6 +2,27 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-30 · Decision 57: child long-bone lengths labelled ESTIMATE
+
+### Changed
+- Owner decision (ESTIMATE): long-bone lengths obtained from the adult Trotter / Trotter & Gleser regressions are
+  `DERIVED` only for adults. `osteometry.length_provenance_for_age` returns `ESTIMATE` below
+  `ADULT_MIN_AGE_YEARS` = 18 (ASSUMED cut-off) or for an unknown age; the bone builder now tags the child templates'
+  six long bones `ESTIMATE_LENGTH/ESTIMATE_SHAPE` instead of `DERIVED_LENGTH/ESTIMATE_SHAPE`. **No numeric value
+  changed**: the bone-mesh vertices of the 5 y child and the adult male hash identically before and after (2 880
+  vertices each); adults (including the 75 y template) keep `DERIVED_LENGTH`. Decision 57 in `DECISION_LOG.md`.
+- Tissue batch (`scripts/batch_specs/tissues.json`, 3/3 PASS, Godot 3/3): the child sidecar now reads
+  `ESTIMATE_LENGTH/ESTIMATE_SHAPE` × 12 + `ESTIMATE` × 180; male and female unchanged.
+
+### Test status
+- `python scripts/test.py`: 1081 passed (9 new in `tests/unit/test_osteometry.py`). `python scripts/lint.py`: clean.
+  `python scripts/engine_tests.py blender --blender C:/DEV/Tools/Blender/blender.exe`: 39 passed, 0 failed (the
+  tissues check now also asserts the child's long bones are ESTIMATE).
+
+### Open
+- Blender's glTF export is not byte-deterministic: two identical tissue runs gave different sha256 for the adult GLBs
+  (the child's matched). The sidecar sha256 identifies the file written, not a reproducible build. Not investigated.
+
 ## [Unreleased] — 2026-10-30 · Batch follow-up 3: tissue export with provenance per layer
 
 ### Added

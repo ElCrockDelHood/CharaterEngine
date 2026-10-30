@@ -110,6 +110,23 @@ def load_osteometry(path: Optional[Path] = None) -> OsteometricTable:
     )
 
 
+# The Trotter / Trotter & Gleser regressions were fitted on adult skeletons and the repository has no paediatric
+# source, so below this age a length obtained from them is not DERIVED (Decision 57). ASSUMED cut-off: the age of
+# majority, not a measured epiphyseal-fusion criterion.
+ADULT_MIN_AGE_YEARS = 18.0
+
+
+def length_provenance_for_age(age_years: Optional[float]) -> ProvenanceState:
+    """Provenance of a long-bone length computed from the adult regressions for a person of ``age_years``.
+
+    ``DERIVED`` for adults; ``ESTIMATE`` for minors and for an unknown age (the regression may not apply).
+    The numbers are the same either way: only the label changes.
+    """
+    if age_years is None or age_years < ADULT_MIN_AGE_YEARS:
+        return ProvenanceState.ESTIMATE
+    return ProvenanceState.DERIVED
+
+
 def bone_length_from_stature(bone: str, stature_m: float, population: str = "male_white",
                              table: Optional[OsteometricTable] = None) -> float:
     """Expected maximum length (metres) of ``bone`` for a person of ``stature_m``."""

@@ -16,7 +16,7 @@ import bmesh
 import bpy
 from mathutils import Matrix, Quaternion, Vector
 
-from character_engine.domain.anatomy.osteometry import LONG_BONES, load_osteometry
+from character_engine.domain.anatomy.osteometry import LONG_BONES, length_provenance_for_age, load_osteometry
 from character_engine.domain.anatomy.reference.source import ProvenanceState
 from character_engine.domain.animation import BoneMap, retarget_scale, stance_scale
 from character_engine.domain.assets import normalization
@@ -250,6 +250,9 @@ def build_bone_meshes(context, armature, stature_m: float, population: str = "ma
     """Proxy (or fitted asset) meshes for every bone, skinned to the armature."""
     table = load_osteometry()
     lengths = table.lengths_for_stature(stature_m, population)
+    # adult regressions: DERIVED lengths for adults, ESTIMATE for children / unknown age (Decision 57)
+    age = armature.get("ce_age_years")
+    length_tag = length_provenance_for_age(None if age is None else float(age)).name
     name = armature["ce_character"]
     pts = bone_points(armature)
     bm = bmesh.new()
@@ -295,7 +298,7 @@ def build_bone_meshes(context, armature, stature_m: float, population: str = "ma
             _cone(bm, p0, p0 + axis * epi, r_epi, r_shaft, segments=10)
             _cone(bm, p0 + axis * epi, p1 - axis * epi, r_shaft, r_shaft, segments=10)
             _cone(bm, p1 - axis * epi, p1, r_shaft, r_epi, segments=10)
-            provenance[n] = "DERIVED_LENGTH/ESTIMATE_SHAPE"
+            provenance[n] = f"{length_tag}_LENGTH/ESTIMATE_SHAPE"
         else:
             region = region_of_bone(n)
             thickness = tissue_profile(region).thickness_m.get(TissueLayer.BONE, 0.01)

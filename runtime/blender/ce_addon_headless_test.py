@@ -1218,6 +1218,9 @@ def main(reset: bool = True) -> int:
         assert aspects["muscle"] == {"attachments": "proven", "geometry": "estimate"}, aspects
         assert aspects["skin"] == {"geometry": "estimate"} and aspects["tendon"] == {"geometry": "estimate"}, aspects
         assert sum(s["count"] for s in layers["bone"]["provenance"]) > 100, layers["bone"]
+        # Decision 57: a child's long bones come from the adult regressions, so their length is ESTIMATE, not DERIVED
+        bone_tags = {s["tag"]: s["count"] for s in layers["bone"]["provenance"]}
+        assert bone_tags.get("ESTIMATE_LENGTH/ESTIMATE_SHAPE", 0) > 0 and "DERIVED_LENGTH/ESTIMATE_SHAPE" not in bone_tags,             bone_tags
         return (f"{res['bytes']} bytes; " + ", ".join(
             f"{k}: {e['vertices']} v {[(s['tag'], s['count']) for s in e['provenance']]}" for k, e in layers.items()))
     if not skipped(args, "batch"):

@@ -1009,6 +1009,24 @@ record, not changed). Tests: `tests/unit/test_reaction_library.py`; Godot runner
 
 ---
 
+## 57. CHILD LONG-BONE LENGTHS FROM ADULT REGRESSIONS ARE ESTIMATE, NOT DERIVED
+
+**Finding** (batch tissue export, 2026-10-30): the bone builder sizes the six long bones of every template with the
+Trotter / Trotter & Gleser regressions (`references/osteometry.json`) and tagged them `DERIVED_LENGTH`, children
+included. Those regressions were fitted on adult skeletons and the repository has no paediatric source, so for the
+5 y and 10 y templates "derived" overstated the evidence.
+
+**Decision** (owner, decision card, 2026-10-30: ESTIMATE): `osteometry.length_provenance_for_age` labels a length from
+the adult regressions `DERIVED` for adults and `ESTIMATE` below `ADULT_MIN_AGE_YEARS` = 18 or for an unknown age; the
+builder tags those bones `ESTIMATE_LENGTH/ESTIMATE_SHAPE`. **No numeric value changes** (same lengths, same meshes);
+adult templates keep `DERIVED_LENGTH`. The 18-year cut-off is **ASSUMED** (age of majority, not an epiphyseal-fusion
+criterion). A cited paediatric long-bone source would be needed to raise the child lengths above ESTIMATE.
+Tests: `tests/unit/test_osteometry.py`; headless check *batch export: tissues mode*.
+
+**Date**: 2026-10-30 · **Status**: FINAL (label only; reversible with a paediatric source)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
