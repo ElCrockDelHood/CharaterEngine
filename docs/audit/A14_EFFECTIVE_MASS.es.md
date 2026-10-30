@@ -113,6 +113,10 @@ nunca se descompusieron en masa × velocidad, y el daño de una patada o una pro
 movimiento (derribo, aceleración de la cabeza), que todavía ningún modelo consume. Las 5 fracturas que quedan en
 todos los movimientos son manos y pies (cáscaras calibradas de 20–30 J).
 
+Un criterio de fractura por fuerza construido sobre este módulo (fuerza pico contra rangos de fuerza por región,
+energía de cráneo, profundidad desde la deflexión) está en `A15_STRIKE_MODEL.es.md` (`domain/physics/strike_model.py`,
+enmienda a la Decisión 58).
+
 ## 6. Pendientes
 
 1. Leer los textos completos (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) y registrarlos en

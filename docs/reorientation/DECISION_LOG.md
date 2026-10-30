@@ -1047,6 +1047,14 @@ summaries of Walilko et al. 2005; kicks and throw from segment fractions, no sou
 Open: make it the default (changes every hash), feed `momentum_j` / `target_speed_m_s` to a knockdown or concussion
 model, and verify the fractions and the striker masses against full texts.
 
+**Amendment** (2026-10-30, A15): `domain/physics/strike_model.py` adds a force-based fracture criterion on top of
+`collision.py`: peak force `F = v·√(k·μ)` against per-region force ranges (with a fracture probability), the skull also
+by 22–24 J on the deformation energy, and wound depth capped by the peak deflection `F/k`. It reuses this decision's
+reduced mass and target-mass table (no second table), is additive and opt-in, and leaves `blunt.py`, `body_strike.py`
+and every earlier hash unchanged. Provenance: thorax stiffness, skull energy and a few force ranges SOURCED (weakly);
+the rest ASSUMED. Replacing the 400 J mapping of the gameplay table is **not** decided here; it belongs to the wounds
+thread. Evidence: `docs/audit/A15_STRIKE_MODEL.md`. Tests: `tests/unit/test_strike_model.py`.
+
 **Date**: 2026-10-30 · **Status**: FINAL (opt-in; values reversible)
 
 ---

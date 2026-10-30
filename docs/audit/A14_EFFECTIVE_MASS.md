@@ -108,6 +108,9 @@ physically consistent but exposes two gaps: the move energies in the table were 
 and the damage a kick or throw does is mostly momentum (knockdown, head acceleration), which no model consumes yet.
 The 5 fractures left on every move are hands and feet (20–30 J calibrated shells).
 
+A force-based fracture criterion built on this module (peak force against per-region force ranges, skull energy,
+depth from deflection) is in `A15_STRIKE_MODEL.md` (`domain/physics/strike_model.py`, amendment to Decision 58).
+
 ## 6. Open items
 
 1. Read the full texts (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) and register them in `source_registry`
