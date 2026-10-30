@@ -111,6 +111,9 @@ The 5 fractures left on every move are hands and feet (20–30 J calibrated shel
 A force-based fracture criterion built on this module (peak force against per-region force ranges, skull energy,
 depth from deflection) is in `A15_STRIKE_MODEL.md` (`domain/physics/strike_model.py`, amendment to Decision 58).
 
+What the momentum part does (head acceleration → concussion probability, impulse → stagger) is in
+`A16_HEAD_KINEMATICS_KNOCKDOWN.md` (`domain/physics/head_kinematics.py`, Decision 59).
+
 ## 6. Open items
 
 1. Read the full texts (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) and register them in `source_registry`

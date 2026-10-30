@@ -1059,15 +1059,32 @@ thread. Evidence: `docs/audit/A15_STRIKE_MODEL.md`. Tests: `tests/unit/test_stri
 
 ---
 
+## 59. HEAD KINEMATICS, CONCUSSION PROBABILITY AND STAGGER FROM THE KNOCK-BACK (ADDITIVE, OPT-IN)
+
+**Decision** (owner, 2026-10-30 "arranquemos"): new `domain/physics/head_kinematics.py` turns the motion part of a
+blow (Decision 58) into head linear acceleration `F_peak / M_head`, rotational acceleration `F_peak · d / I_head`,
+concussion probability from the Rowson et al. 2012 rotational-acceleration table (interpolated; football data), and a
+stagger level from the impulse `μ·v` against `P_STEP` (25 N·s ASSUMED; 1.3 × for several steps after Batcir 2020;
+2 × for a fall, ASSUMED). It replaces nothing: wounds, `strike_model.py`, the gameplay table and every earlier hash
+are unchanged. Provenance: Walilko 2005, Rowson 2012, Sturnieks 2013, Batcir 2020 SOURCED (pages read, full texts not
+in the repository); lever arms, head inertia, table tails and stagger thresholds ASSUMED. Acceptance against
+Walilko's Olympic punches: force +15 %, linear acceleration × 1.33, rotational × 1.11, probability 0.77.
+Evidence: `docs/audit/A16_HEAD_KINEMATICS_KNOCKDOWN.md`. Tests: `tests/unit/test_head_kinematics.py`.
+Open: hook-type blows saturate at 0.99 (lever arm ASSUMED); rotational velocity; young-adult balance data.
+
+**Date**: 2026-10-30 · **Status**: FINAL (opt-in; values reversible)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 58
-**Final Decisions**: 54 (+4 deferred)
+**Total Decisions**: 59
+**Final Decisions**: 55 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
-**Reversible Decisions**: 5 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values)
+**Reversible Decisions**: 6 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values)
 **Critical Decisions**: 6 (Source of Truth, Architecture Direction, Backend Priority, Provenance System, Mesh Generation, Data Invention Rule)
 
 ### 14.2 Decision Impact

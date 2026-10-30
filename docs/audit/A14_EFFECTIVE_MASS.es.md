@@ -117,6 +117,9 @@ Un criterio de fractura por fuerza construido sobre este módulo (fuerza pico co
 energía de cráneo, profundidad desde la deflexión) está en `A15_STRIKE_MODEL.es.md` (`domain/physics/strike_model.py`,
 enmienda a la Decisión 58).
 
+Qué hace la parte de cantidad de movimiento (aceleración de la cabeza → probabilidad de conmoción, impulso →
+tambaleo) está en `A16_HEAD_KINEMATICS_KNOCKDOWN.es.md` (`domain/physics/head_kinematics.py`, Decisión 59).
+
 ## 6. Pendientes
 
 1. Leer los textos completos (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) y registrarlos en
