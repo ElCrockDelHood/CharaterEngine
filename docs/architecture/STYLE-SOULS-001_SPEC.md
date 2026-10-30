@@ -156,6 +156,12 @@ Godot replays every scenario and must reproduce frames, stamina, poise, health a
    frames and the Souls arena plays the clip of each state. Parity: Blender vs Python 0.02°, Godot vs Python
    0.0000° at every key. Note: Godot's glTF loader resamples at 30 fps unless `generate_scene(state, 60)`.
    Blender placeholder clips on the game rig (grips from the pose library), baked glTF; Godot plays them by state.
+4b. **DONE** (owner: "mejoralo un poco antes de jugar") — block body on the game rig: `domain/rigging/game_body.py`
+   (56 capsules, one per game bone, block-dummy envelope radii ESTIMATE, fingers / clavicle ASSUMED) built and
+   skinned in Blender 3.6 (`scripts/bake_game_body.py` → `data/human_game_v1_body.glb`, 66-bone skin, one influence
+   per vertex) and re-bound in Godot (`CECharacter.attach_body`); round bo with a handle; wound markers drawn on top;
+   arena floor grid + engage ring, framing camera, HUD bars. Arena frame time on the GT 740M: 2.93 ms avg, 4.18 ms
+   p95 (A12).
 5. Play-testing pass on the GT 740M and value tuning (values stay PLACEHOLDER until then).
 
 ## 8. Files

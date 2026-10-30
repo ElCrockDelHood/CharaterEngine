@@ -929,6 +929,8 @@ scenarios played through the arena equal Python.
 Step 4 (2026-10-29, owner "sigamos adelante"): placeholder clips authored in the domain, baked in Blender 3.6
 (`souls_clips.glb`, game-rig bones only, lengths = Python frame data) and played by state in Godot after a
 rest-frame retarget; parity Blender ↔ Python ↔ Godot at every key. Blender-first rule kept.
+Visual pass (2026-10-30, owner "mejoralo un poco antes de jugar"): block body on the game rig built and skinned in
+Blender (`human_game_v1_body.glb`, 56 capsules, envelope radii ESTIMATE) and only consumed by Godot; arena tidy.
 
 **Date**: 2026-10-25 · **Status**: FINAL (values reversible)
 

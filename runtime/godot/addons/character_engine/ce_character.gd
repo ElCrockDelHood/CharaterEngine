@@ -208,6 +208,8 @@ func add_wound_marker(bone: String, impact: Dictionary) -> Node3D:
 	mesh.mesh = sphere
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = SEVERITY_COLORS[sev]
+	mat.no_depth_test = true          # stays visible on top of the block body
+	mat.render_priority = 1
 	mesh.material_override = mat
 	att.add_child(mesh)
 	att.set_meta("ce_impact", impact)
@@ -246,13 +248,36 @@ func equip_weapon(weapon: Dictionary) -> BoneAttachment3D:
 	skeleton.add_child(att)
 	var mesh := MeshInstance3D.new()
 	mesh.name = "PLACEHOLDER"
-	var box := BoxMesh.new()
 	var w := maxf(float(weapon.get("width_m", 0.02)), 0.005)
-	box.size = Vector3(w, length, w * (0.25 if weapon.get("category", "") == "blade" else 1.0))
-	mesh.mesh = box
+	var blunt: bool = weapon.get("category", "") == "blunt"
+	if blunt:                          # round shaft (bo), long axis +Y like the box
+		var cyl := CylinderMesh.new()
+		cyl.top_radius = w * 0.5
+		cyl.bottom_radius = w * 0.5
+		cyl.height = length
+		cyl.radial_segments = 12
+		mesh.mesh = cyl
+	else:
+		var box := BoxMesh.new()
+		box.size = Vector3(w, length, w * (0.25 if weapon.get("category", "") == "blade" else 1.0))
+		mesh.mesh = box
 	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.55, 0.4, 0.25) if weapon.get("category", "") == "blunt" else Color(0.75, 0.78, 0.8)
+	mat.albedo_color = Color(0.55, 0.4, 0.25) if blunt else Color(0.75, 0.78, 0.8)
 	mesh.material_override = mat
+	# Handle: a darker band where the hand holds it (grip_fraction along the length), PLACEHOLDER size.
+	var handle := MeshInstance3D.new()
+	handle.name = "Handle"
+	var hcyl := CylinderMesh.new()
+	hcyl.top_radius = w * 0.62
+	hcyl.bottom_radius = w * 0.62
+	hcyl.height = 0.30 if blunt else 0.11
+	hcyl.radial_segments = 12
+	handle.mesh = hcyl
+	var hmat := StandardMaterial3D.new()
+	hmat.albedo_color = Color(0.18, 0.12, 0.08)
+	handle.material_override = hmat
+	handle.position = Vector3(0, -(0.5 - float(weapon.get("grip_fraction", 0.5))) * length, 0)
+	mesh.add_child(handle)
 	# Local transform relative to the grip bone's rest frame: box +Y along the grip axis.
 	var y := axis
 	var x := y.cross(Vector3.UP if absf(y.dot(Vector3.UP)) < 0.9 else Vector3.FORWARD).normalized()
@@ -309,3 +334,63 @@ func look_at_point(target: Vector3) -> Dictionary:
 		skeleton.set_bone_pose_rotation(idx, q)
 		out[eye] = q
 	return out
+
+
+## Block body (Souls arena visuals): the Blender-built, skinned capsule mesh of CE-GAME-v1
+## (data/human_game_v1_body.glb, scripts/bake_game_body.py). The mesh is moved onto this character's skeleton and
+## its skin is rebuilt against this skeleton's rests (same joints, so it deforms identically); the skeleton display
+## mesh is hidden. Flat colour, no textures. Returns the body MeshInstance3D (null if missing).
+const BODY_GLB := "res://addons/character_engine/data/human_game_v1_body.glb"
+var body_mesh: MeshInstance3D = null
+
+
+func attach_body(color := Color(0.62, 0.62, 0.66), path := BODY_GLB) -> MeshInstance3D:
+	if skeleton == null or not FileAccess.file_exists(path):
+		return null
+	var doc := GLTFDocument.new()
+	var state := GLTFState.new()
+	if doc.append_from_file(path, state) != OK:
+		return null
+	var root := doc.generate_scene(state)
+	var src_skel := find_skeleton(root)
+	var src_mesh: MeshInstance3D = _find_skinned_mesh(root)
+	if src_skel == null or src_mesh == null or src_mesh.skin == null:
+		root.free()
+		return null
+	var skin := Skin.new()
+	var src_skin: Skin = src_mesh.skin
+	for i in range(src_skin.get_bind_count()):
+		var bname := String(src_skin.get_bind_name(i))
+		if bname == "":
+			bname = src_skel.get_bone_name(src_skin.get_bind_bone(i))
+		var idx := skeleton.find_bone(bname)
+		if idx >= 0:
+			skin.add_named_bind(bname, skeleton.get_bone_global_rest(idx).affine_inverse())
+	var mesh := MeshInstance3D.new()
+	mesh.name = "BlockBody"
+	mesh.mesh = src_mesh.mesh
+	root.free()
+	skeleton.add_child(mesh)
+	mesh.skin = skin
+	mesh.skeleton = mesh.get_path_to(skeleton)
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = color
+	mesh.material_override = mat
+	for n in _scene_root.find_children("*", "MeshInstance3D", true, false):
+		var mi := n as MeshInstance3D
+		if mi != mesh and mi.skin != null:                 # the octahedral skeleton display (weapons / markers are unskinned)
+			mi.visible = false
+	if body_mesh != null:
+		body_mesh.queue_free()
+	body_mesh = mesh
+	return mesh
+
+
+static func _find_skinned_mesh(node: Node) -> MeshInstance3D:
+	if node is MeshInstance3D and (node as MeshInstance3D).skin != null:
+		return node
+	for c in node.get_children():
+		var f := _find_skinned_mesh(c)
+		if f != null:
+			return f
+	return null

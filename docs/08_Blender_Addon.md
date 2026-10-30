@@ -46,6 +46,13 @@ T-pose points, `bake_souls_clips()` keys one action per clip from `domain/animat
 `export_souls_clips()` writes `runtime/godot/addons/character_engine/data/souls_clips.glb` (game bones only, no
 shape keys, spec SHA-256 in extras; pytest flags a stale bake). The bake prints its Blender-vs-Python parity.
 
+### Block body for the game rig
+
+`python scripts/bake_game_body.py` (Blender 3.6, `runtime/blender/ce_bake_game_body.py`): bare game armature at the
+Python game GLB's points + `game_rig.build_game_body_mesh()` (one capsule per game bone from
+`domain/rigging/game_body.py`, 100 % weighted to it, Armature modifier) → `export_game_body()` writes
+`runtime/godot/addons/character_engine/data/human_game_v1_body.glb` (spec SHA-256 in extras; pytest flags a stale export).
+
 ## Provenance in the viewport
 
 Every generated object carries custom properties (`ce_canonical`, `ce_rig_id`, `ce_report`,

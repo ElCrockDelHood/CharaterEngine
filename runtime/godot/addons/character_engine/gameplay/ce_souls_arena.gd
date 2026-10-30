@@ -34,6 +34,9 @@ var sentinel: CESoulsCombat.Sentinel
 var characters: Dictionary = {}          # fighter_id -> CECharacter
 var animators: Dictionary = {}           # fighter_id -> CESoulsAnimator
 var _move_start := {"player": -1, "opponent": -1}
+var _bars := {}                          # fighter_id -> {hp, st, poise: ProgressBar, state: Label}
+const PLAYER_COLOR := Color(0.36, 0.46, 0.62)
+const SENTINEL_COLOR := Color(0.62, 0.34, 0.22)
 ## false: no clip playback (pure state tests).
 @export var animate: bool = true
 var hud: Label
@@ -79,12 +82,7 @@ func _build_scene() -> void:
 	sentinel = CESoulsCombat.Sentinel.new("opponent", combat.t)
 	combat.souls_event.connect(_on_event)
 
-	var floor := MeshInstance3D.new()
-	var plane := PlaneMesh.new()
-	plane.size = Vector2(14, 14)
-	floor.mesh = plane
-	floor.name = "Floor"
-	add_child(floor)
+	_build_floor()
 	for f in [player, opponent]:
 		var ch := CECharacter.new()
 		ch.name = "Character_" + f.fighter_id
@@ -93,6 +91,7 @@ func _build_scene() -> void:
 		add_child(ch)
 		characters[f.fighter_id] = ch
 		ch.equip_weapon(data.weapon(f.weapon["weapon_id"]))
+		ch.attach_body(PLAYER_COLOR if f.fighter_id == "player" else SENTINEL_COLOR)
 		if animate:
 			var an := CESoulsAnimator.new()
 			an.name = "Animator_" + f.fighter_id
@@ -106,11 +105,7 @@ func _build_scene() -> void:
 	light.rotation_degrees = Vector3(-50, 30, 0)
 	add_child(light)
 	if show_hud:
-		var layer := CanvasLayer.new()
-		add_child(layer)
-		hud = Label.new()
-		hud.position = Vector2(16, 16)
-		layer.add_child(hud)
+		_build_hud()
 	_sync_scene()
 
 
@@ -178,10 +173,12 @@ func _sync_scene() -> void:
 				ch.rotation.y = atan2(d.x, d.z)
 	var p: CECharacter = characters["player"]
 	var s: CECharacter = characters["opponent"]
-	var back := (p.position - s.position).normalized() if p.position.distance_to(s.position) > 1e-6 else Vector3(0, 0, -1)
+	var sep := p.position.distance_to(s.position)
+	var back := (p.position - s.position).normalized() if sep > 1e-6 else Vector3(0, 0, -1)
 	var side := back.cross(Vector3.UP).normalized()          # over-the-shoulder: both fighters stay in view
-	camera.position = p.position + back * 3.0 + side * 1.2 + Vector3(0, 1.9, 0)
-	camera.look_at((p.position + s.position) * 0.5 + Vector3(0, 1.1, 0), Vector3.UP)
+	# Pull back and up as the fighters separate so both stay framed.
+	camera.position = p.position + back * (2.4 + 0.45 * sep) + side * 1.3 + Vector3(0, 1.6 + 0.15 * sep, 0)
+	camera.look_at((p.position + s.position) * 0.5 + Vector3(0, 1.0, 0), Vector3.UP)
 	_update_hud()
 
 
@@ -192,10 +189,95 @@ func hud_text() -> String:
 		var f: CESoulsCombat.Fighter = combat.fighters[fid]
 		lines.append("%-8s HP %5.1f  ST %5.1f  POISE %4.1f  %-9s %s" % [fid if fid == "player" else "sentinel",
 				f.health, f.stamina, f.poise, f.state_name(), f.weapon["weapon_id"]])
-	lines.append("W/S/A/D move  J light  K heavy  Space dodge  L guard (hold)  Tab lock-on (always on)")
 	return "\n".join(lines)
 
 
 func _update_hud() -> void:
 	if hud != null:
 		hud.text = hud_text()
+	for fid in _bars:
+		var f: CESoulsCombat.Fighter = combat.fighters[fid]
+		_bars[fid]["hp"].value = f.health
+		_bars[fid]["st"].value = f.stamina
+		_bars[fid]["poise"].value = f.poise
+		_bars[fid]["state"].text = "%s  (%s)" % [f.state_name(), (animators[fid] as CESoulsAnimator).current if animators.has(fid) else "-"]
+
+
+## Readable floor: flat grey plane, a darker 1 m grid and a lighter ring of the engage range around the centre.
+func _build_floor() -> void:
+	var floor := MeshInstance3D.new()
+	var plane := PlaneMesh.new()
+	plane.size = Vector2(14, 14)
+	floor.mesh = plane
+	floor.name = "Floor"
+	var fm := StandardMaterial3D.new()
+	fm.albedo_color = Color(0.52, 0.53, 0.5)
+	floor.material_override = fm
+	add_child(floor)
+	var lm := StandardMaterial3D.new()
+	lm.albedo_color = Color(0.36, 0.37, 0.35)
+	for i in range(-7, 8):
+		for along_x in [true, false]:
+			var line := MeshInstance3D.new()
+			var b := BoxMesh.new()
+			b.size = Vector3(14.0, 0.004, 0.02) if along_x else Vector3(0.02, 0.004, 14.0)
+			line.mesh = b
+			line.material_override = lm
+			line.position = Vector3(0, 0.002, i) if along_x else Vector3(i, 0.002, 0)
+			floor.add_child(line)
+	var ring := MeshInstance3D.new()
+	var torus := TorusMesh.new()
+	torus.inner_radius = 2.95
+	torus.outer_radius = 3.0
+	ring.mesh = torus
+	var rm := StandardMaterial3D.new()
+	rm.albedo_color = Color(0.75, 0.74, 0.68)
+	ring.material_override = rm
+	ring.position = Vector3(0, 0.003, -start_distance_m * 0.5)
+	ring.scale = Vector3(1, 0.05, 1)
+	floor.add_child(ring)
+
+
+## HUD: one panel per fighter with health / stamina / poise bars (flat colours, no textures) + state and clip.
+func _build_hud() -> void:
+	var layer := CanvasLayer.new()
+	add_child(layer)
+	hud = Label.new()                       # text summary (kept for tests and screenshots)
+	hud.position = Vector2(16, 600)
+	hud.add_theme_font_size_override("font_size", 12)
+	layer.add_child(hud)
+	var x := 16
+	for fid in ["player", "opponent"]:
+		var box := VBoxContainer.new()
+		box.position = Vector2(x, 16)
+		box.custom_minimum_size = Vector2(300, 0)
+		layer.add_child(box)
+		var title := Label.new()
+		title.text = "PLAYER" if fid == "player" else "SENTINEL"
+		box.add_child(title)
+		var bars := {}
+		for spec in [["hp", "HP", 100.0, Color(0.75, 0.2, 0.2)], ["st", "STAMINA", float(combat.t["stamina_max"]), Color(0.3, 0.7, 0.3)],
+				["poise", "POISE", float(combat.t["poise_max"]), Color(0.85, 0.7, 0.25)]]:
+			var bar := ProgressBar.new()
+			bar.max_value = spec[2]
+			bar.custom_minimum_size = Vector2(300, 14)
+			bar.show_percentage = false
+			var fill := StyleBoxFlat.new()
+			fill.bg_color = spec[3]
+			var bg := StyleBoxFlat.new()
+			bg.bg_color = Color(0.12, 0.12, 0.12, 0.8)
+			bar.add_theme_stylebox_override("fill", fill)
+			bar.add_theme_stylebox_override("background", bg)
+			bar.tooltip_text = spec[1]
+			box.add_child(bar)
+			bars[spec[0]] = bar
+		var st := Label.new()
+		box.add_child(st)
+		bars["state"] = st
+		_bars[fid] = bars
+		x += 1280 - 32 - 300
+	var keys := Label.new()
+	keys.text = "W/S/A/D move   J light   K heavy   Space dodge   L guard (hold)   Tab lock-on (always on)"
+	keys.position = Vector2(16, 690)
+	keys.add_theme_font_size_override("font_size", 12)
+	layer.add_child(keys)

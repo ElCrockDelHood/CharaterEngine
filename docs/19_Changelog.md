@@ -275,6 +275,16 @@ All notable changes to Character Engine. Dates are ISO 8601.
 ### Decisions
 - Decision 54: finding A13, foot layout.
 
+## [Unreleased] — 2026-10-30 · Souls arena visuals: block body, bo handle, floor, camera, HUD bars
+
+### Added
+- `domain/rigging/game_body.py` (56 capsules on the game rig), `scripts/bake_game_body.py` +
+  `runtime/blender/ce_bake_game_body.py` (Blender 3.6 → `data/human_game_v1_body.glb`), `CECharacter.attach_body()`.
+- Souls arena: block bodies in flat colours, round bo with a handle, wound markers drawn on top, 1 m floor grid and
+  engage ring, framing camera, HUD bars. Benchmark scenario `souls_arena_2_bodies` (GT 740M 2.93 ms avg).
+- Checks: pytest (`test_game_body.py`), Blender suite (deforms with the skeleton), Godot runner (66-bone skin,
+  ≤ 4 influences, finite, display hidden, weapons / markers).
+
 ## [Unreleased] — 2026-10-29 · Souls-like placeholder clips baked in Blender (STYLE-SOULS-001 step 4)
 
 ### Added

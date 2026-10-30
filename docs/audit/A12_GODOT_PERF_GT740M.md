@@ -32,6 +32,15 @@
 
 Run-to-run spread is within ~5 %.
 
+### Souls arena (2026-10-30)
+
+| Scenario | Avg ms | P95 ms | FPS | Log |
+|----------|-------:|-------:|----:|-----|
+| `souls_arena_2_bodies` — player + Sentinel, block bodies, weapons, baked clips, HUD, duel at 60 Hz | 2.929 | 4.175 | ~341 | `logs/20261030T013148Z_godot_perf.log` |
+
+In the same run `game_x4_face_20_shapes` read 4.50 ms (3.40–3.51 ms on 2026-10-25): another session was using the
+PC at the same time, so treat single runs as indicative.
+
 ## Findings
 
 1. **Game rig vs canonical:** the 66-bone rig saves ~0.4 ms at 4 characters (−14 %) and ~0.8 ms at 8 characters

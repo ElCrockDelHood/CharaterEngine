@@ -64,7 +64,39 @@ class Bench extends Node:
 				await run_scenario("%s_x%d" % [rig, n], rig, n, -1)
 		for k in [0, 20, 52]:
 			await run_scenario("game_x4_face_%d_shapes" % k, "game", 4, k)
+		await run_souls_arena()
 		finish()
+
+	## The Souls arena as shipped (STYLE-SOULS-001): player + Sentinel with block bodies, weapons, baked clips,
+	## HUD, the duel stepped at 60 Hz by physics; the Sentinel fights a passive player.
+	func run_souls_arena() -> void:
+		var data := CEGameplayData.load_default()
+		var arena := CESoulsArena.build(data, GAME_GLB)
+		arena.autoplay_script = {"0": {}}
+		add_child(arena)
+		var times: Array = []
+		var t_prev := Time.get_ticks_usec()
+		for f in range(WARMUP + FRAMES):
+			await get_tree().process_frame
+			var t := Time.get_ticks_usec()
+			if f >= WARMUP:
+				times.append(float(t - t_prev) / 1000.0)
+			t_prev = t
+		times.sort()
+		var avg := 0.0
+		for v in times:
+			avg += v
+		avg /= times.size()
+		var r := {"scenario": "souls_arena_2_bodies", "rig": "game", "characters": 2, "bones_per_character": 66,
+				"face_shapes": -1, "frames": FRAMES, "avg_ms": snappedf(avg, 0.001),
+				"p95_ms": snappedf(times[int(times.size() * 0.95)], 0.001), "fps": snappedf(1000.0 / avg, 0.1),
+				"draw_calls": Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
+				"arena_frames_stepped": arena.frames_stepped}
+		results.append(r)
+		print("  %-26s bones %3d x%d  avg %7.3f ms  p95 %7.3f ms  %6.1f fps  draws %d  (duel frames %d)" % [
+				r["scenario"], 66, 2, r["avg_ms"], r["p95_ms"], r["fps"], r["draw_calls"], arena.frames_stepped])
+		arena.queue_free()
+		await get_tree().process_frame
 
 	func run_scenario(sid: String, rig: String, count: int, face_shapes: int) -> void:
 		var stage := Node3D.new()

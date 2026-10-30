@@ -272,6 +272,51 @@ def bake_souls_clips(context, arm) -> Dict[str, object]:
     return made
 
 
+def build_game_body_mesh(context, arm, placements, name: str = "CE_GAME_BODY"):
+    """Block body: one capsule per placement, 100 % weighted to its game bone, bound to ``arm`` (Armature modifier)."""
+    import bmesh
+
+    old = bpy.data.objects.get(name)
+    if old is not None:
+        bpy.data.objects.remove(old, do_unlink=True)
+    bm = bmesh.new()
+    seg = bm.verts.layers.int.new("ce_segment")            # capsule id per vertex (indices shift while building)
+    bones = [c.weight_bone for c in placements]
+    for i, c in enumerate(placements):
+        for v in build._capsule(bm, Vector(c.a), Vector(c.b), c.radius_m, segments=12, rings=7):
+            v[seg] = i
+    bm.normal_update()
+    me = bpy.data.meshes.new(name)
+    bm.to_mesh(me)
+    bm.free()
+    groups: Dict[str, list] = {}
+    for v, s_id in zip(me.vertices, (a.value for a in me.attributes["ce_segment"].data)):
+        groups.setdefault(bones[s_id], []).append(v.index)
+    for poly in me.polygons:
+        poly.use_smooth = True
+    obj = bpy.data.objects.new(name, me)
+    context.scene.collection.objects.link(obj)
+    obj.parent = arm
+    for bone, idx in groups.items():
+        obj.vertex_groups.new(name=bone).add(idx, 1.0, "REPLACE")
+    obj.modifiers.new("Armature", "ARMATURE").object = arm
+    obj["ce_role"] = "game_block_body"
+    obj["ce_provenance"] = "ESTIMATE"
+    return obj
+
+
+def export_game_body(context, arm, body, filepath, spec_sha256: str = "") -> None:
+    """glTF with the game armature + skinned block body (no animations, no shape keys, no materials)."""
+    arm["ce_body_spec_sha256"] = spec_sha256
+    for o in context.view_layer.objects:
+        o.select_set(o is arm or o is body)
+    context.view_layer.objects.active = arm
+    # The bake scene holds only this armature and body: export the whole scene (selection-based export skipped
+    # the mesh in Blender 3.6 headless).
+    bpy.ops.export_scene.gltf(filepath=str(filepath), export_format="GLB", use_selection=False, export_animations=False,
+                              export_extras=True, export_morph=False, export_skins=True, export_materials="NONE")
+
+
 def export_souls_clips(context, arm, filepath, spec_sha256: str = "") -> None:
     """glTF with the baked clips: game-rig bones only (no control rig, no shape keys), one animation per action."""
     arm["ce_clips_spec_sha256"] = spec_sha256

@@ -111,6 +111,10 @@ Clips (STYLE-SOULS-001 step 4): `gameplay/ce_souls_animator.gd` loads `data/soul
 `scripts/bake_souls_clips.py`), moves every rotation key onto the game GLB's rest frames and plays the clip of the
 fighter's state (moves: light_1..3 / heavy; Sentinel telegraph: windup). Lengths equal the Python frame data, so
 the state machine stays the truth. The loader must bake at 60 fps (`generate_scene(state, 60)`).
+Block body: `CECharacter.attach_body(color)` moves the Blender-built capsule mesh (`data/human_game_v1_body.glb`,
+`scripts/bake_game_body.py`) onto the character's skeleton, rebuilds its skin against this skeleton's rests and hides
+the skeleton display; the Souls arena uses it for both fighters (flat colours), with a round bo + handle, wound
+markers drawn on top, a 1 m floor grid, a framing camera and HUD bars.
 
 Hardware benchmark (windowed, needs the GPU): `python scripts/godot_perf.py` → `builds/tests/godot_perf.json`,
 canonical vs game rig and face blend shapes; results on the GT 740M in `docs/audit/A12_GODOT_PERF_GT740M.md`.

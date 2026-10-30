@@ -12,6 +12,7 @@
 ##   - CESoulsCombat replays the 9 Souls-like reference scenarios identically to Python
 ##   - CESoulsArena builds, maps keys to scenario commands, and plays the Sentinel scenarios like Python
 ##   - Souls clips (baked in Blender): names, lengths, game-rig tracks; retargeted poses equal Python; clip per state
+##   - Block body (Blender capsule mesh): 66-bone skin, <= 4 influences, finite, bound to the skeleton; weapons/markers
 ##   - the D1 reaction library JSON (generated offline in Blender, schema 5) loads: body hits carry a wound, a reaction
 ##     and its playback (per-clip blend-in); parries carry the attacker recoil and no wound
 ##   - the D1 experiments JSON (exp001 contact threshold) has a threshold consistent with its measurements
@@ -546,6 +547,57 @@ class Runner extends Node:
 				ok = ok and ply.has(c)
 			return [ok, "sentinel %s; player %s" % [opp.keys(), ply.keys()]])
 		parena.queue_free()
+
+		# ---- block body (Blender-built capsule mesh on CE-GAME-v1) --------------------
+		var bch := CECharacter.new()
+		bch.glb_path = game_tpose
+		bch.breathing_enabled = false
+		tree_root.add_child(bch)
+		var bmi := bch.attach_body(Color(0.4, 0.5, 0.6))
+		var bstats := {"verts": 0, "max_infl": 0, "finite": true, "binds": 0, "unknown": []}
+		if bmi != null:
+			var arr := bmi.mesh.surface_get_arrays(0)
+			var pos: PackedVector3Array = arr[Mesh.ARRAY_VERTEX]
+			var wts: PackedFloat32Array = arr[Mesh.ARRAY_WEIGHTS]
+			var per := wts.size() / maxi(1, pos.size())
+			bstats["verts"] = pos.size()
+			for i in range(pos.size()):
+				var used := 0
+				for k in range(per):
+					used += 1 if wts[i * per + k] > 0.0 else 0
+				bstats["max_infl"] = maxi(bstats["max_infl"], used)
+				if not (is_finite(pos[i].x) and is_finite(pos[i].y) and is_finite(pos[i].z)):
+					bstats["finite"] = false
+			bstats["binds"] = bmi.skin.get_bind_count()
+			for i in range(bmi.skin.get_bind_count()):
+				if bch.skeleton.find_bone(String(bmi.skin.get_bind_name(i))) < 0:
+					(bstats["unknown"] as Array).append(bmi.skin.get_bind_name(i))
+		var hidden_display := true
+		for n in bch.find_children("*", "MeshInstance3D", true, false):
+			if n != bmi and (n as MeshInstance3D).skin != null and (n as MeshInstance3D).visible:
+				hidden_display = false
+		runner.check("block body: Blender GLB on the game rig, 66-bone skin, <= 4 influences, finite, display hidden", func():
+			return [bmi != null and bstats["binds"] == 66 and (bstats["unknown"] as Array).is_empty() and bstats["max_infl"] >= 1
+					and bstats["max_infl"] <= 4 and bstats["finite"] and bstats["verts"] > 1000 and hidden_display,
+					"%d verts, %d binds, max influences %d, finite %s, display hidden %s" % [bstats["verts"], bstats["binds"],
+					bstats["max_infl"], bstats["finite"], hidden_display]])
+		var aabb0 := bmi.get_aabb() if bmi else AABB()
+		var b_uarm := bch.skeleton.find_bone("upperarm_r")
+		var hand0 := bch.bone_global_position("hand_r")
+		bch.skeleton.set_bone_pose_rotation(b_uarm, Quaternion(Vector3(0, 0, 1), -1.2))
+		await t.process_frame
+		await t.process_frame
+		var bw := bch.equip_weapon(data.weapon("staff"))
+		var bmark := bch.add_wound_marker("RIB_08_L", data.impact("hook", "RIB_08_L"))
+		runner.check("block body bound to the posed skeleton (skin + path); staff with handle and wound markers attach", func():
+			var moved := bch.bone_global_position("hand_r").distance_to(hand0)
+			var handle_ok: bool = bw != null and bw.get_child(0).get_child_count() == 1 and bw.get_child(0).get_child(0).name == "Handle"
+			var mark_ok: bool = bmark != null and bmark.bone_name == "spine_03" and ((bmark.get_child(0) as MeshInstance3D).material_override as StandardMaterial3D).no_depth_test
+			var bound: bool = bmi != null and bmi.get_node_or_null(bmi.skeleton) == bch.skeleton
+			return [bound and moved > 0.2 and handle_ok and mark_ok and (bw.get_child(0) as MeshInstance3D).mesh is CylinderMesh,
+					"hand moved %.3f m with the arm; staff %s + %s on %s; marker on %s (drawn on top)" % [moved,
+					(bw.get_child(0) as MeshInstance3D).mesh.get_class(), bw.get_child(0).get_child(0).name, bw.bone_name, bmark.bone_name]])
+		bch.queue_free()
 
 		# ---- arena ---------------------------------------------------------------
 		CEFighterController.ensure_input_map()

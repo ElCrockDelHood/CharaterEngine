@@ -1134,6 +1134,37 @@ def main(reset: bool = True) -> int:
         return f"{len(made)} clips baked on the 66-bone game armature, poses equal the Python FK (worst {worst:.4f} deg)"
     check("souls clips: Blender bake equals the Python FK, lengths from the frame data", _souls_clips_bake)
 
+    def _game_body():
+        """Block body on the game rig: one capsule per game bone, 1 influence per vertex, follows a posed arm."""
+        from character_engine.domain.rigging.game_body import game_body_placements
+        from character_engine.export.gltf_game import game_skeleton_points
+
+        gr = addon["mod"].game_rig
+        if bpy.context.object and bpy.context.object.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode="OBJECT")
+        pts = game_skeleton_points(pose="tpose")
+        arm = gr.build_game_armature_from_points(ctx, pts, "CE_GAME_BODY_TEST_RIG")
+        body = gr.build_game_body_mesh(ctx, arm, game_body_placements(pts), "CE_GAME_BODY_TEST")
+        infl = {len(v.groups) for v in body.data.vertices}
+        dg = ctx.evaluated_depsgraph_get()
+        before = [v.co.copy() for v in body.evaluated_get(dg).to_mesh().vertices]
+        pb = arm.pose.bones["upperarm_r"]
+        pb.rotation_mode = "QUATERNION"
+        from mathutils import Quaternion as _Q
+        pb.rotation_quaternion = _Q((1.0, 0.0, 0.0), 1.2)      # local X: swing (local Y would only twist)
+        ctx.view_layer.update()
+        dg = ctx.evaluated_depsgraph_get()
+        after = [v.co.copy() for v in body.evaluated_get(dg).to_mesh().vertices]
+        moved = max((a - b).length for a, b in zip(after, before))
+        still = sum(1 for a, b in zip(after, before) if (a - b).length < 1e-6)
+        groups = len(body.vertex_groups)
+        bpy.data.objects.remove(body, do_unlink=True)
+        bpy.data.objects.remove(arm, do_unlink=True)
+        assert infl == {1} and groups == 56 and moved > 0.2 and still > len(before) // 2, (infl, groups, moved, still)
+        return (f"56 capsules, 1 influence per vertex; posing upperarm_r moves its vertices up to {moved:.3f} m, "
+                f"{still}/{len(before)} vertices (rest of the body) stay put")
+    check("block body: capsules on the game rig, 1 influence per vertex, deforms with the skeleton", _game_body)
+
     if args.save:
         def _save():
             args.save.parent.mkdir(parents=True, exist_ok=True)
