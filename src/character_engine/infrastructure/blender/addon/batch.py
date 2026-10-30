@@ -1,7 +1,7 @@
 """Batch export executor: one ``BatchJob`` (pipeline/batch_export.py) → ``<name>.glb`` + provenance sidecar.
 
 Each job starts from an emptied scene and drives the panel's *Generate body* operator and the same import /
-retarget functions as *Import & retarget animation* (with an exact-name clip choice, ``pick_clip``) plus
+retarget functions as *Import & retarget animation* (clip chosen by exact name, ``pick_clip``) plus
 ``build.build_block_dummy`` / ``build.export_scene_glb``, so a batch GLB is what a user would get by clicking
 through the addon with the same settings.
 """
@@ -18,7 +18,6 @@ from character_engine.domain.animation import get_bone_map
 from character_engine.pipeline.batch_export import (
     BatchJob,
     layer_summary,
-    pick_clip,
     provenance_record,
     resolve,
     sha256_file,
@@ -108,14 +107,10 @@ def run_job(context, job: BatchJob, out_dir: Path, root: Path | None = None, rep
         clip_path = resolve(root, job.clip.path)
         if not clip_path.exists():
             raise FileNotFoundError(f"clip file not found: {clip_path}")
-        # Same steps as the Import & retarget operator, except the clip choice: pick_clip prefers an exact or
-        # "<name>_" match over the importer's first substring match (Idle_Loop must not pick Crouch_Idle_Loop).
+        # same steps as the Import & retarget operator; the importer chooses the clip with pick_clip
         bone_map = get_bone_map(job.clip.bone_map)
-        src = build.import_mocap(clip_path, bone_map, "")
-        rule = None
-        if job.clip.clip:
-            name, rule = pick_clip(json.loads(src["ce_clips"]), job.clip.clip)
-            src.animation_data.action = bpy.data.actions[name]
+        src = build.import_mocap(clip_path, bone_map, job.clip.clip)
+        rule = src.get("ce_clip_rule")
         src["ce_character"] = arm["ce_character"]
         build._link(context, src, f"{arm['ce_character']}_Mocap")
         build.retarget_mocap(context, src, arm, bone_map)

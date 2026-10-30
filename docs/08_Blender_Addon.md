@@ -32,7 +32,7 @@ Enable *Character Engine* in Preferences → Add-ons; the panel appears in the 3
 | **Tissues** | Generate tissues | Bone proxies sized by osteometry (Trotter 1970 lengths) or fitted meshes from `assets/anatomy/meshes/<BONE>.{glb,gltf,obj,ply}`; 50 bilateral muscles with tendons from the attachment catalogue; skin envelope baked to a mesh. All weighted to the armature. |
 | **Rig** | Build IK/FK rig, Set IK/FK | Adds `MCH`/`CTRL` collections: IK arms (target `CTRL-hand_ik.L/R`, auto-tuned pole), IK legs with foot roll, `arm_ik_L/R`, `leg_ik_L/R` blend properties (COPY_TRANSFORMS drivers), `CTRL-breath` driving sternum/ribs. |
 | **Game rig (CE-GAME-v1)** | Build game rig, Hand pose, Weapon grip | `<armature>_GAME`: 66 game bones (DEF, UE5 Mannequin names), IK arms/legs + foot roll (`arm_ik_L/R`, `leg_ik_L/R`, pole angles refined so IK at rest is a no-op), one `MCH-anat_<BONE>` helper per canonical node. The canonical armature copies the helpers (`CE_GAME` constraints) and its bones are hidden: animate the game rig. Hand sliders per side (curl per finger, spread, thumb opposition, palm cup) pose the fingers through the domain hand model; *Hand pose* applies the library (`rest`, `relaxed`, `open`, `fist`, `point`, `grip_staff`, `grip_blade`, optional keys); *Weapon grip* picks the weapon's grip pose; *Retarget to game rig* imports a BVH / FBX / glTF clip (or uses the active armature) and bakes it in FK through a game bone map (`mixamo`, `cmu_bvh`, `rokoko`, `quaternius_ual`, `rigify_def`). Angle limits ASSUMED (RIG-GAME-001). |
-| **Mocap** | Import mocap | BVH import (`bpy.ops.import_anim.bvh`) + rest-to-rest retarget through a bone map (`mixamo`, `cmu_bvh`, `rokoko`, `rigify_def`). Optional bake. |
+| **Mocap** | Import mocap | BVH / FBX / glTF import + rest-to-rest retarget through a bone map (`mixamo`, `cmu_bvh`, `rokoko`, `rigify_def`, `quaternius_ual`). *Clip*: exact name first (`pick_clip`); an ambiguous partial name is refused with the candidates; empty = the file's default clip. Optional bake. |
 | **Wounds** | Apply wound (click in viewport), Clear wounds | Raycast → nearest canonical bone → `assess_wound` (type, depth, width, energy). Marker sphere coloured by AIS severity, JSON report in `ce_report`. |
 | **Export** | Export canonical GLB, Export scene GLB | Pure-Python exporter (skeleton contract) or Blender glTF exporter (meshes + active actions). |
 | **Export → Equipment / Cinematic** | Add equipment sockets, Cinematic preset: full body, Workbench | Sockets `SOCKET-sabre_hip.L` / `SOCKET-hand_grip.R` as MCH bones (ASSUMED placement) + PLACEHOLDER sabre; floor, key/fill/rim lights, framed front camera, Workbench 1920×1080, optional render to `builds/renders/`. |
@@ -81,10 +81,11 @@ poses, bone maps, missing clip files or duplicate jobs refuse the whole run (exi
 
 Each job runs from an emptied scene through the panel's *Generate body* operator and the same import / retarget
 functions as *Import & retarget animation*, plus the block dummy, and writes to the spec's `output_dir` (default
-`builds/exports/batch/`, git-ignored). The clip is chosen by `pick_clip`: exact name, else the shortest name
-starting with `<clip>_` (the glTF importer appends `_<object>`), else the importer's own rule (first substring
-match in sorted order, which would pick `Crouch_Idle_Loop` for `Idle_Loop`); the name used and the rule are in
-the provenance (`clip_resolved`, `clip_rule`).
+`builds/exports/batch/`, git-ignored). The clip is chosen by `pick_clip`, the same rule as the panel's
+*Import & retarget animation*: exact name, else the shortest name starting with `<clip>_` (the glTF importer
+appends `_<object>`), else a partial match only when exactly one clip contains the text; several partial matches
+are refused with the candidates listed (the old first-match rule picked `Crouch_Idle_Loop` for `Idle_Loop`). The
+name used and the rule are in the provenance (`clip_resolved`, `clip_rule`).
 
 Local specs read files outside the repo in place (never copied): `ual1_local.json` (one clip) and
 `ual_bodies_local.json` (all 85 distinct UAL1 + UAL2 clips × `human_male_adult`, `human_female_adult`,

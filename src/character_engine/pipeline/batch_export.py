@@ -278,12 +278,17 @@ def layer_summary(tag_counts: Mapping[str, int]) -> List[dict]:
             for t, n in sorted(tag_counts.items(), key=lambda kv: (-kv[1], kv[0]))]
 
 
+class ClipChoiceError(ValueError):
+    """No clip matches the requested name, or only an ambiguous partial match exists."""
+
+
 def pick_clip(names: Sequence[str], wanted: str) -> Tuple[str, str]:
     """Choose the clip named by ``wanted`` among an animation file's ``names``. Returns (name, rule).
 
     Rules in order: ``exact`` (case-insensitive), ``prefix`` (the shortest name starting with ``wanted`` + "_"; the
-    glTF importer appends "_<object>"), ``substring`` (first in sorted order, the addon importer's own rule).
-    The addon importer alone uses the substring rule, which picks ``Crouch_Idle_Loop`` for ``Idle_Loop``.
+    glTF importer appends "_<object>"), ``substring`` (only when exactly one name contains ``wanted``).
+    Several substring matches are refused with the candidates listed: the old first-match rule picked
+    ``Crouch_Idle_Loop`` for ``Idle_Loop``. Used by the batch runner and the *Import & retarget* operator.
     """
     w = wanted.lower()
     exact = [n for n in names if n.lower() == w]
@@ -293,9 +298,12 @@ def pick_clip(names: Sequence[str], wanted: str) -> Tuple[str, str]:
     if prefixed:
         return prefixed[0], "prefix"
     sub = sorted(n for n in names if w in n.lower())
-    if sub:
+    if len(sub) == 1:
         return sub[0], "substring"
-    raise KeyError(f"no clip matching '{wanted}' among {sorted(names)[:20]}")
+    if sub:
+        raise ClipChoiceError(f"clip name '{wanted}' is ambiguous: {len(sub)} clips contain it {sub[:20]}; "
+                              f"give the exact name")
+    raise ClipChoiceError(f"no clip matching '{wanted}' among {sorted(names)[:20]}")
 
 
 def run_id(now: Optional[datetime] = None) -> str:

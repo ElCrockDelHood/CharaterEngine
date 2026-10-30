@@ -2,6 +2,29 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-30 · Import & retarget picks clips by exact name
+
+### Changed
+- The panel operator *Import & retarget animation* (`build.import_mocap` → `_finish_animation_import`) now chooses
+  the clip with `pipeline/batch_export.pick_clip`, shared with the batch runner: exact name, else the shortest
+  `<clip>_…` name, else a partial match only when a single clip contains the text. Several partial matches are
+  refused with the candidates listed (`ClipChoiceError`), instead of taking the first one in sorted order (which
+  picked `Crouch_Idle_Loop` for `Idle_Loop`). An empty clip field keeps the old behaviour (the file's default
+  clip). The rule used is stored on the source armature (`ce_clip_rule`). The batch runner now goes through the
+  importer instead of re-selecting the clip itself.
+
+### Test status
+- `python scripts/test.py`: 1099 passed (`tests/unit/test_batch_export.py`: ambiguous names refused, single partial
+  match allowed). `python scripts/lint.py`: clean.
+- `python scripts/engine_tests.py blender --blender C:/DEV/Tools/Blender/blender.exe`: 40 passed, 0 failed (new
+  check: `Idle_Test` → `Idle_Test_UE_Test` by prefix, `Test` refused as ambiguous).
+- UAL jobs re-run through the new path: `…idle_loop` → `Idle_Loop_Armature`, child `…sword_regular_a` →
+  `Sword_Regular_A_Armature`, both PASS + Godot PASS.
+
+### Open
+- A refused import leaves the imported source armature in the scene (as a failed clip lookup did before).
+- GLB byte-for-byte reproducibility (previous entry) is noted only; not approved, not started.
+
 ## [Unreleased] — 2026-10-30 · Decision 57: child long-bone lengths labelled ESTIMATE
 
 ### Changed

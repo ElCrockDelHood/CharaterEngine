@@ -10,6 +10,7 @@ from character_engine.pipeline.batch_export import (
     LATEST_MANIFEST,
     BatchJob,
     BatchSpecError,
+    ClipChoiceError,
     ClipSpec,
     expand,
     job_name,
@@ -160,8 +161,17 @@ def test_pick_clip_prefers_exact_then_prefix_over_the_importer_substring_rule():
     assert pick_clip(names, "sword_regular_a") == ("Sword_Regular_A_Armature", "prefix")
     assert pick_clip(names, "Swing_Test_UE_Test") == ("Swing_Test_UE_Test", "exact")
     assert pick_clip(names, "Regular_A_Rec") == ("Sword_Regular_A_Rec_Armature", "substring")
-    with pytest.raises(KeyError, match="no clip matching 'Run'"):
+    with pytest.raises(ClipChoiceError, match="no clip matching 'Run'"):
         pick_clip(names, "Run")
+
+
+def test_pick_clip_refuses_an_ambiguous_partial_name_and_lists_the_candidates():
+    names = ["Crouch_Idle_Loop_Armature", "Idle_Loop_Armature", "Sitting_Idle_Loop_Armature"]
+    with pytest.raises(ClipChoiceError) as exc:
+        pick_clip(names, "dle_Lo")                     # neither exact nor a prefix; three clips contain it
+    assert "ambiguous" in str(exc.value) and all(n in str(exc.value) for n in names)
+    assert pick_clip(names, "Crouch_Idle") == ("Crouch_Idle_Loop_Armature", "prefix")
+    assert pick_clip(["Walk_Armature"], "alk") == ("Walk_Armature", "substring")   # single candidate: allowed
 
 
 @pytest.mark.parametrize("tag, aspects", [

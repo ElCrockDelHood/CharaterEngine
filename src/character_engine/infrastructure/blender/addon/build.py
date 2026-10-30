@@ -29,6 +29,7 @@ from character_engine.domain.rigging import (
 )
 from character_engine.domain.tissue import MUSCLES, BodyRegion, TissueLayer, region_of_bone, tissue_profile
 from character_engine.domain.trauma import Wound, WoundAssessment, WoundType, assess_wound
+from character_engine.pipeline.batch_export import pick_clip
 
 Vec3 = Tuple[float, float, float]
 
@@ -771,8 +772,9 @@ ANIMATION_SUFFIXES = (".bvh", ".fbx", ".glb", ".gltf")
 def import_mocap(filepath: Path, bone_map: BoneMap, action_filter: str = ""):
     """Import a BVH, FBX or glTF animation file and return its armature.
 
-    glTF/FBX files usually carry several clips: ``action_filter`` (case-insensitive substring)
-    picks the one assigned to the armature; empty keeps the importer's choice (or the first clip).
+    glTF/FBX files usually carry several clips: ``action_filter`` picks the one assigned to the armature by
+    ``pick_clip`` (exact name, else ``<name>_…``, else a single substring match; ambiguous names are refused with
+    the candidates); empty keeps the importer's choice (or the first clip).
     Meshes that come with the file are tagged as mocap source and hidden.
     """
     suffix = filepath.suffix.lower()
@@ -843,9 +845,9 @@ def _finish_animation_import(before, actions_before, action_filter: str):
     src["ce_clips"] = json.dumps([a.name for a in clips])
     chosen = None
     if action_filter:
-        chosen = next((a for a in clips if action_filter.lower() in a.name.lower()), None)
-        if chosen is None:
-            raise RuntimeError(f"no clip matching '{action_filter}' in {[a.name for a in clips][:20]}")
+        name, rule = pick_clip([a.name for a in clips], action_filter)
+        chosen = next(a for a in clips if a.name == name)
+        src["ce_clip_rule"] = rule
     elif src.animation_data is None or src.animation_data.action is None:
         chosen = clips[0] if clips else None
     if chosen is not None:

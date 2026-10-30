@@ -483,6 +483,28 @@ def main(reset: bool = True) -> int:
         check("mocap: BVH import + retarget (mixamo map)", _mocap)
         check("animation: glTF import + clip choice + retarget (quaternius_ual map)", _gltf_animation)
 
+    def _clip_choice_operator():
+        """Import & retarget picks clips by exact name (pick_clip) and refuses an ambiguous partial name."""
+        glb = Path(tempfile.gettempdir()) / "ce_synthetic_ue.glb"
+        if not glb.exists():
+            glb = _write_synthetic_ue_glb(glb)
+        props.bone_map, props.bvh_path = "quaternius_ual", str(glb)
+        props.mocap_action = "Idle_Test"
+        assert bpy.ops.character_engine.import_mocap() == {"FINISHED"}
+        src = [o for o in bpy.data.objects if o.get("ce_role") == "mocap_source" and o.type == "ARMATURE"][-1]
+        picked, rule = src.animation_data.action.name, src["ce_clip_rule"]
+        assert picked.startswith("Idle_Test") and rule == "prefix", (picked, rule)
+        props.mocap_action = "Test"            # every synthetic clip contains it: refused, not the first match
+        try:        # in background mode an operator that reports ERROR raises instead of returning CANCELLED
+            refused = str(bpy.ops.character_engine.import_mocap())
+        except RuntimeError as exc:
+            refused = str(exc)
+        props.mocap_action = ""
+        assert "ambiguous" in refused and "Idle_Test" in refused, refused
+        return f"'Idle_Test' -> {picked} ({rule}); 'Test' refused: {refused.split('Error: ')[-1][:90]}..."
+    if not skipped(args, "mocap"):
+        check("animation: Import & retarget picks clips by exact name, refuses ambiguous ones", _clip_choice_operator)
+
     out_dir = ROOT / "builds" / "tests"
     out_dir.mkdir(parents=True, exist_ok=True)
 
