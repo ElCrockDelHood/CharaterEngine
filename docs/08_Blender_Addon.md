@@ -59,6 +59,7 @@ diameters, muscle bellies, skin thickness and tissue depths are ESTIMATE/PLACEHO
 python scripts/batch_export.py --check                       # validate scripts/batch_specs/default.json, list jobs
 python scripts/batch_export.py                               # run it (Blender 3.6 in background)
 python scripts/batch_export.py --spec scripts/batch_specs/ual1_local.json --validate-godot
+python scripts/batch_export.py --spec scripts/batch_specs/ual_bodies_local.json --validate-godot   # 85 UAL clips x 3 bodies
 python scripts/batch_export.py --only human_male_adult_1800mm_tpose
 ```
 
@@ -69,8 +70,17 @@ ESTIMATE radii) or `none`; tissue layers are not offered in batch yet. The spec 
 (`character_engine.pipeline.batch_export`) before Blender starts: unknown or unavailable templates (horse, dog),
 poses, bone maps, missing clip files or duplicate jobs refuse the whole run (exit 2), with every error listed.
 
-Each job runs from an emptied scene through the same operators as the panel (*Generate body*, *Import & retarget
-animation*) plus the block dummy, and writes to `builds/exports/batch/` (git-ignored):
+Each job runs from an emptied scene through the panel's *Generate body* operator and the same import / retarget
+functions as *Import & retarget animation*, plus the block dummy, and writes to the spec's `output_dir` (default
+`builds/exports/batch/`, git-ignored). The clip is chosen by `pick_clip`: exact name, else the shortest name
+starting with `<clip>_` (the glTF importer appends `_<object>`), else the importer's own rule (first substring
+match in sorted order, which would pick `Crouch_Idle_Loop` for `Idle_Loop`); the name used and the rule are in
+the provenance (`clip_resolved`, `clip_rule`).
+
+Local specs read files outside the repo in place (never copied): `ual1_local.json` (one clip) and
+`ual_bodies_local.json` (all 85 distinct UAL1 + UAL2 clips × `human_male_adult`, `human_female_adult`,
+`human_child_10y`, T-pose; UAL2's `A_TPose` is left out because UAL1 has a clip of the same name and the job names
+would collide; output `builds/exports/batch_ual/`). The child's proportions stay `placeholder` in every sidecar.
 
 | File | Content |
 |------|---------|

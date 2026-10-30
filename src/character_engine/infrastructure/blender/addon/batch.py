@@ -1,8 +1,9 @@
 """Batch export executor: one ``BatchJob`` (pipeline/batch_export.py) → ``<name>.glb`` + provenance sidecar.
 
-Each job starts from an emptied scene and drives the same operators as the panel (Generate body,
-Import & retarget animation) plus ``build.build_block_dummy`` / ``build.export_scene_glb``, so a batch
-GLB is what a user would get by clicking through the addon with the same settings.
+Each job starts from an emptied scene and drives the panel's *Generate body* operator and the same import /
+retarget functions as *Import & retarget animation* (with an exact-name clip choice, ``pick_clip``) plus
+``build.build_block_dummy`` / ``build.export_scene_glb``, so a batch GLB is what a user would get by clicking
+through the addon with the same settings.
 """
 
 from __future__ import annotations
@@ -13,7 +14,14 @@ from pathlib import Path
 
 import bpy
 
-from character_engine.pipeline.batch_export import BatchJob, provenance_record, resolve, sha256_file
+from character_engine.domain.animation import get_bone_map
+from character_engine.pipeline.batch_export import (
+    BatchJob,
+    pick_clip,
+    provenance_record,
+    resolve,
+    sha256_file,
+)
 
 from . import _bootstrap, bl_info, build
 
@@ -63,21 +71,31 @@ def run_job(context, job: BatchJob, out_dir: Path, root: Path | None = None, rep
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     arm, extra = build_body(context, job, repo_commit)
-    props = context.scene.character_engine
     if job.clip is not None:
         clip_path = resolve(root, job.clip.path)
-        props.bone_map, props.bvh_path, props.mocap_action = job.clip.bone_map, str(clip_path), job.clip.clip
-        props.mocap_bake = True
-        if bpy.ops.character_engine.import_mocap() != {"FINISHED"}:
-            raise RuntimeError(f"import_mocap cancelled for {clip_path} (see the Blender log above)")
+        if not clip_path.exists():
+            raise FileNotFoundError(f"clip file not found: {clip_path}")
+        # Same steps as the Import & retarget operator, except the clip choice: pick_clip prefers an exact or
+        # "<name>_" match over the importer's first substring match (Idle_Loop must not pick Crouch_Idle_Loop).
+        bone_map = get_bone_map(job.clip.bone_map)
+        src = build.import_mocap(clip_path, bone_map, "")
+        rule = None
+        if job.clip.clip:
+            name, rule = pick_clip(json.loads(src["ce_clips"]), job.clip.clip)
+            src.animation_data.action = bpy.data.actions[name]
+        src["ce_character"] = arm["ce_character"]
+        build._link(context, src, f"{arm['ce_character']}_Mocap")
+        build.retarget_mocap(context, src, arm, bone_map)
+        src.hide_set(True)
+        src.hide_render = True
         act = arm.animation_data.action if arm.animation_data else None
         if act is None:
             raise RuntimeError("retarget produced no action on the canonical armature")
-        src = next((o for o in bpy.data.objects if o.get("ce_role") == "mocap_source" and o.type == "ARMATURE"), None)
         extra.update({
             "clip_source_sha256": sha256_file(clip_path),
-            "clip_resolved": src.animation_data.action.name if src and src.animation_data and src.animation_data.action
+            "clip_resolved": src.animation_data.action.name if src.animation_data and src.animation_data.action
             else None,
+            "clip_rule": rule,
             "clip_frames": [int(act.frame_range[0]), int(act.frame_range[1])],
         })
     # the retarget keys every frame of every mapped bone, so keyed export keeps the motion (no forced sampling)

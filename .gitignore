@@ -70,4 +70,4 @@ builds/animations/
 builds/material_sample/
 builds/reactions/
 # Batch asset export outputs (scripts/batch_export.py)
-builds/exports/batch/
+builds/exports/batch*/

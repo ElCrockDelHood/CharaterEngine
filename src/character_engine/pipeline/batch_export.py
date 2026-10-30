@@ -29,7 +29,7 @@ import shutil
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Mapping, Optional, Sequence
+from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..domain.anatomy.pose.tpose import POSES
 from ..domain.anatomy.reference.source import ProvenanceState
@@ -249,6 +249,26 @@ def provenance_record(job: BatchJob, *, blender_version: str, addon_version: str
     if extra:
         rec.update(extra)
     return rec
+
+
+def pick_clip(names: Sequence[str], wanted: str) -> Tuple[str, str]:
+    """Choose the clip named by ``wanted`` among an animation file's ``names``. Returns (name, rule).
+
+    Rules in order: ``exact`` (case-insensitive), ``prefix`` (the shortest name starting with ``wanted`` + "_"; the
+    glTF importer appends "_<object>"), ``substring`` (first in sorted order, the addon importer's own rule).
+    The addon importer alone uses the substring rule, which picks ``Crouch_Idle_Loop`` for ``Idle_Loop``.
+    """
+    w = wanted.lower()
+    exact = [n for n in names if n.lower() == w]
+    if exact:
+        return exact[0], "exact"
+    prefixed = sorted((n for n in names if n.lower().startswith(w + "_")), key=lambda n: (len(n), n))
+    if prefixed:
+        return prefixed[0], "prefix"
+    sub = sorted(n for n in names if w in n.lower())
+    if sub:
+        return sub[0], "substring"
+    raise KeyError(f"no clip matching '{wanted}' among {sorted(names)[:20]}")
 
 
 def run_id(now: Optional[datetime] = None) -> str:

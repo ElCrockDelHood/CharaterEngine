@@ -2,6 +2,35 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-10-30 · Batch follow-up 2: UAL clips on three bodies, exact clip choice
+
+### Added
+- `scripts/batch_specs/ual_bodies_local.json`: the 85 distinct clips of the owner's local Quaternius UAL1 + UAL2
+  files (read in place outside the repo, never copied) × `human_male_adult`, `human_female_adult`,
+  `human_child_10y`, T-pose, bone map `quaternius_ual`, output `builds/exports/batch_ual/` (git-ignored with every
+  `builds/exports/batch*/`). UAL2's `A_TPose` is left out: UAL1 has a clip of the same name and the spec
+  validation refused the duplicate job names.
+- `pipeline/batch_export.pick_clip`: exact name, else the shortest `<clip>_…` name, else the importer's first
+  substring match. The batch runner uses it instead of the *Import & retarget* operator's filter, which picks
+  `Crouch_Idle_Loop` for `Idle_Loop`; the provenance records `clip_resolved` and `clip_rule`. 1 new test.
+
+### Results (Blender 3.6.23 + Godot 4.7.2, this PC)
+- `python scripts/batch_export.py --spec scripts/batch_specs/ual_bodies_local.json --validate-godot`:
+  **255/255 PASS**, Godot validator **255/255 PASS** (208 bones each). Blender 2026 s (mean 7.9–8.0 s per job, max
+  10.4 s), Godot 128 s. Every clip resolved by the `prefix` rule (`Idle_Loop` → `Idle_Loop_Armature`).
+  Manifest `builds/exports/batch_ual/manifest_ual_bodies_local_20261029T234642Z.json`.
+- The child sidecars keep `stature: estimate`, `proportions: placeholder`. The Godot check covers the skeleton
+  only; the motion quality of these retargets (foot sliding, contacts) on the female and child bodies was not
+  measured (the clip QA of `scripts/retarget_batch.py` runs on the 1.80 m male).
+
+### Test status
+- `python scripts/test.py`: 1063 passed. `python scripts/lint.py`: clean.
+  `python scripts/engine_tests.py blender --blender C:/DEV/Tools/Blender/blender.exe`: 37 passed, 0 failed.
+
+### Open
+- The panel operator *Import & retarget animation* still uses the substring rule (its code is in `build.py`,
+  which held another session's uncommitted changes); moving it to `pick_clip` is a follow-up.
+
 ## [Unreleased] — 2026-10-29 · Batch follow-up 1: one manifest per run
 
 ### Changed

@@ -16,6 +16,7 @@ from character_engine.pipeline.batch_export import (
     load_spec,
     manifest,
     manifest_name,
+    pick_clip,
     provenance_record,
     run_id,
     sha256_file,
@@ -148,3 +149,15 @@ def test_each_run_keeps_its_manifest_and_the_latest_copy_follows(tmp_path):
     assert json.loads((tmp_path / LATEST_MANIFEST).read_text(encoding="utf-8"))["jobs_done"] == 3
     assert sorted(p.name for p in tmp_path.iterdir()) == [
         LATEST_MANIFEST, "manifest_default_20261029T000000Z.json", "manifest_other_20261029T000001Z.json"]
+
+
+def test_pick_clip_prefers_exact_then_prefix_over_the_importer_substring_rule():
+    names = ["Crouch_Idle_Loop_Armature", "Idle_Loop_Armature", "Sitting_Idle_Loop_Armature",
+             "Sword_Regular_A_Armature", "Sword_Regular_A_Rec_Armature", "Swing_Test_UE_Test"]
+    assert pick_clip(names, "Idle_Loop") == ("Idle_Loop_Armature", "prefix")      # substring would pick Crouch_
+    assert pick_clip(names, "sword_regular_a") == ("Sword_Regular_A_Armature", "prefix")
+    assert pick_clip(names, "Swing_Test_UE_Test") == ("Swing_Test_UE_Test", "exact")
+    assert pick_clip(names, "Regular_A_Rec") == ("Sword_Regular_A_Rec_Armature", "substring")
+    with pytest.raises(KeyError, match="no clip matching 'Run'"):
+        pick_clip(names, "Run")
+
