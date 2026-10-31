@@ -126,6 +126,8 @@ func clip_for(f: CESoulsCombat.Fighter, telegraph := false) -> String:
 		return "heavy" if f.current_move.ends_with("_heavy") else "light_%d" % clampi(f.chain, 1, 3)
 	if telegraph and state == "idle":
 		return "windup"
+	if state == "knockdown":            # opt-in strike physics; no knockdown clip baked yet: placeholder
+		return "stagger"
 	for cid in table.get("clips", {}):
 		if (table["clips"][cid]["states"] as Array).has(state):
 			return cid

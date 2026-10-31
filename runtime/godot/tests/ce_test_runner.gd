@@ -10,6 +10,8 @@
 ##   - CEBreathing modifier displaces the sternum over time
 ##   - CEShenmueCombat replays every reference fight identically to the Python simulation (incl. weapons)
 ##   - CESoulsCombat replays the 9 Souls-like reference scenarios identically to Python
+##   - CEStrikePhysics (Decisions 58/59, opt-in) equals Python on every reference case; in CESoulsCombat it adds
+##     fracture / concussion / knockdown to blunt hits and leaves the default replay unchanged
 ##   - CESoulsArena builds, maps keys to scenario commands, and plays the Sentinel scenarios like Python
 ##   - Souls clips (baked in Blender): names, lengths, game-rig tracks; retargeted poses equal Python; clip per state
 ##   - Block body (Blender capsule mesh): 66-bone skin, <= 4 influences, finite, bound to the skeleton; weapons/markers
@@ -332,6 +334,109 @@ class Runner extends Node:
 				return [same, "%d hits, %d events, player HP %.2f st %.2f%s" % [got["hits"].size(), got["events"].size(),
 						got["fighters"]["player"]["health"], got["fighters"]["player"]["stamina"],
 						"" if same else "  diff: " + str(diff)]])
+
+		# ---- strike physics port vs Python (Decisions 58 and 59, opt-in) ---------
+		var sphys := CEStrikePhysics.load_default()
+		runner.check("strike physics: tables from Python load (11 regions, Rowson 2012, stagger levels)", func():
+			return [sphys.is_valid() and sphys.target_mass.size() == 11 and (sphys.tb["rowson_2012_rotational"] as Array).size() == 5
+					and sphys.cases().size() > 0, "%d regions, head %.4f kg, thorax %.4f kg, %d reference cases (commit %s)" % [
+					sphys.target_mass.size(), float(sphys.target_mass.get("head", 0.0)), float(sphys.target_mass.get("thorax", 0.0)),
+					sphys.cases().size(), sphys.doc.get("repo_commit", "?")]])
+		runner.check("strike physics identical to Python: split, peak force, fracture, head kinematics, stagger (all cases)", func():
+			var bad: Array = []
+			var worst := 0.0
+			for c in sphys.cases():
+				var e: Dictionary = c["expect"]
+				var g := sphys.blow(str(c["region"]), float(c["striker_mass_kg"]), float(c["speed_m_s"]),
+						float(c["lever_arm_m"]), float(c["bracing"]))
+				# Python rounds each field (3 or 4 decimals, force to 0.1 N) and feeds the rounded force to the head model.
+				var pairs: Array = []
+				for nt in [["striker_energy_j", 1e-3], ["reduced_mass_kg", 1e-4], ["dissipated_j", 1e-3], ["knockback_j", 2e-3],
+						["target_speed_after_m_s", 1e-4], ["peak_force_n", 0.06], ["fracture_probability", 1e-3]]:
+					pairs.append([nt[0], float(g[nt[0]]), float(e[nt[0]]), nt[1]])
+				for k in [["impulse_n_s", 1e-3], ["threshold_n_s", 1e-3], ["segment_speed_m_s", 1e-4]]:
+					pairs.append([k[0], float(g["stagger"][k[0]]), float(e["stagger"][k[0]]), k[1]])
+				if (e["head"] == null) != (g["head"] == null):
+					bad.append([c["region"], "head presence"])
+				elif e["head"] != null:
+					pairs.append(["linear_g", float(g["head"]["linear_g"]), float(e["head"]["linear_g"]), 0.01])
+					pairs.append(["rotational_rad_s2", float(g["head"]["rotational_rad_s2"]), float(e["head"]["rotational_rad_s2"]), 0.2])
+					pairs.append(["concussion_probability", float(g["head"]["concussion_probability"]), float(e["head"]["concussion_probability"]), 2e-4])
+				for pr in pairs:
+					var dlt: float = absf(float(pr[1]) - float(pr[2]))
+					worst = maxf(worst, dlt / float(pr[3]))
+					if dlt > float(pr[3]):
+						bad.append([c["striker"]["label"], c["region"], pr[0], pr[1], pr[2]])
+				if g["fractured"] != e["fractured"] or g["energy_criterion_met"] != e["energy_criterion_met"] \
+						or g["stagger"]["level"] != e["stagger"]["level"] or g["knocked_down"] != e["knocked_down"]:
+					bad.append([c["striker"]["label"], c["region"], c["lever_arm_m"], c["bracing"], "flags"])
+			return [bad.is_empty(), "%d cases, worst deviation %.2f of the rounding tolerance%s" % [sphys.cases().size(), worst,
+					"" if bad.is_empty() else "  bad: " + str(bad.slice(0, 5))]])
+		runner.check("strike physics opt-in in CESoulsCombat: blunt hits carry Python's numbers, events and knockdown; blades none", func():
+			var ref := {}
+			for c in sphys.cases():
+				if float(c["lever_arm_m"]) == float(sphys.tb["lever_straight_m"]) and float(c["bracing"]) == 1.0:
+					ref["%s|%s" % [c["striker"]["label"], c["region"]]] = c["expect"]
+			var bad: Array = []
+			var n_phys := 0
+			var n_down := 0
+			var n_frac := 0
+			for sc in data.souls_reference_scenarios():
+				var got := CESoulsCombat.replay(data, sc["spec"], sphys)
+				var evs: Array = got["events"]
+				for h in got["hits"]:
+					var weapon: String = str(h["move_id"]).rsplit("_", true, 1)[0]
+					if weapon == "short_blade":
+						if h.has("physics"):
+							bad.append([h["move_id"], "blade with physics"])
+						continue
+					if not h.has("physics"):
+						bad.append([h["move_id"], "no physics"])
+						continue
+					n_phys += 1
+					var ph: Dictionary = h["physics"]
+					var e: Dictionary = ref.get("%s|%s" % [h["move_id"], ph["region"]], {})
+					if e.is_empty() or absf(float(ph["peak_force_n"]) - float(e["peak_force_n"])) > 0.06 or ph["fractured"] != e["fractured"] \
+							or ph["knocked_down"] != e["knocked_down"]:
+						bad.append([h["move_id"], ph["region"], "differs from Python"])
+					var kinds := []
+					for ev in evs:
+						if int(ev["frame"]) == int(h["frame"]) and ev["fighter"] == h["defender"]:
+							kinds.append(ev["kind"])
+					if ph["fractured"]:
+						n_frac += 1
+						if not kinds.has("fracture"):
+							bad.append([h["move_id"], h["frame"], "no fracture event"])
+					if ph["knocked_down"] and not kinds.has("ko"):
+						n_down += 1
+						if not kinds.has("knockdown"):
+							bad.append([h["move_id"], h["frame"], "no knockdown event"])
+			return [bad.is_empty() and n_phys > 0, "%d blunt hits with physics, %d fractures, %d knockdowns over %d scenarios%s" % [
+					n_phys, n_frac, n_down, data.souls_reference_scenarios().size(), "" if bad.is_empty() else "  bad: " + str(bad.slice(0, 5))]])
+		runner.check("strike physics: staff heavy to the head knocks the defender down for knockdown_frames, then idle", func():
+			var sim := CESoulsCombat.new(data, [])
+			sim.physics = sphys
+			var pl := sim.make_fighter("player", 0.0, 0.0, "staff")
+			var op := sim.make_fighter("opponent", 0.0, -1.0, "unarmed")
+			for f in [pl, op]:
+				sim.fighters[f.fighter_id] = f
+				f.hitboxes = data.hitboxes(f.stature_m)
+			sim.feed("player", CESoulsCombat.SoulsInput.from_dict({"heavy": true}))
+			var down_at := -1
+			for _i in range(150):
+				sim.step()
+				if down_at < 0 and op.state == CESoulsCombat.S.KNOCKDOWN:
+					down_at = sim.frame
+				if down_at >= 0 and op.state != CESoulsCombat.S.KNOCKDOWN:
+					break
+			var kd := int(data.table.get("knockdown_frames", -1))
+			var ph: Dictionary = sim.hits[0].get("physics", {}) if not sim.hits.is_empty() else {}
+			var p_conc: float = float(ph["head"]["concussion_probability"]) if not ph.is_empty() and ph["head"] != null else -1.0
+			# The defender is stepped after the attacker in the hit frame, so a stun of N frames shows N - 1 frames later
+			# (same convention as hitstun / stagger in the Python port).
+			return [down_at > 0 and op.stun_frames == kd and sim.frame - down_at == kd - 1 and op.state == CESoulsCombat.S.IDLE and p_conc >= 0.5
+					and op.health < 100.0, "down at frame %d for %d frames (table %d), concussion p%.3f, HP %.1f" % [
+					down_at, sim.frame - down_at, kd, p_conc, op.health]])
 
 		# ---- D1 reaction library (generated offline in Blender, read as plain JSON) -
 		runner.check("D1 reaction library: schema 6 (subframes), body hits carry wound + reaction + per-clip blend, parries carry recoil and no wound", func():

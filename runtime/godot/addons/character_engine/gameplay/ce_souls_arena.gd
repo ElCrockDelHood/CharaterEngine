@@ -24,6 +24,8 @@ var data: CEGameplayData            # set by build() or loaded in _ready (RefCou
 @export var sentinel_weapon: String = "staff"
 @export var start_distance_m: float = 3.0
 @export var show_hud: bool = true
+## Opt-in strike physics (Decisions 58 and 59): fracture, concussion and knockdown on blunt hits (CEStrikePhysics).
+@export var strike_physics: bool = false
 ## false: the arena only advances through step_once() (headless tests).
 @export var autostep: bool = true
 ## Frames of scripted player input (tests / demos); empty = keyboard.
@@ -74,6 +76,8 @@ func _build_scene() -> void:
 	ensure_input_map()
 	# Same set-up as the Python reference scenarios: player at the origin, Sentinel at -Y (canonical frame).
 	combat = CESoulsCombat.new(data, [])
+	if strike_physics:
+		combat.physics = CEStrikePhysics.load_default()
 	var player := combat.make_fighter("player", 0.0, 0.0, player_weapon)
 	var opponent := combat.make_fighter("opponent", 0.0, -start_distance_m, sentinel_weapon)
 	for f in [player, opponent]:
@@ -189,6 +193,11 @@ func hud_text() -> String:
 		var f: CESoulsCombat.Fighter = combat.fighters[fid]
 		lines.append("%-8s HP %5.1f  ST %5.1f  POISE %4.1f  %-9s %s" % [fid if fid == "player" else "sentinel",
 				f.health, f.stamina, f.poise, f.state_name(), f.weapon["weapon_id"]])
+	if combat.physics != null and not combat.hits.is_empty() and combat.hits.back().has("physics"):
+		var ph: Dictionary = combat.hits.back()["physics"]
+		lines.append("last blow: %s %.0f N fracture p%.2f%s  stagger %s%s" % [ph["region"], ph["peak_force_n"],
+				ph["fracture_probability"], " BROKEN" if ph["fractured"] else "", ph["stagger"]["level"],
+				"  concussion p%.2f" % float(ph["head"]["concussion_probability"]) if ph["head"] != null else ""])
 	return "\n".join(lines)
 
 

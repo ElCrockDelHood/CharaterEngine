@@ -7,14 +7,20 @@
 ## arithmetic matches Python. Animation is not decided here: Godot plays baked clips (authored in Blender) by state.
 ##
 ## Call `feed(fighter_id, input)` for every fighter, then `step()` once per frame.
+##
+## Opt-in strike physics (Decisions 58 and 59, CEStrikePhysics): set `physics` to a loaded CEStrikePhysics and every
+## blunt body hit also gets the reduced-mass split, peak force, fracture, head kinematics and stagger in
+## `hit["physics"]`, "fracture" / "concussion" / "knockdown" events, and a KNOCKDOWN state when the blow knocks the
+## defender down. Health, poise and wounds are unchanged. With `physics` null (default) nothing differs from Python.
 class_name CESoulsCombat
 extends RefCounted
 
 const FRAME_RATE := 60
 const FALLBACK_BONE := "STERNUM"
 
-enum S { IDLE, WALK, GUARD, STARTUP, ACTIVE, RECOVERY, DODGE, HITSTUN, STAGGER, KO }
-const STATE_NAMES := ["idle", "walk", "guard", "startup", "active", "recovery", "dodge", "hitstun", "stagger", "ko"]
+enum S { IDLE, WALK, GUARD, STARTUP, ACTIVE, RECOVERY, DODGE, HITSTUN, STAGGER, KO, KNOCKDOWN }
+const STATE_NAMES := ["idle", "walk", "guard", "startup", "active", "recovery", "dodge", "hitstun", "stagger", "ko",
+		"knockdown"]
 
 
 class SoulsInput:
@@ -79,6 +85,8 @@ var frame := 0
 var events: Array = []
 var hits: Array = []
 var _resolved: Dictionary = {}
+## Opt-in strike physics (null = off, identical to Python). Blades are not covered (the model is blunt-only).
+var physics: CEStrikePhysics = null
 
 signal souls_event(ev: Dictionary)
 
@@ -254,7 +262,7 @@ func step() -> void:
 				if f.state_frames >= int(t["dodge_frames"]):
 					f.state = S.IDLE
 					f.state_frames = 0
-			S.HITSTUN, S.STAGGER:
+			S.HITSTUN, S.STAGGER, S.KNOCKDOWN:
 				if f.state_frames >= f.stun_frames:
 					f.state = S.IDLE
 					f.state_frames = 0
@@ -325,13 +333,24 @@ func _resolve_hit(a: Fighter, mv: Dictionary) -> void:
 	target.since_poise_hit = 0
 	var hit := {"frame": frame, "attacker": a.fighter_id, "defender": target.fighter_id, "move_id": mv["move_id"],
 			"bone_hit": bone, "energy_j": energy, "severity": int(impact["severity"])}
+	var ph := _physics_of(a, mv, impact)
+	if not ph.is_empty():
+		hit["physics"] = ph
 	hits.append(hit)
 	_emit(target.fighter_id, "hit", "%s->%s sev%d" % [mv["move_id"], bone, int(impact["severity"])])
+	if not ph.is_empty():
+		if ph["fractured"]:
+			_emit(target.fighter_id, "fracture", "%s %.0fN p%.2f" % [ph["region"], ph["peak_force_n"], ph["fracture_probability"]])
+		if ph["head"] != null:
+			_emit(target.fighter_id, "concussion", "p%.2f" % float(ph["head"]["concussion_probability"]))
 	if target.health <= 0.0 or bool(impact["is_lethal"]):
 		target.state = S.KO
 		target.state_frames = 0
 		target.current_move = ""
 		_emit(target.fighter_id, "ko")
+	elif not ph.is_empty() and ph["knocked_down"]:
+		_stun(target, S.KNOCKDOWN, int(data.table.get("knockdown_frames", t["stagger_frames"])))
+		_emit(target.fighter_id, "knockdown", "%s stagger=%s" % [mv["move_id"], ph["stagger"]["level"]])
 	elif target.poise <= 0.0:
 		target.poise = float(t["poise_max"])
 		_stun(target, S.STAGGER, int(t["stagger_frames"]))
@@ -340,6 +359,18 @@ func _resolve_hit(a: Fighter, mv: Dictionary) -> void:
 		_emit(target.fighter_id, "armoured", mv["move_id"])
 	else:
 		_stun(target, S.HITSTUN, int(mv["hitstun"]))
+
+
+## Strike physics of a body hit (empty when `physics` is off or the weapon is a blade). The striker is the move's
+## nominal one (`Striker.from_move`: souls kinds light / heavy use the punch speed, Python's fallback).
+func _physics_of(a: Fighter, mv: Dictionary, impact: Dictionary) -> Dictionary:
+	if physics == null or not physics.is_valid() or str(a.weapon.get("category", "")) == "blade":
+		return {}
+	var region := str(impact.get("region", ""))
+	if not physics.target_mass.has(region):
+		return {}
+	var st := physics.striker_from_move(float(mv["energy_j"]), str(mv["kind"]))
+	return physics.blow(region, float(st["mass_kg"]), float(st["speed_m_s"]))
 
 
 func _stun(f: Fighter, state: int, frames: int) -> void:
@@ -375,7 +406,7 @@ class Sentinel:
 		var none := SoulsInput.new()
 		if target == null or not me.alive():
 			return none
-		if me.state == S.HITSTUN or me.state == S.STAGGER:
+		if me.state == S.HITSTUN or me.state == S.STAGGER or me.state == S.KNOCKDOWN:
 			if phase != "approach":
 				_go("approach")
 			return none
@@ -427,10 +458,12 @@ func summary() -> Dictionary:
 
 
 ## Replay a souls reference scenario spec from the JSON table (mirror of Python `run_souls_scenario`).
-static func replay(p_data: CEGameplayData, spec: Dictionary) -> Dictionary:
+## `p_physics` (opt-in, not in Python) turns on the strike physics; null keeps the replay identical to Python.
+static func replay(p_data: CEGameplayData, spec: Dictionary, p_physics: CEStrikePhysics = null) -> Dictionary:
 	var weapons: Dictionary = spec.get("weapons", {})
 	var d := float(spec["distance_m"])
 	var sim := CESoulsCombat.new(p_data, [])
+	sim.physics = p_physics
 	var player := sim.make_fighter("player", 0.0, 0.0, str(weapons.get("player", "unarmed")))
 	var opponent := sim.make_fighter("opponent", 0.0, -d, str(weapons.get("opponent", "unarmed")))
 	for f in [player, opponent]:
