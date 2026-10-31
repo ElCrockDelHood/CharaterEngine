@@ -114,6 +114,9 @@ depth from deflection) is in `A15_STRIKE_MODEL.md` (`domain/physics/strike_model
 What the momentum part does (head acceleration → concussion probability, impulse → stagger) is in
 `A16_HEAD_KINEMATICS_KNOCKDOWN.md` (`domain/physics/head_kinematics.py`, Decision 59).
 
+Per-move striker ranges with provenance, and the head-impact sensitivity to the lever arm, are in
+`A17_MOVE_STRIKERS.md` (`domain/physics/move_strikers.py`, Decision 60).
+
 ## 6. Open items
 
 1. Read the full texts (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) and register them in `source_registry`

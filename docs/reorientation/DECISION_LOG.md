@@ -1076,15 +1076,30 @@ Open: hook-type blows saturate at 0.99 (lever arm ASSUMED); rotational velocity;
 
 ---
 
+## 60. PER-MOVE STRIKER RECORDS AND HEAD-IMPACT SENSITIVITY (ADDITIVE, OPT-IN)
+
+**Decision** (owner, 2026-10-31 "continua"): new `domain/physics/move_strikers.py` gives every gameplay move an
+effective mass, speed and head lever arm as low / nominal / high with per-field provenance (SOURCED / ESTIMATE /
+ASSUMED) and flags, without bending numbers, the moves whose nominal ½ m v² is more than 25 % away from the table
+`energy_j`: front_kick (+105 %), crescent_kick (+40 %), sweep (+119 %), shoulder_throw (+181 %). `scripts/
+head_sensitivity.py` shows concussion probability over lever arm 0.03–0.10 m × striker low / nominal / high: every
+head-hitting move spans ≈ 0.05–0.99, so the concussion output is dominated by the unsourced lever arm. It replaces
+nothing: `Striker.from_move`, the hook lever arm (0.08 m), the gameplay table and every earlier hash are unchanged.
+Evidence: `docs/audit/A17_MOVE_STRIKERS.md`. Tests: `tests/unit/test_move_strikers.py`.
+
+**Date**: 2026-10-31 · **Status**: FINAL (opt-in; values reversible)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 59
-**Final Decisions**: 55 (+4 deferred)
+**Total Decisions**: 60
+**Final Decisions**: 56 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
-**Reversible Decisions**: 6 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values)
+**Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)
 **Critical Decisions**: 6 (Source of Truth, Architecture Direction, Backend Priority, Provenance System, Mesh Generation, Data Invention Rule)
 
 ### 14.2 Decision Impact

@@ -120,6 +120,9 @@ enmienda a la Decisión 58).
 Qué hace la parte de cantidad de movimiento (aceleración de la cabeza → probabilidad de conmoción, impulso →
 tambaleo) está en `A16_HEAD_KINEMATICS_KNOCKDOWN.es.md` (`domain/physics/head_kinematics.py`, Decisión 59).
 
+Los rangos de golpeador por movimiento con procedencia, y la sensibilidad del impacto en la cabeza a la palanca,
+están en `A17_MOVE_STRIKERS.es.md` (`domain/physics/move_strikers.py`, Decisión 60).
+
 ## 6. Pendientes
 
 1. Leer los textos completos (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) y registrarlos en

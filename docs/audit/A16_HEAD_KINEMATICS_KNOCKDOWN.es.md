@@ -70,6 +70,9 @@ parte de la carga.
   guantes, golpes acumulados, dirección de la rotación, barridas (quitan el apoyo), datos de equilibrio en adultos
   jóvenes (umbrales ASSUMED), historia temporal (solo picos).
 
+Una grilla de sensibilidad sobre palanca y rango de golpeador para cada movimiento que pega en la cabeza está en
+`A17_MOVE_STRIKERS.es.md` (Decisión 60): cada movimiento recorre aproximadamente 0,05–0,99.
+
 ## Pendientes
 
 1. Velocidad rotacional / impulso angular, para poder usar la segunda columna de Rowson.

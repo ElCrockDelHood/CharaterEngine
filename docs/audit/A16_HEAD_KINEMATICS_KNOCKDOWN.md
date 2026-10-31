@@ -67,6 +67,9 @@ is modelled as a free 5.2 kg mass, while the Hybrid III neck carries part of the
   gloves, cumulative blows, the direction of rotation, sweeps (they remove support), young-adult balance data
   (thresholds ASSUMED), any time history (only peaks).
 
+A sensitivity grid over lever arm and striker range for every head-hitting move is in `A17_MOVE_STRIKERS.md`
+(Decision 60): every move spans about 0.05–0.99.
+
 ## Open items
 
 1. Rotational velocity / angular impulse, so the second Rowson column can be used.
