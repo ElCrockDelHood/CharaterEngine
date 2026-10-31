@@ -11,8 +11,8 @@ Each move of `gameplay_shenmue.json` gets effective mass, speed and head lever a
 provenance per field: SOURCED (read in a paper), ESTIMATE (derived from sourced numbers or the engine's estimates),
 ASSUMED (placeholder). Sources: Walilko 2005 (2.9 ± 2.0 kg, 9.14 ± 2.06 m/s, straight punches); Mosler 2024 (velocity
 at max force: jab 6.8, cross 8.6 m/s); Natale 2026 (kinematic punch mass 3.5–10 kg, preprint); roundhouse foot speed
-5.6–7.2 m/s (Gavagan & Sayers 2017); kicks up to 18 m/s (Corcoran 2024); whole leg ≈ 15 kg and segment fractions
-(A14, ESTIMATE). Rule: nominal ½ m v² must be within 25 % of the table's `energy_j`; where it is not, the record
+5.6–7.2 m/s (Gavagan & Sayers 2017); kicks up to 18 m/s (Corcoran 2024); whole leg ≈ 15 kg (ESTIMATE) from segment fractions
+(de Leva 1996, SOURCED; A14). Rule: nominal ½ m v² must be within 25 % of the table's `energy_j`; where it is not, the record
 carries a flag and the numbers are not bent.
 
 | Move | m kg (low / nom / high) | v m/s (low / nom / high) | head lever m | E nominal J | E table J | nominal vs table | E range J | provenance |

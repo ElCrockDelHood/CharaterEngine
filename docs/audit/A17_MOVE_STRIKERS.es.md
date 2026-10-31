@@ -12,7 +12,7 @@ baja / nominal / alta, con procedencia por campo: SOURCED (leído en un trabajo)
 fuente o de estimaciones del motor), ASSUMED (valor de relleno). Fuentes: Walilko 2005 (2,9 ± 2,0 kg, 9,14 ± 2,06
 m/s, rectos); Mosler 2024 (velocidad en la fuerza máxima: jab 6,8, recto 8,6 m/s); Natale 2026 (masa cinemática de la
 piña 3,5–10 kg, preprint); velocidad del pie en la patada circular 5,6–7,2 m/s (Gavagan y Sayers 2017); patadas de
-hasta 18 m/s (Corcoran 2024); pierna entera ≈ 15 kg y fracciones de segmento (A14, ESTIMATE). Regla: ½ m v² nominal
+hasta 18 m/s (Corcoran 2024); pierna entera ≈ 15 kg (ESTIMATE) a partir de fracciones de segmento (de Leva 1996, SOURCED; A14). Regla: ½ m v² nominal
 debe quedar dentro del 25 % del `energy_j` de la tabla; si no, el registro lleva una marca y los números no se fuerzan.
 
 | Movimiento | m kg (baja / nom / alta) | v m/s (baja / nom / alta) | palanca cabeza m | E nominal J | E tabla J | nominal vs tabla | rango E J | procedencia |

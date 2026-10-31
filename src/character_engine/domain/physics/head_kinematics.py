@@ -11,12 +11,16 @@ module turns the motion into what a fight needs, without changing any wound resu
 3. **Concussion probability** from the rotational-acceleration risk table of Rowson et al. 2012 (Ann Biomed Eng
    40(1):1–13; 335 players, 300 977 impacts, 57 concussions): 10 / 25 / 50 / 75 / 90 % at 5260 / 5821 / 6383 / 6945 /
    7483 rad/s², linearly interpolated; 0 → 10 % linear below the first row, 90 → 99 % above the last one (the tails
-   are ASSUMED). Helmeted American-football players, not bare heads or gloved punches.
+   are ASSUMED). Helmeted American-football players, not bare heads or gloved punches. The paper's logistic fit is
+   α = −12.531, β = 0.002 (β printed rounded: with 0.002 the 50 % point falls at 6266 rad/s², β ≈ 0.001963 reproduces
+   the table), so the table stays the implementation.
 4. **Stagger** from the impulse the blow gives the body, ``J = μ · v`` (perfectly inelastic contact with the struck
-   segment, ``collision.py``). One recovery step at ``P_STEP``, several at 1.3 × ``P_STEP`` (multiple-step / single-
-   step threshold ratio of Batcir et al. 2020), fall at 2 × ``P_STEP`` (ASSUMED). ``P_STEP`` = 25 N·s is ASSUMED for
-   a young fighter: older adults step at about 50 N held for about 0.35–0.5 s (Sturnieks et al. 2013), that is about
-   17–25 N·s (derived here, not measured as an impulse). ``bracing`` (≥ 1) raises the thresholds.
+   segment, ``collision.py``). One recovery step at ``P_STEP``, several at 1.3 × ``P_STEP`` (ASSUMED: inspired by the
+   ratio of platform *levels* in Batcir et al. 2020, a lateral moving platform, not convertible to N·s), fall at
+   2 × ``P_STEP`` (ASSUMED). Older adults (≈ 80 y) step at 50.3 / 45.6 / 70.5 N forward / backward / lateral under a
+   waist pull whose force–time area is 0.40 s × F (Sturnieks et al. 2013), that is ≈ 20 / 18 / 28 N·s (DERIVED from
+   SOURCED values, older adults). ``P_STEP`` = 25 N·s is ASSUMED for a young fighter (≈ 1.25–1.4 × the older-adult
+   value). ``bracing`` (≥ 1) raises the thresholds.
 
 Not modelled: rotational velocity and angular impulse, the neck, gloves, cumulative blows, the direction of rotation
 (sagittal / coronal / axial), sweeps (they remove the support, they do not push the centre of mass).
@@ -37,13 +41,14 @@ LEVER_HOOK_M = 0.08                      # ASSUMED: hook-type blow, off-centre l
 HEAD_INERTIA_KG_M2 = 0.0225              # ASSUMED (0.02–0.025 kg·m², unverified)
 
 # Rowson et al. 2012, Table: concussion probability vs peak rotational acceleration (rad/s²). SOURCED (football).
+ROWSON_2012_LOGISTIC = (-12.531, 0.002)    # printed α, β (β rounded); the interpolated table is what the code uses
 ROWSON_2012_ROTATIONAL: Tuple[Tuple[float, float], ...] = (
     (5260.0, 0.10), (5821.0, 0.25), (6383.0, 0.50), (6945.0, 0.75), (7483.0, 0.90))
 SATURATION_RAD_S2 = 9000.0               # ASSUMED: tail above the last table row reaches 0.99 here
 SATURATION_PROBABILITY = 0.99
 
-P_STEP_N_S = 25.0                        # ASSUMED (young fighter; older adults ≈ 17–25 N·s, derived from Sturnieks 2013)
-MULTI_STEP_RATIO = 1.3                   # Batcir et al. 2020 (multiple- / single-step threshold, older adults)
+P_STEP_N_S = 25.0                        # ASSUMED (young fighter); older adults 0.40 s × F ≈ 18–20 N·s AP, 28 lateral
+MULTI_STEP_RATIO = 1.3                   # ASSUMED (Batcir 2020 ratio of platform levels, not of force or impulse)
 FALL_RATIO = 2.0                         # ASSUMED
 STAGGER_LEVELS = ("none", "step", "steps", "fall")
 HEAD_REGIONS = (BodyRegion.HEAD, BodyRegion.NECK)

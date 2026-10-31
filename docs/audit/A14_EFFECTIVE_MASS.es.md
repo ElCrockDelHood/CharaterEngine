@@ -82,7 +82,7 @@ cociente sale grande. Para simular importa la cantidad de movimiento realmente t
 
 `domain/physics/collision.py`: `reduced_mass`, `split` (inelástico: deformación / cantidad de movimiento / velocidad
 común, conserva energía y cantidad de movimiento), `regional_target_mass_kg(masa_corporal, bracing)` = masa
-corporal × fracción del segmento (ESTIMATE, de Leva 1996 de memoria). `LayeredBody(...,
+corporal × fracción del segmento (ESTIMATE, de Leva 1996, Tabla 4, varones: SOURCED, verificado contra el texto completo en `VERIFICACION_FUENTES_A14_A16.es.md`; cabeza y cuello llevan los dos el segmento cabeza + cuello a propósito, así que la tabla suma 106,94 %). `LayeredBody(...,
 target_mass_kg=regional_target_mass_kg())` le pasa a `cut.py` / `blunt.py` (sin cambios) la energía de deformación y
 reporta `StrikeResult.collision`. Apagado por defecto: ningún hash existente cambia.
 

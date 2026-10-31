@@ -12,9 +12,9 @@ Estado: ESTIMATE / ASSUMED, aditivo y opcional (Decisión 59). Código: `domain/
 | Walilko, Viano y Bir 2005, *Br J Sports Med* 39(10):710 | 7 boxeadores olímpicos, 18 rectos a la cara de un Hybrid III | fuerza 3427 ± 811 N; velocidad de la mano 9,14 ± 2,06 m/s; masa efectiva 2,9 ± 2,0 kg; carga en mandíbula 876 ± 288 N; aceleración lineal de la cabeza 58 ± 13 g; aceleración rotacional 6343 ± 1789 rad/s²; corte en el cuello 994 ± 318 N |
 | Rowson et al. 2012, *Ann Biomed Eng* 40(1):1–13 | 335 jugadores de fútbol americano, 300 977 impactos, 57 conmociones | probabilidad de conmoción según aceleración / velocidad rotacional: 10 % 5260 rad/s² / 23,3 rad/s; 25 % 5821 / 25,8; 50 % 6383 / 28,3; 75 % 6945 / 30,8; 90 % 7483 / 33,2. Impactos con conmoción: media ≈ 100–106 g, ≈ 5000 rad/s² |
 | Sturnieks et al. 2013, *PLoS ONE* 8(8):e70981 | 242 adultos de ≈ 80 años, tirón en la cintura (rampa 300 ms, 200 ms sostenido, 100 ms de bajada) | umbral de paso de recuperación 50,3 ± 14,0 N adelante, 45,6 ± 13,2 N atrás, 70,5 ± 21,1 N lateral |
-| Batcir et al. 2020, *BMC Geriatr* 20:249 | 83 adultos de 70+ | umbral de varios pasos ≈ 1,3 × el de un paso (nivel 11,9 contra 8,9) |
+| Batcir et al. 2020, *BMC Geriatr* 20:249 | 83 adultos de 70+ | nivel de varios pasos ≈ 1,3 × el de un paso (11,9 contra 8,9) en una plataforma que se desplaza hacia los lados: cociente de niveles ordinales, no de fuerza ni de impulso |
 
-No se usan los coeficientes logísticos de Rowson (al extraerlos se perdió un signo); se interpola la tabla.
+El ajuste logístico de Rowson es α = −12,531, β = 0,002 (β impreso redondeado: con 0,002 el 50 % cae en 6266 rad/s²; β ≈ 0,001963 reproduce la tabla con error menor a 0,01 en las cinco filas, con test). La implementación sigue interpolando la tabla. Fuentes verificadas en `VERIFICACION_FUENTES_A14_A16.es.md`.
 
 ## Modelo
 
@@ -25,8 +25,10 @@ No se usan los coeficientes logísticos de Rowson (al extraerlos se perdió un s
 3. **Probabilidad de conmoción**: tabla de Rowson 2012 sobre `α`, lineal entre filas; de 0 a 10 % lineal entre 0 y
    5260 rad/s², de 90 a 99 % lineal entre 7483 y 9000 rad/s² (colas ASSUMED).
 4. **Tambaleo**: impulso `J = μ · v` que recibe el cuerpo a través del segmento golpeado (inelástico, `collision.py`).
-   Un paso a `P_PASO` = 25 N·s (ASSUMED para un peleador joven; en adultos mayores ≈ 17–25 N·s, *derivado* de ≈ 50 N
-   sostenidos ≈ 0,35–0,5 s), varios pasos a 1,3 × (Batcir 2020), caída a 2 × (ASSUMED). `bracing` ≥ 1 multiplica los
+   Un paso a `P_PASO` = 25 N·s (ASSUMED para un peleador joven). Adultos mayores: área fuerza–tiempo del tirón en
+   la cintura 0,40 s × F (Sturnieks 2013), ≈ 20 / 18 / 28 N·s adelante / atrás / lateral (DERIVED de valores con
+   fuente). Varios pasos a 1,3 × (ASSUMED, inspirado en los niveles de plataforma de Batcir 2020), caída a 2 ×
+   (ASSUMED). `bracing` ≥ 1 multiplica los
    umbrales. `knocked_down` = caída o probabilidad de conmoción ≥ 0,5.
 
 ## Aceptación (medias de Walilko: Striker 2,9 kg, 9,14 m/s, radio de contacto 0,04 m, a la cabeza)

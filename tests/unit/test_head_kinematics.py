@@ -129,3 +129,14 @@ def test_deterministic(body):
     a = knockback_of(strike_blunt(body, "head", st), st, LEVER_HOOK_M)
     b = knockback_of(strike_blunt(body, "head", st), st, LEVER_HOOK_M)
     assert a == b
+
+
+def test_rowson_logistic_agrees_with_the_table_when_beta_is_unrounded():
+    import math
+
+    from character_engine.domain.physics.head_kinematics import ROWSON_2012_LOGISTIC
+    alpha0, beta_printed = ROWSON_2012_LOGISTIC
+    assert -alpha0 / beta_printed == pytest.approx(6266.0, abs=1.0)        # printed β (rounded): 50 % at 6266
+    beta = -alpha0 / 6383.0                                                # unrounded β ≈ 0.001963 from the 50 % row
+    for rot, p in ROWSON_2012_ROTATIONAL:
+        assert 1.0 / (1.0 + math.exp(-(alpha0 + beta * rot))) == pytest.approx(p, abs=0.01)

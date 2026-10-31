@@ -4,13 +4,14 @@ Additive and opt-in: ``strike_model.Striker.from_move`` (table energy kept, spee
 here is written back into the gameplay table. Each record says where its numbers come from, field by field:
 
 * ``SOURCED``: read in a published paper (the page was read; the full text is not in the repository).
-* ``ESTIMATE``: derived from sourced numbers or from the engine's own estimates (segment fractions, A14).
+* ``ESTIMATE``: derived from sourced numbers or from the engine's own estimates (A14).
 * ``ASSUMED``: a placeholder in the right order of magnitude, no source.
 
 Sources used (A14, A15, A16): Walilko, Viano & Bir 2005, straight punch 2.9 ± 2.0 kg at 9.14 ± 2.06 m/s; Mosler 2024,
 boxers' velocity at maximum force, jab 6.8 m/s, cross 8.6 m/s; Natale 2026 (preprint, not peer reviewed), kinematic
 punch effective mass 3.5–10 kg; roundhouse foot speed at impact 5.6–7.2 m/s (Gavagan & Sayers 2017); kick speeds up to
-18 m/s (Corcoran 2024); whole-leg coupling ≈ 15 kg and segment fractions from ``collision.py`` (ESTIMATE).
+18 m/s (Corcoran 2024); whole-leg coupling ≈ 15 kg (ESTIMATE) from the ``collision.py`` segment fractions (de Leva
+1996, SOURCED).
 
 ``energy_flag`` is set when the nominal ``½ m v²`` is more than ``ENERGY_TOLERANCE`` away from the move's table
 ``energy_j``: the numbers are not bent to match, the mismatch is reported.

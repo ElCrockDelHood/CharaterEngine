@@ -7,10 +7,13 @@ rest, ``½ (m_s + m_t) V²``, stays as motion of striker + segment: knockback an
 input of a knockdown or concussion model, not of tissue damage. ``m_t → ∞`` (immovable target) gives back the old
 ``½ m_s v²``.
 
-Target effective mass per region (ESTIMATE): body mass × segment mass fraction. The fractions are recalled from the
-de Leva (1996) adjustment of Zatsiorsky–Seluyanov segment parameters (male) and are NOT yet verified against the
-paper in this repository. A struck segment drags its neighbours along (bracing, a stiff neck), so the real coupled
-mass is at least the segment mass; ``bracing`` multiplies it.
+Target effective mass per region (ESTIMATE): body mass × segment mass fraction. The fractions are SOURCED: de Leva
+1996, J Biomech 29(9):1223–1230, Table 4, males (adjusted Zatsiorsky–Seluyanov parameters; 100 young men, 73 kg),
+verified against the full text (docs/audit/VERIFICACION_FUENTES_A14_A16.es.md). de Leva's head segment runs from
+vertex to cervicale, so 6.94 % is head + neck: HEAD and NECK both get it on purpose (a blow to either moves head and
+neck together), which makes the table sum to 106.94 %; it is a per-region coupled mass, not a partition of the body.
+A struck segment drags its neighbours along (bracing, a stiff neck), so the real coupled mass is at least the segment
+mass; ``bracing`` multiplies it.
 """
 
 from __future__ import annotations
@@ -24,15 +27,16 @@ from ..tissue import BodyRegion
 
 DEFAULT_BODY_MASS_KG = 75.0              # ASSUMED adult male, only used when no body mass is given
 
-# Fraction of body mass per region (head and neck share the head+neck segment; thorax / abdomen / pelvis are the
-# upper / middle / lower trunk). ESTIMATE: de Leva 1996 values, recalled, pending verification (A14 §5).
+# Fraction of body mass per region: de Leva 1996, Table 4, males (SOURCED, verified). Thorax / abdomen / pelvis are the
+# upper / middle / lower trunk. HEAD and NECK both carry the head+neck segment (6.94 %, vertex to C7) on purpose, so
+# the values sum to 106.94 % with both arms and legs counted: coupled mass per struck region, not a partition.
 SEGMENT_MASS_FRACTION: Dict[BodyRegion, float] = {
     BodyRegion.HEAD: 0.0694, BodyRegion.NECK: 0.0694,
     BodyRegion.THORAX: 0.1596, BodyRegion.ABDOMEN: 0.1633, BodyRegion.PELVIS: 0.1117,
     BodyRegion.UPPER_ARM: 0.0271, BodyRegion.FOREARM: 0.0162, BodyRegion.HAND: 0.0061,
     BodyRegion.THIGH: 0.1416, BodyRegion.LEG: 0.0433, BodyRegion.FOOT: 0.0137,
 }
-SEGMENT_MASS_PROVENANCE = ProvenanceState.ESTIMATE
+SEGMENT_MASS_PROVENANCE = ProvenanceState.PROVEN       # reference-backed with citation (de Leva 1996, Table 4)
 
 
 def regional_target_mass_kg(body_mass_kg: float = DEFAULT_BODY_MASS_KG, bracing: float = 1.0

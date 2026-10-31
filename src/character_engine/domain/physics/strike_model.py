@@ -11,7 +11,8 @@ What changes with respect to ``blunt.py`` / ``body_strike.py`` (which stay as th
   (140 g at 20 m/s: 3.4 kN, 26 mm; 40 m/s: 10.6 kN, 55 mm) give ``k ≈ 1.3–1.9e5 N/m``, and the formula then
   reproduces the 20 m/s peak force to about 20 %. The layer stack (``blunt_through``) still decides *how deep* the
   damage goes; the shell is told whether it breaks (energy 0) or holds (energy ∞).
-* The skull additionally uses its only measured energy criterion (22–24 J, Delye 2007) on ``E_diss``.
+* The skull additionally uses its only measured energy criterion (22–24 J, Delye et al., 18 cadaver heads; the version
+  read is IUTAM 2005, the 2007 year is unconfirmed) on ``E_diss``.
 
 Reduced mass and the struck segment's effective mass come from ``collision.py`` (Decision 58): one table of target
 masses for the whole engine (body mass × segment fraction, ESTIMATE). This module adds only what is specific to the
@@ -56,7 +57,8 @@ TARGET_MASS_KG: Mapping[BodyRegion, float] = regional_target_mass_kg()
 # model runs.
 REGION_RESPONSE: Mapping[BodyRegion, RegionResponse] = {
     BodyRegion.HEAD: RegionResponse(1.0e5, (3000.0, 5000.0, 8000.0), (22.0, 24.0),
-                                    "energy 22-24 J: Delye 2007 (18 cadaver heads, 3.6-7 m/s) SOURCED; force range and k ASSUMED"),
+                                    "energy 22-24 J: Delye et al. (18 cadaver heads; IUTAM 2005 version read, 2007 unconfirmed) SOURCED; "
+                                    "force range and k ASSUMED"),
     BodyRegion.NECK: RegionResponse(5.0e4, (1500.0, 3000.0, 5000.0), None, "ASSUMED"),
     BodyRegion.THORAX: RegionResponse(1.6e5, (1200.0, 3300.0, 5900.0), None,
                                       "k from cadaver thorax 3.4 kN / 26 mm and 10.6 kN / 55 mm; rib force range 1.2-5.9 kN "
@@ -68,7 +70,9 @@ REGION_RESPONSE: Mapping[BodyRegion, RegionResponse] = {
                                        "force range 670-3550 N cited in a review: SOURCED, weak"),
     BodyRegion.HAND: RegionResponse(8.0e4, (500.0, 1500.0, 2500.0), None, "ASSUMED"),
     BodyRegion.THIGH: RegionResponse(2.5e5, (3800.0, 4500.0, 8230.0), None,
-                                     "Kennedy 2004: 3.8-4.8 kN mean fracture force, 45 cadaver femurs; 5.0-8.2 kN cited range"),
+                                     "force range ASSUMED: Kennedy 2004 (45 femurs, 3-point bending) reports peak bending MOMENTS "
+                                     "352 +/- 83 and 348 +/- 96 N m, 50 % risk at 395 N m (50th male); converting to "
+                                     "a force needs the span, not read (thesis pending)"),
     BodyRegion.LEG: RegionResponse(2.0e5, (4110.0, 6000.0, 8450.0), None,
                                    "tibia range 4110-8450 N cited in a review: SOURCED, weak"),
     BodyRegion.FOOT: RegionResponse(1.0e5, (1500.0, 3000.0, 5000.0), None, "ASSUMED"),

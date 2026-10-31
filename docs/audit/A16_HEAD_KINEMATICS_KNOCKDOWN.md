@@ -12,9 +12,9 @@ Status: ESTIMATE / ASSUMED, additive and opt-in (Decision 59). Code: `domain/phy
 | Walilko, Viano & Bir 2005, *Br J Sports Med* 39(10):710 | 7 Olympic boxers, 18 straight punches into a Hybrid III face | punch force 3427 ± 811 N; hand speed 9.14 ± 2.06 m/s; effective mass 2.9 ± 2.0 kg; jaw load 876 ± 288 N; head linear acceleration 58 ± 13 g; rotational acceleration 6343 ± 1789 rad/s²; neck shear 994 ± 318 N |
 | Rowson et al. 2012, *Ann Biomed Eng* 40(1):1–13 | 335 football players, 300 977 impacts, 57 concussions | concussion probability vs rotational acceleration / velocity: 10 % 5260 rad/s² / 23.3 rad/s; 25 % 5821 / 25.8; 50 % 6383 / 28.3; 75 % 6945 / 30.8; 90 % 7483 / 33.2. Concussive impacts: mean ≈ 100–106 g, ≈ 5000 rad/s² |
 | Sturnieks et al. 2013, *PLoS ONE* 8(8):e70981 | 242 adults aged ≈ 80, waist pull (300 ms ramp, 200 ms hold, 100 ms off) | recovery-step threshold 50.3 ± 14.0 N forward, 45.6 ± 13.2 N backward, 70.5 ± 21.1 N lateral |
-| Batcir et al. 2020, *BMC Geriatr* 20:249 | 83 adults aged 70+ | multiple-step threshold ≈ 1.3 × single-step threshold (level 11.9 vs 8.9) |
+| Batcir et al. 2020, *BMC Geriatr* 20:249 | 83 adults aged 70+ | multiple-step level ≈ 1.3 × single-step level (11.9 vs 8.9) on a lateral moving platform: a ratio of ordinal platform levels, not of force or impulse |
 
-The Rowson logistic coefficients are not used (their extraction lost a sign); the table is interpolated instead.
+Rowson's logistic fit is α = −12.531, β = 0.002 (β printed rounded: with 0.002 the 50 % point falls at 6266 rad/s²; β ≈ 0.001963 reproduces the table within 0.01 at all five rows, tested). The interpolated table stays the implementation. Sources verified in `VERIFICACION_FUENTES_A14_A16.es.md`.
 
 ## Model
 
@@ -25,8 +25,9 @@ The Rowson logistic coefficients are not used (their extraction lost a sign); th
 3. **Concussion probability**: Rowson 2012 table on `α`, linear between rows; 0 → 10 % linear from 0 to 5260
    rad/s², 90 → 99 % linear from 7483 to 9000 rad/s² (tails ASSUMED).
 4. **Stagger**: impulse `J = μ · v` given to the body through the struck segment (perfectly inelastic, `collision.py`).
-   One step at `P_STEP` = 25 N·s (ASSUMED for a young fighter; older adults ≈ 17–25 N·s, *derived* from ≈ 50 N held
-   ≈ 0.35–0.5 s), several steps at 1.3 × (Batcir 2020), fall at 2 × (ASSUMED). `bracing` ≥ 1 multiplies the
+   One step at `P_STEP` = 25 N·s (ASSUMED for a young fighter). Older adults: force–time area of the waist pull
+   0.40 s × F (Sturnieks 2013), ≈ 20 / 18 / 28 N·s forward / backward / lateral (DERIVED from SOURCED values).
+   Several steps at 1.3 × (ASSUMED, inspired by Batcir 2020 platform levels), fall at 2 × (ASSUMED). `bracing` ≥ 1 multiplies the
    thresholds. `knocked_down` = fall or concussion probability ≥ 0.5.
 
 ## Acceptance (Walilko means: Striker 2.9 kg, 9.14 m/s, contact radius 0.04 m, onto the head)

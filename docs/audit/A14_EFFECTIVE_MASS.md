@@ -79,7 +79,7 @@ the physically consistent choice.
 
 `domain/physics/collision.py`: `reduced_mass`, `split` (inelastic: deformation / momentum / common speed, energy and
 momentum conserved), `regional_target_mass_kg(body_mass, bracing)` = body mass × segment fraction (ESTIMATE, de Leva
-1996 recalled). `LayeredBody(..., target_mass_kg=regional_target_mass_kg())` feeds the unchanged `cut.py` /
+1996, Table 4, males: SOURCED, verified against the full text in `VERIFICACION_FUENTES_A14_A16.es.md`; head and neck both carry the head+neck segment on purpose, so the table sums to 106.94 %). `LayeredBody(..., target_mass_kg=regional_target_mass_kg())` feeds the unchanged `cut.py` /
 `blunt.py` with the deformation energy and reports `StrikeResult.collision`. Default off: no existing hash changes.
 
 What it does to the sample weapons (relaxed segments, 75 kg body, frontal centre): the sabre keeps 95 % of its 30 J on

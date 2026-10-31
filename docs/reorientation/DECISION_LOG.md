@@ -1041,7 +1041,7 @@ an optional `target_mass_kg`; with it, the unchanged layer models receive the de
 `StrikeResult.collision` reports deformation / momentum / segment speed. **Default off**: every existing result and
 hash (samples 1 and 2, A10 tables) is unchanged. `scripts/gameplay_vs_layered.py --reduced-mass` compares the
 gameplay table with it. Provenance: physics DERIVED; segment fractions ESTIMATE (de Leva 1996, recalled, not
-verified in the repository); striker masses in the comparison script ESTIMATE (punch 2.9 kg from secondary
+verified in the repository; verified and SOURCED since the Decision 59 amendment); striker masses in the comparison script ESTIMATE (punch 2.9 kg from secondary
 summaries of Walilko et al. 2005; kicks and throw from segment fractions, no sourced kick value). Evidence:
 `docs/audit/A14_EFFECTIVE_MASS.md`. Tests: `tests/unit/test_collision.py`.
 Open: make it the default (changes every hash), feed `momentum_j` / `target_speed_m_s` to a knockdown or concussion
@@ -1071,6 +1071,15 @@ in the repository); lever arms, head inertia, table tails and stagger thresholds
 Walilko's Olympic punches: force +15 %, linear acceleration × 1.33, rotational × 1.11, probability 0.77.
 Evidence: `docs/audit/A16_HEAD_KINEMATICS_KNOCKDOWN.md`. Tests: `tests/unit/test_head_kinematics.py`.
 Open: hook-type blows saturate at 0.99 (lever arm ASSUMED); rotational velocity; young-adult balance data.
+
+**Amendment** (2026-10-31, source verification `docs/audit/VERIFICACION_FUENTES_A14_A16.es.md`, owner OK): provenance
+corrected, **no number changed**. The ten segment fractions of `collision.py` (Decision 58) are SOURCED (de Leva 1996,
+Table 4, males; `SEGMENT_MASS_PROVENANCE` = PROVEN); NECK repeating the head+neck 6.94 % is documented as intentional
+(sum 106.94 %). `P_STEP` keeps 25 N·s ASSUMED for a young fighter; the older-adult reference is 0.40 s × F ≈ 18–20 N·s
+antero-posterior, 28 N·s lateral (Sturnieks 2013). `MULTI_STEP_RATIO` 1.3 is ASSUMED (Batcir 2020 compares platform
+levels, not force or impulse). Rowson 2012 logistic α = −12.531, β = 0.002 (rounded) recorded; the table stays the
+implementation (a test checks the unrounded β reproduces it). A15 thigh force range ASSUMED (Kennedy 2004 gives
+bending moments, 395 N·m at 50 % risk); Delye year 2007 unconfirmed.
 
 **Date**: 2026-10-30 · **Status**: FINAL (opt-in; values reversible)
 
