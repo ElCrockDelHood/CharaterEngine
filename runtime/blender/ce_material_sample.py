@@ -10,6 +10,11 @@ Driven by ``scripts/material_sample.py``. Blender computes nothing physical here
 forearm) or end-on impactor (sample 2, thorax) at its stopping depth, all read from the variant JSON files. The two
 variants sit side by side (first one on the left, seen from +X).
 
+Sample 2 presentation (none of it feeds back into the domain result or its hash): the layers are dented down to the
+blunt model's displacement (``CrushField``, per-shell ``compression_m``), the cutaway's section plane holds the strike
+line and halves the club with it, the right-hand variant is mirrored so the two clubs point outwards, and the club is
+drawn as rough wood rather than steel (a metal rod mirrors the blue coat).
+
 Materials map OpenPBR parameters from ``domain/materials/catalog.py`` onto the Principled BSDF (both the 3.x and
 the 4.x+ socket names). Optical values are ASSUMED look-dev, not measurements.
 Works with Blender 3.6 and 4.x / 5.x (EEVEE engine id and Principled sockets are probed at run time).
@@ -32,7 +37,11 @@ except ImportError as exc:  # pragma: no cover
     raise SystemExit("run inside Blender: blender -b --python ...") from exc
 
 WEDGE_HALF_ANGLE = math.radians(50.0)    # cutaway opening around +X (lateral), presentation only
+WEDGE = (-WEDGE_HALF_ANGLE, WEDGE_HALF_ANGLE)   # open interval (angle from +X towards +Y), symmetric by default
+# thorax: one cut face lies on the strike plane (-Y), so the section shows the dent profile; presentation only
+THORAX_WEDGE = (math.radians(-90.0), math.radians(40.0))
 SEGMENTS = 64
+DENT_TAPER = 1.5     # crater rim width / impactor radius beyond the rod (ASSUMED, presentation only)
 SAMPLES = {   # file prefix, cloth key in the JSON, config key of the cloth thickness, variant names (left, right)
     "forearm": {"prefix": "forearm", "cloth": "sleeve", "thickness": "sleeve_thickness_m",
                 "variants": ("unarmored", "armored")},
@@ -92,28 +101,39 @@ def _frame(a: Vector, b: Vector):
     return u, e1, e2
 
 
+def _in_wedge(ang: float, wedge) -> bool:
+    lo, hi = wedge
+    return (ang - lo) % (2 * math.pi) < hi - lo
+
+
 def shell_sector(name: str, a: Vector, b: Vector, r_in: float, r_out: float, t0: float = 0.0, t1: float = 1.0,
-                 wedge: float = WEDGE_HALF_ANGLE):
-    """Closed annular sector solid around a→b, open over ±wedge around +X (the cutaway)."""
+                 wedge=WEDGE, segments: int = SEGMENTS, n_along: int = 1):
+    """Closed annular sector solid around a→b, open over the ``wedge`` angle interval (the cutaway).
+
+    ``n_along`` > 1 adds axial rings so the walls and the cut faces can be dented (``dent_object``).
+    """
     u, e1, e2 = _frame(a, b)
-    p0, p1 = a + (b - a) * t0, a + (b - a) * t1
-    angs = [wedge + (2 * math.pi - 2 * wedge) * i / SEGMENTS for i in range(SEGMENTS + 1)]
+    lo, hi = wedge
+    angs = [hi + (2 * math.pi - (hi - lo)) * i / segments for i in range(segments + 1)]
     bm = bmesh.new()
 
     def ring(center, r):
         return [bm.verts.new(center + (e1 * math.cos(t) + e2 * math.sin(t)) * r) for t in angs]
 
-    rings = {}
-    for key, c, r in (("o0", p0, r_out), ("o1", p1, r_out), ("i0", p0, r_in), ("i1", p1, r_in)):
-        rings[key] = ring(c, max(r, 1e-5))
+    centres = [a + (b - a) * (t0 + (t1 - t0) * k / n_along) for k in range(n_along + 1)]
+    outer = [ring(c, max(r_out, 1e-5)) for c in centres]
+    inner = [ring(c, max(r_in, 1e-5)) for c in centres]
     n = len(angs)
-    for i in range(n - 1):
-        bm.faces.new((rings["o0"][i], rings["o0"][i + 1], rings["o1"][i + 1], rings["o1"][i]))
-        bm.faces.new((rings["i1"][i], rings["i1"][i + 1], rings["i0"][i + 1], rings["i0"][i]))
-        bm.faces.new((rings["i0"][i], rings["i0"][i + 1], rings["o0"][i + 1], rings["o0"][i]))
-        bm.faces.new((rings["o1"][i], rings["o1"][i + 1], rings["i1"][i + 1], rings["i1"][i]))
-    for j in (0, n - 1):                                            # radial cut faces of the wedge
-        bm.faces.new((rings["i0"][j], rings["o0"][j], rings["o1"][j], rings["i1"][j]))
+    for k in range(n_along):
+        o0, o1, i0, i1 = outer[k], outer[k + 1], inner[k], inner[k + 1]
+        for i in range(n - 1):
+            bm.faces.new((o0[i], o0[i + 1], o1[i + 1], o1[i]))
+            bm.faces.new((i1[i], i1[i + 1], i0[i + 1], i0[i]))
+        for j in (0, n - 1):                                        # radial cut faces of the wedge
+            bm.faces.new((i0[j], o0[j], o1[j], i1[j]))
+    for o, i_ in ((outer[0], inner[0]), (inner[-1], outer[-1])):    # end caps
+        for i in range(n - 1):
+            bm.faces.new((i_[i], i_[i + 1], o[i + 1], o[i]))
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     me = bpy.data.meshes.new(name)
     bm.to_mesh(me)
@@ -126,7 +146,7 @@ def shell_sector(name: str, a: Vector, b: Vector, r_in: float, r_out: float, t0:
 
 
 def sleeve_object(name: str, verts, faces, thickness: float, axis_a: Vector, axis_b: Vector, shift: Vector,
-                  floor_radius=None):
+                  floor_radius=None, wedge=WEDGE):
     """Sleeve mesh from the XPBD positions; faces inside the cutaway wedge are dropped so the layers show.
 
     ``floor_radius(t)`` (t = 0..1 along a→b), when given, pushes vertices radially out to just above the outermost
@@ -153,7 +173,7 @@ def sleeve_object(name: str, verts, faces, thickness: float, axis_a: Vector, axi
         rel = c - axis_a
         radial = rel - u * rel.dot(u)
         ang = math.atan2(radial.dot(e2), radial.dot(e1))
-        if abs(ang) > WEDGE_HALF_ANGLE:
+        if not _in_wedge(ang, wedge):
             keep.append(f)
     me = bpy.data.meshes.new(name)
     me.from_pydata([tuple(Vector(v) + shift) for v in verts], [], [tuple(f) for f in keep])
@@ -168,21 +188,125 @@ def sleeve_object(name: str, verts, faces, thickness: float, axis_a: Vector, axi
     return obj
 
 
-def impactor_objects(name: str, ends, radius: float, shift: Vector):
-    """End-on impactor (rod with a rounded tip): tip centre = where the domain says it stopped."""
+class CrushField:
+    """Presentation-only dent of the layered stack under the blunt impactor (sample 2).
+
+    Each interface at radius r moves along the strike direction by the summed ``compression_m`` of the crushed
+    shells inside r (linear within a shell), so the outer surface moves by ``displacement_m`` and the rod face
+    rests on it. Lateral profile: the rod's hemispherical tip out to its radius, then a cosine rim of
+    ``DENT_TAPER`` × radius (ASSUMED). Only the struck side moves. The domain result and its hash are untouched.
+    """
+
+    def __init__(self, r: dict, tip: Vector, back: Vector, axis_a: Vector, axis_b: Vector, radius: float):
+        self.s = (tip - back).normalized()
+        self.u = (axis_b - axis_a).normalized()
+        self.a0 = axis_a
+        self.p0 = axis_a + self.u * (tip - axis_a).dot(self.u)      # strike line meets the spine axis here
+        self.radius = radius
+        comp = {x["shell"]: x["compression_m"] for x in r["blunt"]["absorbed"]}
+        self.bands = sorted((sh["r_inner_m"], sh["r_outer_m"], comp.get(sh["name"], 0.0)) for sh in r["shells"])
+        self.total = r["blunt"]["displacement_m"]
+        self.thick = {sh["name"]: (sh["r_outer_m"] - sh["r_inner_m"], comp.get(sh["name"], 0.0))
+                      for sh in r["shells"]}
+
+    def depth_at_radius(self, rr: float) -> float:
+        d = 0.0
+        for r_in, r_out, c in self.bands:
+            if rr >= r_out:
+                d += c
+            elif rr > r_in:
+                d += c * (rr - r_in) / max(r_out - r_in, 1e-9)
+        return d
+
+    def profile(self, rho: float) -> float:
+        """0..1 share of the centre depth at lateral distance rho from the strike line."""
+        a, big = self.radius, max(self.total, 1e-9)
+        rim = max(big - a, 0.0)                                       # depth where the tip meets the rod wall
+        if rho < a:
+            return max(0.0, big - a + math.sqrt(a * a - rho * rho)) / big
+        w = DENT_TAPER * a
+        if rho < a + w:
+            return rim / big * 0.5 * (1.0 + math.cos(math.pi * (rho - a) / w))
+        return 0.0
+
+    def offset(self, p: Vector, depth_fn=None) -> tuple[float, Vector]:
+        """(profile share, displacement) for a world point; ``depth_fn(radius)`` overrides the centre depth."""
+        rel = p - self.p0
+        front = -rel.dot(self.s)                                      # > 0 on the struck side
+        if front <= 0.0:
+            return 0.0, Vector()
+        lateral = rel + self.s * front
+        g = self.profile(lateral.length) * min(1.0, front / 0.01)
+        if g <= 0.0:
+            return 0.0, Vector()
+        radial = (p - self.a0) - self.u * (p - self.a0).dot(self.u)
+        return g, self.s * ((depth_fn or self.depth_at_radius)(radial.length) * g)
+
+
+def dent_object(obj, field: CrushField, cloth=None):
+    """Move the mesh vertices by ``field``.
+
+    ``cloth = (shell name, floor radius)`` for the solidified XPBD cloth: its mid-surface lands just above the
+    dented floor (the gap under it is closed) and the Solidify thins to the crushed thickness.
+    """
+    depth_fn, keep = None, 1.0
+    if cloth is not None and cloth[0] in field.thick:
+        t, c = field.thick[cloth[0]]
+        keep = max(0.05, (t - c) / max(t, 1e-9))
+        floor = cloth[1]
+        base = field.depth_at_radius(floor)
+        depth_fn = lambda rr: max(0.0, base + rr - floor - (t - c) / 2 - 0.0005)  # noqa: E731
+    weights = []
+    for v in obj.data.vertices:
+        g, d = field.offset(Vector(v.co), depth_fn)
+        v.co = Vector(v.co) + d
+        weights.append(g)
+    obj.data.update()
+    if depth_fn is not None and "thickness" in obj.modifiers:
+        vg = obj.vertex_groups.new(name="crush")
+        for i, g in enumerate(weights):
+            vg.add([i], 1.0 - g, "REPLACE")
+        sol = obj.modifiers["thickness"]
+        sol.vertex_group, sol.thickness_vertex_group = vg.name, keep
+
+
+def impactor_objects(name: str, ends, radius: float, shift: Vector, cut_normal: Vector | None = None):
+    """End-on impactor (rod with a rounded tip): tip centre = where the domain says it stopped.
+
+    ``cut_normal``: halve the rod on the section plane through its axis (keep the side opposite the normal) so it
+    is cut like the layers it rests on.
+    """
     tip, back = Vector(ends[0]) + shift, Vector(ends[1]) + shift
     axis = tip - back
-    bpy.ops.mesh.primitive_cylinder_add(radius=radius, depth=axis.length, location=(tip + back) / 2)
+    bpy.ops.mesh.primitive_cylinder_add(radius=radius, depth=axis.length, location=(tip + back) / 2, vertices=64)
     rod = bpy.context.active_object
     rod.name = name
     rod.rotation_mode = "QUATERNION"
     rod.rotation_quaternion = Vector((0.0, 0.0, 1.0)).rotation_difference(axis.normalized())
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=radius, location=tip)
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=radius, location=tip, segments=64, ring_count=32)
     ball = bpy.context.active_object
     ball.name = name + "_tip"
     for o in (rod, ball):
+        if cut_normal is not None:
+            inv = o.matrix_world.inverted()
+            bm = bmesh.new()
+            bm.from_mesh(o.data)
+            # 0.1 mm off the axis: the sphere poles and some rod edges lie exactly on the plane and break the fill;
+            # the tip keeps only its front half, so its section does not overlap the rod's (coplanar flicker)
+            cuts = [(tip + cut_normal.normalized() * 1e-4, cut_normal)]
+            if o is ball:
+                cuts.append((tip, -axis))
+            for co, no in cuts:
+                bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], dist=1e-7,
+                                       plane_co=inv @ co, plane_no=(inv.to_3x3() @ no).normalized(),
+                                       clear_outer=True)
+                bmesh.ops.holes_fill(bm, edges=bm.edges[:], sides=0)     # one planar hole per cut
+            bm.to_mesh(o.data)
+            bm.free()
         for poly in o.data.polygons:
             poly.use_smooth = True
+        if hasattr(o.data, "use_auto_smooth"):                          # 3.x: the flat section face stays flat
+            o.data.use_auto_smooth, o.data.auto_smooth_angle = True, math.radians(50.0)
     return [rod, ball]
 
 
@@ -204,21 +328,52 @@ def blade_object(name: str, ends, width: float, thickness: float, strike_dir: Ve
 
 
 # --------------------------------------------------------------------------- scene
+def mirror_y(r: dict, cloth: str) -> dict:
+    """Presentation only: mirror a variant across XZ (the layer stack is symmetric), so the right-hand thorax is
+    struck from +Y and its rod points away from its neighbour instead of running through it."""
+    r = json.loads(json.dumps(r))
+    flip = lambda p: [p[0], -p[1], p[2]]  # noqa: E731
+    r["placement"]["a"], r["placement"]["b"] = flip(r["placement"]["a"]), flip(r["placement"]["b"])
+    last = r["frames"][-1]
+    last[cloth] = [flip(v) for v in last[cloth]]
+    r[cloth]["faces"] = [list(reversed(f)) for f in r[cloth]["faces"]]
+    if "impactor" in last:
+        last["impactor"] = [flip(p) for p in last["impactor"]]
+    r["mirrored"] = True
+    return r
+
+
 def build_variant(r: dict, mats: dict, spec: dict, side: float):
     r_max = max(sh["r_outer_m"] for sh in r["shells"])
     shift = Vector((-r["placement"]["a"][0], side * (r_max + 0.03), 0.0))
     a = Vector(r["placement"]["a"]) + shift
     b = Vector(r["placement"]["b"]) + shift
+    last = r["frames"][-1]
+    blunt = "blunt" in r and "impactor" in last and "tip_to_axis_m" in last
+    wedge = THORAX_WEDGE if blunt else WEDGE
+    if r.get("mirrored"):
+        wedge = (-wedge[1], -wedge[0])
+    mesh_kw = {"wedge": wedge, "segments": 192, "n_along": 64} if blunt else {}
+    field = None
+    if blunt:
+        # presentation only: the cloth XPBD stops the rod at the coat; draw its face where the blunt model says the
+        # crushed stack ends (outer radius minus displacement) and dent every layer down to it (CrushField)
+        tip, back = Vector(last["impactor"][0]), Vector(last["impactor"][1])
+        d = (tip - back).normalized()
+        push = last["tip_to_axis_m"] - max(0.0, r_max - r["blunt"]["displacement_m"])
+        tip, back = tip + d * push, back + d * push
+        field = CrushField(r, tip + shift, back + shift, a, b, r["config"]["impactor_radius_m"])
     objs = []
     for s in r["shells"]:
         if s["material"] in ("air", "cloth_wool"):
             continue                                   # sleeve comes from the XPBD mesh
         t0, t1 = (s["z_range"] or (0.0, 1.0))
-        o = shell_sector(f"{r['variant']}_{s['name']}", a, b, s["r_inner_m"], s["r_outer_m"], t0, t1)
+        o = shell_sector(f"{r['variant']}_{s['name']}", a, b, s["r_inner_m"], s["r_outer_m"], t0, t1, **mesh_kw)
+        if field is not None:
+            dent_object(o, field)
         o.data.materials.append(mats[s["material"]])
         o["ce_provenance"] = s["provenance"]
         objs.append(o)
-    last = r["frames"][-1]
     cloth = spec["cloth"]
     solids = [sh for sh in r["shells"] if sh["material"] not in ("air", "cloth_wool")]
 
@@ -228,21 +383,33 @@ def build_variant(r: dict, mats: dict, spec: dict, side: float):
 
     sl = sleeve_object(f"{r['variant']}_{cloth}", last[cloth], r[cloth]["faces"],
                        r["config"][spec["thickness"]], Vector(r["placement"]["a"]), Vector(r["placement"]["b"]),
-                       shift, floor_radius)
+                       shift, floor_radius, wedge)
+    if field is not None:
+        bm = bmesh.new()                                # the XPBD grid (~2 cm) is too coarse for the crater
+        bm.from_mesh(sl.data)
+        bmesh.ops.subdivide_edges(bm, edges=bm.edges[:], cuts=3, use_grid_fill=True)
+        u, e1, e2 = _frame(a, b)                        # re-cut the finer faces so the cloth ends at the section
+        cut = []
+        for f in bm.faces:
+            rel = f.calc_center_median() - a
+            radial = rel - u * rel.dot(u)
+            if _in_wedge(math.atan2(radial.dot(e2), radial.dot(e1)), wedge):
+                cut.append(f)
+        bmesh.ops.delete(bm, geom=cut, context="FACES")
+        bm.to_mesh(sl.data)
+        bm.free()
+        for poly in sl.data.polygons:
+            poly.use_smooth = True
+        dent_object(sl, field, (cloth, floor_radius(r["config"].get("strike_t_axial", 0.5))))
     sl.data.materials.append(mats["cloth_wool"])
     objs.append(sl)
     if "impactor" in last:
-        ends = last["impactor"]
-        if "blunt" in r and "tip_to_axis_m" in last:
-            # presentation only: the cloth XPBD stops the rod at the coat; draw its face where the blunt model says the
-            # crushed stack ends (outer radius minus displacement). The layers themselves are not dented.
-            tip, back = Vector(ends[0]), Vector(ends[1])
-            d = (tip - back).normalized()
-            push = last["tip_to_axis_m"] - max(0.0, r_max - r["blunt"]["displacement_m"])
-            ends = [tuple(tip + d * push), tuple(back + d * push)]
-        im = impactor_objects(f"{r['variant']}_impactor", ends, r["config"]["impactor_radius_m"], shift)
+        ends = [tuple(tip), tuple(back)] if blunt else last["impactor"]
+        # blunt: the section plane holds the strike line; keep the half on the kept-material side (-X)
+        im = impactor_objects(f"{r['variant']}_impactor", ends, r["config"]["impactor_radius_m"], shift,
+                              Vector((1.0, 0.0, 0.0)) if blunt else None)
         for o in im:
-            o.data.materials.append(mats["armor_steel"])
+            o.data.materials.append(mats.get("impactor_presentation", mats["armor_steel"]))
             o["ce_provenance"] = "PLACEHOLDER impactor"
         objs += im
     if "blade" in last:
@@ -340,7 +507,7 @@ def gpu_probe(out: Path) -> dict:
     return result
 
 
-def render_still(scene, path: Path, engine: str, samples: int, device: str) -> dict:
+def render_still(scene, path: Path, engine: str, samples: int, device: str, smooth_eevee: bool = False) -> dict:
     scene.render.filepath = str(path)
     if engine == "cycles":
         scene.render.engine = "CYCLES"
@@ -350,9 +517,16 @@ def render_still(scene, path: Path, engine: str, samples: int, device: str) -> d
         scene.render.engine = eevee_id()
         if hasattr(scene.eevee, "taa_render_samples"):
             scene.eevee.taa_render_samples = 64
-        for attr in ("use_gtao", "use_ssr", "use_soft_shadows"):
+        for attr in ("use_gtao", "use_ssr", "use_soft_shadows", "use_shadow_high_bitdepth"):
             if hasattr(scene.eevee, attr):
                 setattr(scene.eevee, attr, True)
+        if smooth_eevee:
+            # thorax: screen-space reflections smear the rod into the cloth (nothing here is a mirror any more);
+            # finer cube shadows and SSS samples keep the crater edges crisp. Presentation only.
+            for attr, value in (("use_ssr", False), ("shadow_cube_size", "2048"), ("sss_samples", 15),
+                                ("gtao_distance", 0.05)):
+                if hasattr(scene.eevee, attr):
+                    setattr(scene.eevee, attr, value)
     t = time.perf_counter()
     bpy.ops.render.render(write_still=True)
     return {"path": str(path), "engine": scene.render.engine, "samples": samples if engine == "cycles" else 64,
@@ -382,8 +556,11 @@ def main() -> int:
     bpy.ops.wm.read_factory_settings(use_empty=True)
     scene = bpy.context.scene
     spec = SAMPLES[a.sample]
+    thorax = a.sample == "thorax"
     names = spec["variants"]
     variants = [json.loads((a.input / f"{spec['prefix']}_{v}.json").read_text(encoding="utf-8")) for v in names]
+    if thorax:
+        variants[1] = mirror_y(variants[1], spec["cloth"])
     mats = {row["kind"]: principled_from_openpbr(row["kind"], row["optical_openpbr"])
             for row in variants[0]["materials"] if row["optical_openpbr"]}
     if a.sample == "thorax":                       # presentation only: rib shell, tendon and cavity read apart
@@ -394,8 +571,17 @@ def main() -> int:
                 bsdf = mats[kind].node_tree.nodes["Principled BSDF"]
                 _set(bsdf, ["Base Color"], colour)
                 _set(bsdf, ["Subsurface Color"], colour)   # 3.x: the subsurface colour dominates the base colour
-        if "armor_steel" in mats:                  # presentation only: a mirror rod reflects the blue coat as a sleeve
-            _set(mats["armor_steel"].node_tree.nodes["Principled BSDF"], ["Roughness"], 0.45)
+        # presentation only: any metal rod mirrors the blue coat (a blue cast even at roughness 0.45), so the club is
+        # drawn as dark varnished wood, a rough dielectric (ASSUMED look-dev; the domain impactor is unchanged)
+        club = bpy.data.materials.new("impactor_presentation")
+        club.use_nodes = True
+        bsdf = club.node_tree.nodes["Principled BSDF"]
+        _set(bsdf, ["Base Color"], (0.10, 0.045, 0.018, 1.0))      # linear (sRGB ~ #5A3B24)
+        _set(bsdf, ["Metallic"], 0.0)
+        _set(bsdf, ["Roughness"], 0.6)
+        _set(bsdf, ["Specular", "Specular IOR Level"], 0.3)
+        club["ce_provenance"] = "ASSUMED presentation (club)"
+        mats["impactor_presentation"] = club
         scene.view_settings.exposure = -1.5        # presentation only: at 0 EV Filmic washes every layer to pastel
     centres = {}
     for r, side in zip(variants, (-1.0, 1.0)):
@@ -405,7 +591,8 @@ def main() -> int:
     k = max(1.0, r_max / 0.06)                       # forearm sample (outer radius 0.0515 m) keeps k = 1
     setup_world_and_lights(target, k)
     kc = k * 0.62 if a.sample == "thorax" else k     # thorax: tighter comparison framing
-    wide = camera("cam_comparison", target + Vector((0.62, -0.18, 0.2)) * kc, target, 50.0)  # +X: wedges face it
+    # +X: wedges face it; thorax straight on, so both sections (struck from -Y and, mirrored, from +Y) read alike
+    wide = camera("cam_comparison", target + Vector((0.62, 0.0 if thorax else -0.18, 0.2)) * kc, target, 50.0)
     w, h = (int(x) for x in a.resolution.lower().split("x"))
     scene.render.resolution_x, scene.render.resolution_y = w, h
     scene.render.image_settings.file_format = "PNG"
@@ -415,15 +602,22 @@ def main() -> int:
               "renders": [], "provenance": "geometry from domain JSON (ESTIMATE); optics ASSUMED"}
     for eng in engines:
         scene.camera = wide
-        report["renders"].append(render_still(scene, a.out / f"comparison_{eng}.png", eng, a.samples, device))
+        report["renders"].append(render_still(scene, a.out / f"comparison_{eng}.png", eng, a.samples, device,
+                                              thorax))
         print(f"[material] {json.dumps(report['renders'][-1])}", flush=True)
-    if "cycles" in engines:
-        for v, c in centres.items():
-            close = camera(f"cam_{v}", c + Vector((0.35, -0.26, 0.13)) * k, c,
-                           75.0 if a.sample == "thorax" else 50.0)
+    # close-ups: Cycles always; EEVEE too for the thorax (seconds, used to iterate on the dent)
+    for eng in [e for e in engines if e == "cycles" or (thorax and e == "eevee")]:
+        for (v, c), r in zip(centres.items(), variants):
+            # thorax: aim at the crater on the struck side (-Y, +Y when mirrored) rather than at the spine axis
+            sy = -1.0 if r.get("mirrored") else 1.0
+            aim = c + Vector((0.0, -0.06 * sy, 0.0)) if thorax else c
+            # thorax: higher, so the bent layers under the rod show above it in the section
+            view = Vector((0.42, -0.15 * sy, 0.15)) if thorax else Vector((0.35, -0.26, 0.13))
+            close = camera(f"cam_{v}_{eng}", aim + view * k, aim,
+                           75.0 if thorax else 50.0)
             scene.camera = close
-            report["renders"].append(render_still(scene, a.out / f"closeup_{v}_cycles.png", "cycles", a.samples,
-                                                  device))
+            report["renders"].append(render_still(scene, a.out / f"closeup_{v}_{eng}.png", eng, a.samples,
+                                                  device, thorax))
             print(f"[material] {json.dumps(report['renders'][-1])}", flush=True)
     if a.turntable > 0:
         pivot = bpy.data.objects.new("turntable_pivot", None)
