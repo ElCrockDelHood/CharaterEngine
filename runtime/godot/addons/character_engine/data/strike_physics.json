@@ -10476,8 +10476,8 @@
   59
  ],
  "generator": "runtime/godot/tests/make_strike_physics_reference.py",
- "provenance": "ESTIMATE / ASSUMED (see A14, A15, A16); force, fracture and knock-back only, no tissue-layer depth",
- "repo_commit": "983eae1",
+ "provenance": "segment mass fractions SOURCED (de Leva 1996, Table 4); region stiffness, fracture forces, lever arms, head inertia and stagger thresholds ESTIMATE / ASSUMED (see A14, A15, A16); force, fracture and knock-back only, no tissue-layer depth",
+ "repo_commit": "1355b6d",
  "schema": 1,
  "tables": {
   "default_body_mass_kg": 75.0,
@@ -10552,7 +10552,7 @@
      5000.0,
      8000.0
     ],
-    "note": "energy 22-24 J: Delye 2007 (18 cadaver heads, 3.6-7 m/s) SOURCED; force range and k ASSUMED",
+    "note": "energy 22-24 J: Delye et al. (18 cadaver heads; IUTAM 2005 version read, 2007 unconfirmed) SOURCED; force range and k ASSUMED",
     "provenance": "assumed",
     "stiffness_n_per_m": 100000.0
    },
@@ -10596,7 +10596,7 @@
      4500.0,
      8230.0
     ],
-    "note": "Kennedy 2004: 3.8-4.8 kN mean fracture force, 45 cadaver femurs; 5.0-8.2 kN cited range",
+    "note": "force range ASSUMED: Kennedy 2004 (45 femurs, 3-point bending) reports peak bending MOMENTS 352 +/- 83 and 348 +/- 96 N m, 50 % risk at 395 N m (50th male); converting to a force needs the span, not read (thesis pending)",
     "provenance": "assumed",
     "stiffness_n_per_m": 250000.0
    },
@@ -10660,7 +10660,7 @@
    "thorax": 0.1596,
    "upper_arm": 0.0271
   },
-  "segment_mass_provenance": "estimate",
+  "segment_mass_provenance": "proven",
   "stagger_levels": [
    "none",
    "step",

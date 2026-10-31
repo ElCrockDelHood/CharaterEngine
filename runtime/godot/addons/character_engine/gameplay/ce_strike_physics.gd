@@ -5,7 +5,8 @@
 ## The tables (segment mass fractions, region stiffness and fracture forces, Rowson 2012, stagger thresholds) are read
 ## from data/strike_physics.json, written by tests/make_strike_physics_reference.py from the Python modules, so the
 ## numbers live in one place. Not ported: the tissue-layer depth of `strike_blunt` (`blunt_through`); wounds in the
-## fight mockups keep coming from the pre-computed gameplay table. Values are ESTIMATE / ASSUMED (A14, A15, A16).
+## fight mockups keep coming from the pre-computed gameplay table. Segment mass fractions are SOURCED (de Leva 1996);
+## the rest is ESTIMATE / ASSUMED (A14, A15, A16). Per-table provenance is in the JSON.
 class_name CEStrikePhysics
 extends RefCounted
 

@@ -109,7 +109,8 @@ def cases() -> list:
 
 def main() -> None:
     doc = {"schema": 1, "generator": "runtime/godot/tests/make_strike_physics_reference.py", "repo_commit": _commit(),
-           "decisions": [58, 59], "provenance": "ESTIMATE / ASSUMED (see A14, A15, A16); force, fracture and knock-back "
+           "decisions": [58, 59], "provenance": "segment mass fractions SOURCED (de Leva 1996, Table 4); region stiffness, fracture forces, "
+           "lever arms, head inertia and stagger thresholds ESTIMATE / ASSUMED (see A14, A15, A16); force, fracture and knock-back "
            "only, no tissue-layer depth", "tables": tables(), "cases": cases()}
     OUT.write_text(json.dumps(doc, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     print(f"wrote {OUT} ({len(doc['cases'])} cases)")
