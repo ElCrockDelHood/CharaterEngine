@@ -20,9 +20,9 @@ ANATOMY_DIR = Path(__file__).resolve().parents[2] / "src" / "character_engine" /
 # {path relative to data/anatomy: (sha256 of LF-normalised bytes, decisions that approved this state)}
 CONTRACT_FINGERPRINTS = {
     "human_adult_206.json": (
-        "823c52412d08d242485ebdeb3c6ccdb8ecba6ef7c0984dc5c9045eab80884209",
+        "83025e87bc1b87bfda480d36728d225e8810c4c3676c6b46a1c178342b06c5a9",
         "Decisions 15 (1.80 m retarget), 33 (D-13 mirror X), 35 (A10 hand), 36 (A11 radius lateral), 54 (A13 foot), "
-        "65 (A21 fibula lateral), 67 (A23 hip centres), 68 (A24 shoulder girdle)",
+        "65 (A21 fibula lateral), 67 (A23 hip centres), 68 (A24 shoulder girdle), 70 (clavicle parent)",
     ),
     "human_adult_206_backup.json": (
         "4bda0b92e23f88bb0871b2d1fb2c7b64701fb538197a26a71f3e351fcbfbf3ff",

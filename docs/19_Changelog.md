@@ -2,6 +2,12 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-04 · Decision 70: clavicle hangs from the sternum
+
+### Changed
+- `CLAVICLE_L/R` parent `ROOT_SKELETON` → `STERNUM` (`scripts/fix_clavicle_parent.py`); positions unchanged, 208 nodes,
+  single root. Fingerprint updated; `skeleton_serialized.json` regenerated. No gameplay / replay change.
+
 ## [Unreleased] — 2026-11-04 · Decision 69: PROXY anatomy pieces (A25)
 
 ### Added

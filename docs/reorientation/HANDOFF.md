@@ -39,7 +39,7 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 
 1. Tolerancias del ajuste (A19 / A20 / A22 dan la dispersión medida).
 2. Licencia de publicación de BodyParts3D (Decisión 62; precedente público: human-atlas la toma como CC BY 4.0).
-3. Reparentar `CLAVICLE_*` de `ROOT_SKELETON` a `STERNUM` (cambio de topología; 208 nodos se mantienen).
+3. ~~Reparentar `CLAVICLE_*` a `STERNUM`~~: hecho (Decisión 70).
 4. Siguientes regiones con fuente: columna (curvaturas), tórax, cráneo; altura del hombro.
 5. Revisar la rama `anatomy/a13-a24-base` y decidir el merge a `main`.
 6. `feature/audio-p0`: sigue "como está"; si se mergea, renumerar su decisión a la siguiente libre.

@@ -1,6 +1,6 @@
-# Proposal A26a — re-parent CLAVICLE_L/R from ROOT_SKELETON to STERNUM (NOT applied)
+# Proposal A26a — re-parent CLAVICLE_L/R from ROOT_SKELETON to STERNUM (applied, Decision 70)
 
-**Status:** PROPOSAL, measured on a throw-away working copy (reverted) · **Date:** 2026-11-04 · needs the owner's OK
+**Status:** APPLIED as Decision 70 (originally: PROPOSAL, measured on a throw-away working copy) · **Date:** 2026-11-04
 and a numbered Decision · Related: A24 / Decision 68 (clavicle now runs SC → AC).
 
 ## Finding

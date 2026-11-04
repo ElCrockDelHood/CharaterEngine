@@ -24,6 +24,7 @@ C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`
 | A22 | Whole skeleton vs BodyParts3D by regions | 66 | measured, tolerances PENDING |
 | A23 | Hip joint centres 180.2 mm apart | 67 | FINAL (value ESTIMATE) |
 | A24 | Shoulder girdle: shoulder centres 406.8 mm, clavicle SC → AC, scapula AC → AI | 68 | FINAL (values ESTIMATE; clavicle re-parent pending) |
+| A26a | Clavicle re-parented to STERNUM (`docs/architecture/CLAVICLE_REPARENT_PROPOSAL.md`) | 70 | FINAL |
 | A25 | PROXY pieces for anatomy missing from BodyParts3D (muscles, ligaments, coccyx, ossicles) | 69 | FINAL (ESTIMATE / PLACEHOLDER) |
 
 Related proposals (`docs/architecture/`): `ASSET_FITTING_PROPOSAL.md` (F0 – F6), `FEMUR_ANCHOR_LANDMARKS_PROPOSAL.md`,

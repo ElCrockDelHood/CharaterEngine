@@ -1293,14 +1293,29 @@ Audit `docs/audit/A25_ANATOMY_PROXIES.md`. Tests: `tests/unit/test_anatomy_proxi
 
 ---
 
+## 70. CLAVICLE HANGS FROM THE STERNUM (STERNOCLAVICULAR JOINT)
+
+**Decision** (owner, 2026-11-04 21:08, card "Ambas, columna con curva BP3D"): `scripts/fix_clavicle_parent.py` changes
+the parent of `CLAVICLE_L/R` from `ROOT_SKELETON` to `STERNUM`. The clavicle's only bony joint with the axial
+skeleton is the sternoclavicular joint (PROVEN topology), and since A24 the clavicle head is the SC point. Positions
+are unchanged; 208 nodes, single root and acyclic hierarchy are kept. Measured before applying
+(`docs/architecture/CLAVICLE_REPARENT_PROPOSAL.md`): gameplay table and clips in sync, Blender 40/40, Godot 60/60
+with every replay identical. Only the production rig's shoulders now follow the thorax (breathing, spine posing);
+CE-GAME-v1 already hung `clavicle_*` from `spine_03`. Fingerprint of `human_adult_206.json` → `83025e87…c5a9`.
+Tests: `tests/unit/test_shoulder_girdle.py`.
+
+**Date**: 2026-11-04 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 69
+**Total Decisions**: 70
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 61 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 62 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

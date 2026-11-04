@@ -1215,7 +1215,7 @@
       {
         "canonical_name": "CLAVICLE_L",
         "name": "Clavicula I",
-        "parent": "ROOT_SKELETON",
+        "parent": "STERNUM",
         "head": {
           "x": 0.022,
           "y": -0.0586,
@@ -1245,7 +1245,7 @@
       {
         "canonical_name": "CLAVICLE_R",
         "name": "Clavicula D",
-        "parent": "ROOT_SKELETON",
+        "parent": "STERNUM",
         "head": {
           "x": -0.022,
           "y": -0.0586,

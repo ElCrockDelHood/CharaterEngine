@@ -1,6 +1,6 @@
 """Finding A24, variant A (Decision 68): shoulder joint centres 406.8 mm apart, clavicle SC -> AC, scapula AC -> AI.
 
-Positions only; the hierarchy (CLAVICLE parent ROOT_SKELETON) is unchanged here (topology is a separate step).
+Positions from A24; since Decision 70 the clavicle hangs from STERNUM (sternoclavicular joint).
 """
 
 import importlib.util
@@ -52,7 +52,7 @@ def test_girdle_layout(B, side, sign):
     assert sign * ac[0] > sign * sc[0] and ac[1] > sc[1]                            # AC lateral and posterior
     assert _p(sca, "head") == pytest.approx(ac)                                     # scapula starts at the AC joint
     assert _p(sca, "tail")[2] < _p(sca, "head")[2] and _p(sca, "tail")[1] > 0       # inferior angle low, posterior
-    assert cla["parent"] == "ROOT_SKELETON" and sca["parent"] == f"CLAVICLE_{side}"  # hierarchy unchanged
+    assert cla["parent"] == "STERNUM" and sca["parent"] == f"CLAVICLE_{side}"  # SC joint (Decision 70)
 
 
 def test_left_right_mirror(B):
@@ -68,6 +68,24 @@ def test_tpose_still_puts_the_oblique_humerus_horizontal(data):
         h = out[f"HUMERUS_{side}"]
         assert h["tail"]["z"] == pytest.approx(h["head"]["z"], abs=1e-6)
         assert sign * (h["tail"]["x"] - h["head"]["x"]) > 0.3
+
+
+def test_clavicle_reparent_is_idempotent_and_keeps_the_contract(data):
+    spec = importlib.util.spec_from_file_location("fix_clavicle_parent", ROOT / "scripts" / "fix_clavicle_parent.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    again, changed = mod.fix(data)
+    assert again == data and changed == []
+    assert mod.main(["--json", str(BACKUP)]) == 2
+    parents = {b["canonical_name"]: b["parent"] for b in data["bones"]}
+    parents.update({c["canonical_name"]: c["parent"] for c in data["containers"]})
+    assert len(parents) == 208 and [n for n, p in parents.items() if p is None] == ["ROOT_SKELETON"]
+    for n in parents:                                   # acyclic
+        seen, cur = set(), n
+        while parents[cur] is not None:
+            assert cur not in seen
+            seen.add(cur)
+            cur = parents[cur]
 
 
 def test_fix_is_idempotent_and_refuses_the_backup(data):
