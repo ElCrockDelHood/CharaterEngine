@@ -1,6 +1,6 @@
 # A24 proposal — shoulder girdle: shoulder joint centres, clavicle, scapula
 
-**Status:** PROPOSAL (positions approved by the owner via the coordinator, "todos los contratos y todo lo que sea
+**Status:** positions APPLIED as variant A (Decision 68, `docs/audit/A24_SHOULDER_GIRDLE.md`); topology step pending. Originally: PROPOSAL (positions approved by the owner via the coordinator, "todos los contratos y todo lo que sea
 necesario"; the clavicle re-parent is a separate topology step, reported before it is applied) · **Date:**
 2026-11-04 · Related: A22 (shoulder residual 68 mm), A23 / Decision 67 (same method for the hips).
 

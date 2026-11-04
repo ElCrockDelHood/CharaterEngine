@@ -2,6 +2,22 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-04 · Decision 68: shoulder girdle (finding A24, variant A)
+
+### Changed
+- `HUMERUS_L/R.head` x ±0.2331 → ±0.2034 m (shoulder centres 406.8 mm apart, ESTIMATE from ANSUR II × BodyParts3D);
+  `CLAVICLE_*` now SC → AC and `SCAPULA_*` AC → inferior angle (ISB landmarks, BodyParts3D offsets, ESTIMATE).
+  Elbows, forearms, hands and hierarchy unchanged (`scripts/fix_shoulder_girdle.py`). Sources registered, fingerprints
+  updated. Audit `docs/audit/A24_SHOULDER_GIRDLE.md`.
+- `domain/anatomy/pose/tpose.py`: T / A pose subtracts the humerus's rest abduction and straightens the elbow
+  (unchanged for a vertical humerus). Two T-pose tests now use the T-pose's 1 µm precision.
+- Re-generated `souls_clips.json` / `.glb` (arm-chain directions), `human_game_v1_body.glb`, `skeleton_serialized.json`.
+
+### Test status
+- `python scripts/test.py`: 1230 passed. `python scripts/lint.py`: clean.
+- `python scripts/engine_tests.py blender godot`: 40/40 (IK rest deviation 13.6 mm) and 60/60; replays identical;
+  gameplay table in sync.
+
 ## [Unreleased] — 2026-11-04 · Decision 67: hip joint centres 180.2 mm apart (finding A23, variant A)
 
 ### Changed

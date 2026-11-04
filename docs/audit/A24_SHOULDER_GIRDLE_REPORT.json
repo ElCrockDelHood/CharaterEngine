@@ -1,0 +1,225 @@
+{
+  "finding": "A24 shoulder girdle (GH spacing = biacromial; clavicle / scapula stubs on the shoulder joint)",
+  "variant": "A: shoulder girdle and humeral heads only; arm chain and hierarchy unchanged",
+  "file": "src/character_engine/data/anatomy/human_adult_206.json",
+  "sha256_lf_before": "c2d6341a7caffae0f5b04e37fa831f50d3600e01f448aa45de3ecbdb64dce7ca",
+  "sha256_lf_after": "823c52412d08d242485ebdeb3c6ccdb8ecba6ef7c0984dc5c9045eab80884209",
+  "changed_bones": [
+    "CLAVICLE_L",
+    "CLAVICLE_R",
+    "HUMERUS_L",
+    "HUMERUS_R",
+    "SCAPULA_L",
+    "SCAPULA_R"
+  ],
+  "parameters": {
+    "L": {
+      "GH": {
+        "x": 0.2034,
+        "y": 0.0,
+        "z": 1.4724
+      },
+      "SC": {
+        "x": 0.022,
+        "y": -0.0586,
+        "z": 1.481
+      },
+      "AC": {
+        "x": 0.1862,
+        "y": 0.0037,
+        "z": 1.5101
+      },
+      "AI": {
+        "x": 0.1349,
+        "y": 0.0718,
+        "z": 1.3359
+      }
+    },
+    "R": {
+      "GH": {
+        "x": -0.2034,
+        "y": 0.0,
+        "z": 1.4724
+      },
+      "SC": {
+        "x": -0.022,
+        "y": -0.0586,
+        "z": 1.481
+      },
+      "AC": {
+        "x": -0.1862,
+        "y": 0.0037,
+        "z": 1.5101
+      },
+      "AI": {
+        "x": -0.1349,
+        "y": 0.0718,
+        "z": 1.3359
+      }
+    }
+  },
+  "provenance": {
+    "gh_half_spacing_m": "ESTIMATE — ANSUR II biacromial 421.1 mm (men 1.75-1.85 m, n 1814) × BodyParts3D GH / acromion ratio 0.966; pending SHOULDER_JOINT_CENTRE_SPACING",
+    "girdle_offsets": "DERIVED from BodyParts3D (one subject, internal use) × 1.0358, ISB landmarks (Wu et al. 2005); ESTIMATE; pending SHOULDER_GIRDLE_LANDMARKS",
+    "unchanged": "humerus head y/z, elbows, forearms, hands, hierarchy (CLAVICLE parent ROOT_SKELETON)"
+  },
+  "samples": {
+    "HUMERUS_L": {
+      "before": {
+        "head": {
+          "x": 0.2331,
+          "y": 0.0,
+          "z": 1.4724
+        },
+        "tail": {
+          "x": 0.2331,
+          "y": 0.0,
+          "z": 1.1566
+        }
+      },
+      "after": {
+        "head": {
+          "x": 0.2034,
+          "y": 0.0,
+          "z": 1.4724
+        },
+        "tail": {
+          "x": 0.2331,
+          "y": 0.0,
+          "z": 1.1566
+        }
+      }
+    },
+    "CLAVICLE_L": {
+      "before": {
+        "head": {
+          "x": 0.1665,
+          "y": -0.0666,
+          "z": 1.5156
+        },
+        "tail": {
+          "x": 0.1998,
+          "y": -0.0666,
+          "z": 1.5084
+        }
+      },
+      "after": {
+        "head": {
+          "x": 0.022,
+          "y": -0.0586,
+          "z": 1.481
+        },
+        "tail": {
+          "x": 0.1862,
+          "y": 0.0037,
+          "z": 1.5101
+        }
+      }
+    },
+    "SCAPULA_L": {
+      "before": {
+        "head": {
+          "x": 0.2331,
+          "y": 0.0,
+          "z": 1.5012
+        },
+        "tail": {
+          "x": 0.2331,
+          "y": 0.0,
+          "z": 1.4796
+        }
+      },
+      "after": {
+        "head": {
+          "x": 0.1862,
+          "y": 0.0037,
+          "z": 1.5101
+        },
+        "tail": {
+          "x": 0.1349,
+          "y": 0.0718,
+          "z": 1.3359
+        }
+      }
+    },
+    "HUMERUS_R": {
+      "before": {
+        "head": {
+          "x": -0.2331,
+          "y": 0.0,
+          "z": 1.4724
+        },
+        "tail": {
+          "x": -0.2331,
+          "y": 0.0,
+          "z": 1.1566
+        }
+      },
+      "after": {
+        "head": {
+          "x": -0.2034,
+          "y": 0.0,
+          "z": 1.4724
+        },
+        "tail": {
+          "x": -0.2331,
+          "y": 0.0,
+          "z": 1.1566
+        }
+      }
+    },
+    "CLAVICLE_R": {
+      "before": {
+        "head": {
+          "x": -0.1665,
+          "y": -0.0666,
+          "z": 1.5156
+        },
+        "tail": {
+          "x": -0.1998,
+          "y": -0.0666,
+          "z": 1.5084
+        }
+      },
+      "after": {
+        "head": {
+          "x": -0.022,
+          "y": -0.0586,
+          "z": 1.481
+        },
+        "tail": {
+          "x": -0.1862,
+          "y": 0.0037,
+          "z": 1.5101
+        }
+      }
+    },
+    "SCAPULA_R": {
+      "before": {
+        "head": {
+          "x": -0.2331,
+          "y": 0.0,
+          "z": 1.5012
+        },
+        "tail": {
+          "x": -0.2331,
+          "y": 0.0,
+          "z": 1.4796
+        }
+      },
+      "after": {
+        "head": {
+          "x": -0.1862,
+          "y": 0.0037,
+          "z": 1.5101
+        },
+        "tail": {
+          "x": -0.1349,
+          "y": 0.0718,
+          "z": 1.3359
+        }
+      }
+    }
+  },
+  "applied": true
+}

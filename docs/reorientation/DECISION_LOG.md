@@ -1248,14 +1248,38 @@ Tests: `tests/unit/test_hip_centres.py`.
 
 ---
 
+## 68. FINDING A24 — SHOULDER GIRDLE: SHOULDER CENTRES 406.8 MM APART, CLAVICLE SC → AC, SCAPULA AC → AI
+
+**Finding** (A22): the canonical shoulder joint centres (`HUMERUS_L/R.head`) were 466.2 mm apart, i.e. the
+biacromial breadth (Drillis & Contini 0.259 H) used as the gleno-humeral spacing; `CLAVICLE_*` and `SCAPULA_*` were
+short stubs on the shoulder joint (A22 shoulder residual 68 mm, girdle bones ~10 cm off).
+
+**Decision** (owner, 2026-11-04: "todos los contratos y todo lo que sea necesario", then "elijo A"):
+`scripts/fix_shoulder_girdle.py` (variant A) moves `HUMERUS_L/R.head` x to ±0.2034 m (spacing 406.8 mm = ANSUR II
+biacromial 421.1 ± 16.8 mm, men 1.75–1.85 m, × BodyParts3D GH / acromion ratio 0.966; ESTIMATE) and places
+`CLAVICLE_*` (SC → AC) and `SCAPULA_*` (AC → inferior angle) from BodyParts3D offsets × 1.0358 with the ISB landmarks
+of Wu et al. 2005 (ESTIMATE). Elbows, forearms, hands and the hierarchy are unchanged; the humerus tilts 5.37°.
+`SHOULDER_JOINT_CENTRE_SPACING` and `SHOULDER_GIRDLE_LANDMARKS` registered in `source_registry.json`. Fingerprints
+updated (`human_adult_206.json` → `823c5241…4209`, `source_registry.json` → `96a7b9a6…f5ffa3`).
+`domain/anatomy/pose/tpose.py`: the T / A pose now removes the humerus's rest abduction and straightens the elbow
+(identical result for a vertical humerus); two tests aligned with the T-pose's 1 µm rounding. The addon is
+unchanged (a pole-angle refinement was tried, did not help, and was reverted). No gameplay change: table in sync,
+every Godot replay identical (Blender 40/40, IK rest deviation 13.6 mm; Godot 60/60). Re-measured A22: global RMS
+40.8 → 29.7 mm, shoulder residual 67 → 40 mm, girdle region 107.8 → 27.9 mm. The clavicle re-parent to `STERNUM` is
+a separate topology step. Audit `docs/audit/A24_SHOULDER_GIRDLE.md`. Tests: `tests/unit/test_shoulder_girdle.py`.
+
+**Date**: 2026-11-04 · **Status**: FINAL (owner); values ESTIMATE; topology step pending
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 67
+**Total Decisions**: 68
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 59 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE)
+**Final Decisions**: 60 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

@@ -66,8 +66,9 @@ def test_socket_keeps_its_offset_relative_to_the_parent_in_tpose(anatomical, nam
 
     def dist(p, b):
         return [math.dist(p, (b[e]["x"], b[e]["y"], b[e]["z"])) for e in ("head", "tail")]
-    assert dist(head, P) == pytest.approx(dist(ref_head, A), abs=1e-9)    # rigidly attached
-    assert math.dist(head, tail) == pytest.approx(s.length_m, abs=1e-9)
+    # rigidly attached; the T-pose rounds bone ends to 1 µm (tpose._d), so 1e-6 m is the attainable precision
+    assert dist(head, P) == pytest.approx(dist(ref_head, A), abs=1e-6)
+    assert math.dist(head, tail) == pytest.approx(s.length_m, abs=1e-6)
 
 
 def test_offsets_scale_with_stature(anatomical):

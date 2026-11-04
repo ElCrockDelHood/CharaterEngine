@@ -100,5 +100,6 @@ def test_left_and_right_fists_mirror(points):
 
 def test_point_keeps_the_index_straight(points):
     out = apply_hand_pose(points, hand_pose_rotations(HAND_POSES["point"], points, "R"))
-    assert out["index_03_r"] == points["index_03_r"]
+    flat = lambda seg: [c for p in seg for c in p]   # noqa: E731
+    assert flat(out["index_03_r"]) == pytest.approx(flat(points["index_03_r"]), abs=1e-12)   # not rotated (float noise only)
     assert out["middle_03_r"] != points["middle_03_r"]

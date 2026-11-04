@@ -92,8 +92,18 @@ def apply_tpose(bones: Sequence[dict], palms: str = "down", abduction_deg: float
         shoulder = _v(hum["head"])
         # Arm hangs along -Z; rotate about Y so it points to sign*X.
         # R_y(+90) maps (0,0,-1) -> (-1,0,0); R_y(-90) maps it to (+1,0,0).
+        # The rest humerus may already be abducted in the coronal plane (A24: shoulder joint medial to the
+        # elbow); only the remaining angle is applied, so the humerus ends exactly at ``abduction_deg``.
+        # A vertical humerus gives rest = 0, i.e. the original behaviour.
+        tail = _v(hum["tail"])
+        rest = math.degrees(math.atan2(sign * (tail[0] - shoulder[0]), shoulder[2] - tail[2]))
         arm = arm_subtree(out, side)
-        _rotate_subtree(out, arm, _rot_y(-sign * abduction_deg), shoulder)
+        _rotate_subtree(out, arm, _rot_y(-sign * (abduction_deg - rest)), shoulder)
+        if abs(rest) > 1e-9:
+            # The forearm hung vertically, so it is now ``rest`` degrees short of the humerus line: straighten the
+            # elbow so the posed arm is a straight chain (a T / A pose has a straight arm; IK at rest stays a no-op).
+            elbow = _v(by_name[f"HUMERUS_{side}"]["tail"])
+            _rotate_subtree(out, subtree(out, [f"RADIUS_{side}", f"ULNA_{side}"]), _rot_y(-sign * rest), elbow)
         if palms == "down" and abs(abduction_deg - 90.0) < 1e-6:
             # Pronate forearm + hand about the arm axis (world X) so the palm faces -Z.
             elbow = _v(by_name[f"HUMERUS_{side}"]["tail"])
