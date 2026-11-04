@@ -1,0 +1,54 @@
+{
+  "finding": "A23 hip joint centre spacing (133.2 mm canonical vs 180.1 mm BodyParts3D)",
+  "variant": "A: FEMUR_L/R.head x only",
+  "file": "src/character_engine/data/anatomy/human_adult_206.json",
+  "sha256_lf_before": "59b1cce89aa3322b657efe41cf4900b1b3ee1742866b93845d4e0004c088dd80",
+  "sha256_lf_after": "c2d6341a7caffae0f5b04e37fa831f50d3600e01f448aa45de3ecbdb64dce7ca",
+  "changed_bones": [
+    "FEMUR_L",
+    "FEMUR_R"
+  ],
+  "parameters": {
+    "L": {
+      "x_before": 0.0666,
+      "x_after": 0.0901
+    },
+    "R": {
+      "x_before": -0.0666,
+      "x_after": -0.0901
+    }
+  },
+  "provenance": {
+    "hip_centre_half_spacing_m": "ESTIMATE — BodyParts3D ratio 0.674 (hip-centre spacing / inter-ASIS, one subject, internal use) × inter-ASIS 267.4 mm; pending HIP_JOINT_CENTRE_SPACING",
+    "contrast": "Wu et al. 2002 ISB pelvic frame (geometry only, no numeric value)",
+    "plausibility": "ANSUR II men 1.75-1.85 m: bicristal 280.6 ± 16.1 mm, hip breadth 351.2 ± 23.2 mm (skin)",
+    "unchanged": "head y/z, knees (FEMUR tail) and every other bone"
+  },
+  "samples": {
+    "FEMUR_L": {
+      "before": {
+        "x": 0.0666,
+        "y": 0.0,
+        "z": 0.954
+      },
+      "after": {
+        "x": 0.0901,
+        "y": 0.0,
+        "z": 0.954
+      }
+    },
+    "FEMUR_R": {
+      "before": {
+        "x": -0.0666,
+        "y": 0.0,
+        "z": 0.954
+      },
+      "after": {
+        "x": -0.0901,
+        "y": 0.0,
+        "z": 0.954
+      }
+    }
+  },
+  "applied": true
+}

@@ -2,6 +2,22 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-04 · Decision 67: hip joint centres 180.2 mm apart (finding A23, variant A)
+
+### Changed
+- `FEMUR_L/R.head` x ±0.0666 → ±0.0901 m in `human_adult_206.json` (`scripts/fix_hip_centres.py`); knees and every
+  other bone unchanged, femur oblique 3.22°. Value ESTIMATE (BodyParts3D ratio × inter-ASIS; Wu 2002 ISB contrast;
+  ANSUR II control); `HIP_JOINT_CENTRE_SPACING` registered in `source_registry.json`. Fingerprints updated.
+- Re-generated `souls_clips.json` / `souls_clips.glb` (thigh / calf key directions only), `human_game_v1_body.glb`,
+  `builds/exports/skeleton_serialized.json`. Audit `docs/audit/A23_HIP_CENTRES.md`.
+
+### Test status
+- `python scripts/test.py`: 1224 passed (new `tests/unit/test_hip_centres.py`). `python scripts/lint.py`: clean.
+- `python scripts/engine_tests.py blender godot`: 40/40 and 60/60; every replay identical; gameplay table in sync.
+
+### Behaviour
+- No gameplay or replay change. Block dummy thigh capsules tilt with the femur; pelvis capsule unchanged.
+
 ## [Unreleased] — 2026-11-04 · Decision 65: fibula lateral to the tibia (finding A21)
 
 ### Changed

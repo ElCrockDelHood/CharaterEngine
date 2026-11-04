@@ -20,9 +20,9 @@ ANATOMY_DIR = Path(__file__).resolve().parents[2] / "src" / "character_engine" /
 # {path relative to data/anatomy: (sha256 of LF-normalised bytes, decisions that approved this state)}
 CONTRACT_FINGERPRINTS = {
     "human_adult_206.json": (
-        "59b1cce89aa3322b657efe41cf4900b1b3ee1742866b93845d4e0004c088dd80",
+        "c2d6341a7caffae0f5b04e37fa831f50d3600e01f448aa45de3ecbdb64dce7ca",
         "Decisions 15 (1.80 m retarget), 33 (D-13 mirror X), 35 (A10 hand), 36 (A11 radius lateral), 54 (A13 foot), "
-        "65 (A21 fibula lateral)",
+        "65 (A21 fibula lateral), 67 (A23 hip centres)",
     ),
     "human_adult_206_backup.json": (
         "4bda0b92e23f88bb0871b2d1fb2c7b64701fb538197a26a71f3e351fcbfbf3ff",
@@ -41,8 +41,8 @@ CONTRACT_FINGERPRINTS = {
         "Decision 16 (Trotter 1970 / Trotter & Gleser 1952 regressions)",
     ),
     "references/source_registry.json": (
-        "5a730948399f526784e57dfc96ae91a2d739aedaf1cde6984bf01fe52338774d",
-        "Decisions 15, 16, 35, 36, 54, 65 (sources and pending data requirements)",
+        "be8f1f96fb06822e9258223ffdb7e267972fc22fddb315d62ffb645c72d71ae1",
+        "Decisions 15, 16, 35, 36, 54, 65, 67 (sources and pending data requirements)",
     ),
 }
 

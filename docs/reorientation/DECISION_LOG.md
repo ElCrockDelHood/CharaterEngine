@@ -1226,14 +1226,36 @@ tolerance fixed; no canonical data, contract, manifest, addon or backend changed
 
 ---
 
+## 67. FINDING A23 — HIP JOINT CENTRES 180.2 MM APART (VARIANT A, ESTIMATE)
+
+**Finding** (A22): the canonical hip joint centres (`FEMUR_L/R.head`) were 133.2 mm apart; BodyParts3D (scaled)
+gives 180.8 mm, and the canonical 133 mm is 0.50 of the inter-ASIS width against 0.67 in BodyParts3D.
+
+**Decision** (owner, 2026-11-04 16:55, card "Aplicar variante A"; canonical data change authorised for this only):
+`scripts/fix_hip_centres.py` moves only `FEMUR_L/R.head` x to ±0.0901 m (spacing 180.2 mm). y / z of the heads,
+the knees and every other bone are unchanged, so the femur becomes oblique 3.22° and 0.66 mm longer. Value
+ESTIMATE: BodyParts3D ratio 0.674 × inter-ASIS 267.4 mm (one subject, internal use, Decision 62); Wu et al. 2002
+ISB pelvic frame as geometric contrast; ANSUR II (public release, US Army) as plausibility control; ±10 mm (1 SD).
+`HIP_JOINT_CENTRE_SPACING` registered in `source_registry.json` (sourced regression pending). Fingerprints
+updated (`human_adult_206.json` → `c2d6341a…e7ca`, `source_registry.json` → `be8f1f96…1ae1`). Re-generated:
+`souls_clips.json` / `.glb` (thigh / calf directions only), `human_game_v1_body.glb`, `skeleton_serialized.json`.
+**No gameplay change:** gameplay table in sync and every Godot replay identical (Blender 40/40, Godot 60/60, IK rest
+deviation 11.8 mm). Block dummy thigh capsules tilt; pelvis unchanged. Re-measured: A22 hip residual 26.2 → 11.6
+mm, global RMS 42.4 → 40.8 mm; A20 femur length vs Trotter −4.97 → −4.82 %. Audit `docs/audit/A23_HIP_CENTRES.md`.
+Tests: `tests/unit/test_hip_centres.py`.
+
+**Date**: 2026-11-04 · **Status**: FINAL (owner); value ESTIMATE, sourced regression pending
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 66
+**Total Decisions**: 67
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 58 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER)
+**Final Decisions**: 59 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

@@ -1,6 +1,6 @@
 # A23 proposal — canonical hip joint centre spacing (NOT applied)
 
-**Status:** PROPOSAL; nothing applied; needs the owner's OK · **Date:** 2026-11-04 · **Owner's choice:** "Wu +
+**Status:** variant A APPLIED (Decision 67, `docs/audit/A23_HIP_CENTRES.md`); this file keeps the proposal as approved · **Date:** 2026-11-04 · **Owner's choice:** "Wu +
 BodyParts3D as ESTIMATE" (Harrington regression not used) · Related: A22 / Decision 66,
 `PELVIS_LANDMARKS_PROPOSAL.md`, ANSUR II download (`C:\DEV\Assets\ANSUR_II\REGISTRO_DESCARGA.md`).
 
