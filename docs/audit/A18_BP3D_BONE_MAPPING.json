@@ -1,0 +1,3101 @@
+{
+ "source": "BodyParts3D 4.0, partof_BP3D_4.0_obj_99.zip (sha256 9fbc713f...1c97), INTERNAL USE ONLY",
+ "frame": "BP3D bounds in mm, Z-up, -Y front, left = +X (same axes as canonical)",
+ "method": "name match + side by bounding box x; no geometry stored here",
+ "counts": {
+  "MAPPED": 197,
+  "MAPPED_DUPLICATE": 1,
+  "MAPPED_MULTI": 1,
+  "MISSING": 7
+ },
+ "mirror_centre_x_abs_mm": {
+  "pairs": 83,
+  "max": 2.61,
+  "mean": 0.41
+ },
+ "issues": [],
+ "sternum_compound_FMA7485_elements": {
+  "FJ3153": "Xiphoid process",
+  "FJ3178": "Body of sternum",
+  "FJ3290": "Manubrium"
+ },
+ "hyoid_elements": [
+  {
+   "file_id": "FJ2772",
+   "Concept ID": "FMA52749",
+   "Representation ID": "BP10003",
+   "English name": "Hyoid bone",
+   "Volume(cm3)": "1.653800"
+  },
+  {
+   "file_id": "FJ3201",
+   "Concept ID": "FMA52749",
+   "Representation ID": "BP10003",
+   "English name": "Hyoid bone",
+   "Volume(cm3)": "1.653800"
+  }
+ ],
+ "bones": [
+  {
+   "canonical": "FRONTAL",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3200",
+     "fma": "FMA52734",
+     "bp": "BP9668",
+     "name": "Frontal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "PARIETAL_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [
+    "bbox crosses the midline (x -7.9..74.9 mm); its centre is on its own side (bilateral bone meeting the midline at a suture)"
+   ],
+   "elements": [
+    {
+     "file_id": "FJ3274",
+     "fma": "FMA52789",
+     "bp": "BP10199",
+     "name": "Left parietal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "PARIETAL_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [
+    "bbox crosses the midline (x -76.2..5.0 mm); its centre is on its own side (bilateral bone meeting the midline at a suture)"
+   ],
+   "elements": [
+    {
+     "file_id": "FJ3380",
+     "fma": "FMA52788",
+     "bp": "BP10121",
+     "name": "Right parietal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "TEMPORAL_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3281",
+     "fma": "FMA52739",
+     "bp": "BP9536",
+     "name": "Left temporal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "TEMPORAL_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3386",
+     "fma": "FMA52738",
+     "bp": "BP10032",
+     "name": "Right temporal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "OCCIPITAL",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3309",
+     "fma": "FMA52735",
+     "bp": "BP10180",
+     "name": "Occipital bone"
+    }
+   ]
+  },
+  {
+   "canonical": "SPHENOID",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3394",
+     "fma": "FMA52736",
+     "bp": "BP9806",
+     "name": "Sphenoid bone"
+    }
+   ]
+  },
+  {
+   "canonical": "ETHMOID",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3199",
+     "fma": "FMA52740",
+     "bp": "BP10084",
+     "name": "Ethmoid"
+    }
+   ]
+  },
+  {
+   "canonical": "MAXILLA_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [
+    "bbox crosses the midline (x -3.1..45.8 mm); its centre is on its own side (bilateral bone meeting the midline at a suture)"
+   ],
+   "elements": [
+    {
+     "file_id": "FJ3269",
+     "fma": "FMA53650",
+     "bp": "BP10118",
+     "name": "Left maxilla"
+    }
+   ]
+  },
+  {
+   "canonical": "MAXILLA_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3375",
+     "fma": "FMA53649",
+     "bp": "BP9705",
+     "name": "Right maxilla"
+    }
+   ]
+  },
+  {
+   "canonical": "ZYGOMATIC_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3287",
+     "fma": "FMA52893",
+     "bp": "BP9801",
+     "name": "Left zygomatic bone"
+    }
+   ]
+  },
+  {
+   "canonical": "ZYGOMATIC_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3392",
+     "fma": "FMA52892",
+     "bp": "BP9965",
+     "name": "Right zygomatic bone"
+    }
+   ]
+  },
+  {
+   "canonical": "NASAL_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [
+    "bbox crosses the midline (x -2.5..7.2 mm); its centre is on its own side (bilateral bone meeting the midline at a suture)"
+   ],
+   "elements": [
+    {
+     "file_id": "FJ3272",
+     "fma": "FMA53648",
+     "bp": "BP9837",
+     "name": "Left nasal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "NASAL_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3378",
+     "fma": "FMA53647",
+     "bp": "BP10124",
+     "name": "Right nasal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "LACRIMAL_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3265",
+     "fma": "FMA53646",
+     "bp": "BP9614",
+     "name": "Left lacrimal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "LACRIMAL_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3371",
+     "fma": "FMA53645",
+     "bp": "BP9936",
+     "name": "Right lacrimal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "PALATINE_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [
+    "bbox crosses the midline (x -1.5..27.5 mm); its centre is on its own side (bilateral bone meeting the midline at a suture)"
+   ],
+   "elements": [
+    {
+     "file_id": "FJ3273",
+     "fma": "FMA53656",
+     "bp": "BP9484",
+     "name": "Left palatine bone"
+    }
+   ]
+  },
+  {
+   "canonical": "PALATINE_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [
+    "bbox crosses the midline (x -28.8..0.1 mm); its centre is on its own side (bilateral bone meeting the midline at a suture)"
+   ],
+   "elements": [
+    {
+     "file_id": "FJ3379",
+     "fma": "FMA53655",
+     "bp": "BP9748",
+     "name": "Right palatine bone"
+    }
+   ]
+  },
+  {
+   "canonical": "INFERIOR_NASAL_CONCHA_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3263",
+     "fma": "FMA54738",
+     "bp": "BP10109",
+     "name": "Left inferior nasal concha"
+    }
+   ]
+  },
+  {
+   "canonical": "INFERIOR_NASAL_CONCHA_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3369",
+     "fma": "FMA54737",
+     "bp": "BP9752",
+     "name": "Right inferior nasal concha"
+    }
+   ]
+  },
+  {
+   "canonical": "VOMER",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3395",
+     "fma": "FMA9710",
+     "bp": "BP9960",
+     "name": "Vomer"
+    }
+   ]
+  },
+  {
+   "canonical": "MANDIBLE",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3289",
+     "fma": "FMA52748",
+     "bp": "BP9617",
+     "name": "Mandible"
+    }
+   ]
+  },
+  {
+   "canonical": "MALLEUS_L",
+   "status": "MISSING",
+   "bp3d_name_tried": "left malleus",
+   "elements": []
+  },
+  {
+   "canonical": "MALLEUS_R",
+   "status": "MISSING",
+   "bp3d_name_tried": "right malleus",
+   "elements": []
+  },
+  {
+   "canonical": "INCUS_L",
+   "status": "MISSING",
+   "bp3d_name_tried": "left incus",
+   "elements": []
+  },
+  {
+   "canonical": "INCUS_R",
+   "status": "MISSING",
+   "bp3d_name_tried": "right incus",
+   "elements": []
+  },
+  {
+   "canonical": "STAPES_L",
+   "status": "MISSING",
+   "bp3d_name_tried": "left stapes",
+   "elements": []
+  },
+  {
+   "canonical": "STAPES_R",
+   "status": "MISSING",
+   "bp3d_name_tried": "right stapes",
+   "elements": []
+  },
+  {
+   "canonical": "HYOID",
+   "status": "MAPPED_DUPLICATE",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [
+    "FJ2772 and FJ3201: same FMA/BP id and identical vertex/face data; use FJ2772"
+   ],
+   "elements": [
+    {
+     "file_id": "FJ2772",
+     "fma": "FMA52749",
+     "bp": "BP10003",
+     "name": "Hyoid bone"
+    },
+    {
+     "file_id": "FJ3201",
+     "fma": "FMA52749",
+     "bp": "BP10003",
+     "name": "Hyoid bone"
+    }
+   ]
+  },
+  {
+   "canonical": "CERVICAL_1",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3176",
+     "fma": "FMA12519",
+     "bp": "BP9997",
+     "name": "Atlas"
+    }
+   ]
+  },
+  {
+   "canonical": "CERVICAL_2",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3177",
+     "fma": "FMA12520",
+     "bp": "BP9781",
+     "name": "Axis"
+    }
+   ]
+  },
+  {
+   "canonical": "CERVICAL_3",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3161",
+     "fma": "FMA12521",
+     "bp": "BP10151",
+     "name": "Third cervical vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "CERVICAL_4",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3164",
+     "fma": "FMA12522",
+     "bp": "BP9546",
+     "name": "Fourth cervical vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "CERVICAL_5",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3167",
+     "fma": "FMA12523",
+     "bp": "BP10002",
+     "name": "Fifth cervical vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "CERVICAL_6",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3170",
+     "fma": "FMA12524",
+     "bp": "BP9368",
+     "name": "Sixth cervical vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "CERVICAL_7",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3172",
+     "fma": "FMA12525",
+     "bp": "BP9522",
+     "name": "Seventh cervical vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_1",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3158",
+     "fma": "FMA9165",
+     "bp": "BP10080",
+     "name": "First thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_2",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3160",
+     "fma": "FMA9187",
+     "bp": "BP9790",
+     "name": "Second thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_3",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3163",
+     "fma": "FMA9209",
+     "bp": "BP9927",
+     "name": "Third thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_4",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3166",
+     "fma": "FMA9248",
+     "bp": "BP10174",
+     "name": "Fourth thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_5",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3169",
+     "fma": "FMA9922",
+     "bp": "BP9883",
+     "name": "Fifth thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_6",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3171",
+     "fma": "FMA9945",
+     "bp": "BP9703",
+     "name": "Sixth thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_7",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3173",
+     "fma": "FMA9968",
+     "bp": "BP10006",
+     "name": "Seventh thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_8",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3174",
+     "fma": "FMA9991",
+     "bp": "BP10205",
+     "name": "Eighth thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_9",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3175",
+     "fma": "FMA10014",
+     "bp": "BP9656",
+     "name": "Ninth thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_10",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3154",
+     "fma": "FMA10037",
+     "bp": "BP9751",
+     "name": "Tenth thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_11",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3155",
+     "fma": "FMA10059",
+     "bp": "BP9561",
+     "name": "Eleventh thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "THORACIC_12",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3156",
+     "fma": "FMA10081",
+     "bp": "BP10217",
+     "name": "Twelfth thoracic vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "LUMBAR_1",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3157",
+     "fma": "FMA13072",
+     "bp": "BP10066",
+     "name": "First lumbar vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "LUMBAR_2",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3159",
+     "fma": "FMA13073",
+     "bp": "BP10088",
+     "name": "Second lumbar vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "LUMBAR_3",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3162",
+     "fma": "FMA13074",
+     "bp": "BP9675",
+     "name": "Third lumbar vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "LUMBAR_4",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3165",
+     "fma": "FMA13075",
+     "bp": "BP9632",
+     "name": "Fourth lumbar vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "LUMBAR_5",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3168",
+     "fma": "FMA13076",
+     "bp": "BP9697",
+     "name": "Fifth lumbar vertebra"
+    }
+   ]
+  },
+  {
+   "canonical": "SACRUM",
+   "status": "MAPPED",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3393",
+     "fma": "FMA16202",
+     "bp": "BP10178",
+     "name": "Sacrum"
+    }
+   ]
+  },
+  {
+   "canonical": "COCCYX",
+   "status": "MISSING",
+   "bp3d_name_tried": "coccyx",
+   "elements": []
+  },
+  {
+   "canonical": "STERNUM",
+   "status": "MAPPED_MULTI",
+   "side_check": "x_min<0<x_max",
+   "side_ok": true,
+   "notes": [
+    "compound FMA7485 = manubrium + body + xiphoid; join into one mesh for the single canonical bone"
+   ],
+   "elements": [
+    {
+     "file_id": "FJ3290",
+     "fma": "FMA7486",
+     "bp": "BP9840",
+     "name": "Manubrium"
+    },
+    {
+     "file_id": "FJ3178",
+     "fma": "FMA7487",
+     "bp": "BP10083",
+     "name": "Body of sternum"
+    },
+    {
+     "file_id": "FJ3153",
+     "fma": "FMA7488",
+     "bp": "BP9391",
+     "name": "Xiphoid process"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_01_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3228",
+     "fma": "FMA7987",
+     "bp": "BP9978",
+     "name": "Left first rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_02_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3229",
+     "fma": "FMA8012",
+     "bp": "BP10089",
+     "name": "Left second rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_03_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3230",
+     "fma": "FMA8039",
+     "bp": "BP9720",
+     "name": "Left third rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_04_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3231",
+     "fma": "FMA8148",
+     "bp": "BP9589",
+     "name": "Left fourth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_05_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3232",
+     "fma": "FMA8093",
+     "bp": "BP9794",
+     "name": "Left fifth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_06_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3233",
+     "fma": "FMA8202",
+     "bp": "BP10114",
+     "name": "Left sixth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_07_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3234",
+     "fma": "FMA8256",
+     "bp": "BP10209",
+     "name": "Left seventh rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_08_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3235",
+     "fma": "FMA8310",
+     "bp": "BP9918",
+     "name": "Left eighth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_09_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3236",
+     "fma": "FMA8391",
+     "bp": "BP9773",
+     "name": "Left ninth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_10_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3225",
+     "fma": "FMA8472",
+     "bp": "BP10173",
+     "name": "Left tenth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_11_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3226",
+     "fma": "FMA8532",
+     "bp": "BP10142",
+     "name": "Left eleventh rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_12_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3227",
+     "fma": "FMA8534",
+     "bp": "BP10125",
+     "name": "Left twelfth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_01_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3334",
+     "fma": "FMA7857",
+     "bp": "BP9714",
+     "name": "Right first rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_02_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3336",
+     "fma": "FMA7882",
+     "bp": "BP10229",
+     "name": "Right second rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_03_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3338",
+     "fma": "FMA7909",
+     "bp": "BP10077",
+     "name": "Right third rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_04_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3340",
+     "fma": "FMA7957",
+     "bp": "BP10139",
+     "name": "Right fourth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_05_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3342",
+     "fma": "FMA8066",
+     "bp": "BP9975",
+     "name": "Right fifth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_06_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3344",
+     "fma": "FMA8175",
+     "bp": "BP10033",
+     "name": "Right sixth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_07_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3346",
+     "fma": "FMA8229",
+     "bp": "BP9669",
+     "name": "Right seventh rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_08_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3347",
+     "fma": "FMA8283",
+     "bp": "BP10133",
+     "name": "Right eighth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_09_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3348",
+     "fma": "FMA8364",
+     "bp": "BP10184",
+     "name": "Right ninth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_10_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3330",
+     "fma": "FMA8445",
+     "bp": "BP9749",
+     "name": "Right tenth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_11_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3331",
+     "fma": "FMA8531",
+     "bp": "BP10071",
+     "name": "Right eleventh rib"
+    }
+   ]
+  },
+  {
+   "canonical": "RIB_12_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3332",
+     "fma": "FMA8533",
+     "bp": "BP10213",
+     "name": "Right twelfth rib"
+    }
+   ]
+  },
+  {
+   "canonical": "CLAVICLE_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3237",
+     "fma": "FMA13323",
+     "bp": "BP10007",
+     "name": "Left clavicle"
+    }
+   ]
+  },
+  {
+   "canonical": "SCAPULA_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3279",
+     "fma": "FMA13396",
+     "bp": "BP10159",
+     "name": "Left scapula"
+    }
+   ]
+  },
+  {
+   "canonical": "CLAVICLE_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3362",
+     "fma": "FMA13322",
+     "bp": "BP10225",
+     "name": "Right clavicle"
+    }
+   ]
+  },
+  {
+   "canonical": "SCAPULA_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3384",
+     "fma": "FMA13395",
+     "bp": "BP10144",
+     "name": "Right scapula"
+    }
+   ]
+  },
+  {
+   "canonical": "HUMERUS_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3262",
+     "fma": "FMA23131",
+     "bp": "BP10189",
+     "name": "Left humerus"
+    }
+   ]
+  },
+  {
+   "canonical": "RADIUS_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3277",
+     "fma": "FMA23465",
+     "bp": "BP10123",
+     "name": "Left radius"
+    }
+   ]
+  },
+  {
+   "canonical": "ULNA_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3286",
+     "fma": "FMA23468",
+     "bp": "BP10130",
+     "name": "Left ulna"
+    }
+   ]
+  },
+  {
+   "canonical": "HUMERUS_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3368",
+     "fma": "FMA23130",
+     "bp": "BP10197",
+     "name": "Right humerus"
+    }
+   ]
+  },
+  {
+   "canonical": "RADIUS_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3349",
+     "fma": "FMA23464",
+     "bp": "BP9783",
+     "name": "Right radius"
+    }
+   ]
+  },
+  {
+   "canonical": "ULNA_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3391",
+     "fma": "FMA23467",
+     "bp": "BP9679",
+     "name": "Right ulna"
+    }
+   ]
+  },
+  {
+   "canonical": "SCAPHOID_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3278",
+     "fma": "FMA24436",
+     "bp": "BP9627",
+     "name": "Left scaphoid"
+    }
+   ]
+  },
+  {
+   "canonical": "LUNATE_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3268",
+     "fma": "FMA24438",
+     "bp": "BP9800",
+     "name": "Left lunate"
+    }
+   ]
+  },
+  {
+   "canonical": "TRIQUETRUM_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3285",
+     "fma": "FMA24440",
+     "bp": "BP9859",
+     "name": "Left triquetral"
+    }
+   ]
+  },
+  {
+   "canonical": "PISIFORM_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3276",
+     "fma": "FMA24442",
+     "bp": "BP10072",
+     "name": "Left pisiform"
+    }
+   ]
+  },
+  {
+   "canonical": "TRAPEZIUM_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3283",
+     "fma": "FMA24444",
+     "bp": "BP10102",
+     "name": "Left trapezium"
+    }
+   ]
+  },
+  {
+   "canonical": "TRAPEZOID_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3284",
+     "fma": "FMA24445",
+     "bp": "BP10228",
+     "name": "Left trapezoid"
+    }
+   ]
+  },
+  {
+   "canonical": "CAPITATE_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3257",
+     "fma": "FMA24447",
+     "bp": "BP9504",
+     "name": "Left capitate"
+    }
+   ]
+  },
+  {
+   "canonical": "HAMATE_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3261",
+     "fma": "FMA24449",
+     "bp": "BP10034",
+     "name": "Left hamate"
+    }
+   ]
+  },
+  {
+   "canonical": "SCAPHOID_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3383",
+     "fma": "FMA24435",
+     "bp": "BP9926",
+     "name": "Right scaphoid"
+    }
+   ]
+  },
+  {
+   "canonical": "LUNATE_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3374",
+     "fma": "FMA24437",
+     "bp": "BP10233",
+     "name": "Right lunate"
+    }
+   ]
+  },
+  {
+   "canonical": "TRIQUETRUM_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3390",
+     "fma": "FMA24439",
+     "bp": "BP9704",
+     "name": "Right triquetral"
+    }
+   ]
+  },
+  {
+   "canonical": "PISIFORM_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3382",
+     "fma": "FMA24441",
+     "bp": "BP9957",
+     "name": "Right pisiform"
+    }
+   ]
+  },
+  {
+   "canonical": "TRAPEZIUM_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3388",
+     "fma": "FMA24443",
+     "bp": "BP9841",
+     "name": "Right trapezium"
+    }
+   ]
+  },
+  {
+   "canonical": "TRAPEZOID_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3389",
+     "fma": "FMA23725",
+     "bp": "BP9408",
+     "name": "Right trapezoid"
+    }
+   ]
+  },
+  {
+   "canonical": "CAPITATE_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3361",
+     "fma": "FMA24446",
+     "bp": "BP9824",
+     "name": "Right capitate"
+    }
+   ]
+  },
+  {
+   "canonical": "HAMATE_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3367",
+     "fma": "FMA24448",
+     "bp": "BP10220",
+     "name": "Right hamate"
+    }
+   ]
+  },
+  {
+   "canonical": "METACARPAL_1_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3240",
+     "fma": "FMA24465",
+     "bp": "BP10035",
+     "name": "Left first metacarpal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METACARPAL_2_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3243",
+     "fma": "FMA24467",
+     "bp": "BP10048",
+     "name": "Left second metacarpal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METACARPAL_3_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3246",
+     "fma": "FMA24469",
+     "bp": "BP10021",
+     "name": "Left third metacarpal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METACARPAL_4_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3249",
+     "fma": "FMA24471",
+     "bp": "BP10196",
+     "name": "Left fourth metacarpal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METACARPAL_5_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3252",
+     "fma": "FMA24473",
+     "bp": "BP9543",
+     "name": "Left fifth metacarpal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METACARPAL_1_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3350",
+     "fma": "FMA24464",
+     "bp": "BP9833",
+     "name": "Right first metacarpal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METACARPAL_2_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3352",
+     "fma": "FMA24466",
+     "bp": "BP9671",
+     "name": "Right second metacarpal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METACARPAL_3_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3354",
+     "fma": "FMA24468",
+     "bp": "BP9877",
+     "name": "Right third metacarpal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METACARPAL_4_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3356",
+     "fma": "FMA24470",
+     "bp": "BP9775",
+     "name": "Right fourth metacarpal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METACARPAL_5_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3358",
+     "fma": "FMA24472",
+     "bp": "BP10056",
+     "name": "Right fifth metacarpal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_PROXIMAL_1_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3318",
+     "fma": "FMA65470",
+     "bp": "BP9437",
+     "name": "Proximal phalanx of left thumb"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_DISTAL_1_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3188",
+     "fma": "FMA23951",
+     "bp": "BP10158",
+     "name": "Distal phalanx of left thumb"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_PROXIMAL_2_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3313",
+     "fma": "FMA71915",
+     "bp": "BP9710",
+     "name": "Proximal phalanx of left index finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_INTERMEDIATE_2_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3296",
+     "fma": "FMA23938",
+     "bp": "BP10126",
+     "name": "Middle phalanx of left index finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_DISTAL_2_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3183",
+     "fma": "FMA23953",
+     "bp": "BP9700",
+     "name": "Distal phalanx of left index finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_PROXIMAL_3_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3316",
+     "fma": "FMA71908",
+     "bp": "BP10022",
+     "name": "Proximal phalanx of left middle finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_INTERMEDIATE_3_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3299",
+     "fma": "FMA23940",
+     "bp": "BP9779",
+     "name": "Middle phalanx of left middle finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_DISTAL_3_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3186",
+     "fma": "FMA23955",
+     "bp": "BP10012",
+     "name": "Distal phalanx of left middle finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_PROXIMAL_4_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3317",
+     "fma": "FMA71916",
+     "bp": "BP9493",
+     "name": "Proximal phalanx of left ring finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_INTERMEDIATE_4_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3291",
+     "fma": "FMA23942",
+     "bp": "BP9872",
+     "name": "Middle phalanx of left ring finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_DISTAL_4_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3187",
+     "fma": "FMA23957",
+     "bp": "BP10127",
+     "name": "Distal phalanx of left ring finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_PROXIMAL_5_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3314",
+     "fma": "FMA66791",
+     "bp": "BP9919",
+     "name": "Proximal phalanx of left little finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_INTERMEDIATE_5_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3297",
+     "fma": "FMA23944",
+     "bp": "BP9865",
+     "name": "Middle phalanx of left little finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_DISTAL_5_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3184",
+     "fma": "FMA23959",
+     "bp": "BP9977",
+     "name": "Distal phalanx of left little finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_PROXIMAL_1_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3327",
+     "fma": "FMA24450",
+     "bp": "BP9557",
+     "name": "Proximal phalanx of right thumb"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_DISTAL_1_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3198",
+     "fma": "FMA24459",
+     "bp": "BP9772",
+     "name": "Distal phalanx of right thumb"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_PROXIMAL_2_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3322",
+     "fma": "FMA24451",
+     "bp": "BP10051",
+     "name": "Proximal phalanx of right index finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_INTERMEDIATE_2_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3303",
+     "fma": "FMA24455",
+     "bp": "BP9821",
+     "name": "Middle phalanx of right index finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_DISTAL_2_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3193",
+     "fma": "FMA24460",
+     "bp": "BP10064",
+     "name": "Distal phalanx of right index finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_PROXIMAL_3_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3325",
+     "fma": "FMA24452",
+     "bp": "BP10103",
+     "name": "Proximal phalanx of right middle finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_INTERMEDIATE_3_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3306",
+     "fma": "FMA24456",
+     "bp": "BP10170",
+     "name": "Middle phalanx of right middle finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_DISTAL_3_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3196",
+     "fma": "FMA24461",
+     "bp": "BP9795",
+     "name": "Distal phalanx of right middle finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_PROXIMAL_4_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3326",
+     "fma": "FMA24453",
+     "bp": "BP9711",
+     "name": "Proximal phalanx of right ring finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_INTERMEDIATE_4_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3292",
+     "fma": "FMA24457",
+     "bp": "BP9777",
+     "name": "Middle phalanx of right ring finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_DISTAL_4_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3197",
+     "fma": "FMA24462",
+     "bp": "BP9506",
+     "name": "Distal phalanx of right ring finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_PROXIMAL_5_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3323",
+     "fma": "FMA24454",
+     "bp": "BP9612",
+     "name": "Proximal phalanx of right little finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_INTERMEDIATE_5_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3304",
+     "fma": "FMA24458",
+     "bp": "BP9799",
+     "name": "Middle phalanx of right little finger"
+    }
+   ]
+  },
+  {
+   "canonical": "PHALANX_DISTAL_5_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3194",
+     "fma": "FMA24463",
+     "bp": "BP9881",
+     "name": "Distal phalanx of right little finger"
+    }
+   ]
+  },
+  {
+   "canonical": "COXAL_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3288",
+     "fma": "FMA16587",
+     "bp": "BP10067",
+     "name": "Left hip bone"
+    }
+   ]
+  },
+  {
+   "canonical": "COXAL_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3152",
+     "fma": "FMA16586",
+     "bp": "BP9949",
+     "name": "Right hip bone"
+    }
+   ]
+  },
+  {
+   "canonical": "FEMUR_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3259",
+     "fma": "FMA24475",
+     "bp": "BP10115",
+     "name": "Left femur"
+    }
+   ]
+  },
+  {
+   "canonical": "FEMUR_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3365",
+     "fma": "FMA24474",
+     "bp": "BP10053",
+     "name": "Right femur"
+    }
+   ]
+  },
+  {
+   "canonical": "PATELLA_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3275",
+     "fma": "FMA24487",
+     "bp": "BP9728",
+     "name": "Left patella"
+    }
+   ]
+  },
+  {
+   "canonical": "PATELLA_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3381",
+     "fma": "FMA24486",
+     "bp": "BP9739",
+     "name": "Right patella"
+    }
+   ]
+  },
+  {
+   "canonical": "TIBIA_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3282",
+     "fma": "FMA24478",
+     "bp": "BP10195",
+     "name": "Left tibia"
+    }
+   ]
+  },
+  {
+   "canonical": "FIBULA_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3260",
+     "fma": "FMA24481",
+     "bp": "BP9685",
+     "name": "Left fibula"
+    }
+   ]
+  },
+  {
+   "canonical": "TIBIA_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3387",
+     "fma": "FMA24477",
+     "bp": "BP9559",
+     "name": "Right tibia"
+    }
+   ]
+  },
+  {
+   "canonical": "FIBULA_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3366",
+     "fma": "FMA24480",
+     "bp": "BP9550",
+     "name": "Right fibula"
+    }
+   ]
+  },
+  {
+   "canonical": "TALUS_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3280",
+     "fma": "FMA24483",
+     "bp": "BP10186",
+     "name": "Left talus"
+    }
+   ]
+  },
+  {
+   "canonical": "CALCANEUS_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3256",
+     "fma": "FMA24498",
+     "bp": "BP9825",
+     "name": "Left calcaneus"
+    }
+   ]
+  },
+  {
+   "canonical": "NAVICULAR_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3307",
+     "fma": "FMA24501",
+     "bp": "BP9866",
+     "name": "Navicular bone of left foot"
+    }
+   ]
+  },
+  {
+   "canonical": "CUBOID_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3258",
+     "fma": "FMA24529",
+     "bp": "BP9828",
+     "name": "Left cuboid bone"
+    }
+   ]
+  },
+  {
+   "canonical": "CUNEIFORM_MEDIAL_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3271",
+     "fma": "FMA24522",
+     "bp": "BP9959",
+     "name": "Left medial cuneiform bone"
+    }
+   ]
+  },
+  {
+   "canonical": "CUNEIFORM_INTERMEDIATE_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3264",
+     "fma": "FMA24524",
+     "bp": "BP9820",
+     "name": "Left intermediate cuneiform bone"
+    }
+   ]
+  },
+  {
+   "canonical": "CUNEIFORM_LATERAL_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3267",
+     "fma": "FMA24526",
+     "bp": "BP9717",
+     "name": "Left lateral cuneiform bone"
+    }
+   ]
+  },
+  {
+   "canonical": "TALUS_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3385",
+     "fma": "FMA24482",
+     "bp": "BP9560",
+     "name": "Right talus"
+    }
+   ]
+  },
+  {
+   "canonical": "CALCANEUS_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3360",
+     "fma": "FMA24497",
+     "bp": "BP10113",
+     "name": "Right calcaneus"
+    }
+   ]
+  },
+  {
+   "canonical": "NAVICULAR_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3308",
+     "fma": "FMA24500",
+     "bp": "BP10162",
+     "name": "Navicular bone of right foot"
+    }
+   ]
+  },
+  {
+   "canonical": "CUBOID_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3364",
+     "fma": "FMA24528",
+     "bp": "BP10031",
+     "name": "Right cuboid bone"
+    }
+   ]
+  },
+  {
+   "canonical": "CUNEIFORM_MEDIAL_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3377",
+     "fma": "FMA24521",
+     "bp": "BP9996",
+     "name": "Right medial cuneiform bone"
+    }
+   ]
+  },
+  {
+   "canonical": "CUNEIFORM_INTERMEDIATE_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3370",
+     "fma": "FMA24523",
+     "bp": "BP10153",
+     "name": "Right intermediate cuneiform bone"
+    }
+   ]
+  },
+  {
+   "canonical": "CUNEIFORM_LATERAL_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3373",
+     "fma": "FMA24525",
+     "bp": "BP9929",
+     "name": "Right lateral cuneiform bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METATARSAL_1_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3241",
+     "fma": "FMA24508",
+     "bp": "BP9649",
+     "name": "Left first metatarsal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METATARSAL_2_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3244",
+     "fma": "FMA24510",
+     "bp": "BP10052",
+     "name": "Left second metatarsal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METATARSAL_3_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3247",
+     "fma": "FMA24512",
+     "bp": "BP10076",
+     "name": "Left third metatarsal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METATARSAL_4_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3250",
+     "fma": "FMA24514",
+     "bp": "BP9814",
+     "name": "Left fourth metatarsal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METATARSAL_5_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3253",
+     "fma": "FMA24516",
+     "bp": "BP10214",
+     "name": "Left fifth metatarsal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METATARSAL_1_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3351",
+     "fma": "FMA24507",
+     "bp": "BP9677",
+     "name": "Right first metatarsal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METATARSAL_2_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3353",
+     "fma": "FMA24509",
+     "bp": "BP9876",
+     "name": "Right second metatarsal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METATARSAL_3_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3355",
+     "fma": "FMA24511",
+     "bp": "BP9980",
+     "name": "Right third metatarsal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METATARSAL_4_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3357",
+     "fma": "FMA24513",
+     "bp": "BP10160",
+     "name": "Right fourth metatarsal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "METATARSAL_5_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3359",
+     "fma": "FMA24515",
+     "bp": "BP9463",
+     "name": "Right fifth metatarsal bone"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_PROXIMAL_1_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3329",
+     "fma": "FMA43254",
+     "bp": "BP9891",
+     "name": "Proximal phalanx of left big toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_DISTAL_1_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3182",
+     "fma": "FMA32651",
+     "bp": "BP10216",
+     "name": "Distal phalanx of left big toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_PROXIMAL_2_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3328",
+     "fma": "FMA32635",
+     "bp": "BP10137",
+     "name": "Proximal phalanx of left second toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_INTERMEDIATE_2_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3293",
+     "fma": "FMA32643",
+     "bp": "BP9398",
+     "name": "Middle phalanx of left second toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_DISTAL_2_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3179",
+     "fma": "FMA32653",
+     "bp": "BP9622",
+     "name": "Distal phalanx of left second toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_PROXIMAL_3_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3311",
+     "fma": "FMA32637",
+     "bp": "BP10004",
+     "name": "Proximal phalanx of left third toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_INTERMEDIATE_3_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3294",
+     "fma": "FMA32645",
+     "bp": "BP9292",
+     "name": "Middle phalanx of left third toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_DISTAL_3_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3180",
+     "fma": "FMA32655",
+     "bp": "BP9503",
+     "name": "Distal phalanx of left third toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_PROXIMAL_4_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3312",
+     "fma": "FMA32639",
+     "bp": "BP9715",
+     "name": "Proximal phalanx of left fourth toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_INTERMEDIATE_4_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3295",
+     "fma": "FMA32647",
+     "bp": "BP10091",
+     "name": "Middle phalanx of left fourth toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_DISTAL_4_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3181",
+     "fma": "FMA32657",
+     "bp": "BP9974",
+     "name": "Distal phalanx of left fourth toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_PROXIMAL_5_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3315",
+     "fma": "FMA32641",
+     "bp": "BP9863",
+     "name": "Proximal phalanx of left little toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_INTERMEDIATE_5_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3298",
+     "fma": "FMA230988",
+     "bp": "BP10111",
+     "name": "Middle phalanx of left little toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_DISTAL_5_L",
+   "status": "MAPPED",
+   "side_check": "centre_x>0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3185",
+     "fma": "FMA32659",
+     "bp": "BP9986",
+     "name": "Distal phalanx of left little toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_PROXIMAL_1_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3310",
+     "fma": "FMA43253",
+     "bp": "BP9970",
+     "name": "Proximal phalanx of right big toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_DISTAL_1_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3192",
+     "fma": "FMA32650",
+     "bp": "BP10230",
+     "name": "Distal phalanx of right big toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_PROXIMAL_2_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3319",
+     "fma": "FMA32634",
+     "bp": "BP10191",
+     "name": "Proximal phalanx of right second toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_INTERMEDIATE_2_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3300",
+     "fma": "FMA32642",
+     "bp": "BP9798",
+     "name": "Middle phalanx of right second toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_DISTAL_2_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3189",
+     "fma": "FMA32652",
+     "bp": "BP9786",
+     "name": "Distal phalanx of right second toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_PROXIMAL_3_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3320",
+     "fma": "FMA32636",
+     "bp": "BP9947",
+     "name": "Proximal phalanx of right third toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_INTERMEDIATE_3_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3301",
+     "fma": "FMA32644",
+     "bp": "BP10119",
+     "name": "Middle phalanx of right third toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_DISTAL_3_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3190",
+     "fma": "FMA32654",
+     "bp": "BP10092",
+     "name": "Distal phalanx of right third toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_PROXIMAL_4_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3321",
+     "fma": "FMA32638",
+     "bp": "BP9698",
+     "name": "Proximal phalanx of right fourth toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_INTERMEDIATE_4_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3302",
+     "fma": "FMA32646",
+     "bp": "BP9858",
+     "name": "Middle phalanx of right fourth toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_DISTAL_4_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3191",
+     "fma": "FMA32656",
+     "bp": "BP10218",
+     "name": "Distal phalanx of right fourth toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_PROXIMAL_5_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3324",
+     "fma": "FMA32640",
+     "bp": "BP9762",
+     "name": "Proximal phalanx of right little toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_INTERMEDIATE_5_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3305",
+     "fma": "FMA230986",
+     "bp": "BP10212",
+     "name": "Middle phalanx of right little toe"
+    }
+   ]
+  },
+  {
+   "canonical": "TOE_PHALANX_DISTAL_5_R",
+   "status": "MAPPED",
+   "side_check": "centre_x<0",
+   "side_ok": true,
+   "notes": [],
+   "elements": [
+    {
+     "file_id": "FJ3195",
+     "fma": "FMA32658",
+     "bp": "BP9914",
+     "name": "Distal phalanx of right little toe"
+    }
+   ]
+  }
+ ]
+}

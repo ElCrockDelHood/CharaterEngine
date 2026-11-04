@@ -1120,13 +1120,34 @@ Tests: `tests/unit/test_asset_manifest.py`.
 
 ---
 
+## 62. BODYPARTS3D 4.0 FOR INTERNAL USE ONLY; PUBLICATION LICENCE PENDING
+
+**Decision** (owner, 2026-11-04, card "Uso interno; decidir antes de publicar"): BodyParts3D 4.0 (PART-OF tree,
+99 % polygon reduction; `partof_BP3D_4.0_obj_99.zip`, SHA-256
+`9fbc713fffeee924a5a657d9813d84d7eb957bded63adb854931dd5e3eb61c97`) is used **internally only**. The licensor's
+page (https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html and README_e.html, updated 2025/02/27) states
+CC BY 4.0, but the header of every one of the 1258 OBJ files (2013) states CC BY-SA 2.1 Japan. Until the owner
+decides or consults the licensor: (1) no published or sold product includes geometry derived from it; (2) asset
+manifests record the **more restrictive** licence (`CC BY-SA 2.1 JP`) with a note about the discrepancy;
+(3) the downloaded files stay outside the repo (`C:\DEV\Assets\BodyParts3D_4.0\`, download record with hashes
+there) and no OBJ or derived mesh is committed. Attribution to keep:
+"BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International" (and the
+BY-SA 2.1 JP wording while the discrepancy stands). The bone-name mapping (names and FMA/BP3D IDs only, no
+geometry) is `docs/audit/A18_BP3D_BONE_MAPPING.md` / `.json`: 199 of 206 canonical bones have a mesh (197 1:1,
+sternum = 3 elements, hyoid = 2 identical files); ossicles ×6 and coccyx are missing. No canonical data,
+contract, addon or backend changed.
+
+**Date**: 2026-11-04 · **Status**: FINAL for internal use; publication licence PENDING (owner)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 61
+**Total Decisions**: 62
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 56 (+4 deferred)
+**Final Decisions**: 57 (+4 deferred; Decision 62 final for internal use, publication licence pending)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)
