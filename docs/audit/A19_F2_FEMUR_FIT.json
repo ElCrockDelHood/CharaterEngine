@@ -1,0 +1,110 @@
+{
+ "status": "F2 measured; tolerances PENDING (all ESTIMATE)",
+ "licence": "BodyParts3D 4.0, INTERNAL USE ONLY (Decision 62)",
+ "blender": "3.6.23",
+ "inputs_sha256": {
+  "FJ3259": "4b919097be4820784d199838c69b1fe10afba703f0d6680a3ecab58460fb6549",
+  "FJ3365": "02fffe2e1b0f8e038d8b7b48e47cbc4925a749446240e676e910bff34d5348de"
+ },
+ "import_bounds_vs_header_max_abs_mm": {
+  "FJ3259": 1.367187496725819e-05,
+  "FJ3365": 1.4160156297293724e-05
+ },
+ "anchor_extraction": {
+  "head_points": 290,
+  "head_points_first_pass": 303,
+  "head_radius_mm": 22.935517604271297,
+  "head_sphere_rms_mm": 0.6840824720518409,
+  "distal_points": 591
+ },
+ "target_provenance": {
+  "head": "FEMUR_L.head (canonical hip joint, read-only)",
+  "lateral/medial": "FEMUR_L.tail \u00b1 asset epicondylar half-width \u00d7 s0 along canonical lateral \u27c2 bone axis \u2014 DERIVED from the asset, ESTIMATE"
+ },
+ "left": {
+  "scale": 1.0136091785437644,
+  "det_rotation": 1.0,
+  "residuals_mm": {
+   "head": 0.5494414174693496,
+   "lateral": 2.7776564695865735,
+   "medial": 2.815613914794055
+  },
+  "rms_mm": 2.3054242596861845,
+  "spread_ratio": 0.17052959172812063,
+  "chirality_checked": false,
+  "meets_proposed_2mm_rms": false
+ },
+ "right_own_anchors": {
+  "scale": 1.01216202679433,
+  "residuals_mm": {
+   "head": 0.3156077243606801,
+   "lateral": 1.6008593961622541,
+   "medial": 1.6133954357985567
+  },
+  "rms_mm": 1.3248149398076596
+ },
+ "a_joints": {
+  "canonical_fingerprint_before": "71c42ca0d83fdaf7cca6fbe44e43b9abc8e316fcd68caa5d9df1f1116439e55d",
+  "after": "71c42ca0d83fdaf7cca6fbe44e43b9abc8e316fcd68caa5d9df1f1116439e55d",
+  "bones_compared": 206,
+  "moved": []
+ },
+ "b_length": {
+  "trotter_femur_max_length_m": 0.4983,
+  "fitted_length_along_bone_axis_m": 0.47354656457901,
+  "asset_raw_length_along_its_axis_mm": 467.1539851697162,
+  "canonical_joint_segment_m": 0.4178000136273621,
+  "length_error_pct_vs_trotter": -4.967576845472609,
+  "along_axis_stretch_to_trotter": 1.0522724421894945,
+  "note": "stretch NOT applied: it would move the knee anchor off FEMUR_L.tail"
+ },
+ "c_roll": {
+  "spread_ratio_anchors": [
+   0.17052959172812063,
+   2.2818363571672532e-10
+  ],
+  "roll_error_deg": -2.8989034056288824e-14,
+  "fitted_epicondyle_axis_dot_lateral": 0.9999999403953552
+ },
+ "d_mirror": {
+  "signed_volume_cm3": {
+   "left_fitted": 521.3509789801694,
+   "mirror_without_winding_fix": -521.3509789801694,
+   "mirror_with_winding_fix": 521.3509789801694
+  },
+  "raw_mirrored_left_vs_real_right": {
+   "a_to_b": {
+    "mean_mm": 1.9006048999965806,
+    "rms_mm": 2.4936732284539325,
+    "p95_mm": 4.99039376154542,
+    "max_mm": 15.12020081281662
+   },
+   "b_to_a": {
+    "mean_mm": 1.9130164060834371,
+    "rms_mm": 2.538960203739994,
+    "p95_mm": 5.45980641618371,
+    "max_mm": 11.90249715000391
+   },
+   "max_mm": 15.12020081281662,
+   "mean_mm": 1.9068106530400089
+  },
+  "fitted_mirror_vs_fitted_right": {
+   "a_to_b": {
+    "mean_mm": 2.2443290005597767,
+    "rms_mm": 2.75499722848585,
+    "p95_mm": 5.3573534823954105,
+    "max_mm": 16.232537105679512
+   },
+   "b_to_a": {
+    "mean_mm": 2.275639801370144,
+    "rms_mm": 2.8276961952752964,
+    "p95_mm": 5.610444582998753,
+    "max_mm": 12.23850529640913
+   },
+   "max_mm": 16.232537105679512,
+   "mean_mm": 2.25998440096496
+  }
+ },
+ "e_anchor_rms_mm": 2.3054242596861845,
+ "proposed_rms_mm_estimate": 2.0
+}

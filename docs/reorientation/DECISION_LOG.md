@@ -1141,11 +1141,33 @@ contract, addon or backend changed.
 
 ---
 
+## 63. F1 LANDMARK REGISTRATION IMPLEMENTED; F2 FEMUR FIT MEASURED (TOLERANCES PENDING)
+
+**Decision** (owner, 2026-11-04, card "F2: fémur en Blender 3.6", anchors = femoral head centre + medial and
+lateral epicondyles): `domain/assets/registration.py` adds similarity registration by landmarks (Horn 1987
+quaternion rotation, always proper; Umeyama 1991 uniform scale; per-anchor residuals and RMS; nearly collinear
+anchors rejected; with >= 4 non-coplanar anchors a fit that needs a reflection is rejected; least-squares sphere
+fit). `runtime/blender/ce_f2_femur_fit.py` (Blender 3.6.23 headless, driven by `scripts/f2_femur_fit.py`) fits the
+BodyParts3D left femur FJ3259 (internal use, Decision 62; no mesh in the repo) onto `FEMUR_L` of the 1.80 m
+skeleton. Measured (`docs/audit/A19_F2_FEMUR_FIT.md` / `.json`): (a) canonical joints moved = 0 (fingerprint
+unchanged); (b) fitted length 0.4735 m vs Trotter 0.4983 m = −4.97 % (along-axis stretch ×1.052 not applied);
+(c) roll defined (anchor spread ratio 0.171); (d) mirror x → −x with reversed winding gives positive volume
+(+521.4 cm³) and matches the real right femur FJ3365 with mean 1.91 mm / max 15.1 mm; (e) anchor RMS 2.31 mm left
+(1.32 mm right), so the proposed 2 mm (ESTIMATE) is **not** met on the left. Epicondyle targets are derived from
+the asset (no measured canonical epicondyles), ESTIMATE. No tolerance is fixed; no canonical data, contract,
+manifest, addon or backend changed.
+Tests: `tests/unit/test_asset_registration.py`.
+
+**Date**: 2026-11-04 · **Status**: F1 implemented, F2 measured; tolerances PENDING (owner)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 62
+**Total Decisions**: 63
+**Measured, tolerances pending**: 1 (Decision 63, F2 femur fit)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
 **Final Decisions**: 57 (+4 deferred; Decision 62 final for internal use, publication licence pending)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
