@@ -2,6 +2,16 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-04 · Decision 71: spine sagittal curves (A26)
+
+### Changed
+- `CERVICAL_1` … `LUMBAR_5` get BodyParts3D antero-posterior offsets vertebra by vertebra (ESTIMATE; x and z kept)
+  via `scripts/fix_spine_curve.py`; `SPINE_SAGITTAL_CURVE` registered (tangent angles, not Cobb). Fingerprints updated;
+  `souls_clips.json` / `.glb`, `human_game_v1_body.glb`, `skeleton_serialized.json` regenerated.
+
+### Test status
+- pytest and lint green; Blender 40/40 (IK rest 13.6 mm), Godot 60/60, replays identical, gameplay table in sync.
+
 ## [Unreleased] — 2026-11-04 · Decision 70: clavicle hangs from the sternum
 
 ### Changed

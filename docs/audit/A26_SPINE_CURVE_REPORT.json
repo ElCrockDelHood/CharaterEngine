@@ -1,0 +1,186 @@
+{
+  "finding": "A26 spine without sagittal curves (straight vertical stubs)",
+  "variant": "A: z kept, AP offsets from BodyParts3D (ESTIMATE)",
+  "sha256_lf_before": "83025e87bc1b87bfda480d36728d225e8810c4c3676c6b46a1c178342b06c5a9",
+  "sha256_lf_after": "2af551ddd41b5114e7326b43f374a231f5960a30582459b59a584b30b66787d4",
+  "changed_bones": [
+    "CERVICAL_1",
+    "CERVICAL_2",
+    "CERVICAL_3",
+    "CERVICAL_4",
+    "CERVICAL_5",
+    "CERVICAL_6",
+    "CERVICAL_7",
+    "LUMBAR_1",
+    "LUMBAR_2",
+    "LUMBAR_3",
+    "LUMBAR_4",
+    "LUMBAR_5",
+    "THORACIC_1",
+    "THORACIC_10",
+    "THORACIC_11",
+    "THORACIC_12",
+    "THORACIC_2",
+    "THORACIC_3",
+    "THORACIC_4",
+    "THORACIC_5",
+    "THORACIC_6",
+    "THORACIC_7",
+    "THORACIC_8",
+    "THORACIC_9"
+  ],
+  "offsets_m": {
+    "CERVICAL_1": 0.0,
+    "CERVICAL_2": 0.0005,
+    "CERVICAL_3": -0.0004,
+    "CERVICAL_4": -0.0047,
+    "CERVICAL_5": -0.0074,
+    "CERVICAL_6": -0.0088,
+    "CERVICAL_7": -0.0032,
+    "THORACIC_1": 0.0016,
+    "THORACIC_2": 0.0069,
+    "THORACIC_3": 0.0167,
+    "THORACIC_4": 0.0235,
+    "THORACIC_5": 0.0281,
+    "THORACIC_6": 0.0306,
+    "THORACIC_7": 0.0298,
+    "THORACIC_8": 0.0214,
+    "THORACIC_9": 0.0169,
+    "THORACIC_10": 0.0107,
+    "THORACIC_11": 0.0009,
+    "THORACIC_12": -0.0114,
+    "LUMBAR_1": -0.022,
+    "LUMBAR_2": -0.0275,
+    "LUMBAR_3": -0.0278,
+    "LUMBAR_4": -0.0258,
+    "LUMBAR_5": -0.0178
+  },
+  "parameters": {
+    "CERVICAL_1": {
+      "body_offset_m": 0.0,
+      "head_y": 0.0,
+      "tail_y": 0.0003
+    },
+    "CERVICAL_2": {
+      "body_offset_m": 0.0005,
+      "head_y": 0.0003,
+      "tail_y": 0.0
+    },
+    "CERVICAL_3": {
+      "body_offset_m": -0.0004,
+      "head_y": 0.0,
+      "tail_y": -0.0026
+    },
+    "CERVICAL_4": {
+      "body_offset_m": -0.0047,
+      "head_y": -0.0026,
+      "tail_y": -0.006
+    },
+    "CERVICAL_5": {
+      "body_offset_m": -0.0074,
+      "head_y": -0.006,
+      "tail_y": -0.0081
+    },
+    "CERVICAL_6": {
+      "body_offset_m": -0.0088,
+      "head_y": -0.0081,
+      "tail_y": -0.006
+    },
+    "CERVICAL_7": {
+      "body_offset_m": -0.0032,
+      "head_y": -0.006,
+      "tail_y": -0.0008
+    },
+    "THORACIC_1": {
+      "body_offset_m": 0.0016,
+      "head_y": -0.0008,
+      "tail_y": 0.0043
+    },
+    "THORACIC_2": {
+      "body_offset_m": 0.0069,
+      "head_y": 0.0043,
+      "tail_y": 0.0118
+    },
+    "THORACIC_3": {
+      "body_offset_m": 0.0167,
+      "head_y": 0.0118,
+      "tail_y": 0.0201
+    },
+    "THORACIC_4": {
+      "body_offset_m": 0.0235,
+      "head_y": 0.0201,
+      "tail_y": 0.0258
+    },
+    "THORACIC_5": {
+      "body_offset_m": 0.0281,
+      "head_y": 0.0258,
+      "tail_y": 0.0294
+    },
+    "THORACIC_6": {
+      "body_offset_m": 0.0306,
+      "head_y": 0.0294,
+      "tail_y": 0.0302
+    },
+    "THORACIC_7": {
+      "body_offset_m": 0.0298,
+      "head_y": 0.0302,
+      "tail_y": 0.0256
+    },
+    "THORACIC_8": {
+      "body_offset_m": 0.0214,
+      "head_y": 0.0256,
+      "tail_y": 0.0192
+    },
+    "THORACIC_9": {
+      "body_offset_m": 0.0169,
+      "head_y": 0.0192,
+      "tail_y": 0.0138
+    },
+    "THORACIC_10": {
+      "body_offset_m": 0.0107,
+      "head_y": 0.0138,
+      "tail_y": 0.0058
+    },
+    "THORACIC_11": {
+      "body_offset_m": 0.0009,
+      "head_y": 0.0058,
+      "tail_y": -0.0053
+    },
+    "THORACIC_12": {
+      "body_offset_m": -0.0114,
+      "head_y": -0.0053,
+      "tail_y": -0.0167
+    },
+    "LUMBAR_1": {
+      "body_offset_m": -0.022,
+      "head_y": -0.0167,
+      "tail_y": -0.0248
+    },
+    "LUMBAR_2": {
+      "body_offset_m": -0.0275,
+      "head_y": -0.0248,
+      "tail_y": -0.0277
+    },
+    "LUMBAR_3": {
+      "body_offset_m": -0.0278,
+      "head_y": -0.0277,
+      "tail_y": -0.0268
+    },
+    "LUMBAR_4": {
+      "body_offset_m": -0.0258,
+      "head_y": -0.0268,
+      "tail_y": -0.0218
+    },
+    "LUMBAR_5": {
+      "body_offset_m": -0.0178,
+      "head_y": -0.0218,
+      "tail_y": -0.0089
+    }
+  },
+  "provenance": {
+    "offsets": "ESTIMATE — BodyParts3D body centroids, one subject, ×1.0269; tangent angles are not Cobb",
+    "pattern": "Pró, Anatomía Clínica, ch. 2 pp. 86-88: cervical / lumbar lordosis, thoracic / sacral kyphosis",
+    "unchanged": "x and z of every vertebra; SACRUM, COCCYX, ribs, sternum, skull"
+  },
+  "applied": true
+}

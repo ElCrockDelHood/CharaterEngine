@@ -1308,14 +1308,31 @@ Tests: `tests/unit/test_shoulder_girdle.py`.
 
 ---
 
+## 71. A26 — SPINE SAGITTAL CURVES FROM BODYPARTS3D (VARIANT A, ESTIMATE)
+
+**Decision** (owner, 2026-11-04 21:08, card "Ambas, columna con curva BP3D"): `scripts/fix_spine_curve.py` keeps x and z
+of `CERVICAL_1` … `LUMBAR_5` and gives each vertebra the antero-posterior offset of its BodyParts3D namesake (body
+centroid vs the C1 → sacrum line, ×1.0269), heads and tails as neighbour means. Peaks: C6 −8.1 mm, T6 +30.6 mm, L3 −27.8
+mm. Shape descriptor: cervical lordosis 24.5°, thoracic kyphosis 42.2°, lumbar lordosis 24.3°, angles between centroid
+tangents, **not Cobb angles**. Qualitative pattern cited from Pró, *Anatomía Clínica*, ch. 2, pp. 86–88 (no degrees).
+`SPINE_SAGITTAL_CURVE` registered (ESTIMATE, Cobb reference pending). Sacrum, coccyx, ribs, sternum and skull are
+unchanged. Finding recorded, not corrected: the canonical cervical spine is only 30 mm tall. Measured before
+committing: gameplay table in sync, every Godot replay identical (60/60), Blender 40/40 with IK rest deviation 13.6 mm
+and T-pose PASS; clips and game body re-baked (spine-chain directions only). A22 spine median 87.3 → 79.1 mm, axis
+angle 34.3° → 24.2°. Fingerprints updated. Audit `docs/audit/A26_SPINE_CURVE.md`. Tests: `tests/unit/test_spine_curve.py`.
+
+**Date**: 2026-11-04 · **Status**: FINAL (owner); values ESTIMATE
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 70
+**Total Decisions**: 71
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 62 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 63 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)
