@@ -89,8 +89,11 @@ Domain phases A02–A11 audited; canonical stature 1.80 m with Drillis & Contini
 heights (`docs/audit/A07_STATURE_RETARGET_180.md`); osteometry, T-pose, tissue/wound layers,
 character templates, IK/FK rig, mocap maps and Shenmue-style gameplay across Blender, UPBGE and
 Godot (`docs/audit/A08_OSTEOMETRY_TISSUES_TPOSE.md`); left = +X (Decision 33), hand and forearm layout
-(A10, A11). Godot is the primary gameplay runtime, UPBGE optional (Decision 40); Blender is the production
-line (Decision 42). Backend phases C1–C6 implemented and tested.
+(A10, A11), foot (A13), fibula (A21), hip joint centres (A23) and shoulder girdle (A24); asset fitting
+against a real skeleton (F0–F2, A18–A22); strike physics and head kinematics (A14–A17, opt-in). Audit index:
+`docs/audit/INDEX.md`; start here for new work: `docs/reorientation/HANDOFF.md`. Godot is the primary gameplay
+runtime, UPBGE optional (Decision 40); Blender is the production line (Decision 42). Backend phases C1–C6
+implemented and tested.
 Open gaps (events, rewards, assets API, HTTP layer) are tracked in
 `docs/reorientation/OPEN_GAPS.md`. The production/runtime split and the roadmap (character
 editor, IK/FK rig, mocap, runtime IK, simulation extraction, animals) are in

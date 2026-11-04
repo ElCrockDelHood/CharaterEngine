@@ -7,21 +7,28 @@
 
 ---
 
-> **Current status (2026-10-25).** This document is the 2026-09-02 post-reorientation snapshot and is
+> **Current status (2026-11-04).** This document is the 2026-09-02 post-reorientation snapshot and is
 > kept as history; it is **not** rewritten. Where it disagrees with the items below, the items below win.
 >
-> - **Backend C1–C6 implemented and tested**: configuration (C1), database foundation (C2), users (C3),
->   accounts / identities (C4), Argon2id authentication with sessions (C5), RBAC authorization (C6).
->   Code in `backend/`, tests in `tests/backend/` (261 tests). Evidence: `docs/reorientation/PHASE_C_EVIDENCE.md`,
->   `docs/audit/C05_*`, `docs/audit/C5_*`, `docs/audit/C6_*`.
+> - **Backend C1–C6 implemented and tested** (`backend/`, `tests/backend/`; evidence `docs/reorientation/PHASE_C_EVIDENCE.md`).
 > - **Anatomy data**: base stature 1.80 m (A07, Decision 15), osteometry drives mesh extents (A08, Decision 16),
->   left is +X with −Y forward (A09 mirror, Decision 33 / D-13), hand layout rebuilt (A10, Decision 35), radius
->   lateral to ulna (A11, Decision 36). The canonical data is fingerprinted (Decision 52).
-> - **Math contracts** D-01 … D-14 (Decisions 21–34); **runtimes**: Godot 4 is the primary gameplay runtime,
->   UPBGE optional (Decision 40); Blender is the production line (Decisions 42, 45).
-> - Full suite: ~850 pytest tests (`python scripts/test.py`).
-> - Source of truth for what changed since this snapshot: `docs/audit/A07`–`A11` and Decisions 15–48 (and later)
->   in `docs/reorientation/DECISION_LOG.md`.
+>   left is +X with −Y forward (Decision 33 / D-13), hand (A10, 35), radius lateral (A11, 36), foot (A13, 54),
+>   fibula lateral (A21, 65), hip joint centres 180.2 mm (A23, 67, ESTIMATE), shoulder girdle (A24, 68, ESTIMATE).
+>   The canonical data is fingerprinted (Decision 52).
+> - **Asset fitting**: manifest validator F0 (61, contract PROPOSED), landmark registration F1 and Blender fit F2
+>   (63, 64, 66) measured against BodyParts3D (internal use, 62); tolerances pending. Index: `docs/audit/INDEX.md`.
+> - **Combat**: strike physics, head kinematics and per-move strikers (A14–A17, Decisions 58–60, opt-in);
+>   Souls-like arena and reaction library in Godot. Godot 4 is the primary runtime (40); Blender is the
+>   production line (42, 45).
+> - Full suite: ~1230 pytest tests (`python scripts/test.py`); Blender addon 40/40, Godot 60/60.
+> - Source of truth for what changed since this snapshot: `docs/audit/INDEX.md`, `docs/reorientation/HANDOFF.md`
+>   and `docs/reorientation/DECISION_LOG.md` (Decisions up to 68).
+>
+> **Open anatomy gaps (2026-11-04)**: tolerances for asset fitting; spine curvature, rib cage and skull layout
+> (schematic, A22); clavicle re-parent to STERNUM; sourced tibia–fibula offset and hip-centre regression;
+> coccyx and ear ossicles have no real mesh (absent from BodyParts3D, proxies in `assets/anatomy/proxies/`);
+> latissimus dorsi, rectus abdominis, tibialis anterior, peroneus group and the major joint ligaments are absent
+> from BodyParts3D (proxies); publication licence of BodyParts3D (Decision 62).
 >
 > Closed since this snapshot: §1.1 User/Identity System, the authentication / authorization services of §1.4 (their HTTP
 > middleware stays open with §1.6), and
