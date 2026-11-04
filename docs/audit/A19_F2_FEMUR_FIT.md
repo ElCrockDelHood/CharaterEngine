@@ -62,8 +62,12 @@ anclajes coplanares la quiralidad no se ve, así que el lado lo da el manifiesto
 ## Reproducir
 
 ```bash
-python scripts/f2_femur_fit.py --bp3d C:/DEV/Assets/BodyParts3D_4.0/extracted/partof_BP3D_4.0_obj_99 --out C:/DEV/Assets/BodyParts3D_4.0/out
+python scripts/f2_femur_fit.py --bp3d C:/DEV/Assets/BodyParts3D_4.0/extracted/partof_BP3D_4.0_obj_99 --out C:/DEV/Assets/BodyParts3D_4.0/out --bones FEMUR
 ```
+
+Desde A20 el script cubre los 6 huesos largos y el fémur sale del módulo de dominio `long_bone_fit.py`. Los valores
+de arriba se reproducen con una diferencia de 3,5e-4 mm o menos (ver la sección "Femur vs A19" de A20). El JSON de
+A19 queda como registro histórico; el resumen nuevo es `A20_F2_LONG_BONES_FIT.json`.
 
 Blender: `C:/DEV/Tools/Blender/blender.exe` (3.6.23), o `CE_BLENDER`. Entradas: FJ3259 / FJ3365, con los SHA-256
 en el JSON. El resultado es determinista.

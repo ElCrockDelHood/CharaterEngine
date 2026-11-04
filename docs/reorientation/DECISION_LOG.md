@@ -1162,12 +1162,33 @@ Tests: `tests/unit/test_asset_registration.py`.
 
 ---
 
+## 64. F2 EXTENDED TO THE LONG BONES (BODYPARTS3D, L + R): MEASURED, TOLERANCES PENDING
+
+**Decision** (owner, 2026-11-04, card "Extender a huesos largos"): the F2 fit of Decision 63 is generalised to FEMUR,
+TIBIA, FIBULA, HUMERUS, RADIUS and ULNA, left and right (12 bone-sides), with no duplicated code: new pure-domain
+`domain/assets/long_bone_fit.py` (per-bone anchor rules, ESTIMATE; right side by mirroring the left rule; canonical
+targets with head / tail read-only and lateral / roll targets derived from the asset), used by
+`runtime/blender/ce_f2_femur_fit.py` (`--bones`) and `scripts/f2_femur_fit.py`. The femur reproduces A19 within
+3.5e-4 mm. Measured (`docs/audit/A20_F2_LONG_BONES_FIT.md` / `.json`): canonical joints moved = 0; all 12 fitted,
+none failed; anchor RMS 0.05–3.99 mm (median 2.60; 5/12 within the proposed 2 mm ESTIMATE); length along the
+canonical axis vs Trotter −8.8 % … +12.6 % (0/12 within the proposed 1 %; not Trotter's measuring definition);
+mirror with reversed winding correct for all six (volume sign), mean 1.1–2.0 mm / p95 3.4–5.9 mm vs the real right
+bones. Findings recorded, not fixed: canonical FIBULA lies 0.0333 m in front of the tibia on the knee → ankle
+segment (anatomically lateral / posterior, head below the knee), fibula roll weakly defined, tibial torsion
+(3–4.6° between the two pairs), ulna proximal centroid includes the olecranon. Anchor names are proposals, not
+added to the landmark list. No tolerance fixed; no canonical data, contract, manifest, addon or backend changed.
+Tests: `tests/unit/test_long_bone_fit.py`.
+
+**Date**: 2026-11-04 · **Status**: measured; tolerances PENDING (owner)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 63
-**Measured, tolerances pending**: 1 (Decision 63, F2 femur fit)
+**Total Decisions**: 64
+**Measured, tolerances pending**: 2 (Decision 63, F2 femur fit; Decision 64, long bones)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
 **Final Decisions**: 57 (+4 deferred; Decision 62 final for internal use, publication licence pending)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)

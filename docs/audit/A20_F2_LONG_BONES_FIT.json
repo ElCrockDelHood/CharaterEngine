@@ -1,0 +1,856 @@
+{
+ "status": "F2 measured; tolerances PENDING (all ESTIMATE)",
+ "licence": "BodyParts3D 4.0, INTERNAL USE ONLY (Decision 62)",
+ "blender": "3.6.23",
+ "stature_m": 1.8,
+ "joints": {
+  "canonical_fingerprint_before": "71c42ca0d83fdaf7cca6fbe44e43b9abc8e316fcd68caa5d9df1f1116439e55d",
+  "after": "71c42ca0d83fdaf7cca6fbe44e43b9abc8e316fcd68caa5d9df1f1116439e55d",
+  "bones_compared": 206,
+  "moved": []
+ },
+ "failed": {},
+ "rows": [
+  {
+   "bone": "FEMUR",
+   "side": "L",
+   "rms_mm": 2.305424158406678,
+   "max_residual_mm": 2.815613791101186,
+   "scale": 1.013609151156119,
+   "length_error_pct": -4.967581118593899,
+   "roll_error_deg": -4.831505994710621e-14,
+   "spread_ratio": 0.17052959172812063
+  },
+  {
+   "bone": "FEMUR",
+   "side": "R",
+   "rms_mm": 1.324461238650992,
+   "max_residual_mm": 1.6129646889714064,
+   "scale": 1.012149881488817,
+   "length_error_pct": -5.100715391981149,
+   "roll_error_deg": 6.75633463086274e-14,
+   "spread_ratio": 0.17075024437459005
+  },
+  {
+   "bone": "TIBIA",
+   "side": "L",
+   "rms_mm": 3.6790707876782536,
+   "max_residual_mm": 3.8616533973317257,
+   "scale": 1.186843934111795,
+   "length_error_pct": 12.07736553122477,
+   "roll_error_deg": 4.578363986123298,
+   "spread_ratio": 0.18437570886768984
+  },
+  {
+   "bone": "TIBIA",
+   "side": "R",
+   "rms_mm": 2.993366309520958,
+   "max_residual_mm": 3.814430063387105,
+   "scale": 1.1912767332383047,
+   "length_error_pct": 12.55039824092272,
+   "roll_error_deg": 3.014630654419895,
+   "spread_ratio": 0.18512918217489113
+  },
+  {
+   "bone": "FIBULA",
+   "side": "L",
+   "rms_mm": 0.22371423551109693,
+   "max_residual_mm": 0.2771274062165763,
+   "scale": 1.1362037067264976,
+   "length_error_pct": 8.164257303490684,
+   "roll_error_deg": 0.0,
+   "spread_ratio": 0.021737046645531315
+  },
+  {
+   "bone": "FIBULA",
+   "side": "R",
+   "rms_mm": 0.05020834249739145,
+   "max_residual_mm": 0.062298284823569805,
+   "scale": 1.1400633986511692,
+   "length_error_pct": 8.56391804631764,
+   "roll_error_deg": 0.0,
+   "spread_ratio": 0.019655906289952226
+  },
+  {
+   "bone": "HUMERUS",
+   "side": "L",
+   "rms_mm": 3.106351521608572,
+   "max_residual_mm": 3.798465927539467,
+   "scale": 1.1720559313616319,
+   "length_error_pct": 1.9998552375845187,
+   "roll_error_deg": -3.2170472708158264e-14,
+   "spread_ratio": 0.20320072276643228
+  },
+  {
+   "bone": "HUMERUS",
+   "side": "R",
+   "rms_mm": 2.892460698285009,
+   "max_residual_mm": 3.5336115588860686,
+   "scale": 1.1739682554880555,
+   "length_error_pct": 2.151004655946244,
+   "roll_error_deg": 0.0,
+   "spread_ratio": 0.2043194329501057
+  },
+  {
+   "bone": "RADIUS",
+   "side": "L",
+   "rms_mm": 3.0813888739202953,
+   "max_residual_mm": 3.8125616136070057,
+   "scale": 1.0789276876633902,
+   "length_error_pct": -4.014109056039354,
+   "roll_error_deg": -1.8676799854760908e-13,
+   "spread_ratio": 0.12230231544244549
+  },
+  {
+   "bone": "RADIUS",
+   "side": "R",
+   "rms_mm": 3.990842859527836,
+   "max_residual_mm": 4.958211767767158,
+   "scale": 1.0776826980975964,
+   "length_error_pct": -4.224352404853538,
+   "roll_error_deg": 0.0,
+   "spread_ratio": 0.1234658335476102
+  },
+  {
+   "bone": "ULNA",
+   "side": "L",
+   "rms_mm": 1.036053329025224,
+   "max_residual_mm": 1.3111328694873914,
+   "scale": 1.0281079779557796,
+   "length_error_pct": -8.370301971966963,
+   "roll_error_deg": 4.6786731984423076e-12,
+   "spread_ratio": 0.05149679034613351
+  },
+  {
+   "bone": "ULNA",
+   "side": "R",
+   "rms_mm": 0.628176891505679,
+   "max_residual_mm": 0.8015713754673526,
+   "scale": 1.023597193358884,
+   "length_error_pct": -8.776698329423722,
+   "roll_error_deg": -2.4116428719895094e-13,
+   "spread_ratio": 0.05425965741925307
+  }
+ ],
+ "dispersion": {
+  "anchor_rms_mm": {
+   "n": 12,
+   "min": 0.05020834249739145,
+   "median": 2.5989424283458433,
+   "max": 3.990842859527836,
+   "mean": 2.1092932705114986,
+   "stdev": 1.386089301445406
+  },
+  "anchor_max_residual_mm": {
+   "n": 12,
+   "min": 0.062298284823569805,
+   "median": 3.174612674993627,
+   "max": 4.958211767767158,
+   "mean": 2.554970228715501,
+   "stdev": 1.655119224844965
+  },
+  "abs_length_error_pct_vs_trotter": {
+   "n": 12,
+   "min": 1.9998552375845187,
+   "median": 6.632486347735917,
+   "max": 12.55039824092272,
+   "mean": 6.7467131073621,
+   "stdev": 3.5358476657384985
+  },
+  "similarity_scale": {
+   "n": 12,
+   "min": 1.012149881488817,
+   "median": 1.107565697194944,
+   "max": 1.1912767332383047,
+   "mean": 1.10287387910817,
+   "stdev": 0.07165721634645257
+  },
+  "abs_roll_error_deg": {
+   "n": 12,
+   "min": 0.0,
+   "median": 5.793920312786681e-14,
+   "max": 4.578363986123298,
+   "mean": 0.6327495533790373,
+   "stdev": 1.5149242646651135
+  },
+  "mirror_mean_mm": {
+   "n": 6,
+   "min": 1.0705484605497593,
+   "median": 1.8631152522154149,
+   "max": 2.0284861799326674,
+   "mean": 1.7466219766617064,
+   "stdev": 0.36249392078763215
+  },
+  "mirror_p95_mm": {
+   "n": 6,
+   "min": 3.381788730621338,
+   "median": 5.378755973652005,
+   "max": 5.872789770364761,
+   "mean": 5.183494572217266,
+   "stdev": 0.9220960511540001
+  },
+  "mirror_max_mm": {
+   "n": 6,
+   "min": 9.814680553972721,
+   "median": 12.210090644657612,
+   "max": 19.552718847990036,
+   "mean": 13.163810751090447,
+   "stdev": 3.6679361926696474
+  },
+  "bone_sides_meeting_proposed_2mm_rms": 5,
+  "bone_sides_within_proposed_1pct_length": 0
+ },
+ "bones": {
+  "FEMUR": {
+   "bp3d_files": {
+    "L": "FJ3259.obj",
+    "R": "FJ3365.obj"
+   },
+   "rule": "head = sphere on the proximal-medial 12 %; epicondyles = \u00b1X extremes of the distal 10 %",
+   "anchors": [
+    "femoral_head_centre",
+    "femoral_lateral_epicondyle",
+    "femoral_medial_epicondyle"
+   ],
+   "trotter_max_length_m": 0.4983,
+   "mirror": {
+    "signed_volume_cm3": {
+     "left_fitted": 521.3515775353006,
+     "mirror_without_winding_fix": -521.3515775353006,
+     "mirror_with_winding_fix": 521.3515775353006
+    },
+    "raw_mirrored_left_vs_real_right_mm": {
+     "mean_mm": 1.9068106530400089,
+     "p95_mm": 5.45980641618371,
+     "max_mm": 15.12020081281662
+    },
+    "fitted_mirror_vs_fitted_right_mm": {
+     "mean_mm": 2.2600950105378232,
+     "p95_mm": 5.609726533293724,
+     "max_mm": 16.232864931225777
+    }
+   },
+   "L": {
+    "scale": 1.013609151156119,
+    "rms_mm": 2.305424158406678,
+    "residuals_mm": {
+     "femoral_head_centre": 0.5494413933318376,
+     "femoral_lateral_epicondyle": 2.7776563475616984,
+     "femoral_medial_epicondyle": 2.815613791101186
+    },
+    "spread_ratio": 0.17052959172812063,
+    "planarity_ratio": 2.2818363571672532e-10,
+    "chirality_checked": false,
+    "meets_proposed_2mm_rms": false,
+    "canonical_joint_segment_m": 0.41779999999999995,
+    "asset_joint_distance_mm": 412.16300034219734,
+    "fitted_length_along_bone_axis_m": 0.4735465432860466,
+    "length_error_pct_vs_trotter": -4.967581118593899,
+    "along_axis_stretch_to_trotter": 1.0522724895047983,
+    "roll_error_deg": -4.831505994710621e-14,
+    "target_provenance": {
+     "femoral_head_centre": "canonical head/tail (read-only)",
+     "femoral_lateral_epicondyle": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "femoral_medial_epicondyle": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE"
+    },
+    "anchor_extraction": {
+     "femoral_head_centre": {
+      "points": 290,
+      "radius_mm": 22.935517604271297,
+      "sphere_rms_mm": 0.6840824720518409
+     },
+     "femoral_lateral_epicondyle": {
+      "points": 591
+     },
+     "femoral_medial_epicondyle": {
+      "points": 591
+     }
+    }
+   },
+   "R": {
+    "scale": 1.012149881488817,
+    "rms_mm": 1.324461238650992,
+    "residuals_mm": {
+     "femoral_head_centre": 0.31552346291871197,
+     "femoral_lateral_epicondyle": 1.6004319962266182,
+     "femoral_medial_epicondyle": 1.6129646889714064
+    },
+    "spread_ratio": 0.17075024437459005,
+    "planarity_ratio": 1.1130427946284186e-11,
+    "chirality_checked": false,
+    "meets_proposed_2mm_rms": true,
+    "canonical_joint_segment_m": 0.41779999999999995,
+    "asset_joint_distance_mm": 412.77564581936434,
+    "fitted_length_along_bone_axis_m": 0.47288313520175795,
+    "length_error_pct_vs_trotter": -5.100715391981149,
+    "along_axis_stretch_to_trotter": 1.0537487233233593,
+    "roll_error_deg": 6.75633463086274e-14,
+    "target_provenance": {
+     "femoral_head_centre": "canonical head/tail (read-only)",
+     "femoral_lateral_epicondyle": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "femoral_medial_epicondyle": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE"
+    },
+    "anchor_extraction": {
+     "femoral_head_centre": {
+      "points": 262,
+      "radius_mm": 22.827025119432015,
+      "sphere_rms_mm": 0.7511021975057739
+     },
+     "femoral_lateral_epicondyle": {
+      "points": 585
+     },
+     "femoral_medial_epicondyle": {
+      "points": 585
+     }
+    }
+   }
+  },
+  "TIBIA": {
+   "bp3d_files": {
+    "L": "FJ3282.obj",
+    "R": "FJ3387.obj"
+   },
+   "rule": "4 anchors: \u00b1X extremes of the proximal 10 % (condyles) and distal 8 % (fibular notch / medial malleolus)",
+   "anchors": [
+    "tibial_lateral_condyle_edge",
+    "tibial_medial_condyle_edge",
+    "tibial_fibular_notch_edge",
+    "tibial_medial_malleolus_edge"
+   ],
+   "trotter_max_length_m": 0.4023,
+   "mirror": {
+    "signed_volume_cm3": {
+     "left_fitted": 496.88731810454465,
+     "mirror_without_winding_fix": -496.88731810454465,
+     "mirror_with_winding_fix": 496.88731810454465
+    },
+    "raw_mirrored_left_vs_real_right_mm": {
+     "mean_mm": 2.0284861799326674,
+     "p95_mm": 5.844505503773689,
+     "max_mm": 19.552718847990036
+    },
+    "fitted_mirror_vs_fitted_right_mm": {
+     "mean_mm": 5.1839328805730505,
+     "p95_mm": 10.79916674643755,
+     "max_mm": 21.292900666594505
+    }
+   },
+   "L": {
+    "scale": 1.186843934111795,
+    "rms_mm": 3.6790707876782536,
+    "residuals_mm": {
+     "tibial_lateral_condyle_edge": 3.7590484731272014,
+     "tibial_medial_condyle_edge": 3.8616533973317257,
+     "tibial_fibular_notch_edge": 3.5938867279420625,
+     "tibial_medial_malleolus_edge": 3.4904746446963673
+    },
+    "spread_ratio": 0.18437570886768984,
+    "planarity_ratio": 0.01057143462091881,
+    "chirality_checked": true,
+    "meets_proposed_2mm_rms": false,
+    "canonical_joint_segment_m": 0.4168,
+    "asset_joint_distance_mm": 351.1305816193875,
+    "fitted_length_along_bone_axis_m": 0.45088724153211723,
+    "length_error_pct_vs_trotter": 12.07736553122477,
+    "along_axis_stretch_to_trotter": 0.8922408153155598,
+    "roll_error_deg": 4.578363986123298,
+    "target_provenance": {
+     "tibial_lateral_condyle_edge": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "tibial_medial_condyle_edge": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "tibial_fibular_notch_edge": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "tibial_medial_malleolus_edge": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE"
+    },
+    "anchor_extraction": {
+     "tibial_lateral_condyle_edge": {
+      "points": 429
+     },
+     "tibial_medial_condyle_edge": {
+      "points": 429
+     },
+     "tibial_fibular_notch_edge": {
+      "points": 254
+     },
+     "tibial_medial_malleolus_edge": {
+      "points": 254
+     }
+    }
+   },
+   "R": {
+    "scale": 1.1912767332383047,
+    "rms_mm": 2.993366309520958,
+    "residuals_mm": {
+     "tibial_lateral_condyle_edge": 1.900206922758763,
+     "tibial_medial_condyle_edge": 1.8731004943120961,
+     "tibial_fibular_notch_edge": 3.814430063387105,
+     "tibial_medial_malleolus_edge": 3.7645449834391127
+    },
+    "spread_ratio": 0.18512918217489113,
+    "planarity_ratio": 0.006972040430242555,
+    "chirality_checked": true,
+    "meets_proposed_2mm_rms": false,
+    "canonical_joint_segment_m": 0.4168,
+    "asset_joint_distance_mm": 349.8418328383462,
+    "fitted_length_along_bone_axis_m": 0.4527902521232321,
+    "length_error_pct_vs_trotter": 12.55039824092272,
+    "along_axis_stretch_to_trotter": 0.8884908588767706,
+    "roll_error_deg": 3.014630654419895,
+    "target_provenance": {
+     "tibial_lateral_condyle_edge": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "tibial_medial_condyle_edge": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "tibial_fibular_notch_edge": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "tibial_medial_malleolus_edge": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE"
+    },
+    "anchor_extraction": {
+     "tibial_lateral_condyle_edge": {
+      "points": 414
+     },
+     "tibial_medial_condyle_edge": {
+      "points": 414
+     },
+     "tibial_fibular_notch_edge": {
+      "points": 254
+     },
+     "tibial_medial_malleolus_edge": {
+      "points": 254
+     }
+    }
+   }
+  },
+  "FIBULA": {
+   "bp3d_files": {
+    "L": "FJ3260.obj",
+    "R": "FJ3366.obj"
+   },
+   "rule": "thin bone: the roll anchor sits only ~1 cm off the axis, so roll is weakly defined",
+   "anchors": [
+    "fibular_head_centroid",
+    "lateral_malleolus_centroid",
+    "lateral_malleolus_lateral_point"
+   ],
+   "trotter_max_length_m": 0.4038,
+   "mirror": {
+    "signed_volume_cm3": {
+     "left_fitted": 82.06235793754394,
+     "mirror_without_winding_fix": -82.06235793754394,
+     "mirror_with_winding_fix": 82.06235793754394
+    },
+    "raw_mirrored_left_vs_real_right_mm": {
+     "mean_mm": 1.819419851390821,
+     "p95_mm": 5.244371481239796,
+     "max_mm": 10.075083002448082
+    },
+    "fitted_mirror_vs_fitted_right_mm": {
+     "mean_mm": 2.4359879149459784,
+     "p95_mm": 5.767446011304855,
+     "max_mm": 10.394162498414516
+    }
+   },
+   "L": {
+    "scale": 1.1362037067264976,
+    "rms_mm": 0.22371423551109693,
+    "residuals_mm": {
+     "fibular_head_centroid": 0.009442490771866189,
+     "lateral_malleolus_centroid": 0.27065738046955146,
+     "lateral_malleolus_lateral_point": 0.2771274062165763
+    },
+    "spread_ratio": 0.021737046645531315,
+    "planarity_ratio": 1.8364883910943772e-10,
+    "chirality_checked": false,
+    "meets_proposed_2mm_rms": true,
+    "canonical_joint_segment_m": 0.4168,
+    "asset_joint_distance_mm": 366.82373840950817,
+    "fitted_length_along_bone_axis_m": 0.43676727099149537,
+    "length_error_pct_vs_trotter": 8.164257303490684,
+    "along_axis_stretch_to_trotter": 0.924519822841448,
+    "roll_error_deg": 0.0,
+    "target_provenance": {
+     "fibular_head_centroid": "canonical head/tail (read-only)",
+     "lateral_malleolus_centroid": "canonical head/tail (read-only)",
+     "lateral_malleolus_lateral_point": "canonical axis at the anchor's axial parameter + its lateral offset \u00d7 s0 \u2014 DERIVED, ESTIMATE (antero-posterior offset dropped)"
+    },
+    "anchor_extraction": {
+     "fibular_head_centroid": {
+      "points": 107
+     },
+     "lateral_malleolus_centroid": {
+      "points": 124
+     },
+     "lateral_malleolus_lateral_point": {
+      "points": 192
+     }
+    }
+   },
+   "R": {
+    "scale": 1.1400633986511692,
+    "rms_mm": 0.05020834249739145,
+    "residuals_mm": {
+     "fibular_head_centroid": 0.0021698789022451693,
+     "lateral_malleolus_centroid": 0.06063702089150701,
+     "lateral_malleolus_lateral_point": 0.062298284823569805
+    },
+    "spread_ratio": 0.019655906289952226,
+    "planarity_ratio": 0.0,
+    "chirality_checked": false,
+    "meets_proposed_2mm_rms": true,
+    "canonical_joint_segment_m": 0.4168,
+    "asset_joint_distance_mm": 365.59129122610614,
+    "fitted_length_along_bone_axis_m": 0.4383811010710306,
+    "length_error_pct_vs_trotter": 8.56391804631764,
+    "along_axis_stretch_to_trotter": 0.9211163506215395,
+    "roll_error_deg": 0.0,
+    "target_provenance": {
+     "fibular_head_centroid": "canonical head/tail (read-only)",
+     "lateral_malleolus_centroid": "canonical head/tail (read-only)",
+     "lateral_malleolus_lateral_point": "canonical axis at the anchor's axial parameter + its lateral offset \u00d7 s0 \u2014 DERIVED, ESTIMATE (antero-posterior offset dropped)"
+    },
+    "anchor_extraction": {
+     "fibular_head_centroid": {
+      "points": 120
+     },
+     "lateral_malleolus_centroid": {
+      "points": 127
+     },
+     "lateral_malleolus_lateral_point": {
+      "points": 198
+     }
+    }
+   }
+  },
+  "HUMERUS": {
+   "bp3d_files": {
+    "L": "FJ3262.obj",
+    "R": "FJ3368.obj"
+   },
+   "rule": "same rule as the femur: head sphere + epicondyles",
+   "anchors": [
+    "humeral_head_centre",
+    "humeral_lateral_epicondyle",
+    "humeral_medial_epicondyle"
+   ],
+   "trotter_max_length_m": 0.3557,
+   "mirror": {
+    "signed_volume_cm3": {
+     "left_fitted": 250.45257650753905,
+     "mirror_without_winding_fix": -250.45257650753905,
+     "mirror_with_winding_fix": 250.45257650753905
+    },
+    "raw_mirrored_left_vs_real_right_mm": {
+     "mean_mm": 1.0705484605497593,
+     "p95_mm": 3.381788730621338,
+     "max_mm": 9.814680553972721
+    },
+    "fitted_mirror_vs_fitted_right_mm": {
+     "mean_mm": 1.36751518638367,
+     "p95_mm": 4.030956421047449,
+     "max_mm": 11.716592125594616
+    }
+   },
+   "L": {
+    "scale": 1.1720559313616319,
+    "rms_mm": 3.106351521608572,
+    "residuals_mm": {
+     "humeral_head_centre": 0.8797740377804629,
+     "humeral_lateral_epicondyle": 3.7075481881115,
+     "humeral_medial_epicondyle": 3.798465927539467
+    },
+    "spread_ratio": 0.20320072276643228,
+    "planarity_ratio": 0.0,
+    "chirality_checked": false,
+    "meets_proposed_2mm_rms": false,
+    "canonical_joint_segment_m": 0.31579999999999986,
+    "asset_joint_distance_mm": 269.3847555583746,
+    "fitted_length_along_bone_axis_m": 0.36281348508008815,
+    "length_error_pct_vs_trotter": 1.9998552375845187,
+    "along_axis_stretch_to_trotter": 0.9803935482758644,
+    "roll_error_deg": -3.2170472708158264e-14,
+    "target_provenance": {
+     "humeral_head_centre": "canonical head/tail (read-only)",
+     "humeral_lateral_epicondyle": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "humeral_medial_epicondyle": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE"
+    },
+    "anchor_extraction": {
+     "humeral_head_centre": {
+      "points": 443,
+      "radius_mm": 20.422549565287568,
+      "sphere_rms_mm": 0.9852134512391331
+     },
+     "humeral_lateral_epicondyle": {
+      "points": 708
+     },
+     "humeral_medial_epicondyle": {
+      "points": 708
+     }
+    }
+   },
+   "R": {
+    "scale": 1.1739682554880555,
+    "rms_mm": 2.892460698285009,
+    "residuals_mm": {
+     "humeral_head_centre": 0.8228686667418741,
+     "humeral_lateral_epicondyle": 3.454773969678976,
+     "humeral_medial_epicondyle": 3.5336115588860686
+    },
+    "spread_ratio": 0.2043194329501057,
+    "planarity_ratio": 1.7618565229991122e-10,
+    "chirality_checked": false,
+    "meets_proposed_2mm_rms": false,
+    "canonical_joint_segment_m": 0.31579999999999986,
+    "asset_joint_distance_mm": 268.95343836701227,
+    "fitted_length_along_bone_axis_m": 0.3633511235612008,
+    "length_error_pct_vs_trotter": 2.151004655946244,
+    "along_axis_stretch_to_trotter": 0.9789428927968842,
+    "roll_error_deg": 0.0,
+    "target_provenance": {
+     "humeral_head_centre": "canonical head/tail (read-only)",
+     "humeral_lateral_epicondyle": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "humeral_medial_epicondyle": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE"
+    },
+    "anchor_extraction": {
+     "humeral_head_centre": {
+      "points": 537,
+      "radius_mm": 20.697526731921464,
+      "sphere_rms_mm": 1.0547958169362002
+     },
+     "humeral_lateral_epicondyle": {
+      "points": 714
+     },
+     "humeral_medial_epicondyle": {
+      "points": 714
+     }
+    }
+   }
+  },
+  "RADIUS": {
+   "bp3d_files": {
+    "L": "FJ3277.obj",
+    "R": "FJ3349.obj"
+   },
+   "rule": "radial head is a disc, not a sphere: centroid of the proximal 5 %",
+   "anchors": [
+    "radial_head_centroid",
+    "radial_styloid_tip",
+    "radial_ulnar_notch_edge"
+   ],
+   "trotter_max_length_m": 0.2672,
+   "mirror": {
+    "signed_volume_cm3": {
+     "left_fitted": 50.18756039384038,
+     "mirror_without_winding_fix": -50.18756039384038,
+     "mirror_with_winding_fix": 50.18756039384038
+    },
+    "raw_mirrored_left_vs_real_right_mm": {
+     "mean_mm": 2.022847841541048,
+     "p95_mm": 5.872789770364761,
+     "max_mm": 12.36354187130928
+    },
+    "fitted_mirror_vs_fitted_right_mm": {
+     "mean_mm": 2.3847456504873694,
+     "p95_mm": 6.680815946310759,
+     "max_mm": 13.78205418586731
+    }
+   },
+   "L": {
+    "scale": 1.0789276876633902,
+    "rms_mm": 3.0813888739202953,
+    "residuals_mm": {
+     "radial_head_centroid": 0.5421138894618762,
+     "radial_styloid_tip": 3.6953157713870977,
+     "radial_ulnar_notch_edge": 3.8125616136070057
+    },
+    "spread_ratio": 0.12230231544244549,
+    "planarity_ratio": 1.625391442323265e-09,
+    "chirality_checked": false,
+    "meets_proposed_2mm_rms": false,
+    "canonical_joint_segment_m": 0.2408999999999999,
+    "asset_joint_distance_mm": 223.19630565694234,
+    "fitted_length_along_bone_axis_m": 0.25647430060226284,
+    "length_error_pct_vs_trotter": -4.014109056039354,
+    "along_axis_stretch_to_trotter": 1.041819782225941,
+    "roll_error_deg": -1.8676799854760908e-13,
+    "target_provenance": {
+     "radial_head_centroid": "canonical head/tail (read-only)",
+     "radial_styloid_tip": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "radial_ulnar_notch_edge": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE"
+    },
+    "anchor_extraction": {
+     "radial_head_centroid": {
+      "points": 94
+     },
+     "radial_styloid_tip": {
+      "points": 138
+     },
+     "radial_ulnar_notch_edge": {
+      "points": 138
+     }
+    }
+   },
+   "R": {
+    "scale": 1.0776826980975964,
+    "rms_mm": 3.990842859527836,
+    "residuals_mm": {
+     "radial_head_centroid": 0.7193539768444158,
+     "radial_styloid_tip": 4.762262709081298,
+     "radial_ulnar_notch_edge": 4.958211767767158
+    },
+    "spread_ratio": 0.1234658335476102,
+    "planarity_ratio": 2.5809351124642566e-09,
+    "chirality_checked": false,
+    "meets_proposed_2mm_rms": false,
+    "canonical_joint_segment_m": 0.2408999999999999,
+    "asset_joint_distance_mm": 223.399351556501,
+    "fitted_length_along_bone_axis_m": 0.25591253037423134,
+    "length_error_pct_vs_trotter": -4.224352404853538,
+    "along_axis_stretch_to_trotter": 1.0441067485412399,
+    "roll_error_deg": 0.0,
+    "target_provenance": {
+     "radial_head_centroid": "canonical head/tail (read-only)",
+     "radial_styloid_tip": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE",
+     "radial_ulnar_notch_edge": "canonical joint \u00b1 asset half-width \u00d7 s0 along canonical lateral \u27c2 axis \u2014 DERIVED, ESTIMATE"
+    },
+    "anchor_extraction": {
+     "radial_head_centroid": {
+      "points": 84
+     },
+     "radial_styloid_tip": {
+      "points": 169
+     },
+     "radial_ulnar_notch_edge": {
+      "points": 169
+     }
+    }
+   }
+  },
+  "ULNA": {
+   "bp3d_files": {
+    "L": "FJ3286.obj",
+    "R": "FJ3391.obj"
+   },
+   "rule": "proximal centroid includes the olecranon, so it sits above the elbow joint centre (ESTIMATE)",
+   "anchors": [
+    "ulnar_proximal_centroid",
+    "ulnar_head_centroid",
+    "ulnar_radial_notch_lateral_point"
+   ],
+   "trotter_max_length_m": 0.2864,
+   "mirror": {
+    "signed_volume_cm3": {
+     "left_fitted": 41.04937648895866,
+     "mirror_without_winding_fix": -41.04937648895866,
+     "mirror_with_winding_fix": 41.04937648895866
+    },
+    "raw_mirrored_left_vs_real_right_mm": {
+     "mean_mm": 1.6316188735159343,
+     "p95_mm": 5.2977055311203,
+     "max_mm": 12.056639418005943
+    },
+    "fitted_mirror_vs_fitted_right_mm": {
+     "mean_mm": 2.324777330763144,
+     "p95_mm": 6.1188554391264915,
+     "max_mm": 11.476981453597546
+    }
+   },
+   "L": {
+    "scale": 1.0281079779557796,
+    "rms_mm": 1.036053329025224,
+    "residuals_mm": {
+     "ulnar_proximal_centroid": 1.2194402315641908,
+     "ulnar_head_centroid": 0.1188091829160512,
+     "ulnar_radial_notch_lateral_point": 1.3111328694873914
+    },
+    "spread_ratio": 0.05149679034613351,
+    "planarity_ratio": 3.2741701278519654e-09,
+    "chirality_checked": false,
+    "meets_proposed_2mm_rms": true,
+    "canonical_joint_segment_m": 0.2408999999999999,
+    "asset_joint_distance_mm": 234.1747820679481,
+    "fitted_length_along_bone_axis_m": 0.2624274551522866,
+    "length_error_pct_vs_trotter": -8.370301971966963,
+    "along_axis_stretch_to_trotter": 1.0913492257652773,
+    "roll_error_deg": 4.6786731984423076e-12,
+    "target_provenance": {
+     "ulnar_proximal_centroid": "canonical head/tail (read-only)",
+     "ulnar_head_centroid": "canonical head/tail (read-only)",
+     "ulnar_radial_notch_lateral_point": "canonical axis at the anchor's axial parameter + its lateral offset \u00d7 s0 \u2014 DERIVED, ESTIMATE (antero-posterior offset dropped)"
+    },
+    "anchor_extraction": {
+     "ulnar_proximal_centroid": {
+      "points": 179
+     },
+     "ulnar_head_centroid": {
+      "points": 91
+     },
+     "ulnar_radial_notch_lateral_point": {
+      "points": 267
+     }
+    }
+   },
+   "R": {
+    "scale": 1.023597193358884,
+    "rms_mm": 0.628176891505679,
+    "residuals_mm": {
+     "ulnar_proximal_centroid": 0.73071520384177,
+     "ulnar_head_centroid": 0.08577436663170285,
+     "ulnar_radial_notch_lateral_point": 0.8015713754673526
+    },
+    "spread_ratio": 0.05425965741925307,
+    "planarity_ratio": 2.402573594958564e-09,
+    "chirality_checked": false,
+    "meets_proposed_2mm_rms": true,
+    "canonical_joint_segment_m": 0.2408999999999999,
+    "asset_joint_distance_mm": 235.257226016303,
+    "fitted_length_along_bone_axis_m": 0.26126353598453045,
+    "length_error_pct_vs_trotter": -8.776698329423722,
+    "along_axis_stretch_to_trotter": 1.096211145274241,
+    "roll_error_deg": -2.4116428719895094e-13,
+    "target_provenance": {
+     "ulnar_proximal_centroid": "canonical head/tail (read-only)",
+     "ulnar_head_centroid": "canonical head/tail (read-only)",
+     "ulnar_radial_notch_lateral_point": "canonical axis at the anchor's axial parameter + its lateral offset \u00d7 s0 \u2014 DERIVED, ESTIMATE (antero-posterior offset dropped)"
+    },
+    "anchor_extraction": {
+     "ulnar_proximal_centroid": {
+      "points": 164
+     },
+     "ulnar_head_centroid": {
+      "points": 81
+     },
+     "ulnar_radial_notch_lateral_point": {
+      "points": 257
+     }
+    }
+   }
+  }
+ },
+ "proposed_estimates_compared": {
+  "anchor_rms_mm": 2.0,
+  "length_pct": 1.0,
+  "mirror_mm": 1.0
+ },
+ "femur_vs_A19": {
+  "left_rms_mm": {
+   "A19": 2.3054242596861845,
+   "now": 2.305424158406678,
+   "abs_diff": 1.0127950655913764e-07
+  },
+  "left_scale": {
+   "A19": 1.0136091785437644,
+   "now": 1.013609151156119,
+   "abs_diff": 2.7387645484822087e-08
+  },
+  "right_rms_mm": {
+   "A19": 1.3248149398076596,
+   "now": 1.324461238650992,
+   "abs_diff": 0.0003537011566676629
+  },
+  "left_length_m": {
+   "A19": 0.47354656457901,
+   "now": 0.4735465432860466,
+   "abs_diff": 2.129296339248299e-08
+  },
+  "mirror_raw_mean_mm": {
+   "A19": 1.9068106530400089,
+   "now": 1.9068106530400089,
+   "abs_diff": 0.0
+  }
+ }
+}
