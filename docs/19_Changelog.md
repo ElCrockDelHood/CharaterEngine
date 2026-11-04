@@ -2,6 +2,24 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-04 · Decision 65: fibula lateral to the tibia (finding A21)
+
+### Changed
+- `FIBULA_L/R` in `human_adult_206.json`: the pre-existing PLACEHOLDER offset (0.0333 m) moved from in front of the
+  tibia (−Y) to lateral (left +X, right −X); z, length, parent and the tibia unchanged (`scripts/fix_fibula_layout.py`,
+  method of A11). `FIBULA_INTEROSSEOUS_OFFSET` registered as NOT_ACQUIRED in `source_registry.json`; the posterior
+  component is pending a source. Contract fingerprints updated with Decision 65. Audit `docs/audit/A21_FIBULA_LAYOUT.md`.
+- `builds/exports/skeleton_serialized.json` regenerated (8 fibula coordinates).
+
+### Test status
+- `python scripts/test.py`: all passed (new `tests/unit/test_fibula_layout.py`). `python scripts/lint.py`: clean.
+- `python scripts/engine_tests.py blender godot`: Blender 3.6.23 40/40 (IK rest deviation 11.8 mm, unchanged),
+  Godot 4.7.2 60/60. Gameplay table in sync. UPBGE not run.
+
+### Behaviour
+- No gameplay, game-rig, block-body, socket or IK change. The PERONEUS_GROUP tissue proxy moves with the fibula
+  (visual only).
+
 ## [Unreleased] — 2026-10-30 · Import & retarget picks clips by exact name
 
 ### Changed

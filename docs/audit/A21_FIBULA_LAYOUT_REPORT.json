@@ -1,0 +1,156 @@
+{
+  "finding": "A21 fibula layout (fibula in front of the tibia instead of lateral to it)",
+  "file": "src/character_engine/data/anatomy/human_adult_206.json",
+  "sha256_before": "71c42ca0d83fdaf7cca6fbe44e43b9abc8e316fcd68caa5d9df1f1116439e55d",
+  "sha256_after": "59b1cce89aa3322b657efe41cf4900b1b3ee1742866b93845d4e0004c088dd80",
+  "sha256_lf_before": "71c42ca0d83fdaf7cca6fbe44e43b9abc8e316fcd68caa5d9df1f1116439e55d",
+  "sha256_lf_after": "59b1cce89aa3322b657efe41cf4900b1b3ee1742866b93845d4e0004c088dd80",
+  "changed_bones": [
+    "FIBULA_L",
+    "FIBULA_R"
+  ],
+  "parameters": {
+    "L_head": {
+      "tibia_xy_m": [
+        0.0666,
+        0.0
+      ],
+      "offset_m": 0.0333
+    },
+    "L_tail": {
+      "tibia_xy_m": [
+        0.0666,
+        0.0
+      ],
+      "offset_m": 0.0333
+    },
+    "R_head": {
+      "tibia_xy_m": [
+        -0.0666,
+        0.0
+      ],
+      "offset_m": 0.0333
+    },
+    "R_tail": {
+      "tibia_xy_m": [
+        -0.0666,
+        0.0
+      ],
+      "offset_m": 0.0333
+    }
+  },
+  "provenance": {
+    "z_and_length": "unchanged existing data (head 0.487 / tail 0.0702, same as the tibia)",
+    "tibia": "unchanged",
+    "offset": "PLACEHOLDER — pre-existing 0.0333 m, moved from −Y to lateral X; pending FIBULA_INTEROSSEOUS_OFFSET",
+    "posterior_component": "not added (no source); pending FIBULA_INTEROSSEOUS_OFFSET",
+    "fibula_lateral_to_tibia": "PROVEN topology (anatomical position)"
+  },
+  "samples": {
+    "TIBIA_L": {
+      "before": {
+        "head": {
+          "x": 0.0666,
+          "y": 0.0,
+          "z": 0.487
+        },
+        "tail": {
+          "x": 0.0666,
+          "y": 0.0,
+          "z": 0.0702
+        }
+      },
+      "after": {
+        "head": {
+          "x": 0.0666,
+          "y": 0.0,
+          "z": 0.487
+        },
+        "tail": {
+          "x": 0.0666,
+          "y": 0.0,
+          "z": 0.0702
+        }
+      }
+    },
+    "FIBULA_L": {
+      "before": {
+        "head": {
+          "x": 0.0666,
+          "y": -0.0333,
+          "z": 0.487
+        },
+        "tail": {
+          "x": 0.0666,
+          "y": -0.0333,
+          "z": 0.0702
+        }
+      },
+      "after": {
+        "head": {
+          "x": 0.0999,
+          "y": 0.0,
+          "z": 0.487
+        },
+        "tail": {
+          "x": 0.0999,
+          "y": 0.0,
+          "z": 0.0702
+        }
+      }
+    },
+    "TIBIA_R": {
+      "before": {
+        "head": {
+          "x": -0.0666,
+          "y": 0.0,
+          "z": 0.487
+        },
+        "tail": {
+          "x": -0.0666,
+          "y": 0.0,
+          "z": 0.0702
+        }
+      },
+      "after": {
+        "head": {
+          "x": -0.0666,
+          "y": 0.0,
+          "z": 0.487
+        },
+        "tail": {
+          "x": -0.0666,
+          "y": 0.0,
+          "z": 0.0702
+        }
+      }
+    },
+    "FIBULA_R": {
+      "before": {
+        "head": {
+          "x": -0.0666,
+          "y": -0.0333,
+          "z": 0.487
+        },
+        "tail": {
+          "x": -0.0666,
+          "y": -0.0333,
+          "z": 0.0702
+        }
+      },
+      "after": {
+        "head": {
+          "x": -0.0999,
+          "y": 0.0,
+          "z": 0.487
+        },
+        "tail": {
+          "x": -0.0999,
+          "y": 0.0,
+          "z": 0.0702
+        }
+      }
+    }
+  },
+  "applied": true
+}

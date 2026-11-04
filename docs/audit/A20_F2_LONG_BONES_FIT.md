@@ -101,8 +101,10 @@ Reading for setting tolerances:
 
 1. **Canonical FIBULA_L/R** spans exactly the tibia's knee → ankle segment, 0.0333 m **in front of** the tibia (−Y)
    and on the same x. Anatomically the fibula is lateral and slightly posterior, and its head lies below the knee
-   joint. This looks like the forearm layout before A11 (Decision 36). It inflates the fibula scale (1.14) and
-   length (+8 %). It needs a source and the owner's OK to change (Decision 52).
+   joint. This looks like the forearm layout before A11 (Decision 36). The fibula's scale (1.14) and length (+8 %)
+   come from the segment length and the head at knee level, not from the antero-posterior offset: a per-bone
+   similarity fit cannot see a pure translation. Correction: the lateral offset was fixed in A21 (Decision 65);
+   re-measured, the per-bone metrics are identical, as expected.
 2. **Fibula roll** is weak (spread ratio 0.02, the roll point only ~1 cm off the axis). Its roll should come from
    the tibia (both bones together), not from the fibula alone.
 3. **Tibia:** the two ±X pairs are 3–4.6° apart (tibial torsion). One roll per bone cannot satisfy both ends.

@@ -1183,14 +1183,36 @@ Tests: `tests/unit/test_long_bone_fit.py`.
 
 ---
 
+## 65. FINDING A21 — FIBULA LATERAL TO THE TIBIA
+
+**Finding** (A20, finding 1): in the anatomical position the fibula is lateral (and slightly posterior) to the tibia;
+the canonical data placed `FIBULA_L/R` on the tibia's knee → ankle segment, 0.0333 m in front of it (y −0.0333) at
+the same x.
+
+**Decision** (owner, 2026-11-04, card "Sí, A21 del peroné"; canonical data change authorised for this only):
+`scripts/fix_fibula_layout.py` (method of A11 / Decision 36) keeps the fibula's z (0.487 / 0.0702), length and parent
+and the tibia unchanged, and moves the pre-existing PLACEHOLDER offset 0.0333 m from −Y to lateral X (left +X,
+right −X). No posterior component is added (no source). `FIBULA_INTEROSSEOUS_OFFSET` registered as NOT_ACQUIRED
+in `source_registry.json`. Only FIBULA_L/R changed; nothing hangs from them. Fingerprints updated
+(`human_adult_206.json` → `59b1cce8…dd80`, `source_registry.json` → `5a730948…774d`). No behaviour change: gameplay
+table in sync, game rig / block body / sockets / IK unchanged (Blender 40/40, IK rest deviation 11.8 mm; Godot
+60/60); the PERONEUS_GROUP tissue proxy moves with the fibula (visual). F2 per-bone metrics are identical to A20
+(a per-bone fit cannot see a translation). Against BodyParts3D (evidence, not a source) the tibia → fibula
+relationship goes from ≈ 63 mm off to ≈ 28 mm off (the posterior part is pending). Audit:
+`docs/audit/A21_FIBULA_LAYOUT.md`. Tests: `tests/unit/test_fibula_layout.py`.
+
+**Date**: 2026-11-04 · **Status**: FINAL (topology); offset PLACEHOLDER, source pending
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 64
+**Total Decisions**: 65
 **Measured, tolerances pending**: 2 (Decision 63, F2 femur fit; Decision 64, long bones)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 57 (+4 deferred; Decision 62 final for internal use, publication licence pending)
+**Final Decisions**: 58 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)
