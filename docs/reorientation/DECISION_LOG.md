@@ -1100,11 +1100,32 @@ Evidence: `docs/audit/A17_MOVE_STRIKERS.md`. Tests: `tests/unit/test_move_strike
 
 ---
 
+## 61. ASSET MANIFEST VALIDATOR (F0 IMPLEMENTED; MANIFEST CONTRACT PROPOSED, PENDING OWNER APPROVAL)
+
+**Decision** (owner, 2026-11-04 "sigamos adelante, corrijamos"): phase F0 of
+`docs/architecture/ASSET_FITTING_PROPOSAL.md` is implemented in pure domain code:
+`domain/assets/manifest.py` (`validate_manifest`, `verify_sha256`). It rejects a manifest whose licence, author or
+origin was not read (Decision 46), whose `sha256` is missing or malformed, whose `canonical_bone` is not among
+the 208 canonical nodes for the declared side, whose rigid part has fewer than 3 non-collinear anchors, or whose
+muscle attachments disagree with `MUSCLES`; it accepts a synthetic example. The **manifest contract itself is
+NOT approved** (proposal §8.1): this entry records the implementation only. The §5 tolerances are kept as
+constants with provenance ESTIMATE (proposed values) or UNKNOWN (pending); nothing applies them yet. Landmark
+names are not checked against a closed list until one exists (§8.4). `assets/anatomy/manifests/` (empty of
+assets) stays outside the canonical fingerprint (Decision 52). `assets/anatomy/meshes/README.md` now states that
+`_fit_asset` does not mirror the opposite side (fix planned in F2). No canonical data, contract, backend or
+addon code changed; no asset was downloaded.
+Tests: `tests/unit/test_asset_manifest.py`.
+
+**Date**: 2026-11-04 · **Status**: PROPOSED (contract pending owner approval; F0 code additive)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 60
+**Total Decisions**: 61
+**Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
 **Final Decisions**: 56 (+4 deferred)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)

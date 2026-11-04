@@ -26,7 +26,7 @@ meshes, nunca mueve joints), 46 (referencias legales y sin malware), 52 (datos c
 No puede: (a) recibir un esqueleto completo en un archivo y separarlo en huesos; (b) registrar un mesh de otras
 proporciones por landmarks (solo escala por un eje y alinea un vector); (c) fijar el roll ni espejar correctamente
 L/R; (d) importar músculos, tendones, grasa, fascia o piel reales; (e) pesar un mesh deformable (piel, músculo)
-con pesos suaves de calidad; (f) medir y reportar el error del ajuste. Hay que **crearlo** (fases en §5).
+con pesos suaves de calidad; (f) medir y reportar el error del ajuste. Hay que **crearlo** (fases en §7).
 
 ## 3. Contrato de asset (manifiesto)
 
