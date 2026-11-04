@@ -3,6 +3,7 @@ summary docs/audit/A20_F2_LONG_BONES_FIT.json (no geometry, no anchor coordinate
 
     python scripts/f2_femur_fit.py --bp3d C:/DEV/Assets/BodyParts3D_4.0/extracted/partof_BP3D_4.0_obj_99 \
         --out C:/DEV/Assets/BodyParts3D_4.0/out [--bones FEMUR,TIBIA,...] [--blender ...] [--no-summary]
+    python scripts/f2_femur_fit.py --regions --bp3d ... --out ...   # whole skeleton by regions -> A22 summary
 
 Default: all six long bones (FEMUR, TIBIA, FIBULA, HUMERUS, RADIUS, ULNA), left and right. The summary also compares
 the femur with the committed A19 result (Decision 63). ``--bones FEMUR`` re-measures the femur alone (A19 values).
@@ -25,7 +26,9 @@ from engine_tests import find_blender
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "runtime" / "blender" / "ce_f2_femur_fit.py"
+REGIONS_SCRIPT = ROOT / "runtime" / "blender" / "ce_f2_regions_fit.py"
 SUMMARY = ROOT / "docs" / "audit" / "A20_F2_LONG_BONES_FIT.json"
+REGIONS_SUMMARY = ROOT / "docs" / "audit" / "A22_SKELETON_REGIONS_FIT.json"
 A19 = ROOT / "docs" / "audit" / "A19_F2_FEMUR_FIT.json"
 
 
@@ -92,6 +95,24 @@ def summary(res: dict) -> dict:
     return out
 
 
+def regions_summary(res: dict) -> dict:
+    """A22: global registration, per-region statistics, mirror pairs and pelvis distances (no coordinates)."""
+    keep = ("centroid_to_segment_mm", "head_error_mm", "tail_error_mm", "extent_over_length", "axis_angle_deg")
+    mirror = res["mirror"]
+    means = sorted(v["mean_mm"] for v in mirror.values())
+    return {
+        "status": res["status"], "licence": "BodyParts3D 4.0, INTERNAL USE ONLY (Decision 62)",
+        "blender": res["blender"], "joints": res["joints"], "failed": res["failed"],
+        "global_registration": res["global_registration"],
+        "regions": res["regions"],
+        "bones": {b: {k: m[k] for k in keep} for b, m in res["bones"].items()},
+        "mirror_pairs": mirror,
+        "mirror_mean_mm_over_pairs": {"n": len(means), "min": means[0], "median": statistics.median(means),
+                                      "max": means[-1]},
+        "pelvis": res["pelvis"],
+    }
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--bp3d", default=os.environ.get("CE_BP3D_DIR"))
@@ -99,6 +120,7 @@ def main() -> int:
     p.add_argument("--bones", default="FEMUR,TIBIA,FIBULA,HUMERUS,RADIUS,ULNA")
     p.add_argument("--blender")
     p.add_argument("--no-summary", action="store_true")
+    p.add_argument("--regions", action="store_true", help="whole skeleton by regions (A22) instead of long bones")
     a = p.parse_args()
     if not a.bp3d or not a.out:
         p.error("need --bp3d and --out (or CE_BP3D_DIR / CE_F2_OUT)")
@@ -108,6 +130,20 @@ def main() -> int:
     blender = find_blender(a.blender)
     if blender is None:
         p.error("Blender not found (set CE_BLENDER or --blender)")
+    if a.regions:
+        cmd = [str(blender), "-b", "--factory-startup", "--python", str(REGIONS_SCRIPT), "--",
+               "--bp3d", str(Path(a.bp3d)), "--out", str(out)]
+        code, _, log = run_logged(cmd, "blender")
+        results = out / "f2_regions_fit_results.json"
+        if code != 0:
+            print(f"Blender exit {code}; see {log}" + (f" and {results}" if results.exists() else ""))
+            return code
+        if not a.no_summary:
+            res = json.loads(results.read_text(encoding="utf-8"))
+            REGIONS_SUMMARY.write_text(json.dumps(regions_summary(res), indent=1) + "\n", encoding="utf-8",
+                                       newline="\n")
+            print(f"summary -> {REGIONS_SUMMARY.relative_to(ROOT)}")
+        return 0
     cmd = [str(blender), "-b", "--factory-startup", "--python", str(SCRIPT), "--",
            "--bp3d", str(Path(a.bp3d)), "--out", str(out), "--bones", a.bones]
     code, _, log = run_logged(cmd, "blender")

@@ -1,0 +1,2406 @@
+{
+ "status": "F2 regions measured; tolerances PENDING (all ESTIMATE)",
+ "licence": "BodyParts3D 4.0, INTERNAL USE ONLY (Decision 62)",
+ "blender": "3.6.23",
+ "joints": {
+  "canonical_fingerprint_before": "59b1cce89aa3322b657efe41cf4900b1b3ee1742866b93845d4e0004c088dd80",
+  "after": "59b1cce89aa3322b657efe41cf4900b1b3ee1742866b93845d4e0004c088dd80",
+  "bones_compared": 206,
+  "moved": []
+ },
+ "failed": {},
+ "global_registration": {
+  "anchors": [
+   "FEMUR_L.proximal",
+   "FEMUR_L.distal",
+   "FEMUR_R.proximal",
+   "FEMUR_R.distal",
+   "HUMERUS_L.proximal",
+   "HUMERUS_L.distal",
+   "HUMERUS_R.proximal",
+   "HUMERUS_R.distal"
+  ],
+  "scale": 1.0319704974188237,
+  "det_rotation": 1.0000000000000007,
+  "residuals_mm": {
+   "FEMUR_L.proximal": 26.15519600805675,
+   "FEMUR_L.distal": 18.930297801678364,
+   "FEMUR_R.proximal": 25.9660150322388,
+   "FEMUR_R.distal": 19.446827880236828,
+   "HUMERUS_L.proximal": 67.78813394584915,
+   "HUMERUS_L.distal": 39.61583310225253,
+   "HUMERUS_R.proximal": 67.50265557866487,
+   "HUMERUS_R.distal": 40.030426792122654
+  },
+  "rms_mm": 42.45372836971354,
+  "chirality_checked": true
+ },
+ "regions": {
+  "pelvis": {
+   "bones": 4,
+   "fitted": 3,
+   "missing": [
+    "COCCYX"
+   ],
+   "centroid_to_midpoint_after_region_shift_mm": {
+    "n": 3,
+    "min": 34.62818748145011,
+    "median": 34.79267303748913,
+    "p95": 34.79267303748913,
+    "max": 38.39291821666915,
+    "mean": 35.937926245202796
+   },
+   "centroid_to_segment_mm": {
+    "n": 3,
+    "min": 30.20438394297605,
+    "median": 30.64527961670789,
+    "p95": 30.64527961670789,
+    "max": 64.71090214834248,
+    "mean": 41.853521902675475
+   },
+   "head_error_mm": {
+    "n": 3,
+    "min": 36.767687022437514,
+    "median": 37.730028122020336,
+    "p95": 37.730028122020336,
+    "max": 65.29025982830561,
+    "mean": 46.59599165758782
+   },
+   "tail_error_mm": {
+    "n": 3,
+    "min": 109.22829933989524,
+    "median": 109.43131444344283,
+    "p95": 109.43131444344283,
+    "max": 145.0822475078774,
+    "mean": 121.24728709707183
+   },
+   "extent_over_length": {
+    "n": 3,
+    "min": 2.297620614893628,
+    "median": 3.2760383545322074,
+    "p95": 3.2760383545322074,
+    "max": 3.282315416245184,
+    "mean": 2.95199146189034
+   },
+   "axis_angle_deg": {
+    "n": 3,
+    "min": 14.703996179526985,
+    "median": 17.574812731473248,
+    "p95": 17.574812731473248,
+    "max": 17.995222027393098,
+    "mean": 16.758010312797776
+   },
+   "mean_centroid_shift_mm": [
+    -0.1326573943719826,
+    15.867726111150013,
+    -54.001498441150645
+   ]
+  },
+  "spine": {
+   "bones": 24,
+   "fitted": 24,
+   "missing": [],
+   "centroid_to_midpoint_after_region_shift_mm": {
+    "n": 24,
+    "min": 23.714568043345423,
+    "median": 65.60110818302088,
+    "p95": 103.62026102444837,
+    "max": 132.6241700596164,
+    "mean": 71.45971232254061
+   },
+   "centroid_to_segment_mm": {
+    "n": 24,
+    "min": 6.794339612408663,
+    "median": 85.86673283763638,
+    "p95": 135.29429203027195,
+    "max": 143.44533206319966,
+    "mean": 77.35511150866243
+   },
+   "head_error_mm": {
+    "n": 24,
+    "min": 14.159832554391128,
+    "median": 83.30956111512143,
+    "p95": 134.8103177014523,
+    "max": 144.39242460180037,
+    "mean": 79.83762389018709
+   },
+   "tail_error_mm": {
+    "n": 24,
+    "min": 14.07413252304378,
+    "median": 122.38048063384934,
+    "p95": 171.75376183321038,
+    "max": 176.0908769691543,
+    "mean": 102.22850377548777
+   },
+   "extent_over_length": {
+    "n": 24,
+    "min": 1.6649851757773562,
+    "median": 5.6566818740960185,
+    "p95": 11.849086913578407,
+    "max": 12.635258114003504,
+    "mean": 5.66238830581683
+   },
+   "axis_angle_deg": {
+    "n": 24,
+    "min": 12.611007722415131,
+    "median": 34.30207264951909,
+    "p95": 52.174242496655644,
+    "max": 60.90483603761496,
+    "mean": 35.01449581173933
+   },
+   "mean_centroid_shift_mm": [
+    -0.5768303619106316,
+    19.469717873917592,
+    -55.78525180513293
+   ]
+  },
+  "thorax": {
+   "bones": 25,
+   "fitted": 25,
+   "missing": [],
+   "centroid_to_midpoint_after_region_shift_mm": {
+    "n": 25,
+    "min": 49.34629626982586,
+    "median": 79.89124862293367,
+    "p95": 125.35141046850879,
+    "max": 143.24223627219948,
+    "mean": 86.93542398549661
+   },
+   "centroid_to_segment_mm": {
+    "n": 25,
+    "min": 35.676868641003765,
+    "median": 121.50195711750177,
+    "p95": 181.48827575217277,
+    "max": 185.8394650258022,
+    "mean": 114.58318094270979
+   },
+   "head_error_mm": {
+    "n": 25,
+    "min": 22.45433915440861,
+    "median": 118.34223560905752,
+    "p95": 168.83749578747106,
+    "max": 181.08096232843081,
+    "mean": 114.58877047882902
+   },
+   "tail_error_mm": {
+    "n": 25,
+    "min": 42.70667482831371,
+    "median": 150.84972902373585,
+    "p95": 228.32698766855034,
+    "max": 230.62295638918812,
+    "mean": 149.4059971444551
+   },
+   "extent_over_length": {
+    "n": 25,
+    "min": 1.105535224137355,
+    "median": 2.3272041835573676,
+    "p95": 2.5014976635599218,
+    "max": 3.5597301040753266,
+    "mean": 2.1276221517772664
+   },
+   "axis_angle_deg": {
+    "n": 25,
+    "min": 24.480313265551494,
+    "median": 38.17053388624899,
+    "p95": 41.81524647817037,
+    "max": 44.251784273433245,
+    "mean": 36.795750627873026
+   },
+   "mean_centroid_shift_mm": [
+    -0.5233684735190725,
+    1.5322363020958762,
+    -99.45514420739306
+   ]
+  },
+  "shoulder_girdle": {
+   "bones": 4,
+   "fitted": 4,
+   "missing": [],
+   "centroid_to_midpoint_after_region_shift_mm": {
+    "n": 4,
+    "min": 102.90468277241943,
+    "median": 107.15057528762753,
+    "p95": 110.24523838994571,
+    "max": 111.45278978226446,
+    "mean": 107.16465578248474
+   },
+   "centroid_to_segment_mm": {
+    "n": 4,
+    "min": 97.48515728727428,
+    "median": 108.63083907094642,
+    "p95": 117.2481151734805,
+    "max": 117.58532582940883,
+    "mean": 108.083040314644
+   },
+   "head_error_mm": {
+    "n": 4,
+    "min": 91.09108072768736,
+    "median": 124.27818198731698,
+    "p95": 157.14381898616693,
+    "max": 158.86303261836179,
+    "mean": 124.62761933017077
+   },
+   "tail_error_mm": {
+    "n": 4,
+    "min": 90.05651304294184,
+    "median": 150.5570628272102,
+    "p95": 208.928806204301,
+    "max": 209.2940221537053,
+    "mean": 150.11616521276687
+   },
+   "extent_over_length": {
+    "n": 4,
+    "min": 3.8045486852681356,
+    "median": 5.86140125216603,
+    "p95": 7.916311680246581,
+    "max": 7.916988722423492,
+    "mean": 5.8610849780059215
+   },
+   "axis_angle_deg": {
+    "n": 4,
+    "min": 24.84681068938146,
+    "median": 30.484736100556475,
+    "p95": 35.93812512600803,
+    "max": 36.75412598849042,
+    "mean": 30.64260221974621
+   },
+   "mean_centroid_shift_mm": [
+    -0.6542786893705141,
+    31.727111674684824,
+    -33.30003326447595
+   ]
+  },
+  "arm": {
+   "bones": 6,
+   "fitted": 6,
+   "missing": [],
+   "centroid_to_midpoint_after_region_shift_mm": {
+    "n": 6,
+    "min": 15.822542486237857,
+    "median": 52.151021337267046,
+    "p95": 54.512183514511115,
+    "max": 58.17156445120661,
+    "mean": 42.92654977789478
+   },
+   "centroid_to_segment_mm": {
+    "n": 6,
+    "min": 24.589583749764593,
+    "median": 28.213928070726176,
+    "p95": 40.68757059754731,
+    "max": 43.294459444702966,
+    "mean": 31.9409518261605
+   },
+   "head_error_mm": {
+    "n": 6,
+    "min": 60.79255625019031,
+    "median": 63.38484663226336,
+    "p95": 67.03375455480533,
+    "max": 67.47702871960321,
+    "mean": 63.92339574360538
+   },
+   "tail_error_mm": {
+    "n": 6,
+    "min": 34.10594547409366,
+    "median": 85.30191649877449,
+    "p95": 95.98626491901182,
+    "max": 96.13975618673778,
+    "mean": 71.84103256800209
+   },
+   "extent_over_length": {
+    "n": 6,
+    "min": 0.9808999838197169,
+    "median": 1.0042314655998568,
+    "p95": 1.0599592315212045,
+    "max": 1.0607789951985878,
+    "mean": 1.0154153287354026
+   },
+   "axis_angle_deg": {
+    "n": 6,
+    "min": 9.52344925417959,
+    "median": 13.55027230268686,
+    "p95": 14.030842360982772,
+    "max": 14.263338463900144,
+    "mean": 12.494219451688771
+   },
+   "mean_centroid_shift_mm": [
+    0.0549248403622169,
+    -11.093261310272744,
+    60.88005160666932
+   ]
+  },
+  "hand": {
+   "bones": 54,
+   "fitted": 54,
+   "missing": [],
+   "centroid_to_midpoint_after_region_shift_mm": {
+    "n": 54,
+    "min": 6.522326826491067,
+    "median": 27.510558759429408,
+    "p95": 51.522471496225826,
+    "max": 59.88291074454342,
+    "mean": 29.777201991103425
+   },
+   "centroid_to_segment_mm": {
+    "n": 54,
+    "min": 72.71494678406096,
+    "median": 96.3647396717758,
+    "p95": 144.45786475087115,
+    "max": 152.6572951493112,
+    "mean": 104.36856328184227
+   },
+   "head_error_mm": {
+    "n": 54,
+    "min": 76.56373501014231,
+    "median": 104.63704433017205,
+    "p95": 145.48216915112656,
+    "max": 159.5011699147793,
+    "mean": 111.36162496538952
+   },
+   "tail_error_mm": {
+    "n": 54,
+    "min": 87.29761095020645,
+    "median": 113.221084625721,
+    "p95": 168.20938444933833,
+    "max": 174.11093442368465,
+    "mean": 122.15404534995483
+   },
+   "extent_over_length": {
+    "n": 54,
+    "min": 0.274479827767416,
+    "median": 0.7640969134566746,
+    "p95": 1.452037620340767,
+    "max": 1.5329970324443627,
+    "mean": 0.8323808274112172
+   },
+   "axis_angle_deg": {
+    "n": 54,
+    "min": 9.556202834298775,
+    "median": 25.29553978154366,
+    "p95": 46.387738954680245,
+    "max": 54.341386519690296,
+    "mean": 26.99225282065315
+   },
+   "mean_centroid_shift_mm": [
+    0.01674706959123995,
+    -74.29327647176501,
+    86.79920613589407
+   ]
+  },
+  "leg": {
+   "bones": 8,
+   "fitted": 8,
+   "missing": [],
+   "centroid_to_midpoint_after_region_shift_mm": {
+    "n": 8,
+    "min": 13.710544619498409,
+    "median": 35.996142803053516,
+    "p95": 52.887564337639695,
+    "max": 55.248824367500255,
+    "mean": 34.90628176446026
+   },
+   "centroid_to_segment_mm": {
+    "n": 8,
+    "min": 7.83815131786731,
+    "median": 21.558653292298068,
+    "p95": 39.642542339553295,
+    "max": 40.87049144486471,
+    "mean": 22.94175975959827
+   },
+   "head_error_mm": {
+    "n": 8,
+    "min": 11.322690341346336,
+    "median": 34.68350122313722,
+    "p95": 46.0533398967469,
+    "max": 47.0924236130473,
+    "mean": 31.928932627407804
+   },
+   "tail_error_mm": {
+    "n": 8,
+    "min": 27.981834995163062,
+    "median": 33.414011463895996,
+    "p95": 44.08681349495086,
+    "max": 44.97621533169349,
+    "mean": 34.936382117300674
+   },
+   "extent_over_length": {
+    "n": 8,
+    "min": 0.940791314328367,
+    "median": 1.051519153595334,
+    "p95": 1.691394183707647,
+    "max": 1.6988942134889682,
+    "mean": 1.1847393240227957
+   },
+   "axis_angle_deg": {
+    "n": 8,
+    "min": 0.882252628393086,
+    "median": 3.0244599783657975,
+    "p95": 40.86758801548854,
+    "max": 43.36406508256243,
+    "mean": 12.268662354959009
+   },
+   "mean_centroid_shift_mm": [
+    0.12489665308291464,
+    2.5475736940439435,
+    1.1641697547958643
+   ]
+  },
+  "foot": {
+   "bones": 52,
+   "fitted": 52,
+   "missing": [],
+   "centroid_to_midpoint_after_region_shift_mm": {
+    "n": 52,
+    "min": 28.597587522123508,
+    "median": 66.53531781363958,
+    "p95": 93.45488426209717,
+    "max": 97.49092524463755,
+    "mean": 66.68663708023014
+   },
+   "centroid_to_segment_mm": {
+    "n": 52,
+    "min": 20.887771376361762,
+    "median": 87.64573641206641,
+    "p95": 119.34153713264631,
+    "max": 126.38973836209885,
+    "mean": 84.96037362668591
+   },
+   "head_error_mm": {
+    "n": 52,
+    "min": 32.16093992689903,
+    "median": 94.03744085591718,
+    "p95": 123.36038693872102,
+    "max": 130.33441308302065,
+    "mean": 91.47091292039843
+   },
+   "tail_error_mm": {
+    "n": 52,
+    "min": 39.231146395948116,
+    "median": 98.64068317531152,
+    "p95": 139.1949512599482,
+    "max": 148.79499784777502,
+    "mean": 99.41830119537528
+   },
+   "extent_over_length": {
+    "n": 52,
+    "min": 0.240787321476528,
+    "median": 0.7886765481464661,
+    "p95": 1.28878179047942,
+    "max": 1.3336922466099908,
+    "mean": 0.7931553007446333
+   },
+   "axis_angle_deg": {
+    "n": 52,
+    "min": 2.695176885298507,
+    "median": 12.502025280182774,
+    "p95": 29.34150906946884,
+    "max": 38.36995884510901,
+    "mean": 13.845571849826454
+   },
+   "mean_centroid_shift_mm": [
+    -0.140554169087435,
+    53.16038956607958,
+    43.906156010116625
+   ]
+  },
+  "skull": {
+   "bones": 29,
+   "fitted": 23,
+   "missing": [
+    "MALLEUS_L",
+    "MALLEUS_R",
+    "INCUS_L",
+    "INCUS_R",
+    "STAPES_L",
+    "STAPES_R"
+   ],
+   "centroid_to_midpoint_after_region_shift_mm": {
+    "n": 23,
+    "min": 3.603816949514129,
+    "median": 47.88549871792606,
+    "p95": 77.91702574433401,
+    "max": 85.3214254536136,
+    "mean": 46.18735178621261
+   },
+   "centroid_to_segment_mm": {
+    "n": 23,
+    "min": 16.902496820690846,
+    "median": 52.05927545944032,
+    "p95": 64.26167254475934,
+    "max": 65.60957940434405,
+    "mean": 46.69437505505086
+   },
+   "head_error_mm": {
+    "n": 23,
+    "min": 24.046008711285385,
+    "median": 63.04987688520901,
+    "p95": 75.64221933191278,
+    "max": 97.93158408894676,
+    "mean": 57.613637425622564
+   },
+   "tail_error_mm": {
+    "n": 23,
+    "min": 17.75722065337305,
+    "median": 57.87285186331106,
+    "p95": 76.72999470284337,
+    "max": 82.18362980900179,
+    "mean": 57.21611149405968
+   },
+   "extent_over_length": {
+    "n": 23,
+    "min": 1.0808013268967478,
+    "median": 1.9608949391282204,
+    "p95": 3.642971221707251,
+    "max": 6.610671661348138,
+    "mean": 2.2085035354980853
+   },
+   "axis_angle_deg": {
+    "n": 23,
+    "min": 5.536646831125234,
+    "median": 22.966064342339735,
+    "p95": 39.62052662296332,
+    "max": 58.27380039595262,
+    "mean": 23.602654136314502
+   },
+   "mean_centroid_shift_mm": [
+    -0.5530812479860767,
+    -16.603732927274873,
+    13.422887831511526
+   ]
+  }
+ },
+ "bones": {
+  "COXAL_L": {
+   "centroid_to_segment_mm": 30.20438394297605,
+   "head_error_mm": 37.730028122020336,
+   "tail_error_mm": 109.43131444344283,
+   "extent_over_length": 3.282315416245184,
+   "axis_angle_deg": 17.574812731473248
+  },
+  "COXAL_R": {
+   "centroid_to_segment_mm": 30.64527961670789,
+   "head_error_mm": 36.767687022437514,
+   "tail_error_mm": 109.22829933989524,
+   "extent_over_length": 3.2760383545322074,
+   "axis_angle_deg": 17.995222027393098
+  },
+  "SACRUM": {
+   "centroid_to_segment_mm": 64.71090214834248,
+   "head_error_mm": 65.29025982830561,
+   "tail_error_mm": 145.0822475078774,
+   "extent_over_length": 2.297620614893628,
+   "axis_angle_deg": 14.703996179526985
+  },
+  "CERVICAL_1": {
+   "centroid_to_segment_mm": 73.74435447927989,
+   "head_error_mm": 83.33318033815561,
+   "tail_error_mm": 69.51797813883934,
+   "extent_over_length": 4.606364141843884,
+   "axis_angle_deg": 23.979188360502487
+  },
+  "CERVICAL_2": {
+   "centroid_to_segment_mm": 58.53427801928606,
+   "head_error_mm": 83.28594189208724,
+   "tail_error_mm": 55.68123128851791,
+   "extent_over_length": 10.817299649984145,
+   "axis_angle_deg": 39.48490256487682
+  },
+  "CERVICAL_3": {
+   "centroid_to_segment_mm": 44.64866290267985,
+   "head_error_mm": 53.858117024014106,
+   "tail_error_mm": 45.33615230356418,
+   "extent_over_length": 6.716839209263905,
+   "axis_angle_deg": 52.174242496655644
+  },
+  "CERVICAL_4": {
+   "centroid_to_segment_mm": 35.06400942404829,
+   "head_error_mm": 44.822017121448305,
+   "tail_error_mm": 37.660400243288834,
+   "extent_over_length": 6.5891185946430895,
+   "axis_angle_deg": 51.01298030665764
+  },
+  "CERVICAL_5": {
+   "centroid_to_segment_mm": 23.26931127956666,
+   "head_error_mm": 35.25380648668586,
+   "tail_error_mm": 37.62044961103799,
+   "extent_over_length": 5.785938506169316,
+   "axis_angle_deg": 60.90483603761496
+  },
+  "CERVICAL_6": {
+   "centroid_to_segment_mm": 13.182203686682776,
+   "head_error_mm": 25.605951280945032,
+   "tail_error_mm": 25.273148232272682,
+   "extent_over_length": 5.527425242022721,
+   "axis_angle_deg": 49.90010155003166
+  },
+  "CERVICAL_7": {
+   "centroid_to_segment_mm": 6.794339612408663,
+   "head_error_mm": 16.790927528991613,
+   "tail_error_mm": 35.47834875422312,
+   "extent_over_length": 6.479079085757015,
+   "axis_angle_deg": 52.22549826242834
+  },
+  "THORACIC_1": {
+   "centroid_to_segment_mm": 12.730062769843046,
+   "head_error_mm": 19.31016011087186,
+   "tail_error_mm": 14.07413252304378,
+   "extent_over_length": 6.135088615708415,
+   "axis_angle_deg": 12.611007722415131
+  },
+  "THORACIC_2": {
+   "centroid_to_segment_mm": 17.643295099153747,
+   "head_error_mm": 14.159832554391128,
+   "tail_error_mm": 29.41531020209448,
+   "extent_over_length": 6.84124557766029,
+   "axis_angle_deg": 14.388367385288134
+  },
+  "THORACIC_3": {
+   "centroid_to_segment_mm": 34.84504670007456,
+   "head_error_mm": 22.661723230093152,
+   "tail_error_mm": 68.68796091924793,
+   "extent_over_length": 8.148578038263562,
+   "axis_angle_deg": 42.65033303825767
+  },
+  "THORACIC_4": {
+   "centroid_to_segment_mm": 54.44009796370469,
+   "head_error_mm": 39.246074888451304,
+   "tail_error_mm": 93.05510177420959,
+   "extent_over_length": 8.8120098532131,
+   "axis_angle_deg": 42.80875451330532
+  },
+  "THORACIC_5": {
+   "centroid_to_segment_mm": 75.11569248989206,
+   "head_error_mm": 60.04597188800637,
+   "tail_error_mm": 118.72701426462064,
+   "extent_over_length": 11.849086913578407,
+   "axis_angle_deg": 30.32136415665098
+  },
+  "THORACIC_6": {
+   "centroid_to_segment_mm": 96.6177731853807,
+   "head_error_mm": 82.71604334991204,
+   "tail_error_mm": 140.32240316705983,
+   "extent_over_length": 12.306848058100233,
+   "axis_angle_deg": 23.88546079369917
+  },
+  "THORACIC_7": {
+   "centroid_to_segment_mm": 118.74807419711972,
+   "head_error_mm": 104.97825862371388,
+   "tail_error_mm": 162.32007429105064,
+   "extent_over_length": 12.635258114003504,
+   "axis_angle_deg": 17.87479025225668
+  },
+  "THORACIC_8": {
+   "centroid_to_segment_mm": 125.91827116672106,
+   "head_error_mm": 126.66937732864439,
+   "tail_error_mm": 168.53430177002872,
+   "extent_over_length": 3.0415711245067474,
+   "axis_angle_deg": 18.34939940798312
+  },
+  "THORACIC_9": {
+   "centroid_to_segment_mm": 128.45803565836067,
+   "head_error_mm": 131.29737885843738,
+   "tail_error_mm": 171.75376183321038,
+   "extent_over_length": 2.643703821043336,
+   "axis_angle_deg": 28.01653058073148
+  },
+  "THORACIC_10": {
+   "centroid_to_segment_mm": 135.29429203027195,
+   "head_error_mm": 134.8103177014523,
+   "tail_error_mm": 175.09595067265852,
+   "extent_over_length": 2.604775188821237,
+   "axis_angle_deg": 33.03975690140299
+  },
+  "THORACIC_11": {
+   "centroid_to_segment_mm": 137.8592633257788,
+   "head_error_mm": 138.8398970702507,
+   "tail_error_mm": 176.0908769691543,
+   "extent_over_length": 2.424928269037423,
+   "axis_angle_deg": 39.36634081905466
+  },
+  "THORACIC_12": {
+   "centroid_to_segment_mm": 143.44533206319966,
+   "head_error_mm": 144.39242460180037,
+   "tail_error_mm": 170.89456751866052,
+   "extent_over_length": 2.3378451325986225,
+   "axis_angle_deg": 25.606865220051606
+  },
+  "LUMBAR_1": {
+   "centroid_to_segment_mm": 98.25732783708449,
+   "head_error_mm": 103.08197081119371,
+   "tail_error_mm": 133.72985565011962,
+   "extent_over_length": 2.2541381381160503,
+   "axis_angle_deg": 51.04247826003318
+  },
+  "LUMBAR_2": {
+   "centroid_to_segment_mm": 100.55084872541208,
+   "head_error_mm": 107.43684643196484,
+   "tail_error_mm": 126.03394700307807,
+   "extent_over_length": 1.88192150822263,
+   "axis_angle_deg": 28.818106904155076
+  },
+  "LUMBAR_3": {
+   "centroid_to_segment_mm": 103.604461811686,
+   "head_error_mm": 111.85269314144986,
+   "tail_error_mm": 127.17778732231308,
+   "extent_over_length": 1.6649851757773562,
+   "axis_angle_deg": 24.395572539840717
+  },
+  "LUMBAR_4": {
+   "centroid_to_segment_mm": 105.70640530459332,
+   "head_error_mm": 113.42153605805798,
+   "tail_error_mm": 131.43717550176217,
+   "extent_over_length": 1.7871946134062109,
+   "axis_angle_deg": 41.926633010215234
+  },
+  "LUMBAR_5": {
+   "centroid_to_segment_mm": 112.05123647566963,
+   "head_error_mm": 118.23252504347107,
+   "tail_error_mm": 139.56616065765013,
+   "extent_over_length": 2.0060767678627114,
+   "axis_angle_deg": 35.564388397635184
+  },
+  "STERNUM": {
+   "centroid_to_segment_mm": 73.78027878526657,
+   "head_error_mm": 22.45433915440861,
+   "tail_error_mm": 143.2524418772997,
+   "extent_over_length": 3.5597301040753266,
+   "axis_angle_deg": 24.480313265551494
+  },
+  "RIB_01_L": {
+   "centroid_to_segment_mm": 36.92929798588047,
+   "head_error_mm": 58.020502989458386,
+   "tail_error_mm": 54.03807968499695,
+   "extent_over_length": 1.6069520974983602,
+   "axis_angle_deg": 34.57350273777749
+  },
+  "RIB_02_L": {
+   "centroid_to_segment_mm": 37.12887272344426,
+   "head_error_mm": 62.26481703475096,
+   "tail_error_mm": 44.91297050731169,
+   "extent_over_length": 2.144342531803614,
+   "axis_angle_deg": 25.912703346605294
+  },
+  "RIB_03_L": {
+   "centroid_to_segment_mm": 49.38868919699386,
+   "head_error_mm": 72.5739515190478,
+   "tail_error_mm": 61.54863114373933,
+   "extent_over_length": 2.328185945113346,
+   "axis_angle_deg": 30.313969054351645
+  },
+  "RIB_04_L": {
+   "centroid_to_segment_mm": 71.28412092125619,
+   "head_error_mm": 84.30487123600929,
+   "tail_error_mm": 92.73435060567044,
+   "extent_over_length": 2.350649284290213,
+   "axis_angle_deg": 35.83101105877241
+  },
+  "RIB_05_L": {
+   "centroid_to_segment_mm": 92.14021832688294,
+   "head_error_mm": 99.75710895136802,
+   "tail_error_mm": 119.51204836038085,
+   "extent_over_length": 2.377322112821024,
+   "axis_angle_deg": 38.04801932080542
+  },
+  "RIB_06_L": {
+   "centroid_to_segment_mm": 121.50195711750177,
+   "head_error_mm": 118.34223560905752,
+   "tail_error_mm": 150.84972902373585,
+   "extent_over_length": 2.411390688332295,
+   "axis_angle_deg": 39.16361134421841
+  },
+  "RIB_07_L": {
+   "centroid_to_segment_mm": 139.6978974075401,
+   "head_error_mm": 134.8080907383586,
+   "tail_error_mm": 179.6757149086705,
+   "extent_over_length": 2.5032380263687433,
+   "axis_angle_deg": 39.96000554253964
+  },
+  "RIB_08_L": {
+   "centroid_to_segment_mm": 151.95340443986436,
+   "head_error_mm": 143.23649739323773,
+   "tail_error_mm": 206.51826835780645,
+   "extent_over_length": 2.34029814844749,
+   "axis_angle_deg": 44.251784273433245
+  },
+  "RIB_09_L": {
+   "centroid_to_segment_mm": 159.99516379925694,
+   "head_error_mm": 147.91965809393741,
+   "tail_error_mm": 211.71820974965647,
+   "extent_over_length": 2.1287742932557614,
+   "axis_angle_deg": 41.71048422544534
+  },
+  "RIB_10_L": {
+   "centroid_to_segment_mm": 169.7989947504145,
+   "head_error_mm": 154.8763393608004,
+   "tail_error_mm": 219.56260641832176,
+   "extent_over_length": 1.9391795859497098,
+   "axis_angle_deg": 40.7477426723291
+  },
+  "RIB_11_L": {
+   "centroid_to_segment_mm": 180.9534069829301,
+   "head_error_mm": 168.83749578747106,
+   "tail_error_mm": 230.62295638918812,
+   "extent_over_length": 1.6022503668188455,
+   "axis_angle_deg": 41.141976798680155
+  },
+  "RIB_12_L": {
+   "centroid_to_segment_mm": 185.8394650258022,
+   "head_error_mm": 181.08096232843081,
+   "tail_error_mm": 228.32698766855034,
+   "extent_over_length": 1.105535224137355,
+   "axis_angle_deg": 36.14940672442564
+  },
+  "RIB_01_R": {
+   "centroid_to_segment_mm": 35.676868641003765,
+   "head_error_mm": 57.05123481869699,
+   "tail_error_mm": 53.56323571302986,
+   "extent_over_length": 1.6066693957663791,
+   "axis_angle_deg": 35.173949300581484
+  },
+  "RIB_02_R": {
+   "centroid_to_segment_mm": 37.97401993251662,
+   "head_error_mm": 61.200842897327945,
+   "tail_error_mm": 42.70667482831371,
+   "extent_over_length": 2.144736352566612,
+   "axis_angle_deg": 25.045828199361804
+  },
+  "RIB_03_R": {
+   "centroid_to_segment_mm": 49.49604387823587,
+   "head_error_mm": 71.67830028039783,
+   "tail_error_mm": 61.236797769947124,
+   "extent_over_length": 2.3272041835573676,
+   "axis_angle_deg": 30.50521483780539
+  },
+  "RIB_04_R": {
+   "centroid_to_segment_mm": 71.30832642966709,
+   "head_error_mm": 82.95066614533677,
+   "tail_error_mm": 92.23737220844951,
+   "extent_over_length": 2.3320522679630695,
+   "axis_angle_deg": 36.04179722427767
+  },
+  "RIB_05_R": {
+   "centroid_to_segment_mm": 91.8658754994875,
+   "head_error_mm": 99.11335556223167,
+   "tail_error_mm": 119.45143739552785,
+   "extent_over_length": 2.3761404633991052,
+   "axis_angle_deg": 38.17053388624899
+  },
+  "RIB_06_R": {
+   "centroid_to_segment_mm": 121.41541536406656,
+   "head_error_mm": 117.70633554213988,
+   "tail_error_mm": 150.51810699771866,
+   "extent_over_length": 2.3906987536808098,
+   "axis_angle_deg": 39.071373425686495
+  },
+  "RIB_07_R": {
+   "centroid_to_segment_mm": 140.2952272232731,
+   "head_error_mm": 134.36943729759548,
+   "tail_error_mm": 178.8484499614821,
+   "extent_over_length": 2.5014976635599218,
+   "axis_angle_deg": 39.72408524412048
+  },
+  "RIB_08_R": {
+   "centroid_to_segment_mm": 151.48644659843924,
+   "head_error_mm": 142.5541607931249,
+   "tail_error_mm": 204.66493700506487,
+   "extent_over_length": 2.339126693691046,
+   "axis_angle_deg": 43.8038249686497
+  },
+  "RIB_09_R": {
+   "centroid_to_segment_mm": 158.7025700584755,
+   "head_error_mm": 147.2135312505265,
+   "tail_error_mm": 211.43935691520537,
+   "extent_over_length": 2.1277188591608183,
+   "axis_angle_deg": 41.81524647817037
+  },
+  "RIB_10_R": {
+   "centroid_to_segment_mm": 169.254740709059,
+   "head_error_mm": 154.1566180846,
+   "tail_error_mm": 219.77282949535208,
+   "extent_over_length": 1.9388134223340103,
+   "axis_angle_deg": 41.012530289342585
+  },
+  "RIB_11_R": {
+   "centroid_to_segment_mm": 181.48827575217277,
+   "head_error_mm": 167.91530505202365,
+   "tail_error_mm": 229.94308188750156,
+   "extent_over_length": 1.6020342431019752,
+   "axis_angle_deg": 41.20475738293178
+  },
+  "RIB_12_R": {
+   "centroid_to_segment_mm": 185.22394601831348,
+   "head_error_mm": 180.33260405038737,
+   "tail_error_mm": 227.49465373845644,
+   "extent_over_length": 1.1060130867384597,
+   "axis_angle_deg": 36.04009409471358
+  },
+  "CLAVICLE_L": {
+   "centroid_to_segment_mm": 100.01356296841236,
+   "head_error_mm": 158.86303261836179,
+   "tail_error_mm": 92.18531945011938,
+   "extent_over_length": 3.8045486852681356,
+   "axis_angle_deg": 36.75412598849042
+  },
+  "CLAVICLE_R": {
+   "centroid_to_segment_mm": 97.48515728727428,
+   "head_error_mm": 157.14381898616693,
+   "tail_error_mm": 90.05651304294184,
+   "extent_over_length": 3.8064908240854796,
+   "axis_angle_deg": 35.93812512600803
+  },
+  "SCAPULA_L": {
+   "centroid_to_segment_mm": 117.58532582940883,
+   "head_error_mm": 91.09108072768736,
+   "tail_error_mm": 208.928806204301,
+   "extent_over_length": 7.916311680246581,
+   "axis_angle_deg": 24.84681068938146
+  },
+  "SCAPULA_R": {
+   "centroid_to_segment_mm": 117.2481151734805,
+   "head_error_mm": 91.41254498846703,
+   "tail_error_mm": 209.2940221537053,
+   "extent_over_length": 7.916988722423492,
+   "axis_angle_deg": 25.031347075104915
+  },
+  "HUMERUS_L": {
+   "centroid_to_segment_mm": 40.68757059754731,
+   "head_error_mm": 62.46673203229804,
+   "tail_error_mm": 34.2103958306203,
+   "extent_over_length": 1.004207100968136,
+   "axis_angle_deg": 9.52344925417959
+  },
+  "RADIUS_L": {
+   "centroid_to_segment_mm": 24.589583749764593,
+   "head_error_mm": 61.46734167250671,
+   "tail_error_mm": 85.05335596911262,
+   "extent_over_length": 0.9808999838197169,
+   "axis_angle_deg": 13.37175893730106
+  },
+  "ULNA_L": {
+   "centroid_to_segment_mm": 28.833963595762523,
+   "head_error_mm": 67.03375455480533,
+   "tail_error_mm": 95.98626491901182,
+   "extent_over_length": 1.0607789951985878,
+   "axis_angle_deg": 14.030842360982772
+  },
+  "HUMERUS_R": {
+   "centroid_to_segment_mm": 43.294459444702966,
+   "head_error_mm": 64.30296123222868,
+   "tail_error_mm": 34.10594547409366,
+   "extent_over_length": 1.0042558302315778,
+   "axis_angle_deg": 10.047142025696395
+  },
+  "RADIUS_R": {
+   "centroid_to_segment_mm": 26.646241023495786,
+   "head_error_mm": 60.79255625019031,
+   "tail_error_mm": 85.55047702843636,
+   "extent_over_length": 0.9823908306731925,
+   "axis_angle_deg": 13.728785668072659
+  },
+  "ULNA_R": {
+   "centroid_to_segment_mm": 27.593892545689833,
+   "head_error_mm": 67.47702871960321,
+   "tail_error_mm": 96.13975618673778,
+   "extent_over_length": 1.0599592315212045,
+   "axis_angle_deg": 14.263338463900144
+  },
+  "SCAPHOID_L": {
+   "centroid_to_segment_mm": 78.64927693854933,
+   "head_error_mm": 85.42126827139586,
+   "tail_error_mm": 92.83364130064982,
+   "extent_over_length": 0.6972800007343132,
+   "axis_angle_deg": 30.85549594843343
+  },
+  "LUNATE_L": {
+   "centroid_to_segment_mm": 78.64312350853324,
+   "head_error_mm": 85.84363416858082,
+   "tail_error_mm": 90.0704960686689,
+   "extent_over_length": 0.5695515463246877,
+   "axis_angle_deg": 39.378255844780455
+  },
+  "TRIQUETRUM_L": {
+   "centroid_to_segment_mm": 73.801966917319,
+   "head_error_mm": 79.49279750813565,
+   "tail_error_mm": 89.32808213599655,
+   "extent_over_length": 0.6119469833751386,
+   "axis_angle_deg": 12.729786837777338
+  },
+  "PISIFORM_L": {
+   "centroid_to_segment_mm": 72.71494678406096,
+   "head_error_mm": 76.56373501014231,
+   "tail_error_mm": 87.48408066507454,
+   "extent_over_length": 0.5206822611312352,
+   "axis_angle_deg": 9.768058491162819
+  },
+  "TRAPEZIUM_L": {
+   "centroid_to_segment_mm": 95.85371571938167,
+   "head_error_mm": 105.90775880927323,
+   "tail_error_mm": 106.01292189371436,
+   "extent_over_length": 0.9068801376203816,
+   "axis_angle_deg": 21.597113743009107
+  },
+  "TRAPEZOID_L": {
+   "centroid_to_segment_mm": 86.11571086133104,
+   "head_error_mm": 91.82040581551858,
+   "tail_error_mm": 98.00670849150899,
+   "extent_over_length": 0.5666183602745091,
+   "axis_angle_deg": 31.442101611253644
+  },
+  "CAPITATE_L": {
+   "centroid_to_segment_mm": 87.5839996610149,
+   "head_error_mm": 99.34456340426576,
+   "tail_error_mm": 97.6361369163183,
+   "extent_over_length": 1.013890119836541,
+   "axis_angle_deg": 21.585215025708994
+  },
+  "HAMATE_L": {
+   "centroid_to_segment_mm": 86.78340440070286,
+   "head_error_mm": 95.00213176954807,
+   "tail_error_mm": 97.28902265111722,
+   "extent_over_length": 0.8766708827427349,
+   "axis_angle_deg": 13.72472397136693
+  },
+  "METACARPAL_1_L": {
+   "centroid_to_segment_mm": 106.83613530901236,
+   "head_error_mm": 116.26797577772996,
+   "tail_error_mm": 134.40180243376278,
+   "extent_over_length": 0.8371243238739892,
+   "axis_angle_deg": 35.80840616872529
+  },
+  "METACARPAL_2_L": {
+   "centroid_to_segment_mm": 85.10459863807354,
+   "head_error_mm": 102.05362083948093,
+   "tail_error_mm": 96.21780991825031,
+   "extent_over_length": 1.529223358080156,
+   "axis_angle_deg": 16.24959995602805
+  },
+  "METACARPAL_3_L": {
+   "centroid_to_segment_mm": 80.34042947518735,
+   "head_error_mm": 98.75178946999009,
+   "tail_error_mm": 96.67327130415623,
+   "extent_over_length": 1.452037620340767,
+   "axis_angle_deg": 16.48563563997219
+  },
+  "METACARPAL_4_L": {
+   "centroid_to_segment_mm": 81.33772706642574,
+   "head_error_mm": 99.85329006416428,
+   "tail_error_mm": 98.80977693799807,
+   "extent_over_length": 1.351739489838276,
+   "axis_angle_deg": 13.005819173447186
+  },
+  "METACARPAL_5_L": {
+   "centroid_to_segment_mm": 85.44659402620708,
+   "head_error_mm": 104.3180607451977,
+   "tail_error_mm": 107.03749819975644,
+   "extent_over_length": 1.2339815241003704,
+   "axis_angle_deg": 17.455607765534566
+  },
+  "PHALANX_PROXIMAL_1_L": {
+   "centroid_to_segment_mm": 133.62035341772548,
+   "head_error_mm": 142.37276148821726,
+   "tail_error_mm": 150.3027903429885,
+   "extent_over_length": 0.9525845884818418,
+   "axis_angle_deg": 13.544912791877234
+  },
+  "PHALANX_DISTAL_1_L": {
+   "centroid_to_segment_mm": 152.00882471395005,
+   "head_error_mm": 159.30039637105062,
+   "tail_error_mm": 174.11093442368465,
+   "extent_over_length": 0.6920661675178261,
+   "axis_angle_deg": 24.44873330492088
+  },
+  "PHALANX_PROXIMAL_2_L": {
+   "centroid_to_segment_mm": 94.01586393925069,
+   "head_error_mm": 100.12611997443946,
+   "tail_error_mm": 111.07715028464402,
+   "extent_over_length": 1.1334713108159469,
+   "axis_angle_deg": 23.61598837816242
+  },
+  "PHALANX_INTERMEDIATE_2_L": {
+   "centroid_to_segment_mm": 114.66152060028284,
+   "head_error_mm": 116.38077229039094,
+   "tail_error_mm": 136.36513938535361,
+   "extent_over_length": 0.6174123615942713,
+   "axis_angle_deg": 36.00897668249392
+  },
+  "PHALANX_DISTAL_2_L": {
+   "centroid_to_segment_mm": 141.143755109471,
+   "head_error_mm": 141.03612819531327,
+   "tail_error_mm": 164.54193342426768,
+   "extent_over_length": 0.41366509669235796,
+   "axis_angle_deg": 45.11777687166397
+  },
+  "PHALANX_PROXIMAL_3_L": {
+   "centroid_to_segment_mm": 94.96888232826151,
+   "head_error_mm": 100.80728016006697,
+   "tail_error_mm": 113.1361688330844,
+   "extent_over_length": 1.2250540975310462,
+   "axis_angle_deg": 27.371430340601613
+  },
+  "PHALANX_INTERMEDIATE_3_L": {
+   "centroid_to_segment_mm": 115.00345902714739,
+   "head_error_mm": 116.74875352596271,
+   "tail_error_mm": 134.78613360799835,
+   "extent_over_length": 0.7642427151920503,
+   "axis_angle_deg": 31.666448703230955
+  },
+  "PHALANX_DISTAL_3_L": {
+   "centroid_to_segment_mm": 138.68354811669766,
+   "head_error_mm": 138.41103937180364,
+   "tail_error_mm": 162.17272589349994,
+   "extent_over_length": 0.39237028546901354,
+   "axis_angle_deg": 46.95419913285658
+  },
+  "PHALANX_PROXIMAL_4_L": {
+   "centroid_to_segment_mm": 96.87576362416993,
+   "head_error_mm": 103.53122065592905,
+   "tail_error_mm": 114.80566155721098,
+   "extent_over_length": 1.1717917735914776,
+   "axis_angle_deg": 25.679604662175223
+  },
+  "PHALANX_INTERMEDIATE_4_L": {
+   "centroid_to_segment_mm": 116.63021544358959,
+   "head_error_mm": 118.06488351324865,
+   "tail_error_mm": 138.20823933747133,
+   "extent_over_length": 0.7192548185366927,
+   "axis_angle_deg": 36.0549982606158
+  },
+  "PHALANX_DISTAL_4_L": {
+   "centroid_to_segment_mm": 143.02404319688773,
+   "head_error_mm": 142.20426604700594,
+   "tail_error_mm": 168.02503372215858,
+   "extent_over_length": 0.274479827767416,
+   "axis_angle_deg": 54.341386519690296
+  },
+  "PHALANX_PROXIMAL_5_L": {
+   "centroid_to_segment_mm": 103.202351769277,
+   "head_error_mm": 109.91684812054845,
+   "tail_error_mm": 122.28057470721076,
+   "extent_over_length": 0.9759096202914198,
+   "axis_angle_deg": 24.904546964598822
+  },
+  "PHALANX_INTERMEDIATE_5_L": {
+   "centroid_to_segment_mm": 122.26592879622228,
+   "head_error_mm": 125.65225115110317,
+   "tail_error_mm": 144.06919527773908,
+   "extent_over_length": 0.5902757380353867,
+   "axis_angle_deg": 28.692981884044006
+  },
+  "PHALANX_DISTAL_5_L": {
+   "centroid_to_segment_mm": 144.46328321569982,
+   "head_error_mm": 145.48216915112656,
+   "tail_error_mm": 168.20938444933833,
+   "extent_over_length": 0.38228377058894686,
+   "axis_angle_deg": 37.800632506768075
+  },
+  "SCAPHOID_R": {
+   "centroid_to_segment_mm": 80.11902369336966,
+   "head_error_mm": 86.55928260674425,
+   "tail_error_mm": 93.33193317967549,
+   "extent_over_length": 0.6957615922717488,
+   "axis_angle_deg": 34.36780925559372
+  },
+  "LUNATE_R": {
+   "centroid_to_segment_mm": 78.44893831208915,
+   "head_error_mm": 86.54420201516149,
+   "tail_error_mm": 90.94596880968496,
+   "extent_over_length": 0.5557547498486853,
+   "axis_angle_deg": 39.493587909793206
+  },
+  "TRIQUETRUM_R": {
+   "centroid_to_segment_mm": 73.89425554900012,
+   "head_error_mm": 79.56046541151169,
+   "tail_error_mm": 88.94503135784078,
+   "extent_over_length": 0.6230168225020596,
+   "axis_angle_deg": 12.40967242800521
+  },
+  "PISIFORM_R": {
+   "centroid_to_segment_mm": 73.0026814987219,
+   "head_error_mm": 77.83001103016454,
+   "tail_error_mm": 87.29761095020645,
+   "extent_over_length": 0.5249951648093546,
+   "axis_angle_deg": 9.556202834298775
+  },
+  "TRAPEZIUM_R": {
+   "centroid_to_segment_mm": 97.58439117341433,
+   "head_error_mm": 105.62591995307518,
+   "tail_error_mm": 106.18306129466298,
+   "extent_over_length": 0.9013694152348315,
+   "axis_angle_deg": 21.180862177210876
+  },
+  "TRAPEZOID_R": {
+   "centroid_to_segment_mm": 86.4202814597087,
+   "head_error_mm": 92.03643176197846,
+   "tail_error_mm": 98.90093343296876,
+   "extent_over_length": 0.5619571168422012,
+   "axis_angle_deg": 27.84216902366686
+  },
+  "CAPITATE_R": {
+   "centroid_to_segment_mm": 89.37344409225867,
+   "head_error_mm": 99.04059614204364,
+   "tail_error_mm": 98.35028540596157,
+   "extent_over_length": 1.013365789092723,
+   "axis_angle_deg": 16.658433518694597
+  },
+  "HAMATE_R": {
+   "centroid_to_segment_mm": 86.47147001843906,
+   "head_error_mm": 95.2016443793076,
+   "tail_error_mm": 97.91737795635136,
+   "extent_over_length": 0.8759974603312063,
+   "axis_angle_deg": 13.197396521553895
+  },
+  "METACARPAL_1_R": {
+   "centroid_to_segment_mm": 106.11517733737682,
+   "head_error_mm": 117.21429069277995,
+   "tail_error_mm": 134.1047338889135,
+   "extent_over_length": 0.8334217294694373,
+   "axis_angle_deg": 34.04841865459863
+  },
+  "METACARPAL_2_R": {
+   "centroid_to_segment_mm": 83.94631895943618,
+   "head_error_mm": 102.87023302699176,
+   "tail_error_mm": 96.77431407853675,
+   "extent_over_length": 1.5329970324443627,
+   "axis_angle_deg": 16.582963583440335
+  },
+  "METACARPAL_3_R": {
+   "centroid_to_segment_mm": 82.79089241921677,
+   "head_error_mm": 99.42152745899104,
+   "tail_error_mm": 97.37842864882317,
+   "extent_over_length": 1.4529475791710476,
+   "axis_angle_deg": 16.21092826261562
+  },
+  "METACARPAL_4_R": {
+   "centroid_to_segment_mm": 83.23372221198126,
+   "head_error_mm": 100.00130191379709,
+   "tail_error_mm": 99.27386735307783,
+   "extent_over_length": 1.349844021697995,
+   "axis_angle_deg": 13.070823808307034
+  },
+  "METACARPAL_5_R": {
+   "centroid_to_segment_mm": 88.06550344187828,
+   "head_error_mm": 104.95602791514641,
+   "tail_error_mm": 107.91361156417652,
+   "extent_over_length": 1.2379574437126029,
+   "axis_angle_deg": 16.792152357176665
+  },
+  "PHALANX_PROXIMAL_1_R": {
+   "centroid_to_segment_mm": 132.746756960699,
+   "head_error_mm": 143.13904445230986,
+   "tail_error_mm": 150.88311154150327,
+   "extent_over_length": 0.9511038882502479,
+   "axis_angle_deg": 14.415954916003175
+  },
+  "PHALANX_DISTAL_1_R": {
+   "centroid_to_segment_mm": 152.6572951493112,
+   "head_error_mm": 159.5011699147793,
+   "tail_error_mm": 174.11091017974832,
+   "extent_over_length": 0.693243315989618,
+   "axis_angle_deg": 23.82979848752107
+  },
+  "PHALANX_PROXIMAL_2_R": {
+   "centroid_to_segment_mm": 94.51798287611713,
+   "head_error_mm": 99.77477253076088,
+   "tail_error_mm": 111.39210244597392,
+   "extent_over_length": 1.1256024486942064,
+   "axis_angle_deg": 24.9114749009121
+  },
+  "PHALANX_INTERMEDIATE_2_R": {
+   "centroid_to_segment_mm": 115.39777555836802,
+   "head_error_mm": 116.6872370296746,
+   "tail_error_mm": 137.10516303348183,
+   "extent_over_length": 0.6171118976875102,
+   "axis_angle_deg": 36.61052417239732
+  },
+  "PHALANX_DISTAL_2_R": {
+   "centroid_to_segment_mm": 141.58963203128508,
+   "head_error_mm": 141.3265046661212,
+   "tail_error_mm": 165.42077818704888,
+   "extent_over_length": 0.4174662589660789,
+   "axis_angle_deg": 46.387738954680245
+  },
+  "PHALANX_PROXIMAL_3_R": {
+   "centroid_to_segment_mm": 95.59365819670391,
+   "head_error_mm": 100.53627002167285,
+   "tail_error_mm": 113.3060004183576,
+   "extent_over_length": 1.22254526703155,
+   "axis_angle_deg": 28.046397936394172
+  },
+  "PHALANX_INTERMEDIATE_3_R": {
+   "centroid_to_segment_mm": 115.53546894111172,
+   "head_error_mm": 117.41544360103428,
+   "tail_error_mm": 135.18839201091447,
+   "extent_over_length": 0.7639511117212989,
+   "axis_angle_deg": 31.09191758095889
+  },
+  "PHALANX_DISTAL_3_R": {
+   "centroid_to_segment_mm": 139.72747811711446,
+   "head_error_mm": 139.03800463078164,
+   "tail_error_mm": 162.00759073615328,
+   "extent_over_length": 0.4062013342553734,
+   "axis_angle_deg": 44.44971944373257
+  },
+  "PHALANX_PROXIMAL_4_R": {
+   "centroid_to_segment_mm": 97.11853835778079,
+   "head_error_mm": 104.09240864089067,
+   "tail_error_mm": 114.48026470861763,
+   "extent_over_length": 1.173621858924783,
+   "axis_angle_deg": 24.253123598771907
+  },
+  "PHALANX_INTERMEDIATE_4_R": {
+   "centroid_to_segment_mm": 117.4879391930455,
+   "head_error_mm": 118.92597716269856,
+   "tail_error_mm": 138.42692467061465,
+   "extent_over_length": 0.7203836332200455,
+   "axis_angle_deg": 35.171944720208096
+  },
+  "PHALANX_DISTAL_4_R": {
+   "centroid_to_segment_mm": 143.58415044856545,
+   "head_error_mm": 142.3694481029844,
+   "tail_error_mm": 168.07454358085303,
+   "extent_over_length": 0.2759839110342329,
+   "axis_angle_deg": 53.860850376046834
+  },
+  "PHALANX_PROXIMAL_5_R": {
+   "centroid_to_segment_mm": 103.78280176097061,
+   "head_error_mm": 110.91713001711288,
+   "tail_error_mm": 121.99418964118426,
+   "extent_over_length": 0.9817630513682838,
+   "axis_angle_deg": 22.22456788618273
+  },
+  "PHALANX_INTERMEDIATE_5_R": {
+   "centroid_to_segment_mm": 122.45955210621561,
+   "head_error_mm": 126.27578319884722,
+   "tail_error_mm": 144.23994620326295,
+   "extent_over_length": 0.5900505021002748,
+   "axis_angle_deg": 27.735054509801714
+  },
+  "PHALANX_DISTAL_5_R": {
+   "centroid_to_segment_mm": 144.45786475087115,
+   "head_error_mm": 145.99069818404297,
+   "tail_error_mm": 168.47905945534416,
+   "extent_over_length": 0.3776615031551738,
+   "axis_angle_deg": 36.892727315803995
+  },
+  "FEMUR_L": {
+   "centroid_to_segment_mm": 27.829977607161755,
+   "head_error_mm": 40.22015210878091,
+   "tail_error_mm": 29.02475279987348,
+   "extent_over_length": 1.1514460479830693,
+   "axis_angle_deg": 3.826636445067149
+  },
+  "PATELLA_L": {
+   "centroid_to_segment_mm": 39.642542339553295,
+   "head_error_mm": 46.0533398967469,
+   "tail_error_mm": 36.077000813044144,
+   "extent_over_length": 1.6988942134889682,
+   "axis_angle_deg": 40.86758801548854
+  },
+  "TIBIA_L": {
+   "centroid_to_segment_mm": 9.076230020205815,
+   "head_error_mm": 11.87888284802522,
+   "tail_error_mm": 44.97621533169349,
+   "extent_over_length": 0.940791314328367,
+   "axis_angle_deg": 0.882252628393086
+  },
+  "FIBULA_L": {
+   "centroid_to_segment_mm": 15.15937876253713,
+   "head_error_mm": 29.124205580732553,
+   "tail_error_mm": 30.433621121530496,
+   "extent_over_length": 0.951531690317596,
+   "axis_angle_deg": 2.0386088139567864
+  },
+  "FEMUR_R": {
+   "centroid_to_segment_mm": 27.801028918249088,
+   "head_error_mm": 40.59291629308967,
+   "tail_error_mm": 27.981834995163062,
+   "extent_over_length": 1.1512522634852764,
+   "axis_angle_deg": 4.041129151978753
+  },
+  "PATELLA_R": {
+   "centroid_to_segment_mm": 40.87049144486471,
+   "head_error_mm": 47.0924236130473,
+   "tail_error_mm": 36.159796267401994,
+   "extent_over_length": 1.691394183707647,
+   "axis_angle_deg": 43.36406508256243
+  },
+  "TIBIA_R": {
+   "centroid_to_segment_mm": 7.83815131786731,
+   "head_error_mm": 11.322690341346336,
+   "tail_error_mm": 44.08681349495086,
+   "extent_over_length": 0.9408188351660498,
+   "axis_angle_deg": 0.906735190560869
+  },
+  "FIBULA_R": {
+   "centroid_to_segment_mm": 15.316277666347045,
+   "head_error_mm": 29.146850337493532,
+   "tail_error_mm": 30.75102211474785,
+   "extent_over_length": 0.9517860437053915,
+   "axis_angle_deg": 2.2222835116644464
+  },
+  "TALUS_L": {
+   "centroid_to_segment_mm": 20.887771376361762,
+   "head_error_mm": 32.56250273781493,
+   "tail_error_mm": 39.231146395948116,
+   "extent_over_length": 1.2297189940500886,
+   "axis_angle_deg": 23.754753082665463
+  },
+  "CALCANEUS_L": {
+   "centroid_to_segment_mm": 68.19633358785511,
+   "head_error_mm": 66.83389886625663,
+   "tail_error_mm": 76.66128522324507,
+   "extent_over_length": 1.0761456046247957,
+   "axis_angle_deg": 9.335826274579162
+  },
+  "NAVICULAR_L": {
+   "centroid_to_segment_mm": 44.53586011473423,
+   "head_error_mm": 58.27788827127668,
+   "tail_error_mm": 54.242356907191265,
+   "extent_over_length": 0.7466156880993423,
+   "axis_angle_deg": 37.96781572510808
+  },
+  "CUBOID_L": {
+   "centroid_to_segment_mm": 70.01337358627525,
+   "head_error_mm": 70.9631292330459,
+   "tail_error_mm": 88.05518198472154,
+   "extent_over_length": 0.5480595969672849,
+   "axis_angle_deg": 10.590518680526493
+  },
+  "CUNEIFORM_MEDIAL_L": {
+   "centroid_to_segment_mm": 68.10649938457459,
+   "head_error_mm": 70.59440217202453,
+   "tail_error_mm": 76.61920430728549,
+   "extent_over_length": 0.7638187218849016,
+   "axis_angle_deg": 4.341258683406812
+  },
+  "CUNEIFORM_INTERMEDIATE_L": {
+   "centroid_to_segment_mm": 65.55624180456965,
+   "head_error_mm": 76.92611349219992,
+   "tail_error_mm": 82.32151468922494,
+   "extent_over_length": 0.6085187083344122,
+   "axis_angle_deg": 23.429348929376747
+  },
+  "CUNEIFORM_LATERAL_L": {
+   "centroid_to_segment_mm": 55.82158743288088,
+   "head_error_mm": 67.62385517438045,
+   "tail_error_mm": 73.08144685868602,
+   "extent_over_length": 0.7921238692844796,
+   "axis_angle_deg": 13.982593337168407
+  },
+  "METATARSAL_1_L": {
+   "centroid_to_segment_mm": 74.04504567374332,
+   "head_error_mm": 83.03696945028548,
+   "tail_error_mm": 89.42207059326567,
+   "extent_over_length": 1.1272296900520418,
+   "axis_angle_deg": 9.261855207396083
+  },
+  "METATARSAL_2_L": {
+   "centroid_to_segment_mm": 77.28418124339403,
+   "head_error_mm": 90.89811191705593,
+   "tail_error_mm": 92.79849031392281,
+   "extent_over_length": 1.3325874367038932,
+   "axis_angle_deg": 14.733298981424655
+  },
+  "METATARSAL_3_L": {
+   "centroid_to_segment_mm": 68.08724328532132,
+   "head_error_mm": 80.53826616879802,
+   "tail_error_mm": 89.71545478784361,
+   "extent_over_length": 1.2273754821173568,
+   "axis_angle_deg": 17.99107907131828
+  },
+  "METATARSAL_4_L": {
+   "centroid_to_segment_mm": 77.9784459345335,
+   "head_error_mm": 93.55508338324644,
+   "tail_error_mm": 89.36327345297518,
+   "extent_over_length": 1.2238464634988853,
+   "axis_angle_deg": 30.01057785027386
+  },
+  "METATARSAL_5_L": {
+   "centroid_to_segment_mm": 71.69256766145327,
+   "head_error_mm": 94.51979832858792,
+   "tail_error_mm": 91.93923292479876,
+   "extent_over_length": 1.2898639243395138,
+   "axis_angle_deg": 28.28971166354933
+  },
+  "TOE_PHALANX_PROXIMAL_1_L": {
+   "centroid_to_segment_mm": 91.63103311889661,
+   "head_error_mm": 94.72551071774555,
+   "tail_error_mm": 96.73077111259508,
+   "extent_over_length": 1.085339140388793,
+   "axis_angle_deg": 4.5214904554940505
+  },
+  "TOE_PHALANX_DISTAL_1_L": {
+   "centroid_to_segment_mm": 102.99603445294038,
+   "head_error_mm": 105.81179254659497,
+   "tail_error_mm": 113.29881624604387,
+   "extent_over_length": 0.8228408311688821,
+   "axis_angle_deg": 12.4867311220088
+  },
+  "TOE_PHALANX_PROXIMAL_2_L": {
+   "centroid_to_segment_mm": 94.35955367902676,
+   "head_error_mm": 97.02318433851292,
+   "tail_error_mm": 101.62242833342971,
+   "extent_over_length": 0.9184159853635039,
+   "axis_angle_deg": 13.2660314004962
+  },
+  "TOE_PHALANX_INTERMEDIATE_2_L": {
+   "centroid_to_segment_mm": 104.07746870453103,
+   "head_error_mm": 106.594727928472,
+   "tail_error_mm": 114.51795228800049,
+   "extent_over_length": 0.5586507535187117,
+   "axis_angle_deg": 3.669468697440396
+  },
+  "TOE_PHALANX_DISTAL_2_L": {
+   "centroid_to_segment_mm": 116.21003261544276,
+   "head_error_mm": 119.21897832995916,
+   "tail_error_mm": 129.95183426920892,
+   "extent_over_length": 0.43080894889900645,
+   "axis_angle_deg": 3.019505452091743
+  },
+  "TOE_PHALANX_PROXIMAL_3_L": {
+   "centroid_to_segment_mm": 89.36526324436515,
+   "head_error_mm": 92.39218761271896,
+   "tail_error_mm": 100.55059523802798,
+   "extent_over_length": 0.9211954027485446,
+   "axis_angle_deg": 18.033705252500912
+  },
+  "TOE_PHALANX_INTERMEDIATE_3_L": {
+   "centroid_to_segment_mm": 101.93217490659431,
+   "head_error_mm": 105.47890950094596,
+   "tail_error_mm": 113.55280686271438,
+   "extent_over_length": 0.5532418606333271,
+   "axis_angle_deg": 4.730514050103273
+  },
+  "TOE_PHALANX_DISTAL_3_L": {
+   "centroid_to_segment_mm": 116.20047345883714,
+   "head_error_mm": 119.78435855007017,
+   "tail_error_mm": 132.88349582198381,
+   "extent_over_length": 0.37137026943702256,
+   "axis_angle_deg": 5.715774155426282
+  },
+  "TOE_PHALANX_PROXIMAL_4_L": {
+   "centroid_to_segment_mm": 87.68910154822196,
+   "head_error_mm": 91.34556279586748,
+   "tail_error_mm": 102.58902366230069,
+   "extent_over_length": 0.7832410363692526,
+   "axis_angle_deg": 21.650485394765767
+  },
+  "TOE_PHALANX_INTERMEDIATE_4_L": {
+   "centroid_to_segment_mm": 102.2771764307066,
+   "head_error_mm": 104.9962843926551,
+   "tail_error_mm": 119.19902631990159,
+   "extent_over_length": 0.4360252091181177,
+   "axis_angle_deg": 10.242206856641747
+  },
+  "TOE_PHALANX_DISTAL_4_L": {
+   "centroid_to_segment_mm": 120.03574204984952,
+   "head_error_mm": 123.395754704201,
+   "tail_error_mm": 139.1949512599482,
+   "extent_over_length": 0.3641728493481627,
+   "axis_angle_deg": 10.189041301028743
+  },
+  "TOE_PHALANX_PROXIMAL_5_L": {
+   "centroid_to_segment_mm": 88.29748330884813,
+   "head_error_mm": 96.46711769747847,
+   "tail_error_mm": 104.59686603715663,
+   "extent_over_length": 0.8240424807557715,
+   "axis_angle_deg": 16.108124272744544
+  },
+  "TOE_PHALANX_INTERMEDIATE_5_L": {
+   "centroid_to_segment_mm": 105.01941898517798,
+   "head_error_mm": 107.15322962637735,
+   "tail_error_mm": 125.94726478060203,
+   "extent_over_length": 0.2417741937527516,
+   "axis_angle_deg": 10.93945890739706
+  },
+  "TOE_PHALANX_DISTAL_5_L": {
+   "centroid_to_segment_mm": 126.38973836209885,
+   "head_error_mm": 130.33441308302065,
+   "tail_error_mm": 148.79499784777502,
+   "extent_over_length": 0.3402265224344809,
+   "axis_angle_deg": 3.2635748896641115
+  },
+  "TALUS_R": {
+   "centroid_to_segment_mm": 20.95419506940923,
+   "head_error_mm": 32.16093992689903,
+   "tail_error_mm": 39.28573848262065,
+   "extent_over_length": 1.2157739269314636,
+   "axis_angle_deg": 22.74484078464883
+  },
+  "CALCANEUS_R": {
+   "centroid_to_segment_mm": 68.7833743458417,
+   "head_error_mm": 65.92461459742803,
+   "tail_error_mm": 76.22853758959022,
+   "extent_over_length": 1.0759616466666246,
+   "axis_angle_deg": 9.200687006357052
+  },
+  "NAVICULAR_R": {
+   "centroid_to_segment_mm": 48.673911799484706,
+   "head_error_mm": 58.8023928437553,
+   "tail_error_mm": 53.98659571496316,
+   "extent_over_length": 0.7460385519520889,
+   "axis_angle_deg": 38.36995884510901
+  },
+  "CUBOID_R": {
+   "centroid_to_segment_mm": 68.44522287909024,
+   "head_error_mm": 65.78500262143092,
+   "tail_error_mm": 86.72422037712948,
+   "extent_over_length": 0.5403151815633161,
+   "axis_angle_deg": 15.936772366237806
+  },
+  "CUNEIFORM_MEDIAL_R": {
+   "centroid_to_segment_mm": 68.13266430873134,
+   "head_error_mm": 71.22148589812747,
+   "tail_error_mm": 76.69821752733856,
+   "extent_over_length": 0.7703048137147295,
+   "axis_angle_deg": 4.108471380985119
+  },
+  "CUNEIFORM_INTERMEDIATE_R": {
+   "centroid_to_segment_mm": 66.11988481871468,
+   "head_error_mm": 76.79587309226804,
+   "tail_error_mm": 83.30199591024866,
+   "extent_over_length": 0.6118918168251185,
+   "axis_angle_deg": 20.43215255268536
+  },
+  "CUNEIFORM_LATERAL_R": {
+   "centroid_to_segment_mm": 55.525916668071964,
+   "head_error_mm": 68.03262839088958,
+   "tail_error_mm": 73.39553783949556,
+   "extent_over_length": 0.7951032125265282,
+   "axis_angle_deg": 14.006011899755698
+  },
+  "METATARSAL_1_R": {
+   "centroid_to_segment_mm": 74.64667916024362,
+   "head_error_mm": 83.34119662473374,
+   "tail_error_mm": 88.91248797583357,
+   "extent_over_length": 1.12777761258946,
+   "axis_angle_deg": 9.32668188190818
+  },
+  "METATARSAL_2_R": {
+   "centroid_to_segment_mm": 77.91209799569717,
+   "head_error_mm": 91.53485076348791,
+   "tail_error_mm": 92.46774264260992,
+   "extent_over_length": 1.3336922466099908,
+   "axis_angle_deg": 13.549898998682778
+  },
+  "METATARSAL_3_R": {
+   "centroid_to_segment_mm": 67.45417341742018,
+   "head_error_mm": 80.04616893871572,
+   "tail_error_mm": 89.9571974699632,
+   "extent_over_length": 1.2283931964319244,
+   "axis_angle_deg": 18.750866757702454
+  },
+  "METATARSAL_4_R": {
+   "centroid_to_segment_mm": 76.962385921069,
+   "head_error_mm": 93.10644533976593,
+   "tail_error_mm": 89.03247147389997,
+   "extent_over_length": 1.2293617617763968,
+   "axis_angle_deg": 29.34150906946884
+  },
+  "METATARSAL_5_R": {
+   "centroid_to_segment_mm": 71.92025348328735,
+   "head_error_mm": 94.88204989336153,
+   "tail_error_mm": 91.46683036189464,
+   "extent_over_length": 1.28878179047942,
+   "axis_angle_deg": 27.752343233461456
+  },
+  "TOE_PHALANX_PROXIMAL_1_R": {
+   "centroid_to_segment_mm": 92.03412294446849,
+   "head_error_mm": 94.76217196748496,
+   "tail_error_mm": 95.77416927515189,
+   "extent_over_length": 1.0853506267101307,
+   "axis_angle_deg": 6.504349076121847
+  },
+  "TOE_PHALANX_DISTAL_1_R": {
+   "centroid_to_segment_mm": 102.71287826165086,
+   "head_error_mm": 106.33475363249616,
+   "tail_error_mm": 113.14057636655699,
+   "extent_over_length": 0.8251494598014177,
+   "axis_angle_deg": 10.042303606190819
+  },
+  "TOE_PHALANX_PROXIMAL_2_R": {
+   "centroid_to_segment_mm": 93.3681882581076,
+   "head_error_mm": 97.23320719343332,
+   "tail_error_mm": 100.78751210609617,
+   "extent_over_length": 0.9181787991287759,
+   "axis_angle_deg": 12.51731943835675
+  },
+  "TOE_PHALANX_INTERMEDIATE_2_R": {
+   "centroid_to_segment_mm": 104.28035781782759,
+   "head_error_mm": 106.82520281230492,
+   "tail_error_mm": 114.69305728070597,
+   "extent_over_length": 0.5566714114512138,
+   "axis_angle_deg": 3.582400988990302
+  },
+  "TOE_PHALANX_DISTAL_2_R": {
+   "centroid_to_segment_mm": 116.42842238181598,
+   "head_error_mm": 118.88966886910575,
+   "tail_error_mm": 129.71796876278935,
+   "extent_over_length": 0.42846768555315684,
+   "axis_angle_deg": 3.805206615505687
+  },
+  "TOE_PHALANX_PROXIMAL_3_R": {
+   "centroid_to_segment_mm": 89.9484136899676,
+   "head_error_mm": 92.59436622161046,
+   "tail_error_mm": 101.24228586405827,
+   "extent_over_length": 0.9275396623081438,
+   "axis_angle_deg": 18.08335711953074
+  },
+  "TOE_PHALANX_INTERMEDIATE_3_R": {
+   "centroid_to_segment_mm": 101.79008028041193,
+   "head_error_mm": 104.99533704826423,
+   "tail_error_mm": 113.83495538214349,
+   "extent_over_length": 0.5512053756812998,
+   "axis_angle_deg": 2.695176885298507
+  },
+  "TOE_PHALANX_DISTAL_3_R": {
+   "centroid_to_segment_mm": 116.29308191222883,
+   "head_error_mm": 119.66806989356488,
+   "tail_error_mm": 132.39543488821585,
+   "extent_over_length": 0.3736004543537631,
+   "axis_angle_deg": 6.40376451174331
+  },
+  "TOE_PHALANX_PROXIMAL_4_R": {
+   "centroid_to_segment_mm": 87.38892182845768,
+   "head_error_mm": 91.75438230089621,
+   "tail_error_mm": 102.16019936507456,
+   "extent_over_length": 0.7852292270084528,
+   "axis_angle_deg": 19.486727373213654
+  },
+  "TOE_PHALANX_INTERMEDIATE_4_R": {
+   "centroid_to_segment_mm": 102.05835605430859,
+   "head_error_mm": 104.5170830754443,
+   "tail_error_mm": 118.98623961148483,
+   "extent_over_length": 0.4371049648959443,
+   "axis_angle_deg": 12.756513373269561
+  },
+  "TOE_PHALANX_DISTAL_4_R": {
+   "centroid_to_segment_mm": 119.34153713264631,
+   "head_error_mm": 123.36038693872102,
+   "tail_error_mm": 139.22622478012462,
+   "extent_over_length": 0.365717142423335,
+   "axis_angle_deg": 9.918013756361985
+  },
+  "TOE_PHALANX_PROXIMAL_5_R": {
+   "centroid_to_segment_mm": 87.60237127591085,
+   "head_error_mm": 96.18374503534879,
+   "tail_error_mm": 104.72017202691605,
+   "extent_over_length": 0.8284423844614455,
+   "axis_angle_deg": 15.363565005636909
+  },
+  "TOE_PHALANX_INTERMEDIATE_5_R": {
+   "centroid_to_segment_mm": 104.77446567939124,
+   "head_error_mm": 106.67201769878166,
+   "tail_error_mm": 126.18830301559362,
+   "extent_over_length": 0.240787321476528,
+   "axis_angle_deg": 10.114471221012572
+  },
+  "TOE_PHALANX_DISTAL_5_R": {
+   "centroid_to_segment_mm": 125.70162525217837,
+   "head_error_mm": 130.0113992228058,
+   "tail_error_mm": 148.54550155021832,
+   "extent_over_length": 0.3399857015069375,
+   "axis_angle_deg": 3.651622748143401
+  },
+  "FRONTAL": {
+   "centroid_to_segment_mm": 57.107634704053964,
+   "head_error_mm": 97.93158408894676,
+   "tail_error_mm": 17.75722065337305,
+   "extent_over_length": 3.3717891950770738,
+   "axis_angle_deg": 22.966064342339735
+  },
+  "PARIETAL_L": {
+   "centroid_to_segment_mm": 46.60177995447105,
+   "head_error_mm": 74.04208612427931,
+   "tail_error_mm": 58.32578720830197,
+   "extent_over_length": 3.646244464408521,
+   "axis_angle_deg": 33.162637302501665
+  },
+  "PARIETAL_R": {
+   "centroid_to_segment_mm": 42.226648245813166,
+   "head_error_mm": 75.64221933191278,
+   "tail_error_mm": 54.77798891228707,
+   "extent_over_length": 3.642971221707251,
+   "axis_angle_deg": 33.63412339126534
+  },
+  "TEMPORAL_L": {
+   "centroid_to_segment_mm": 56.180707955285214,
+   "head_error_mm": 66.00563603864234,
+   "tail_error_mm": 57.87285186331106,
+   "extent_over_length": 1.173521878862452,
+   "axis_angle_deg": 23.314829647861366
+  },
+  "TEMPORAL_R": {
+   "centroid_to_segment_mm": 55.77141308849428,
+   "head_error_mm": 65.20850149331102,
+   "tail_error_mm": 57.73844485799943,
+   "extent_over_length": 1.1733862294127684,
+   "axis_angle_deg": 23.0933126471391
+  },
+  "OCCIPITAL": {
+   "centroid_to_segment_mm": 16.902496820690846,
+   "head_error_mm": 52.26437274267517,
+   "tail_error_mm": 39.8801503500366,
+   "extent_over_length": 1.6523099738619258,
+   "axis_angle_deg": 34.839765409600375
+  },
+  "SPHENOID": {
+   "centroid_to_segment_mm": 40.71261218341478,
+   "head_error_mm": 41.66558287199192,
+   "tail_error_mm": 72.23313738618945,
+   "extent_over_length": 2.1421948165513256,
+   "axis_angle_deg": 5.892216185746197
+  },
+  "ETHMOID": {
+   "centroid_to_segment_mm": 20.301510427154252,
+   "head_error_mm": 24.046008711285385,
+   "tail_error_mm": 37.77849671411042,
+   "extent_over_length": 1.0808013268967478,
+   "axis_angle_deg": 31.064534501667985
+  },
+  "MAXILLA_L": {
+   "centroid_to_segment_mm": 41.01134446519133,
+   "head_error_mm": 48.83938740335424,
+   "tail_error_mm": 66.96673097162848,
+   "extent_over_length": 2.142054027339323,
+   "axis_angle_deg": 8.29207307447308
+  },
+  "MAXILLA_R": {
+   "centroid_to_segment_mm": 39.53032956699208,
+   "head_error_mm": 48.63840907762549,
+   "tail_error_mm": 68.30927084177611,
+   "extent_over_length": 2.1438991758010357,
+   "axis_angle_deg": 9.366242679739242
+  },
+  "ZYGOMATIC_L": {
+   "centroid_to_segment_mm": 55.46840052649739,
+   "head_error_mm": 63.04987688520901,
+   "tail_error_mm": 76.31613829571137,
+   "extent_over_length": 1.7280351086493082,
+   "axis_angle_deg": 5.536646831125234
+  },
+  "ZYGOMATIC_R": {
+   "centroid_to_segment_mm": 54.35979721533414,
+   "head_error_mm": 63.0763496516662,
+   "tail_error_mm": 76.72999470284337,
+   "extent_over_length": 1.72454150047476,
+   "axis_angle_deg": 6.217871739640887
+  },
+  "NASAL_L": {
+   "centroid_to_segment_mm": 52.174032703498646,
+   "head_error_mm": 64.3964307663507,
+   "tail_error_mm": 50.63646938894727,
+   "extent_over_length": 1.626296863863784,
+   "axis_angle_deg": 22.365411086872133
+  },
+  "NASAL_R": {
+   "centroid_to_segment_mm": 53.06795126407473,
+   "head_error_mm": 66.82041400594478,
+   "tail_error_mm": 49.86906422206205,
+   "extent_over_length": 1.64595887456012,
+   "axis_angle_deg": 26.15692576225848
+  },
+  "LACRIMAL_L": {
+   "centroid_to_segment_mm": 41.21347321441958,
+   "head_error_mm": 41.22051525596368,
+   "tail_error_mm": 43.01785474326379,
+   "extent_over_length": 2.2329019964830192,
+   "axis_angle_deg": 12.261851857848237
+  },
+  "LACRIMAL_R": {
+   "centroid_to_segment_mm": 42.492989001855605,
+   "head_error_mm": 42.07711187015018,
+   "tail_error_mm": 45.04441527569099,
+   "extent_over_length": 1.9608949391282204,
+   "axis_angle_deg": 9.411142752833856
+  },
+  "PALATINE_L": {
+   "centroid_to_segment_mm": 64.66723534340277,
+   "head_error_mm": 64.1045218058386,
+   "tail_error_mm": 82.18362980900179,
+   "extent_over_length": 2.220762299134039,
+   "axis_angle_deg": 17.343040924743555
+  },
+  "PALATINE_R": {
+   "centroid_to_segment_mm": 64.26167254475934,
+   "head_error_mm": 64.59624920535404,
+   "tail_error_mm": 82.01496232516821,
+   "extent_over_length": 2.202627161277453,
+   "axis_angle_deg": 18.14095587574862
+  },
+  "INFERIOR_NASAL_CONCHA_L": {
+   "centroid_to_segment_mm": 55.270941293320945,
+   "head_error_mm": 59.88669957397975,
+   "tail_error_mm": 63.07456764141615,
+   "extent_over_length": 1.182922287453569,
+   "axis_angle_deg": 19.876330280010357
+  },
+  "INFERIOR_NASAL_CONCHA_R": {
+   "centroid_to_segment_mm": 52.05927545944032,
+   "head_error_mm": 42.14686399265179,
+   "tail_error_mm": 60.703452256576306,
+   "extent_over_length": 1.5309463302649886,
+   "axis_angle_deg": 54.04504481815716
+  },
+  "VOMER": {
+   "centroid_to_segment_mm": 17.783265070398713,
+   "head_error_mm": 37.890751932986724,
+   "tail_error_mm": 38.487695770513064,
+   "extent_over_length": 1.343663616721609,
+   "axis_angle_deg": 27.985697004745003
+  },
+  "MANDIBLE": {
+   "centroid_to_segment_mm": 65.60957940434405,
+   "head_error_mm": 90.6129363365727,
+   "tail_error_mm": 62.61475118863505,
+   "extent_over_length": 2.616186367178528,
+   "axis_angle_deg": 39.62052662296332
+  },
+  "HYOID": {
+   "centroid_to_segment_mm": 39.195535813262715,
+   "head_error_mm": 30.951151622626327,
+   "tail_error_mm": 53.637488984529575,
+   "extent_over_length": 6.610671661348138,
+   "axis_angle_deg": 58.27380039595262
+  }
+ },
+ "mirror_pairs": {
+  "COXAL": {
+   "mean_mm": 2.101803467323064,
+   "p95_mm": 5.203240551054478,
+   "max_mm": 13.803198002278805
+  },
+  "RIB_01": {
+   "mean_mm": 0.8956645249288755,
+   "p95_mm": 1.5731323510408401,
+   "max_mm": 3.652294632047415
+  },
+  "RIB_02": {
+   "mean_mm": 0.9458478507373046,
+   "p95_mm": 1.6462027560919523,
+   "max_mm": 3.810251597315073
+  },
+  "RIB_03": {
+   "mean_mm": 0.9410232033225877,
+   "p95_mm": 1.6553913010284305,
+   "max_mm": 4.182164557278156
+  },
+  "RIB_04": {
+   "mean_mm": 1.0101051320374168,
+   "p95_mm": 1.8425871385261416,
+   "max_mm": 4.176703281700611
+  },
+  "RIB_05": {
+   "mean_mm": 0.9488866062357177,
+   "p95_mm": 1.6746430192142725,
+   "max_mm": 4.071466159075499
+  },
+  "RIB_06": {
+   "mean_mm": 1.0761776968573586,
+   "p95_mm": 2.246537711471319,
+   "max_mm": 3.6304881796240807
+  },
+  "RIB_07": {
+   "mean_mm": 0.9771764784101409,
+   "p95_mm": 1.6706754686310887,
+   "max_mm": 4.109614994376898
+  },
+  "RIB_08": {
+   "mean_mm": 0.9912541358580078,
+   "p95_mm": 1.7310242401435971,
+   "max_mm": 4.790097009390593
+  },
+  "RIB_09": {
+   "mean_mm": 1.0193523099504362,
+   "p95_mm": 1.7139514675363898,
+   "max_mm": 5.208698101341724
+  },
+  "RIB_10": {
+   "mean_mm": 1.019533686081423,
+   "p95_mm": 1.6882569761946797,
+   "max_mm": 3.570674918591976
+  },
+  "RIB_11": {
+   "mean_mm": 1.0172262570540787,
+   "p95_mm": 1.6637626104056835,
+   "max_mm": 3.415423911064863
+  },
+  "RIB_12": {
+   "mean_mm": 0.9977711536097239,
+   "p95_mm": 1.6432426637038589,
+   "max_mm": 3.4864642657339573
+  },
+  "CLAVICLE": {
+   "mean_mm": 1.524331872157994,
+   "p95_mm": 3.2092544715851545,
+   "max_mm": 6.7528546787798405
+  },
+  "SCAPULA": {
+   "mean_mm": 0.45863428352279795,
+   "p95_mm": 1.334965112619102,
+   "max_mm": 5.081186071038246
+  },
+  "HUMERUS": {
+   "mean_mm": 1.0705484605497593,
+   "p95_mm": 3.381788730621338,
+   "max_mm": 9.814680553972721
+  },
+  "RADIUS": {
+   "mean_mm": 2.022847841541048,
+   "p95_mm": 5.872789770364761,
+   "max_mm": 12.36354187130928
+  },
+  "ULNA": {
+   "mean_mm": 1.6316188735159343,
+   "p95_mm": 5.2977055311203,
+   "max_mm": 12.056639418005943
+  },
+  "SCAPHOID": {
+   "mean_mm": 0.8102846815101088,
+   "p95_mm": 1.9314606906846166,
+   "max_mm": 3.8167478051036596
+  },
+  "LUNATE": {
+   "mean_mm": 0.8005014291792253,
+   "p95_mm": 2.5207367725670338,
+   "max_mm": 3.228525398299098
+  },
+  "TRIQUETRUM": {
+   "mean_mm": 0.7136219386203817,
+   "p95_mm": 2.0116183441132307,
+   "max_mm": 3.1532845459878445
+  },
+  "PISIFORM": {
+   "mean_mm": 0.6751455440950556,
+   "p95_mm": 1.6084349481388927,
+   "max_mm": 2.6709595695137978
+  },
+  "TRAPEZIUM": {
+   "mean_mm": 0.6887525036687403,
+   "p95_mm": 1.9076497992500663,
+   "max_mm": 3.8288102950900793
+  },
+  "TRAPEZOID": {
+   "mean_mm": 0.469807156995079,
+   "p95_mm": 1.2126767542213202,
+   "max_mm": 2.275835257023573
+  },
+  "CAPITATE": {
+   "mean_mm": 0.8858518427469111,
+   "p95_mm": 3.0439926777035,
+   "max_mm": 5.049820989370346
+  },
+  "HAMATE": {
+   "mean_mm": 0.6382115298754658,
+   "p95_mm": 1.9584530964493752,
+   "max_mm": 3.0217610765248537
+  },
+  "METACARPAL_1": {
+   "mean_mm": 0.8369132044670681,
+   "p95_mm": 2.360342303290963,
+   "max_mm": 5.729352124035358
+  },
+  "METACARPAL_2": {
+   "mean_mm": 0.8452939234641917,
+   "p95_mm": 3.1339877750724554,
+   "max_mm": 6.276818457990885
+  },
+  "METACARPAL_3": {
+   "mean_mm": 0.8278357453149477,
+   "p95_mm": 2.612515352666378,
+   "max_mm": 5.859107244759798
+  },
+  "METACARPAL_4": {
+   "mean_mm": 0.8567492291137202,
+   "p95_mm": 2.3215455003082752,
+   "max_mm": 5.048522260040045
+  },
+  "METACARPAL_5": {
+   "mean_mm": 0.8199726950390636,
+   "p95_mm": 2.4064378812909126,
+   "max_mm": 4.487774800509214
+  },
+  "PHALANX_PROXIMAL_1": {
+   "mean_mm": 0.8200531006681822,
+   "p95_mm": 2.524408046156168,
+   "max_mm": 5.408827215433121
+  },
+  "PHALANX_DISTAL_1": {
+   "mean_mm": 0.6624832991639802,
+   "p95_mm": 1.6560734948143363,
+   "max_mm": 3.5463941749185324
+  },
+  "PHALANX_PROXIMAL_2": {
+   "mean_mm": 0.8071010971974573,
+   "p95_mm": 2.251820173114538,
+   "max_mm": 5.612961947917938
+  },
+  "PHALANX_INTERMEDIATE_2": {
+   "mean_mm": 0.6615489426788963,
+   "p95_mm": 1.7843869281932712,
+   "max_mm": 3.240055637434125
+  },
+  "PHALANX_DISTAL_2": {
+   "mean_mm": 0.5354423748756818,
+   "p95_mm": 1.419790438376367,
+   "max_mm": 2.186919329687953
+  },
+  "PHALANX_PROXIMAL_3": {
+   "mean_mm": 0.7964352803963121,
+   "p95_mm": 1.8704934045672417,
+   "max_mm": 3.733316669240594
+  },
+  "PHALANX_INTERMEDIATE_3": {
+   "mean_mm": 0.677839037300629,
+   "p95_mm": 1.8304724944755435,
+   "max_mm": 3.5100230015814304
+  },
+  "PHALANX_DISTAL_3": {
+   "mean_mm": 0.5683147440003135,
+   "p95_mm": 1.521113677881658,
+   "max_mm": 2.959929406642914
+  },
+  "PHALANX_PROXIMAL_4": {
+   "mean_mm": 0.8200758098038861,
+   "p95_mm": 2.216709079220891,
+   "max_mm": 4.39657224342227
+  },
+  "PHALANX_INTERMEDIATE_4": {
+   "mean_mm": 0.7027094436027655,
+   "p95_mm": 1.7967679305002093,
+   "max_mm": 3.5096353385597467
+  },
+  "PHALANX_DISTAL_4": {
+   "mean_mm": 0.620530879887224,
+   "p95_mm": 1.6818804433569312,
+   "max_mm": 2.434144727885723
+  },
+  "PHALANX_PROXIMAL_5": {
+   "mean_mm": 0.8725465432640349,
+   "p95_mm": 2.4666571989655495,
+   "max_mm": 4.384469706565142
+  },
+  "PHALANX_INTERMEDIATE_5": {
+   "mean_mm": 0.7104569495093958,
+   "p95_mm": 2.449311316013336,
+   "max_mm": 2.9991206247359514
+  },
+  "PHALANX_DISTAL_5": {
+   "mean_mm": 0.6209548429222951,
+   "p95_mm": 1.584201818332076,
+   "max_mm": 2.5339240673929453
+  },
+  "FEMUR": {
+   "mean_mm": 1.9068106530400089,
+   "p95_mm": 5.45980641618371,
+   "max_mm": 15.12020081281662
+  },
+  "PATELLA": {
+   "mean_mm": 1.208932635826285,
+   "p95_mm": 3.189623821526766,
+   "max_mm": 5.666379816830158
+  },
+  "TIBIA": {
+   "mean_mm": 2.0284861799326674,
+   "p95_mm": 5.844505503773689,
+   "max_mm": 19.552718847990036
+  },
+  "FIBULA": {
+   "mean_mm": 1.819419851390821,
+   "p95_mm": 5.244371481239796,
+   "max_mm": 10.075083002448082
+  },
+  "TALUS": {
+   "mean_mm": 0.9397674199844683,
+   "p95_mm": 2.5778962299227715,
+   "max_mm": 6.8968068808317184
+  },
+  "CALCANEUS": {
+   "mean_mm": 1.1929591715266294,
+   "p95_mm": 3.307582112029195,
+   "max_mm": 8.733958005905151
+  },
+  "NAVICULAR": {
+   "mean_mm": 0.817243774273156,
+   "p95_mm": 2.7555671986192465,
+   "max_mm": 4.525872878730297
+  },
+  "CUBOID": {
+   "mean_mm": 0.9522359777457394,
+   "p95_mm": 2.629244001582265,
+   "max_mm": 6.051488686352968
+  },
+  "CUNEIFORM_MEDIAL": {
+   "mean_mm": 0.6965118443914552,
+   "p95_mm": 2.032211283221841,
+   "max_mm": 5.007796920835972
+  },
+  "CUNEIFORM_INTERMEDIATE": {
+   "mean_mm": 0.6985491267081148,
+   "p95_mm": 1.9800441805273294,
+   "max_mm": 3.2157280948013067
+  },
+  "CUNEIFORM_LATERAL": {
+   "mean_mm": 0.6806364455600518,
+   "p95_mm": 1.9698047544807196,
+   "max_mm": 5.193271208554506
+  },
+  "METATARSAL_1": {
+   "mean_mm": 0.767533605564485,
+   "p95_mm": 2.102443715557456,
+   "max_mm": 5.289903841912746
+  },
+  "METATARSAL_2": {
+   "mean_mm": 0.7835310158675892,
+   "p95_mm": 2.035553101450205,
+   "max_mm": 4.667318891733885
+  },
+  "METATARSAL_3": {
+   "mean_mm": 0.8756915001762007,
+   "p95_mm": 2.845155540853739,
+   "max_mm": 5.761528387665749
+  },
+  "METATARSAL_4": {
+   "mean_mm": 0.8443691899675323,
+   "p95_mm": 2.3835478350520134,
+   "max_mm": 6.450124550610781
+  },
+  "METATARSAL_5": {
+   "mean_mm": 0.847238859017077,
+   "p95_mm": 2.3767282254993916,
+   "max_mm": 4.825448151677847
+  },
+  "TOE_PHALANX_PROXIMAL_1": {
+   "mean_mm": 0.8172380147427112,
+   "p95_mm": 2.0980823319405317,
+   "max_mm": 3.554989816620946
+  },
+  "TOE_PHALANX_DISTAL_1": {
+   "mean_mm": 0.710738974164782,
+   "p95_mm": 2.1082020830363035,
+   "max_mm": 4.067161586135626
+  },
+  "TOE_PHALANX_PROXIMAL_2": {
+   "mean_mm": 0.7124618747767515,
+   "p95_mm": 2.2277079988271,
+   "max_mm": 3.8111412432044744
+  },
+  "TOE_PHALANX_INTERMEDIATE_2": {
+   "mean_mm": 0.6116674515731786,
+   "p95_mm": 1.612096675671637,
+   "max_mm": 3.0334049370139837
+  },
+  "TOE_PHALANX_DISTAL_2": {
+   "mean_mm": 0.6034605337144401,
+   "p95_mm": 1.3961077202111483,
+   "max_mm": 2.147065941244364
+  },
+  "TOE_PHALANX_PROXIMAL_3": {
+   "mean_mm": 0.6069961833327355,
+   "p95_mm": 1.4134316006675363,
+   "max_mm": 2.751045860350132
+  },
+  "TOE_PHALANX_INTERMEDIATE_3": {
+   "mean_mm": 0.5208762746746388,
+   "p95_mm": 1.275667455047369,
+   "max_mm": 2.094125375151634
+  },
+  "TOE_PHALANX_DISTAL_3": {
+   "mean_mm": 0.43104116844143425,
+   "p95_mm": 1.3284845044836402,
+   "max_mm": 1.827515079639852
+  },
+  "TOE_PHALANX_PROXIMAL_4": {
+   "mean_mm": 0.581005497226025,
+   "p95_mm": 1.5088828513398767,
+   "max_mm": 2.9575477819889784
+  },
+  "TOE_PHALANX_INTERMEDIATE_4": {
+   "mean_mm": 0.5225263431323525,
+   "p95_mm": 1.1898934608325362,
+   "max_mm": 2.6931928005069494
+  },
+  "TOE_PHALANX_DISTAL_4": {
+   "mean_mm": 0.45974015484153385,
+   "p95_mm": 1.012366497889161,
+   "max_mm": 1.8334389897063375
+  },
+  "TOE_PHALANX_PROXIMAL_5": {
+   "mean_mm": 0.6125518961987457,
+   "p95_mm": 1.6556308837607503,
+   "max_mm": 3.080953611060977
+  },
+  "TOE_PHALANX_INTERMEDIATE_5": {
+   "mean_mm": 0.5330578509940915,
+   "p95_mm": 1.7045297427102923,
+   "max_mm": 2.3294822312891483
+  },
+  "TOE_PHALANX_DISTAL_5": {
+   "mean_mm": 0.37975196690948076,
+   "p95_mm": 1.1349504347890615,
+   "max_mm": 1.8029510974884033
+  },
+  "PARIETAL": {
+   "mean_mm": 1.5917923897283017,
+   "p95_mm": 4.9588424153625965,
+   "max_mm": 10.000496171414852
+  },
+  "TEMPORAL": {
+   "mean_mm": 1.1329711152301858,
+   "p95_mm": 2.1047983318567276,
+   "max_mm": 7.51426862552762
+  },
+  "MAXILLA": {
+   "mean_mm": 1.2511277619000405,
+   "p95_mm": 3.0024119187146425,
+   "max_mm": 5.902593955397606
+  },
+  "ZYGOMATIC": {
+   "mean_mm": 1.2872255339572294,
+   "p95_mm": 2.8163068927824497,
+   "max_mm": 5.467885173857212
+  },
+  "NASAL": {
+   "mean_mm": 2.2571132396630293,
+   "p95_mm": 4.526980686932802,
+   "max_mm": 4.8779989592731
+  },
+  "LACRIMAL": {
+   "mean_mm": 1.6437035876781172,
+   "p95_mm": 4.042872227728367,
+   "max_mm": 4.641878418624401
+  },
+  "PALATINE": {
+   "mean_mm": 1.0320274585752593,
+   "p95_mm": 1.9807100761681795,
+   "max_mm": 4.246874712407589
+  },
+  "INFERIOR_NASAL_CONCHA": {
+   "mean_mm": 2.432464328822395,
+   "p95_mm": 8.14989022910595,
+   "max_mm": 9.85355582088232
+  }
+ },
+ "mirror_mean_mm_over_pairs": {
+  "n": 83,
+  "min": 0.37975196690948076,
+  "median": 0.8200758098038861,
+  "max": 2.432464328822395
+ },
+ "pelvis": {
+  "asset_mm": {
+   "inter_asis_width_mm": 259.0821880554643,
+   "inter_psis_width_mm": 90.56836651239671,
+   "pelvic_depth_asis_psis_mm": 138.45165186335888,
+   "inter_hip_centre_width_mm": 174.56454329324666,
+   "symphysis_to_mid_asis_mm": 101.35340684717517
+  },
+  "asset_scaled_to_canonical_mm": {
+   "inter_asis_width_mm": 267.36517447995476,
+   "inter_psis_width_mm": 93.46388224020836,
+   "pelvic_depth_asis_psis_mm": 142.87802004188828,
+   "inter_hip_centre_width_mm": 180.14545857402155,
+   "symphysis_to_mid_asis_mm": 104.59372567917177
+  },
+  "canonical_inter_hip_centre_width_mm": 133.20000000000002
+ }
+}

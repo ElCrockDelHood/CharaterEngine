@@ -1205,12 +1205,33 @@ relationship goes from ≈ 63 mm off to ≈ 28 mm off (the posterior part is pen
 
 ---
 
+## 66. F2 BY REGIONS: WHOLE SKELETON VS BODYPARTS3D MEASURED (TOLERANCES PENDING)
+
+**Decision** (owner, 2026-11-04, front 1 "caderas y huesos bien definidos"): new pure-domain
+`domain/assets/skeleton_regions.py` and `runtime/blender/ce_f2_regions_fit.py` (`scripts/f2_femur_fit.py --regions`,
+reusing F1 registration, the A20 rules and the F2 Blender helpers) compare the whole BodyParts3D skeleton (internal
+use, Decision 62) with the canonical one: one global similarity on the 8 measured limb joint centres (hip, knee,
+shoulder, elbow; RMS 42.4 mm: shoulder 68, elbow 40, hip 26, knee 19 mm), then every bone against its canonical
+segment, per region (pelvis, spine, thorax, shoulder girdle, arm, hand, leg, foot, skull), plus the mirror of 83
+bilateral pairs (mean 0.38–2.43 mm). 199/206 measured; not fitted: COCCYX (proxy) and the 6 ossicles (absent in
+BP3D). Canonical joints moved = 0. Findings recorded, **not corrected**: canonical hip-centre width 133 mm vs
+180 mm in BP3D (scaled); spine as straight vertical stubs without curvature; ribs as horizontal stubs; scapula on
+the shoulder joint (~10 cm lateral) and shoulders too wide; skull bones as vertical stubs. Measured pelvic landmarks
+(ASIS, PSIS, pubic symphysis, acetabular centre) proposed with cited sources (Gray's Anatomy 41st ed.; Wu et al.
+2002 ISB; Harrington et al. 2007; Bell et al. 1990) in `docs/architecture/PELVIS_LANDMARKS_PROPOSAL.md`, not applied.
+Audit: `docs/audit/A22_SKELETON_REGIONS_FIT.md` / `.json`. Tests: `tests/unit/test_skeleton_regions.py`. No
+tolerance fixed; no canonical data, contract, manifest, addon or backend changed.
+
+**Date**: 2026-11-04 · **Status**: measured; tolerances PENDING (owner)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 65
-**Measured, tolerances pending**: 2 (Decision 63, F2 femur fit; Decision 64, long bones)
+**Total Decisions**: 66
+**Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
 **Final Decisions**: 58 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
