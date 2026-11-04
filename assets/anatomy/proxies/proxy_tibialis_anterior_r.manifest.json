@@ -1,0 +1,54 @@
+{
+ "asset_id": "proxy_tibialis_anterior_r",
+ "file": "proxy_tibialis_anterior_r.obj",
+ "sha256": "da3cd2ad11593ce721da97313fd2cda944474feed3c89cb82f0e5e3145794048",
+ "layer": "muscle",
+ "parts": [
+  {
+   "mesh": "proxy_tibialis_anterior_r",
+   "canonical_bone": "TIBIA",
+   "side": "R",
+   "anchors": [
+    {
+     "landmark": "proxy_tibialis_anterior_r_origin",
+     "vertex_or_point": [
+      -0.0666,
+      0.0,
+      0.44532
+     ]
+    },
+    {
+     "landmark": "proxy_tibialis_anterior_r_insertion",
+     "vertex_or_point": [
+      -0.027,
+      -0.0789,
+      0.0326
+     ]
+    },
+    {
+     "landmark": "proxy_tibialis_anterior_r_equator",
+     "vertex_or_point": [
+      -0.0468,
+      -0.055165,
+      0.241964
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [
+  {
+   "muscle": "TIBIALIS_ANTERIOR",
+   "origin_bone": "TIBIA",
+   "insertion_bone": "CUNEIFORM_MEDIAL"
+  }
+ ],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "ESTIMATE",
+ "note": "MUSCLES catalogue attachments and radius (ESTIMATE); absent from BodyParts3D IS-A"
+}

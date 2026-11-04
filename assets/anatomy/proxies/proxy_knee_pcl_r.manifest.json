@@ -1,0 +1,48 @@
+{
+ "asset_id": "proxy_knee_pcl_r",
+ "file": "proxy_knee_pcl_r.obj",
+ "sha256": "7f9a8df7f5086b3238da8eb8b069559340f9874fcfbd13ec09950c5ebd732746",
+ "layer": "ligament",
+ "parts": [
+  {
+   "mesh": "proxy_knee_pcl_r",
+   "canonical_bone": "FEMUR",
+   "side": "R",
+   "anchors": [
+    {
+     "landmark": "proxy_knee_pcl_r_origin",
+     "vertex_or_point": [
+      -0.0566,
+      -0.01,
+      0.5362
+     ]
+    },
+    {
+     "landmark": "proxy_knee_pcl_r_insertion",
+     "vertex_or_point": [
+      -0.0666,
+      0.02,
+      0.477
+     ]
+    },
+    {
+     "landmark": "proxy_knee_pcl_r_equator",
+     "vertex_or_point": [
+      -0.057805,
+      0.006265,
+      0.5066
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "PLACEHOLDER",
+ "note": "medial femoral condyle -> posterior intercondylar area; offsets PLACEHOLDER"
+}

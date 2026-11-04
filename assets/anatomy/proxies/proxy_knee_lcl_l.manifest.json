@@ -1,0 +1,48 @@
+{
+ "asset_id": "proxy_knee_lcl_l",
+ "file": "proxy_knee_lcl_l.obj",
+ "sha256": "76177eb7144e3bc42a34fd863071c56d4ab2e5c2043b303a89fb82a3ab3809c2",
+ "layer": "ligament",
+ "parts": [
+  {
+   "mesh": "proxy_knee_lcl_l",
+   "canonical_bone": "FEMUR",
+   "side": "L",
+   "anchors": [
+    {
+     "landmark": "proxy_knee_lcl_l_origin",
+     "vertex_or_point": [
+      0.1083,
+      0.0,
+      0.5462
+     ]
+    },
+    {
+     "landmark": "proxy_knee_lcl_l_insertion",
+     "vertex_or_point": [
+      0.0999,
+      0.0,
+      0.487
+     ]
+    },
+    {
+     "landmark": "proxy_knee_lcl_l_equator",
+     "vertex_or_point": [
+      0.1041,
+      -0.006,
+      0.5166
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "PLACEHOLDER",
+ "note": "lateral epicondyle (half-width ESTIMATE, A20) -> fibular head (canonical, A21 PLACEHOLDER)"
+}

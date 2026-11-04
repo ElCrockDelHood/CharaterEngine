@@ -6,12 +6,12 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 
 - Repo: `C:\DEV\Proyectos\CharaterEngine-20261004T202505Z-1-001\CharaterEngine`, remoto
   `github.com/ElCrockDelHood/CharaterEngine`.
-- `origin/main` = `75d0e93` (push del 2026-10-28). El trabajo posterior (de A13 a A24, Decisiones 54–68) está en la
+- `origin/main` = `75d0e93` (push del 2026-10-28). El trabajo posterior (de A13 a A25, Decisiones 54–69) está en la
   rama **`anatomy/a13-a24-base`**, pendiente de revisión antes de mergear a `main`.
 - Herramientas en `C:\DEV\Tools`: Blender 3.6.23 (referencia), Godot 4.7.2 (tests), UPBGE 0.50 (opcional).
 - Tests: `.venv\Scripts\python.exe scripts\test.py`, `scripts\lint.py`, `scripts\engine_tests.py blender godot`
   (logs en `logs/`). Último estado: pytest todo verde, lint OK, Blender 40/40, Godot 60/60.
-- Decisiones: `docs/reorientation/DECISION_LOG.md` (última: **68**; siguiente libre: **69**).
+- Decisiones: `docs/reorientation/DECISION_LOG.md` (última: **69**; siguiente libre: **70**).
   Índice de auditorías: `docs/audit/INDEX.md`.
 - Referencias externas (fuera del repo, nunca se commitean): `assets/anatomy/README.md`.
 
@@ -24,6 +24,7 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 | Biblioteca de reacciones D1 (esquema 6), arena souls-like, batch export / retarget, material sample 2 | 55–57 y commits de producto |
 | Ajuste de assets: manifiesto F0, registro F1, ajuste F2 en Blender | 61, 63, 64, 66 (A19, A20, A22) |
 | BodyParts3D: mapeo de huesos, uso interno | A18 / 62 |
+| Proxies de lo que falta en BodyParts3D (músculos, ligamentos, cóccix, huesecillos) | A25 / 69 |
 | Correcciones del esqueleto canónico: peroné lateral, centros de cadera 180,2 mm, cintura escapular (hombros 406,8 mm, clavícula SC→AC, escápula AC→AI) | A21, A23, A24 / 65, 67, 68 |
 
 ## 3. Reglas que siguen vigentes

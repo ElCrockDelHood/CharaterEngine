@@ -1,0 +1,48 @@
+{
+ "asset_id": "proxy_shoulder_coracoclavicular_r",
+ "file": "proxy_shoulder_coracoclavicular_r.obj",
+ "sha256": "6f731e3f72da6f8630e735bc3e0a0fea6db1aa160996d800fc16ba92bb4b758e",
+ "layer": "ligament",
+ "parts": [
+  {
+   "mesh": "proxy_shoulder_coracoclavicular_r",
+   "canonical_bone": "CLAVICLE",
+   "side": "R",
+   "anchors": [
+    {
+     "landmark": "proxy_shoulder_coracoclavicular_r_origin",
+     "vertex_or_point": [
+      -0.15336,
+      -0.00876,
+      1.50428
+     ]
+    },
+    {
+     "landmark": "proxy_shoulder_coracoclavicular_r_insertion",
+     "vertex_or_point": [
+      -0.18107,
+      -0.01949,
+      1.47268
+     ]
+    },
+    {
+     "landmark": "proxy_shoulder_coracoclavicular_r_equator",
+     "vertex_or_point": [
+      -0.168659,
+      -0.010395,
+      1.48848
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "PLACEHOLDER",
+ "note": "lateral clavicle -> coracoid process (offset from the A24 scapula segment PLACEHOLDER)"
+}

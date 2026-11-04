@@ -1,0 +1,54 @@
+{
+ "asset_id": "proxy_latissimus_dorsi_r",
+ "file": "proxy_latissimus_dorsi_r.obj",
+ "sha256": "899dab5ea9ea220dcef8341eb00514dd469fc6c5afd8a374dba1462dd360d448",
+ "layer": "muscle",
+ "parts": [
+  {
+   "mesh": "proxy_latissimus_dorsi_r",
+   "canonical_bone": "HUMERUS",
+   "side": "R",
+   "anchors": [
+    {
+     "landmark": "proxy_latissimus_dorsi_r_origin",
+     "vertex_or_point": [
+      0.0,
+      0.0,
+      1.10952
+     ]
+    },
+    {
+     "landmark": "proxy_latissimus_dorsi_r_insertion",
+     "vertex_or_point": [
+      -0.207855,
+      0.0,
+      1.42503
+     ]
+    },
+    {
+     "landmark": "proxy_latissimus_dorsi_r_equator",
+     "vertex_or_point": [
+      -0.103928,
+      0.025,
+      1.267275
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [
+  {
+   "muscle": "LATISSIMUS_DORSI",
+   "origin_bone": "SACRUM",
+   "insertion_bone": "HUMERUS"
+  }
+ ],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "ESTIMATE",
+ "note": "MUSCLES catalogue attachments and radius (ESTIMATE); absent from BodyParts3D IS-A"
+}

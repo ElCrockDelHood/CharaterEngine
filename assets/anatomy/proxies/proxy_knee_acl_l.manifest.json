@@ -1,0 +1,48 @@
+{
+ "asset_id": "proxy_knee_acl_l",
+ "file": "proxy_knee_acl_l.obj",
+ "sha256": "527076c222581c095d7616c36872310b21ac220262a65c3c46426242d851f591",
+ "layer": "ligament",
+ "parts": [
+  {
+   "mesh": "proxy_knee_acl_l",
+   "canonical_bone": "FEMUR",
+   "side": "L",
+   "anchors": [
+    {
+     "landmark": "proxy_knee_acl_l_origin",
+     "vertex_or_point": [
+      0.0766,
+      0.015,
+      0.5362
+     ]
+    },
+    {
+     "landmark": "proxy_knee_acl_l_insertion",
+     "vertex_or_point": [
+      0.0666,
+      -0.015,
+      0.487
+     ]
+    },
+    {
+     "landmark": "proxy_knee_acl_l_equator",
+     "vertex_or_point": [
+      0.067805,
+      0.001265,
+      0.5116
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "PLACEHOLDER",
+ "note": "lateral femoral condyle (posterior) -> anterior intercondylar area; offsets PLACEHOLDER"
+}

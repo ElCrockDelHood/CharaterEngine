@@ -1272,14 +1272,35 @@ a separate topology step. Audit `docs/audit/A24_SHOULDER_GIRDLE.md`. Tests: `tes
 
 ---
 
+## 69. A25 — PROXY GEOMETRY FOR ANATOMY MISSING FROM BODYPARTS3D
+
+**Decision** (owner, 2026-11-04: "lo que nos falta, ¿lo podés modelar?", coordinated scope): new pure-domain
+`domain/assets/proxies.py` and `scripts/build_anatomy_proxies.py` generate 33 labelled PROXY pieces into
+`assets/anatomy/proxies/` (OBJ + asset manifest each, INDEX.json):
+
+* latissimus dorsi, rectus abdominis, tibialis anterior and peroneus group (L/R): spindles from the `MUSCLES`
+  catalogue, **ESTIMATE**;
+* knee ACL / PCL / MCL / LCL, ankle ATFL / deltoid, and shoulder coracoclavicular / coracoacromial / glenohumeral
+  ligaments (L/R): bands on canonical bone points with **PLACEHOLDER** offsets and radii (the knee half-width is
+  ESTIMATE from A20);
+* coccyx and ear ossicles: ellipsoids on their canonical segments, **PLACEHOLDER**.
+
+All are absent from BodyParts3D (A18, IS-A tree). The manifest layer list gains `ligament` (manifest contract still
+PROPOSED, Decision 61). Deterministic and in sync with a test. The canonical data, fingerprints and rig are only read.
+Audit `docs/audit/A25_ANATOMY_PROXIES.md`. Tests: `tests/unit/test_anatomy_proxies.py`.
+
+**Date**: 2026-11-04 · **Status**: FINAL (proxies; every value ESTIMATE / PLACEHOLDER, replaceable by sourced meshes)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 68
+**Total Decisions**: 69
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 60 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE)
+**Final Decisions**: 61 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

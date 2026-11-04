@@ -1,0 +1,54 @@
+{
+ "asset_id": "proxy_rectus_abdominis_l",
+ "file": "proxy_rectus_abdominis_l.obj",
+ "sha256": "08810cff82042ce1d0809c61a29067a98479d227c9a973e34e81f134a38fce71",
+ "layer": "muscle",
+ "parts": [
+  {
+   "mesh": "proxy_rectus_abdominis_l",
+   "canonical_bone": "COXAL",
+   "side": "L",
+   "anchors": [
+    {
+     "landmark": "proxy_rectus_abdominis_l_origin",
+     "vertex_or_point": [
+      0.0,
+      -0.0666,
+      1.44
+     ]
+    },
+    {
+     "landmark": "proxy_rectus_abdominis_l_insertion",
+     "vertex_or_point": [
+      0.0999,
+      0.0,
+      0.99288
+     ]
+    },
+    {
+     "landmark": "proxy_rectus_abdominis_l_equator",
+     "vertex_or_point": [
+      0.04995,
+      -0.051104,
+      1.213788
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [
+  {
+   "muscle": "RECTUS_ABDOMINIS",
+   "origin_bone": "STERNUM",
+   "insertion_bone": "COXAL"
+  }
+ ],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "ESTIMATE",
+ "note": "MUSCLES catalogue attachments and radius (ESTIMATE); absent from BodyParts3D IS-A"
+}

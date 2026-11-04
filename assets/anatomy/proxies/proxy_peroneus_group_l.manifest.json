@@ -1,0 +1,54 @@
+{
+ "asset_id": "proxy_peroneus_group_l",
+ "file": "proxy_peroneus_group_l.obj",
+ "sha256": "6a62d361bc6d5b279d1392ea0fa46d82ce52af5477dcdef7833668a26fe82429",
+ "layer": "muscle",
+ "parts": [
+  {
+   "mesh": "proxy_peroneus_group_l",
+   "canonical_bone": "FIBULA",
+   "side": "L",
+   "anchors": [
+    {
+     "landmark": "proxy_peroneus_group_l_origin",
+     "vertex_or_point": [
+      0.0999,
+      0.0,
+      0.40364
+     ]
+    },
+    {
+     "landmark": "proxy_peroneus_group_l_insertion",
+     "vertex_or_point": [
+      0.1062,
+      -0.0947,
+      0.0
+     ]
+    },
+    {
+     "landmark": "proxy_peroneus_group_l_equator",
+     "vertex_or_point": [
+      0.10305,
+      -0.059033,
+      0.204561
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [
+  {
+   "muscle": "PERONEUS_GROUP",
+   "origin_bone": "FIBULA",
+   "insertion_bone": "METATARSAL_5"
+  }
+ ],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "ESTIMATE",
+ "note": "MUSCLES catalogue attachments and radius (ESTIMATE); absent from BodyParts3D IS-A"
+}

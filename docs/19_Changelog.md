@@ -2,6 +2,17 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-04 · Decision 69: PROXY anatomy pieces (A25)
+
+### Added
+- `assets/anatomy/proxies/`: 33 script-generated pieces with manifests (muscles ESTIMATE; ligaments, coccyx and ear
+  ossicles PLACEHOLDER) for structures absent from BodyParts3D; `scripts/build_anatomy_proxies.py [--check]`,
+  `domain/assets/proxies.py`. Manifest layer `ligament` added (contract PROPOSED).
+- Docs: `docs/audit/INDEX.md`, `assets/anatomy/README.md` (external references), HANDOFF / status banners updated.
+
+### Test status
+- `python scripts/test.py`, `python scripts/lint.py`, `python scripts/engine_tests.py blender godot`: see A25.
+
 ## [Unreleased] — 2026-11-04 · Decision 68: shoulder girdle (finding A24, variant A)
 
 ### Changed

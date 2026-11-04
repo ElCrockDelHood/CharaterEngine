@@ -1,0 +1,48 @@
+{
+ "asset_id": "proxy_shoulder_coracoacromial_r",
+ "file": "proxy_shoulder_coracoacromial_r.obj",
+ "sha256": "7f553f479dadd9f9b1f1447b927fcc92fa1c93b275948b6961abba64aa87677f",
+ "layer": "ligament",
+ "parts": [
+  {
+   "mesh": "proxy_shoulder_coracoacromial_r",
+   "canonical_bone": "SCAPULA",
+   "side": "R",
+   "anchors": [
+    {
+     "landmark": "proxy_shoulder_coracoacromial_r_origin",
+     "vertex_or_point": [
+      -0.18107,
+      -0.01949,
+      1.47268
+     ]
+    },
+    {
+     "landmark": "proxy_shoulder_coracoacromial_r_insertion",
+     "vertex_or_point": [
+      -0.1862,
+      0.0037,
+      1.5101
+     ]
+    },
+    {
+     "landmark": "proxy_shoulder_coracoacromial_r_equator",
+     "vertex_or_point": [
+      -0.179729,
+      -0.007031,
+      1.49139
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "PLACEHOLDER",
+ "note": "coracoid process -> acromion (scapula head, A24); coracoid offset PLACEHOLDER"
+}

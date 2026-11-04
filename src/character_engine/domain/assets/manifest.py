@@ -32,7 +32,7 @@ from .normalize import AXES
 
 Vec = Tuple[float, float, float]
 
-LAYERS: Tuple[str, ...] = ("bone", "muscle", "tendon", "fascia", "fat", "skin")
+LAYERS: Tuple[str, ...] = ("bone", "muscle", "tendon", "ligament", "fascia", "fat", "skin")   # ligament: A25
 RIGID_LAYERS: Tuple[str, ...] = ("bone",)
 ATTACHMENT_LAYERS: Tuple[str, ...] = ("muscle", "tendon")
 SIDES: Tuple[str, ...] = ("L", "R", "mirror", "midline")

@@ -1,0 +1,48 @@
+{
+ "asset_id": "proxy_ankle_deltoid_l",
+ "file": "proxy_ankle_deltoid_l.obj",
+ "sha256": "22434bbd5548dc0b8280153c5eed8fc57b3ea7bf1906792bedd94a2c7b66643f",
+ "layer": "ligament",
+ "parts": [
+  {
+   "mesh": "proxy_ankle_deltoid_l",
+   "canonical_bone": "TIBIA",
+   "side": "L",
+   "anchors": [
+    {
+     "landmark": "proxy_ankle_deltoid_l_origin",
+     "vertex_or_point": [
+      0.0466,
+      0.0,
+      0.0702
+     ]
+    },
+    {
+     "landmark": "proxy_ankle_deltoid_l_insertion",
+     "vertex_or_point": [
+      0.0466,
+      0.0,
+      0.0502
+     ]
+    },
+    {
+     "landmark": "proxy_ankle_deltoid_l_equator",
+     "vertex_or_point": [
+      0.0466,
+      -0.006,
+      0.0602
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "PLACEHOLDER",
+ "note": "medial malleolus -> medial talus; offsets PLACEHOLDER"
+}

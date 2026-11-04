@@ -1,0 +1,48 @@
+{
+ "asset_id": "proxy_ankle_atfl_r",
+ "file": "proxy_ankle_atfl_r.obj",
+ "sha256": "b197726048bb387b181fd0ebe3634985d2c8f0ba04131fa9ed81f192d310dde9",
+ "layer": "ligament",
+ "parts": [
+  {
+   "mesh": "proxy_ankle_atfl_r",
+   "canonical_bone": "FIBULA",
+   "side": "R",
+   "anchors": [
+    {
+     "landmark": "proxy_ankle_atfl_r_origin",
+     "vertex_or_point": [
+      -0.0999,
+      -0.01,
+      0.0702
+     ]
+    },
+    {
+     "landmark": "proxy_ankle_atfl_r_insertion",
+     "vertex_or_point": [
+      -0.0816,
+      -0.02,
+      0.0702
+     ]
+    },
+    {
+     "landmark": "proxy_ankle_atfl_r_equator",
+     "vertex_or_point": [
+      -0.092668,
+      -0.01851,
+      0.0702
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "PLACEHOLDER",
+ "note": "lateral malleolus -> talar neck; offsets PLACEHOLDER"
+}

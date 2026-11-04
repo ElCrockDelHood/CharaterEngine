@@ -1,0 +1,48 @@
+{
+ "asset_id": "proxy_shoulder_glenohumeral_l",
+ "file": "proxy_shoulder_glenohumeral_l.obj",
+ "sha256": "17abb3ca0fe7ae9abaf3fe9131c982d53e1419c77fb309392b3203224f293a3d",
+ "layer": "ligament",
+ "parts": [
+  {
+   "mesh": "proxy_shoulder_glenohumeral_l",
+   "canonical_bone": "SCAPULA",
+   "side": "L",
+   "anchors": [
+    {
+     "landmark": "proxy_shoulder_glenohumeral_l_origin",
+     "vertex_or_point": [
+      0.180044,
+      0.011872,
+      1.489196
+     ]
+    },
+    {
+     "landmark": "proxy_shoulder_glenohumeral_l_insertion",
+     "vertex_or_point": [
+      0.2034,
+      0.0,
+      1.4724
+     ]
+    },
+    {
+     "landmark": "proxy_shoulder_glenohumeral_l_equator",
+     "vertex_or_point": [
+      0.189003,
+      0.000587,
+      1.480798
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "PLACEHOLDER",
+ "note": "glenoid rim -> humeral head (A24 joint centre); radius PLACEHOLDER"
+}

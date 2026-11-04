@@ -1,0 +1,48 @@
+{
+ "asset_id": "proxy_incus_l",
+ "file": "proxy_incus_l.obj",
+ "sha256": "cd9f3a30a19bb4484269191682c6590da7371127a1f00c17329cbe1b695ba899",
+ "layer": "bone",
+ "parts": [
+  {
+   "mesh": "proxy_incus_l",
+   "canonical_bone": "INCUS",
+   "side": "L",
+   "anchors": [
+    {
+     "landmark": "proxy_incus_l_origin",
+     "vertex_or_point": [
+      0.0133,
+      -0.0133,
+      1.6262
+     ]
+    },
+    {
+     "landmark": "proxy_incus_l_insertion",
+     "vertex_or_point": [
+      0.0133,
+      -0.0133,
+      1.6329
+     ]
+    },
+    {
+     "landmark": "proxy_incus_l_equator",
+     "vertex_or_point": [
+      0.0133,
+      -0.010955,
+      1.62955
+     ]
+    }
+   ]
+  }
+ ],
+ "attachments": [],
+ "source_units": "m",
+ "up": "+Z",
+ "forward": "-Y",
+ "licence": "Character Engine project-generated proxy (no third-party geometry)",
+ "author": "Character Engine, scripts/build_anatomy_proxies.py",
+ "origin_url": "scripts/build_anatomy_proxies.py (domain/assets/proxies.py)",
+ "provenance": "PLACEHOLDER",
+ "note": "absent from BodyParts3D; ellipsoid on the canonical segment"
+}

@@ -1,0 +1,335 @@
+{
+ "status": "PROXY geometry (A25); replace with sourced meshes when available",
+ "pieces": [
+  {
+   "asset_id": "proxy_latissimus_dorsi_l",
+   "name": "Latissimus dorsi",
+   "layer": "muscle",
+   "side": "L",
+   "provenance": "ESTIMATE",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.377823
+  },
+  {
+   "asset_id": "proxy_latissimus_dorsi_r",
+   "name": "Latissimus dorsi",
+   "layer": "muscle",
+   "side": "R",
+   "provenance": "ESTIMATE",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.377823
+  },
+  {
+   "asset_id": "proxy_rectus_abdominis_l",
+   "name": "Rectus abdominis",
+   "layer": "muscle",
+   "side": "L",
+   "provenance": "ESTIMATE",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.46296
+  },
+  {
+   "asset_id": "proxy_rectus_abdominis_r",
+   "name": "Rectus abdominis",
+   "layer": "muscle",
+   "side": "R",
+   "provenance": "ESTIMATE",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.46296
+  },
+  {
+   "asset_id": "proxy_tibialis_anterior_l",
+   "name": "Tibialis anterior",
+   "layer": "muscle",
+   "side": "L",
+   "provenance": "ESTIMATE",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.422056
+  },
+  {
+   "asset_id": "proxy_tibialis_anterior_r",
+   "name": "Tibialis anterior",
+   "layer": "muscle",
+   "side": "R",
+   "provenance": "ESTIMATE",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.422056
+  },
+  {
+   "asset_id": "proxy_peroneus_group_l",
+   "name": "Peroneus (fibularis) group",
+   "layer": "muscle",
+   "side": "L",
+   "provenance": "ESTIMATE",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.414648
+  },
+  {
+   "asset_id": "proxy_peroneus_group_r",
+   "name": "Peroneus (fibularis) group",
+   "layer": "muscle",
+   "side": "R",
+   "provenance": "ESTIMATE",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.414648
+  },
+  {
+   "asset_id": "proxy_knee_acl_l",
+   "name": "Anterior cruciate ligament",
+   "layer": "ligament",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.058486
+  },
+  {
+   "asset_id": "proxy_knee_acl_r",
+   "name": "Anterior cruciate ligament",
+   "layer": "ligament",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.058486
+  },
+  {
+   "asset_id": "proxy_knee_pcl_l",
+   "name": "Posterior cruciate ligament",
+   "layer": "ligament",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.067117
+  },
+  {
+   "asset_id": "proxy_knee_pcl_r",
+   "name": "Posterior cruciate ligament",
+   "layer": "ligament",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.067117
+  },
+  {
+   "asset_id": "proxy_knee_mcl_l",
+   "name": "Medial collateral ligament",
+   "layer": "ligament",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.119388
+  },
+  {
+   "asset_id": "proxy_knee_mcl_r",
+   "name": "Medial collateral ligament",
+   "layer": "ligament",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.119388
+  },
+  {
+   "asset_id": "proxy_knee_lcl_l",
+   "name": "Lateral collateral ligament",
+   "layer": "ligament",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.059793
+  },
+  {
+   "asset_id": "proxy_knee_lcl_r",
+   "name": "Lateral collateral ligament",
+   "layer": "ligament",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.059793
+  },
+  {
+   "asset_id": "proxy_ankle_atfl_l",
+   "name": "Anterior talofibular ligament",
+   "layer": "ligament",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.020854
+  },
+  {
+   "asset_id": "proxy_ankle_atfl_r",
+   "name": "Anterior talofibular ligament",
+   "layer": "ligament",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.020854
+  },
+  {
+   "asset_id": "proxy_ankle_deltoid_l",
+   "name": "Deltoid ligament (medial collateral of the ankle)",
+   "layer": "ligament",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.02
+  },
+  {
+   "asset_id": "proxy_ankle_deltoid_r",
+   "name": "Deltoid ligament (medial collateral of the ankle)",
+   "layer": "ligament",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.02
+  },
+  {
+   "asset_id": "proxy_shoulder_coracoclavicular_l",
+   "name": "Coracoclavicular ligament",
+   "layer": "ligament",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.043377
+  },
+  {
+   "asset_id": "proxy_shoulder_coracoclavicular_r",
+   "name": "Coracoclavicular ligament",
+   "layer": "ligament",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.043377
+  },
+  {
+   "asset_id": "proxy_shoulder_coracoacromial_l",
+   "name": "Coracoacromial ligament",
+   "layer": "ligament",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.044321
+  },
+  {
+   "asset_id": "proxy_shoulder_coracoacromial_r",
+   "name": "Coracoacromial ligament",
+   "layer": "ligament",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.044321
+  },
+  {
+   "asset_id": "proxy_shoulder_glenohumeral_l",
+   "name": "Glenohumeral ligaments (capsule band)",
+   "layer": "ligament",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.031122
+  },
+  {
+   "asset_id": "proxy_shoulder_glenohumeral_r",
+   "name": "Glenohumeral ligaments (capsule band)",
+   "layer": "ligament",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.031122
+  },
+  {
+   "asset_id": "proxy_coccyx",
+   "name": "Coccyx",
+   "layer": "bone",
+   "side": "midline",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.0324
+  },
+  {
+   "asset_id": "proxy_malleus_l",
+   "name": "Malleus",
+   "layer": "bone",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.0066
+  },
+  {
+   "asset_id": "proxy_malleus_r",
+   "name": "Malleus",
+   "layer": "bone",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.0066
+  },
+  {
+   "asset_id": "proxy_incus_l",
+   "name": "Incus",
+   "layer": "bone",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.0067
+  },
+  {
+   "asset_id": "proxy_incus_r",
+   "name": "Incus",
+   "layer": "bone",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.0067
+  },
+  {
+   "asset_id": "proxy_stapes_l",
+   "name": "Stapes",
+   "layer": "bone",
+   "side": "L",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.0067
+  },
+  {
+   "asset_id": "proxy_stapes_r",
+   "name": "Stapes",
+   "layer": "bone",
+   "side": "R",
+   "provenance": "PLACEHOLDER",
+   "vertices": 134,
+   "triangles": 264,
+   "length_m": 0.0067
+  }
+ ]
+}
