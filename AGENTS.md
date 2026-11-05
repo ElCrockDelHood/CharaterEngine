@@ -17,7 +17,7 @@ for users, accounts, authentication and RBAC authorization.
 | `src/character_engine/infrastructure/blender/` | Blender/UPBGE adapters | Only place `bpy` is allowed (plus `runtime/`) |
 | `runtime/godot/`, `runtime/upbge/` | Runtime validators (GDScript, bpy) | Consume `builds/gltf/*.glb`, never the domain |
 | `backend/` | Config, DB models, users, accounts, authentication, authorization | SQLAlchemy 2, Argon2id, tests on in-memory SQLite |
-| `tests/` | pytest (`anatomy`, `unit`, `integration`, `export`, `backend`) | ~850 tests, all must pass |
+| `tests/` | pytest (`anatomy`, `unit`, `integration`, `export`, `backend`) | ~1275 tests, all must pass |
 | `docs/audit/`, `docs/reorientation/` | Forensic audits, contracts, decision log | Source of truth for phase closure |
 | `scripts/` | `bootstrap`, `test`, `lint`, `format`, `clean`, `export_gltf`, `acceptance_gate` | Cross-platform Python |
 

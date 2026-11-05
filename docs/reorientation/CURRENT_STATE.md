@@ -7,22 +7,25 @@
 
 ---
 
-> **Current status (2026-11-04).** This document is the 2026-09-02 post-reorientation snapshot and is
+> **Current status (2026-11-05).** This document is the 2026-09-02 post-reorientation snapshot and is
 > kept as history; it is **not** rewritten. Where it disagrees with the items below, the items below win.
 >
 > - **Backend C1–C6 implemented and tested** (`backend/`, `tests/backend/`; evidence `docs/reorientation/PHASE_C_EVIDENCE.md`).
 > - **Anatomy data**: base stature 1.80 m (A07, Decision 15), osteometry drives mesh extents (A08, Decision 16),
 >   left is +X with −Y forward (Decision 33 / D-13), hand (A10, 35), radius lateral (A11, 36), foot (A13, 54),
->   fibula lateral (A21, 65), hip joint centres 180.2 mm (A23, 67, ESTIMATE), shoulder girdle (A24, 68, ESTIMATE).
+>   fibula lateral (A21, 65), hip joint centres 180.2 mm (A23, 67, ESTIMATE), shoulder girdle (A24, 68, ESTIMATE),
+>   clavicle under the sternum (70), spine curve and heights (A26, A27, 71, 72, ESTIMATE), thorax (A28, 73, ESTIMATE),
+>   skull (A30, 74, ESTIMATE), head ratios from ANSUR II (A31, 75, DERIVED). Limbs, hands and feet: do not move (A29).
 >   The canonical data is fingerprinted (Decision 52).
 > - **Asset fitting**: manifest validator F0 (61, contract PROPOSED), landmark registration F1 and Blender fit F2
 >   (63, 64, 66) measured against BodyParts3D (CC BY 4.0, 76); tolerances pending. Index: `docs/audit/INDEX.md`.
 > - **Combat**: strike physics, head kinematics and per-move strikers (A14–A17, Decisions 58–60, opt-in);
 >   Souls-like arena and reaction library in Godot. Godot 4 is the primary runtime (40); Blender is the
 >   production line (42, 45).
-> - Full suite: ~1230 pytest tests (`python scripts/test.py`); Blender addon 40/40, Godot 60/60.
+> - **Licences**: project code MIT (77); BodyParts3D-derived values CC BY 4.0 with attribution (76); see `NOTICE`.
+> - Full suite: ~1275 pytest tests (`python scripts/test.py`); Blender addon 40/40, Godot 60/60.
 > - Source of truth for what changed since this snapshot: `docs/audit/INDEX.md`, `docs/reorientation/HANDOFF.md`
->   and `docs/reorientation/DECISION_LOG.md` (Decisions up to 68).
+>   and `docs/reorientation/DECISION_LOG.md` (Decisions up to 77).
 
 ---
 

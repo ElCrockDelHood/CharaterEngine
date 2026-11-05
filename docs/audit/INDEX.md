@@ -33,6 +33,8 @@ C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`
 | A30 | Skull bones at BodyParts3D positions, mandible excluded | 74 | FINAL (values ESTIMATE) |
 | A31 | Head width and depth ratios from ANSUR II | 75 | FINAL (DERIVED) |
 
+Open items: `docs/reorientation/HANDOFF.md` §4.
+
 Licensing (no audit): BodyParts3D publication under CC BY 4.0, Decision 76 (`NOTICE`); project code under MIT, Decision 77 (`LICENSE`).
 
 Related proposals (`docs/architecture/`): `ASSET_FITTING_PROPOSAL.md` (F0 – F6), `FEMUR_ANCHOR_LANDMARKS_PROPOSAL.md`,
