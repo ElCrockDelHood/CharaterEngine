@@ -75,9 +75,29 @@ def test_light_strike_points_the_arm_forward():
             assert math.hypot(*k["directions"][b]) == pytest.approx(1.0)
 
 
+def _same_data(a, b, tol=1e-9):
+    """Same structure and strings, numbers within ``tol``: trig results differ in the last digits between platforms."""
+    if isinstance(a, dict) and isinstance(b, dict):
+        return a.keys() == b.keys() and all(_same_data(a[k], b[k], tol) for k in a)
+    if isinstance(a, list) and isinstance(b, list):
+        return len(a) == len(b) and all(_same_data(x, y, tol) for x, y in zip(a, b))
+    if isinstance(a, bool) or isinstance(b, bool) or not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+        return a == b
+    return abs(a - b) <= tol
+
+
 def test_committed_json_is_in_sync():
-    text = json.dumps(clip_reference(game_skeleton_points(pose="tpose")), indent=2, sort_keys=True) + "\n"
-    assert (DATA / "souls_clips.json").read_text(encoding="utf-8") == text, "run scripts/export_souls_clips.py"
+    committed = json.loads((DATA / "souls_clips.json").read_text(encoding="utf-8"))
+    current = json.loads(json.dumps(clip_reference(game_skeleton_points(pose="tpose"))))
+    assert _same_data(committed, current), "run scripts/export_souls_clips.py"
+
+
+def test_sync_check_ignores_last_digits_but_catches_real_changes():
+    assert _same_data({"d": [0.1 + 0.2, 1]}, {"d": [0.3, 1]})
+    assert not _same_data({"d": [0.3]}, {"d": [0.3 + 1e-6]})
+    assert not _same_data({"d": [0.3]}, {"d": [0.3, 0.3]})
+    assert not _same_data({"a": 1}, {"b": 1})
+    assert not _same_data({"a": "x"}, {"a": "y"})
 
 
 def test_committed_blender_bake_matches_the_spec_and_has_game_bones_only():
