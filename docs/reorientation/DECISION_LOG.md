@@ -1346,14 +1346,30 @@ the neck now lands on the neck. A22 spine median 79.1 → 16.8 mm. Fingerprints 
 
 ---
 
+## 73. A28 — THORAX: STERNUM TO THE XIPHOID, RIBS FROM THEIR VERTEBRA (VARIANT A, ESTIMATE)
+
+**Decision** (owner, 2026-11-05 01:38, card "B y luego tórax, con Busscher"): `scripts/fix_thorax.py` keeps the `STERNUM`
+head (so the SC joint, clavicle and shoulders of A24 stay) and moves its tail to the xiphoid tip (47 → 183 mm); the 24
+ribs run from their costovertebral end to their free / costochondral end, relative to their own thoracic vertebra, from
+BodyParts3D ×1.0468 (one subject, ESTIMATE; chords 85–223 mm, descending forward). Rib 12 uses its own tip rule (farthest
+vertex from the head, 86 mm), checked within 3 mm against ribs 10 and 11. `THORAX_GEOMETRY` registered. Measured
+before committing, with the Decision 72 spine applied: gameplay table in sync, every Godot replay identical (60/60),
+Blender 40/40 (IK rest 13.6 mm, T-pose PASS), clips unchanged, proxies regenerated. A22 thorax median 123.2 → 31.8 mm, axis
+angle 38.2° → 5.1°, sternum 74.7 → 4.8 mm. Fingerprints updated. Audit `docs/audit/A28_THORAX.md`. Tests:
+`tests/unit/test_thorax.py`.
+
+**Date**: 2026-11-05 · **Status**: FINAL (owner); values ESTIMATE
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 72
+**Total Decisions**: 73
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 64 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 65 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

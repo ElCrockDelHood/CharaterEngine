@@ -1,0 +1,189 @@
+{
+  "finding": "A28 thorax: sternum 47 mm stub, ribs short horizontal stubs detached from the spine",
+  "variant": "A: sternum tail and all ribs; sternum head, clavicle, scapula and shoulders kept",
+  "sha256_lf_before": "57083dd03af7fed203bfdf9cdc1cea8351ddd57d2a4431409ae6140271342b8f",
+  "sha256_lf_after": "a79f32f1cb19e59d0db628856426f923b889c15b26d4f8bbe723d0fdc404b7c0",
+  "changed_bones": [
+    "RIB_01_L",
+    "RIB_01_R",
+    "RIB_02_L",
+    "RIB_02_R",
+    "RIB_03_L",
+    "RIB_03_R",
+    "RIB_04_L",
+    "RIB_04_R",
+    "RIB_05_L",
+    "RIB_05_R",
+    "RIB_06_L",
+    "RIB_06_R",
+    "RIB_07_L",
+    "RIB_07_R",
+    "RIB_08_L",
+    "RIB_08_R",
+    "RIB_09_L",
+    "RIB_09_R",
+    "RIB_10_L",
+    "RIB_10_R",
+    "RIB_11_L",
+    "RIB_11_R",
+    "RIB_12_L",
+    "RIB_12_R",
+    "STERNUM"
+  ],
+  "parameters": {
+    "STERNUM_tail": {
+      "x": 0.0,
+      "y": -0.1381,
+      "z": 1.318
+    },
+    "RIB_01_L": {
+      "head": {
+        "x": 0.0168,
+        "y": -0.004,
+        "z": 1.504
+      },
+      "tail": {
+        "x": 0.0587,
+        "y": -0.0599,
+        "z": 1.4551
+      }
+    },
+    "RIB_02_L": {
+      "head": {
+        "x": 0.0161,
+        "y": 0.0055,
+        "z": 1.4915
+      },
+      "tail": {
+        "x": 0.0497,
+        "y": -0.0983,
+        "z": 1.4144
+      }
+    },
+    "RIB_03_L": {
+      "head": {
+        "x": 0.0131,
+        "y": 0.0175,
+        "z": 1.4762
+      },
+      "tail": {
+        "x": 0.0515,
+        "y": -0.1143,
+        "z": 1.3879
+      }
+    },
+    "RIB_04_L": {
+      "head": {
+        "x": 0.0144,
+        "y": 0.02,
+        "z": 1.4548
+      },
+      "tail": {
+        "x": 0.0605,
+        "y": -0.1288,
+        "z": 1.3588
+      }
+    },
+    "RIB_05_L": {
+      "head": {
+        "x": 0.0215,
+        "y": 0.0339,
+        "z": 1.4256
+      },
+      "tail": {
+        "x": 0.0825,
+        "y": -0.1358,
+        "z": 1.3219
+      }
+    },
+    "RIB_06_L": {
+      "head": {
+        "x": 0.0144,
+        "y": 0.0313,
+        "z": 1.4049
+      },
+      "tail": {
+        "x": 0.0942,
+        "y": -0.1333,
+        "z": 1.2923
+      }
+    },
+    "RIB_07_L": {
+      "head": {
+        "x": 0.0196,
+        "y": 0.0381,
+        "z": 1.3871
+      },
+      "tail": {
+        "x": 0.112,
+        "y": -0.122,
+        "z": 1.2622
+      }
+    },
+    "RIB_08_L": {
+      "head": {
+        "x": 0.0213,
+        "y": 0.0362,
+        "z": 1.3503
+      },
+      "tail": {
+        "x": 0.1224,
+        "y": -0.1022,
+        "z": 1.2312
+      }
+    },
+    "RIB_09_L": {
+      "head": {
+        "x": 0.027,
+        "y": 0.0339,
+        "z": 1.313
+      },
+      "tail": {
+        "x": 0.1267,
+        "y": -0.0765,
+        "z": 1.1998
+      }
+    },
+    "RIB_10_L": {
+      "head": {
+        "x": 0.0297,
+        "y": 0.032,
+        "z": 1.2827
+      },
+      "tail": {
+        "x": 0.1255,
+        "y": -0.0597,
+        "z": 1.1758
+      }
+    },
+    "RIB_11_L": {
+      "head": {
+        "x": 0.0244,
+        "y": 0.0233,
+        "z": 1.257
+      },
+      "tail": {
+        "x": 0.1097,
+        "y": -0.0379,
+        "z": 1.1526
+      }
+    },
+    "RIB_12_L": {
+      "head": {
+        "x": 0.0324,
+        "y": 0.0159,
+        "z": 1.215
+      },
+      "tail": {
+        "x": 0.0893,
+        "y": -0.0011,
+        "z": 1.1524
+      }
+    }
+  },
+  "provenance": {
+    "sternum_ribs": "ESTIMATE — BodyParts3D (one subject, internal use) × 1.0468; ribs relative to their own vertebra",
+    "shape": "straight chords of curved bones; the visible curve belongs to the mesh / proxy"
+  },
+  "applied": true
+}

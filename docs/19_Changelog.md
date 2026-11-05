@@ -2,6 +2,15 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-05 · Decision 73: thorax (A28)
+
+### Changed
+- `STERNUM` tail to the xiphoid tip (183 mm, head unchanged) and all 24 ribs from their vertebra to their anterior / free
+  end (ESTIMATE; `scripts/fix_thorax.py`). Fingerprints updated; proxies and `human_game_v1_body.glb` regenerated.
+
+### Behaviour
+- No gameplay, replay or clip change.
+
 ## [Unreleased] — 2026-11-05 · Decision 72: vertebral heights (A27)
 
 ### Changed

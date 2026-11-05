@@ -29,7 +29,7 @@
    "provenance": "ESTIMATE",
    "vertices": 134,
    "triangles": 264,
-   "length_m": 0.46296
+   "length_m": 0.367089
   },
   {
    "asset_id": "proxy_rectus_abdominis_r",
@@ -39,7 +39,7 @@
    "provenance": "ESTIMATE",
    "vertices": 134,
    "triangles": 264,
-   "length_m": 0.46296
+   "length_m": 0.367089
   },
   {
    "asset_id": "proxy_tibialis_anterior_l",

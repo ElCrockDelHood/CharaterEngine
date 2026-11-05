@@ -1,6 +1,6 @@
 # Proposal A26b — spine curvature, thorax and skull (NOT applied)
 
-**Status:** spine variant A APPLIED (Decision 71, `docs/audit/A26_SPINE_CURVE.md`, mapped vertebra by vertebra); thorax and skull still PROPOSAL · **Date:** 2026-11-04 · needs the
+**Status:** spine applied (Decisions 71, 72), thorax applied (Decision 73, `THORAX_PROPOSAL.md`); skull still PROPOSAL · **Date:** 2026-11-04 · needs the
 owner's OK, a source per region and numbered Decisions · Related: A22 (spine 86 mm, thorax 122 mm, skull 52 mm
 median centroid → segment distance), A24.
 

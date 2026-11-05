@@ -1,6 +1,6 @@
-# Proposal A28 — thorax: sternum and ribs (NOT applied)
+# Proposal A28 — thorax: sternum and ribs (variant A applied, Decision 73)
 
-**Status:** PROPOSAL, measured in a throw-away working copy (reverted; canonical data and fingerprints unchanged) ·
+**Status:** variant A APPLIED (`docs/audit/A28_THORAX.md`, with a rib-12 rule); this file keeps the proposal as approved ·
 **Date:** 2026-11-05 · needs the owner's OK and a numbered Decision · depends on `CERVICAL_SPACING_PROPOSAL.md`
 (variant B) · Related: A22, A24, A26.
 
