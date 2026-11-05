@@ -6,7 +6,7 @@
     (or CE_BP3D_DIR / CE_F2_OUT; driven by scripts/f2_femur_fit.py). The file keeps its A19 name; it now fits
     every long bone listed (femur: A19 / Decision 63; all six: A20).
 
-INTERNAL USE ONLY (Decision 62): OBJ files, the .blend and the full results JSON stay in ``--out`` (outside the repo).
+Meshes stay out of the repo (Decisions 46, 76): OBJ files, the .blend and the full results JSON stay in ``--out`` (outside the repo).
 
 Per bone and side: import raw (mm, Z-up, −Y front, left = +X; checked against the OBJ header bounds), anchors and
 targets from ``domain/assets/long_bone_fit.py`` (ESTIMATE), similarity registration

@@ -17,7 +17,7 @@ C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`
 | A16 | Head kinematics, concussion, knockdown (`.es.md`) | 59 | opt-in |
 | A17 | Per-move striker records (`.es.md`) | 60 | opt-in |
 | — | Source verification of A14–A16 (`VERIFICACION_FUENTES_A14_A16.es.md`, 2026-10-31) | — | report |
-| A18 | BodyParts3D bone mapping to the 206 canonical bones (199 / 206) | 62 | internal use |
+| A18 | BodyParts3D bone mapping to the 206 canonical bones (199 / 206) | 62, 76 | CC BY 4.0 (`NOTICE`) |
 | A19 | F2 femur fit in Blender 3.6 | 63 | measured, tolerances PENDING |
 | A20 | F2 long bones L + R | 64 | measured, tolerances PENDING |
 | A21 | Fibula lateral to the tibia | 65 | FINAL (offset PLACEHOLDER) |

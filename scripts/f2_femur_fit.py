@@ -8,7 +8,7 @@ summary docs/audit/A20_F2_LONG_BONES_FIT.json (no geometry, no anchor coordinate
 Default: all six long bones (FEMUR, TIBIA, FIBULA, HUMERUS, RADIUS, ULNA), left and right. The summary also compares
 the femur with the committed A19 result (Decision 63). ``--bones FEMUR`` re-measures the femur alone (A19 values).
 
-BodyParts3D is INTERNAL USE ONLY (Decision 62): the OBJ files, the .blend and the full results JSON stay in --out,
+BodyParts3D meshes stay out of the repo (Decisions 46, 76): the OBJ files, the .blend and the full results JSON stay in --out,
 outside the repo. Log: logs/<UTC>_blender.log (scripts/_logrun.py).
 """
 
@@ -77,7 +77,7 @@ def summary(res: dict) -> dict:
         "bone_sides_meeting_proposed_2mm_rms": sum(r["rms_mm"] <= 2.0 for r in rows),
         "bone_sides_within_proposed_1pct_length": sum(abs(r["length_error_pct"]) <= 1.0 for r in rows),
     }
-    out = {"status": res["status"], "licence": "BodyParts3D 4.0, INTERNAL USE ONLY (Decision 62)",
+    out = {"status": res["status"], "licence": "BodyParts3D 4.0, CC BY 4.0 (Decision 76; see NOTICE)",
            "blender": res["blender"], "stature_m": res["stature_m"], "joints": res["joints"],
            "failed": res["failed"], "rows": rows, "dispersion": dispersion, "bones": per_bone,
            "proposed_estimates_compared": {"anchor_rms_mm": 2.0, "length_pct": 1.0, "mirror_mm": 1.0}}
@@ -101,7 +101,7 @@ def regions_summary(res: dict) -> dict:
     mirror = res["mirror"]
     means = sorted(v["mean_mm"] for v in mirror.values())
     return {
-        "status": res["status"], "licence": "BodyParts3D 4.0, INTERNAL USE ONLY (Decision 62)",
+        "status": res["status"], "licence": "BodyParts3D 4.0, CC BY 4.0 (Decision 76; see NOTICE)",
         "blender": res["blender"], "joints": res["joints"], "failed": res["failed"],
         "global_registration": res["global_registration"],
         "regions": res["regions"],

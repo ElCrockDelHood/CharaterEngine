@@ -16,7 +16,7 @@
 >   fibula lateral (A21, 65), hip joint centres 180.2 mm (A23, 67, ESTIMATE), shoulder girdle (A24, 68, ESTIMATE).
 >   The canonical data is fingerprinted (Decision 52).
 > - **Asset fitting**: manifest validator F0 (61, contract PROPOSED), landmark registration F1 and Blender fit F2
->   (63, 64, 66) measured against BodyParts3D (internal use, 62); tolerances pending. Index: `docs/audit/INDEX.md`.
+>   (63, 64, 66) measured against BodyParts3D (CC BY 4.0, 76); tolerances pending. Index: `docs/audit/INDEX.md`.
 > - **Combat**: strike physics, head kinematics and per-move strikers (A14–A17, Decisions 58–60, opt-in);
 >   Souls-like arena and reaction library in Godot. Godot 4 is the primary runtime (40); Blender is the
 >   production line (42, 45).

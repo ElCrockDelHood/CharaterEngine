@@ -1,0 +1,101 @@
+Character Engine: third-party notices and attributions
+=======================================================
+
+The terms for the project's own work are in LICENSE. This file lists the third-party
+material the repository adapts or cites, and the conditions that travel with it.
+Decision 76 (docs/reorientation/DECISION_LOG.md) records the publication decision.
+
+
+1. BodyParts3D: adapted, attribution required
+---------------------------------------------
+
+BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International
+
+Source:  https://dbarchive.biosciencedbc.jp/en/bodyparts3d/
+Terms:   https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html (page last updated 2025/02/27; read 2026-11-05)
+Licence: https://creativecommons.org/licenses/by/4.0/legalcode.en
+
+Files used: BodyParts3D 4.0, PART-OF and IS-A trees. No BodyParts3D mesh is in this repository.
+
+Adaptations in this repository. These are numeric values measured from the meshes, not the
+meshes themselves; the changes were landmark and centroid measurement, scaling to a 1.80 m
+stature, remapping onto the canonical skeleton, and rounding:
+
+- canonical coordinates in src/character_engine/data/anatomy/human_adult_206.json
+  (hips, shoulder girdle, spine, thorax, skull: Decisions 67, 68, 71-74), and everything
+  generated from that skeleton (builds/exports/skeleton_serialized.json, the Godot body and
+  clips in runtime/godot/addons/character_engine/data/, assets/anatomy/proxies/);
+- the value tables in scripts/fix_*.py;
+- the name mapping and the numeric summaries in docs/audit/A18 to A30 and in the proposals
+  in docs/architecture/.
+
+These values are adaptations of one subject and are marked ESTIMATE. The licensor has not
+reviewed or endorsed this project. Anyone reusing them must keep the attribution above and
+say that the values were changed. No warranty is given by the licensor.
+
+Discrepancy, disclosed: the headers of the 2013 OBJ files state CC BY-SA 2.1 Japan, while
+the licensor's current page states CC BY 4.0. This project follows the current page.
+
+Dated audits, proposals and scripts from before Decision 76 may still say "internal use".
+Decision 76 and this file take precedence over that wording.
+
+
+2. ANSUR II: derived statistics
+-------------------------------
+
+Gordon, C.C. et al. (2015). 2012 Anthropometric Survey of U.S. Army Personnel. U.S. Army
+Natick Soldier RD&E Center, Report NATICK/TR-15/007. The accompanying U.S. Army memorandum
+says "cleared for UNLIMITED PUBLIC RELEASE".
+
+Used for ratios and comparisons (Decision 75, A29, A31). The population is U.S. Army
+personnel, not the civilian population. The U.S. Army has not endorsed this project.
+
+
+3. Busscher et al. 2010: cited contrast only, no commercial use of its values
+-----------------------------------------------------------------------------
+
+Busscher et al. (2010), Eur Spine J 19:1104, PMC2900026. Licence: CC BY-NC.
+
+Cited only as a contrast (A27). It is the source of no canonical value. Any figure quoted
+from it remains under CC BY-NC and is not licensed by this repository; it may not be reused
+commercially on the strength of this project's terms.
+
+
+4. Published sources: values and conventions cited
+--------------------------------------------------
+
+- Drillis, R.; Contini, R. (1966). Body Segment Parameters. New York University, School of
+  Engineering and Science, Technical Report 1166.03. Reproduced in Winter, D.A. (2009),
+  Biomechanics and Motor Control of Human Movement, 4th ed., Wiley, Fig. 4.1.
+  Joint-height ratios of the canonical skeleton.
+- Trotter, M.; Gleser, G.C. (1952). Estimation of stature from long bones of American Whites
+  and Negroes. doi:10.1002/ajpa.1330100407.
+- Trotter, M. (1970). Estimation of stature from intact long limb bones.
+- Wu, G. et al. (2002). ISB recommendation on definitions of joint coordinate systems, part I.
+  J Biomech 35:543-548. Geometry convention only.
+- Wu, G. et al. (2005). ISB recommendation on definitions of joint coordinate systems, part II
+  (shoulder). J Biomech 38:981-992. Landmark convention only.
+
+The complete list, with what each source supports, is in
+src/character_engine/data/anatomy/references/source_registry.json.
+
+
+5. Used outside the repository: nothing committed
+-------------------------------------------------
+
+Kept in a local folder and not redistributed here:
+
+- human-atlas (https://github.com/ashemag/human-atlas): code MIT, data CC BY 4.0, itself
+  derived from BodyParts3D. Mesh-to-system classification used as a working aid.
+- Quaternius Universal Animation Library: CC0. Test clips; only local paths are recorded,
+  in scripts/batch_specs/.
+- Judo manuals and the owner's video playlist, and the anatomy textbook Anatomía Clínica (Pró):
+  all rights reserved. Consulted as references; cited, never copied.
+
+
+6. Software dependencies
+------------------------
+
+Python and engine dependencies are installed by the user and keep their own licences; see
+pyproject.toml. They are not part of the current tree. Blender, UPBGE and Godot are separate
+tools with their own licences.

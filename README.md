@@ -98,3 +98,9 @@ Open gaps (events, rewards, assets API, HTTP layer) are tracked in
 `docs/reorientation/OPEN_GAPS.md`. The production/runtime split and the roadmap (character
 editor, IK/FK rig, mocap, runtime IK, simulation extraction, animals) are in
 [docs/architecture/PRODUCTION_VS_RUNTIME.md](docs/architecture/PRODUCTION_VS_RUNTIME.md).
+
+## Licence and attribution
+
+The project's own terms are in [LICENSE](LICENSE). Third-party attributions are in [NOTICE](NOTICE). Part of the canonical
+skeleton adapts values measured from BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0
+International; reuse of those values must keep that attribution (Decision 76). No third-party mesh is in this repository.

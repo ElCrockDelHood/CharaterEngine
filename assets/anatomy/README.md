@@ -8,12 +8,12 @@
 
 ## External references (outside the repo — never committed)
 
-Third-party data stays outside the repository (Decision 46; BodyParts3D internal use, Decision 62). Each folder
+Third-party data stays outside the repository (Decision 46; attributions in `NOTICE`, Decision 76). Each folder
 has its own download record with URL, size, SHA-256, licence and antivirus result.
 
 | Reference | Where | Licence / use |
 |-----------|-------|---------------|
-| BodyParts3D 4.0, PART-OF tree (bones, skin) | `C:\DEV\Assets\BodyParts3D_4.0\download`, `extracted` | page CC BY 4.0 vs OBJ headers CC BY-SA 2.1 JP; **internal use** until the owner decides (Decision 62) |
+| BodyParts3D 4.0, PART-OF tree (bones, skin) | `C:\DEV\Assets\BodyParts3D_4.0\download`, `extracted` | CC BY 4.0, per the licensor's current page (OBJ headers from 2013 say CC BY-SA 2.1 JP, disclosed in `NOTICE`); derived values published with attribution, meshes not committed (Decision 76) |
 | BodyParts3D 4.0, IS-A tree (402 muscles, tendons, ligaments) | `C:\DEV\Assets\BodyParts3D_4.0\isa_download`, `isa_extracted` | same as above |
 | human-atlas `atlas.json` (mesh → system classification) | `C:\DEV\Assets\BodyParts3D_4.0\human_atlas_meta` | code MIT, data CC BY 4.0 (derived from BodyParts3D) |
 | Tentative mappings (bones, soft tissue) | `C:\DEV\Assets\BodyParts3D_4.0\mapping_*_tentative.tsv` | ESTIMATE, derived |

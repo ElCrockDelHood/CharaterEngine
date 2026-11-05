@@ -1137,7 +1137,7 @@ geometry) is `docs/audit/A18_BP3D_BONE_MAPPING.md` / `.json`: 199 of 206 canonic
 sternum = 3 elements, hyoid = 2 identical files); ossicles ×6 and coccyx are missing. No canonical data,
 contract, addon or backend changed.
 
-**Date**: 2026-11-04 · **Status**: FINAL for internal use; publication licence PENDING (owner)
+**Date**: 2026-11-04 · **Status**: SUPERSEDED by Decision 76 (2026-11-05)
 
 ---
 
@@ -1392,14 +1392,37 @@ Fingerprints of `anthropometry.json` and `source_registry.json` updated. Audit `
 
 ---
 
+## 76. BODYPARTS3D PUBLISHED UNDER CC BY 4.0 WITH ATTRIBUTION (CLOSES DECISION 62)
+
+**Decision** (owner, 2026-11-05: repository public on purpose, "para que cualquiera pueda usarlo"; CC BY 4.0 closure
+instructed through the project coordinator's brief the same day): Decision 62's internal-use restriction ends. Values
+derived from BodyParts3D 4.0 may be published under **CC BY 4.0** with the attribution "BodyParts3D, © The Database Center
+for Life Science licensed under CC Attribution 4.0 International", the licence link and a statement of the changes, all in
+`NOTICE`. Basis: the licensor's licence page (https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html, last updated
+2025/02/27, read again 2026-11-05) states CC BY 4.0.
+
+**Residual risk, disclosed:** the headers of the 2013 OBJ files state CC BY-SA 2.1 Japan, and the licensor's page does not
+mention them. The current page is followed and `NOTICE` discloses the discrepancy; the licensor was not consulted and this
+is not legal advice. Asset manifests record CC BY 4.0, with a note on the OBJ headers.
+
+**What stays:** OBJ files and derived meshes stay out of the repository (Decision 46). Busscher et al. 2010 (CC BY-NC) stays
+a cited contrast, the source of no canonical value. **Not rewritten:** dated audits, proposals, `scripts/fix_*.py` and the pending
+notes in `source_registry.json` keep "internal use" as written at the time; this Decision and `NOTICE` take precedence. No
+canonical data or fingerprint changed. `LICENSE` and `pyproject.toml` were not changed: their terms are the owner's
+decision. Test: `tests/unit/test_notice.py`.
+
+**Date**: 2026-11-05 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 75
+**Total Decisions**: 76
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 67 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 68 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

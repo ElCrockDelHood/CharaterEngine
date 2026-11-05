@@ -2,6 +2,16 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-05 · Decision 76: publication of BodyParts3D-derived values
+
+### Added
+- `NOTICE`: attributions for BodyParts3D (CC BY 4.0), ANSUR II, Busscher et al. 2010 (CC BY-NC, cited contrast only),
+  Drillis & Contini, Trotter, Wu et al.; linked from the README.
+
+### Changed
+- Decision 62 (internal use) superseded: derived values are published under CC BY 4.0 with attribution. Meshes stay out of
+  the repository. No canonical data, gameplay or runtime change.
+
 ## [Unreleased] — 2026-11-05 · Decision 75: head ratios from ANSUR II (A31)
 
 ### Changed

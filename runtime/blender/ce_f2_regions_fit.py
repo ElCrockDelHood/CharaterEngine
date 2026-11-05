@@ -5,7 +5,7 @@
         --out  C:/DEV/Assets/BodyParts3D_4.0/out
     (driven by ``scripts/f2_femur_fit.py --regions``)
 
-INTERNAL USE ONLY (Decision 62): OBJ files, the .blend and the full results JSON stay in ``--out``.
+Meshes stay out of the repo (Decisions 46, 76): OBJ files, the .blend and the full results JSON stay in ``--out``.
 Method in ``domain/assets/skeleton_regions.py``: one global similarity on the 8 measured limb joint centres
 (hip, knee, shoulder, elbow; A20 anchor rules), then every bone against its canonical segment, per region; mirror of
 every bilateral pair (raw left mirrored vs raw right); proposed pelvic landmarks as distances only.
