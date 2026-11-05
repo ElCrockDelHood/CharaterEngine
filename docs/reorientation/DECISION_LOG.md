@@ -998,8 +998,8 @@ severity) was underestimated, and a blade passing through a body between two fra
 
 Subframes exposed a retarget defect: the bake could store a quaternion key with the opposite sign of the previous
 one (same rotation), so the interpolation between them spun the bone (Sword_Heavy_Combo: 5 flips, a 1.5 m blade jump
-at frame 14.5 and two false hits). `build.import_mocap` now keeps each bone's keys sign-continuous; this also protects
-any engine that interpolates the clips (Godot at 60 fps). Result: 7 body hits instead of 3 (four were blades passing
+at frame 14.5 and two false hits). The retarget bake (`build.retarget_mocap`) now keeps each bone's keys sign-continuous.
+Whether Godot playback was affected was not tested (correction 2026-11-05; an earlier wording claimed it was). Result: 7 body hits instead of 3 (four were blades passing
 through a thigh or arm between two frames), wound depths up to 2x deeper.
 
 Playback re-measurements after contact stay on whole frames. Experiment 001 keeps its own integer scan (separate
