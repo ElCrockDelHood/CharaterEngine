@@ -1325,14 +1325,35 @@ angle 34.3° → 24.2°. Fingerprints updated. Audit `docs/audit/A26_SPINE_CURVE
 
 ---
 
+## 72. A27 — VERTEBRAL HEIGHTS FROM BODYPARTS3D (VARIANT B, ESTIMATE)
+
+**Finding**: with BodyParts3D mapped to the stature, C1 was 73 mm too low and T4–L5 up to 164 mm too high (C7 / T1
+agree); ANSUR II iliocristale (1.091 m) agrees with BP3D L4 (1.087 m), not with the canonical L4 (1.22 m).
+
+**Decision** (owner, 2026-11-05 01:38, card "B y luego tórax, con Busscher"): `scripts/fix_spine_heights.py` gives C1–L5
+and the sacrum the z of their BodyParts3D namesakes (stature map ×1.0468, hip shift fading to +23.3 mm at the sacrum,
+ESTIMATE), and hangs the coccyx from the new sacrum tail (DERIVED). C1–C7 30 → 112 mm, T1–T12 146 → 306 mm. Stature,
+hips, shoulders, sternum, ribs and skull are unchanged; x and the Decision 71 curve are kept. `SPINE_VERTEBRAL_HEIGHTS`
+registered. Contrast only (licence **CC BY-NC, non-commercial**; not a source of canonical values): Busscher et al.
+2010, *Eur Spine J* 19:1104, PMC2900026: C3→L5 569.4 ± 17.7 mm vs 539.6 mm now (362 mm before); end-plate angles 20.1 /
+34.5 / 29.2° vs our centroid tangents 24.5 / 42.2 / 24.3° (different definitions), all within 1 SD. Measured before
+committing: gameplay table in sync, every Godot replay identical (60/60), Blender 40/40 (IK rest 13.6 mm, T-pose PASS),
+clip timings unchanged, `strike_physics.json` unchanged; layered-body thorax energy −0.27 % (opt-in) and a strike at
+the neck now lands on the neck. A22 spine median 79.1 → 16.8 mm. Fingerprints updated. Audit
+`docs/audit/A27_SPINE_HEIGHTS.md`. Tests: `tests/unit/test_spine_heights.py`.
+
+**Date**: 2026-11-05 · **Status**: FINAL (owner); values ESTIMATE
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 71
+**Total Decisions**: 72
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 63 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 64 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

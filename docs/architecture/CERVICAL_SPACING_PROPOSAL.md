@@ -1,6 +1,6 @@
-# Proposal A27 — vertebral heights: cervical spacing and the whole spine (NOT applied)
+# Proposal A27 — vertebral heights: cervical spacing and the whole spine (variant B applied, Decision 72)
 
-**Status:** PROPOSAL, measured in throw-away working copies (reverted; canonical data and fingerprints unchanged) ·
+**Status:** variant B APPLIED (`docs/audit/A27_SPINE_HEIGHTS.md`); this file keeps the proposal as approved (measured in throw-away working copies) ·
 **Date:** 2026-11-05 · needs the owner's OK and a numbered Decision · Related: A22, A26 / Decision 71 (AP curve).
 
 ## Finding: it is not only the neck
@@ -67,7 +67,7 @@ could replace the BP3D body heights or serve as a control.
 - `test_body_strike::…except_the_neck`: it documents that a strike at the neck used to land on the thorax block. With
   a real neck the strike lands on the **neck**. This is an improvement; the test's expectation would change.
 - Variant B also changes the opt-in strike physics slightly (body capsules follow the spine); `strike_physics.json`
-  must be regenerated and compared.
+  must be regenerated and compared. (Done in A27: only its commit stamp differs.)
 - `skeleton_serialized.json`, `human_game_v1_body.glb`, `souls_clips` regenerated; Decision + fingerprint.
 
 ## Recommendation

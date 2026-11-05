@@ -26,6 +26,7 @@ C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`
 | A24 | Shoulder girdle: shoulder centres 406.8 mm, clavicle SC → AC, scapula AC → AI | 68 | FINAL (values ESTIMATE; clavicle re-parent pending) |
 | A26a | Clavicle re-parented to STERNUM (`docs/architecture/CLAVICLE_REPARENT_PROPOSAL.md`) | 70 | FINAL |
 | A26 | Spine sagittal curves from BodyParts3D (vertebra by vertebra) | 71 | FINAL (values ESTIMATE; cervical spacing finding pending) |
+| A27 | Vertebral heights from BodyParts3D, contrast Busscher 2010 (CC BY-NC) | 72 | FINAL (values ESTIMATE) |
 | A25 | PROXY pieces for anatomy missing from BodyParts3D (muscles, ligaments, coccyx, ossicles) | 69 | FINAL (ESTIMATE / PLACEHOLDER) |
 
 Related proposals (`docs/architecture/`): `ASSET_FITTING_PROPOSAL.md` (F0 – F6), `FEMUR_ANCHOR_LANDMARKS_PROPOSAL.md`,

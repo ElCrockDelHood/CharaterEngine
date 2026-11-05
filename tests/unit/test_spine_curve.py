@@ -1,4 +1,4 @@
-"""Decision 71 (A26): the canonical spine follows the BodyParts3D sagittal curves (ESTIMATE); z and x unchanged."""
+"""Decision 71 (A26): the canonical spine follows the BodyParts3D sagittal curves (ESTIMATE); x unchanged (z since Decision 72: test_spine_heights)."""
 
 import importlib.util
 import json
@@ -43,7 +43,7 @@ def test_curves_have_the_right_signs(B):
 def test_x_z_and_neighbours_unchanged(B):
     for n in VERT:
         assert B[n]["head"]["x"] == 0.0 and B[n]["tail"]["x"] == 0.0
-    assert (B["CERVICAL_1"]["head"]["z"], B["LUMBAR_5"]["tail"]["z"]) == pytest.approx((1.5516, 1.1808))
+    assert (B["CERVICAL_1"]["head"]["z"], B["LUMBAR_5"]["tail"]["z"]) == pytest.approx((1.6283, 1.0597))   # Decision 72
     for n in ("SACRUM", "COCCYX"):
         assert B[n]["head"]["y"] == 0.0 and B[n]["tail"]["y"] == 0.0
     assert B["STERNUM"]["head"] == {"x": 0.0, "y": -0.0666, "z": 1.4868}

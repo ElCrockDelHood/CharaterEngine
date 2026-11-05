@@ -1,0 +1,146 @@
+{
+  "finding": "A27 vertebral heights: neck too short, trunk compressed (T4-L5 up to 164 mm too high)",
+  "variant": "B: C1-L5, sacrum and coccyx; stature, hips, shoulders kept",
+  "sha256_lf_before": "2af551ddd41b5114e7326b43f374a231f5960a30582459b59a584b30b66787d4",
+  "sha256_lf_after": "57083dd03af7fed203bfdf9cdc1cea8351ddd57d2a4431409ae6140271342b8f",
+  "changed_bones": [
+    "CERVICAL_1",
+    "CERVICAL_2",
+    "CERVICAL_3",
+    "CERVICAL_4",
+    "CERVICAL_5",
+    "CERVICAL_6",
+    "CERVICAL_7",
+    "COCCYX",
+    "LUMBAR_1",
+    "LUMBAR_2",
+    "LUMBAR_3",
+    "LUMBAR_4",
+    "LUMBAR_5",
+    "SACRUM",
+    "THORACIC_1",
+    "THORACIC_10",
+    "THORACIC_11",
+    "THORACIC_12",
+    "THORACIC_2",
+    "THORACIC_3",
+    "THORACIC_4",
+    "THORACIC_5",
+    "THORACIC_6",
+    "THORACIC_7",
+    "THORACIC_8",
+    "THORACIC_9"
+  ],
+  "parameters": {
+    "CERVICAL_1": {
+      "head_z": 1.6283,
+      "tail_z": 1.6172
+    },
+    "CERVICAL_2": {
+      "head_z": 1.6172,
+      "tail_z": 1.5993
+    },
+    "CERVICAL_3": {
+      "head_z": 1.5993,
+      "tail_z": 1.5789
+    },
+    "CERVICAL_4": {
+      "head_z": 1.5789,
+      "tail_z": 1.5629
+    },
+    "CERVICAL_5": {
+      "head_z": 1.5629,
+      "tail_z": 1.5467
+    },
+    "CERVICAL_6": {
+      "head_z": 1.5467,
+      "tail_z": 1.5316
+    },
+    "CERVICAL_7": {
+      "head_z": 1.5316,
+      "tail_z": 1.5162
+    },
+    "THORACIC_1": {
+      "head_z": 1.5162,
+      "tail_z": 1.4985
+    },
+    "THORACIC_2": {
+      "head_z": 1.4985,
+      "tail_z": 1.4798
+    },
+    "THORACIC_3": {
+      "head_z": 1.4798,
+      "tail_z": 1.4597
+    },
+    "THORACIC_4": {
+      "head_z": 1.4597,
+      "tail_z": 1.4376
+    },
+    "THORACIC_5": {
+      "head_z": 1.4376,
+      "tail_z": 1.4128
+    },
+    "THORACIC_6": {
+      "head_z": 1.4128,
+      "tail_z": 1.3859
+    },
+    "THORACIC_7": {
+      "head_z": 1.3859,
+      "tail_z": 1.3558
+    },
+    "THORACIC_8": {
+      "head_z": 1.3558,
+      "tail_z": 1.3252
+    },
+    "THORACIC_9": {
+      "head_z": 1.3252,
+      "tail_z": 1.2969
+    },
+    "THORACIC_10": {
+      "head_z": 1.2969,
+      "tail_z": 1.2696
+    },
+    "THORACIC_11": {
+      "head_z": 1.2696,
+      "tail_z": 1.2407
+    },
+    "THORACIC_12": {
+      "head_z": 1.2407,
+      "tail_z": 1.2099
+    },
+    "LUMBAR_1": {
+      "head_z": 1.2099,
+      "tail_z": 1.1796
+    },
+    "LUMBAR_2": {
+      "head_z": 1.1796,
+      "tail_z": 1.1515
+    },
+    "LUMBAR_3": {
+      "head_z": 1.1515,
+      "tail_z": 1.1232
+    },
+    "LUMBAR_4": {
+      "head_z": 1.1232,
+      "tail_z": 1.0924
+    },
+    "LUMBAR_5": {
+      "head_z": 1.0924,
+      "tail_z": 1.0597
+    },
+    "SACRUM": {
+      "head_z": 1.0597,
+      "tail_z": 1.0096
+    },
+    "COCCYX": {
+      "head_z": 1.0096,
+      "tail_z": 0.9772
+    }
+  },
+  "provenance": {
+    "z": "ESTIMATE — BodyParts3D body mid-heights (one subject, internal use), stature map, hip shift fade",
+    "coccyx": "DERIVED — hangs from the new sacrum tail, canonical length kept",
+    "contrast": "Busscher et al. 2010, Eur Spine J 19:1104, PMC2900026 (CC BY-NC): total C3-L5 569.4 +/- 17.7 mm"
+  },
+  "applied": true
+}

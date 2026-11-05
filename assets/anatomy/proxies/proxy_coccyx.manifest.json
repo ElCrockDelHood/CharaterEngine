@@ -1,7 +1,7 @@
 {
  "asset_id": "proxy_coccyx",
  "file": "proxy_coccyx.obj",
- "sha256": "02db02dd3749871b3b14b85f36125c1ab5bfa7162878b5453a5a813ae9a006da",
+ "sha256": "186a44dfe5425419c51a5ce0b14ad10fbd76fe258f3131a0719ecd30bedba7d9",
  "layer": "bone",
  "parts": [
   {
@@ -14,7 +14,7 @@
      "vertex_or_point": [
       0.0,
       0.0,
-      1.0188
+      1.0096
      ]
     },
     {
@@ -22,7 +22,7 @@
      "vertex_or_point": [
       0.0,
       0.0,
-      0.9864
+      0.9772
      ]
     },
     {
@@ -30,7 +30,7 @@
      "vertex_or_point": [
       0.0,
       -0.01134,
-      1.0026
+      0.9934
      ]
     }
    ]

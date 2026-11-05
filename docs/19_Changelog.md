@@ -2,6 +2,17 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-05 · Decision 72: vertebral heights (A27)
+
+### Changed
+- C1–L5, sacrum and coccyx take heights from BodyParts3D (ESTIMATE; `scripts/fix_spine_heights.py`): the neck is 112 mm
+  (was 30) and the thoracic spine 306 mm (was 146); stature, hips and shoulders unchanged. Contrast: Busscher 2010
+  (CC BY-NC). Fingerprints updated; proxies, `souls_clips`, `human_game_v1_body.glb`, `skeleton_serialized.json` regenerated.
+
+### Behaviour
+- No gameplay or replay change. In the layered-body model a strike at the neck now lands on the neck, and the thorax
+  normal energy changes −0.27 % (opt-in).
+
 ## [Unreleased] — 2026-11-04 · Decision 71: spine sagittal curves (A26)
 
 ### Changed

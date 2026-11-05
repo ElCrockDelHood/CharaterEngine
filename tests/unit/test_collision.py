@@ -69,7 +69,7 @@ def test_default_body_is_unchanged(bodies):
     plain, _ = bodies
     r = plain.central_strike("thorax", PUNCH)
     assert r.collision is None
-    assert r.energy_normal_j == pytest.approx(PUNCH.kinetic_energy_j, rel=1e-3)
+    assert r.energy_normal_j == pytest.approx(PUNCH.kinetic_energy_j, rel=5e-3)   # thorax tilt (Decision 72): -0.27 %
     assert all("deformation_j" not in row for row in sweep(plain, SABRE))
 
 

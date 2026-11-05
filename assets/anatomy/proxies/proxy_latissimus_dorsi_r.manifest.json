@@ -1,7 +1,7 @@
 {
  "asset_id": "proxy_latissimus_dorsi_r",
  "file": "proxy_latissimus_dorsi_r.obj",
- "sha256": "899dab5ea9ea220dcef8341eb00514dd469fc6c5afd8a374dba1462dd360d448",
+ "sha256": "afef63a58c1a80b51111d5de130fddacf2d4e34a132ccc9d1f1c3da10de86f19",
  "layer": "muscle",
  "parts": [
   {
@@ -14,7 +14,7 @@
      "vertex_or_point": [
       0.0,
       0.0,
-      1.10952
+      1.05469
      ]
     },
     {
@@ -30,7 +30,7 @@
      "vertex_or_point": [
       -0.103928,
       0.025,
-      1.267275
+      1.23986
      ]
     }
    ]

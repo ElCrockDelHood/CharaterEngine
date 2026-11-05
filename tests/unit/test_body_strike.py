@@ -38,15 +38,13 @@ def test_every_segment_gets_layers(body):
         assert lc.shells, name
 
 
-def test_central_strike_hits_its_own_segment_except_the_neck(body):
+def test_central_strike_hits_its_own_segment(body):
+    # since Decision 72 the neck has its real length, so a strike at the neck no longer lands on the thorax block
     for name in body.capsules:
         r = body.central_strike(name, CLUB)
         assert r is not None, name
-        if name == "neck":
-            assert r.segment == "thorax"          # the thorax block is a sphere that covers the neck from the front
-        else:
-            assert r.segment == name, name
-            assert r.incidence_cos > 0.95, name
+        assert r.segment == name, name
+        assert r.incidence_cos > 0.95, name
 
 
 def test_deterministic(body):

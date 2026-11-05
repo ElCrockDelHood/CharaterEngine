@@ -6,12 +6,12 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 
 - Repo: `C:\DEV\Proyectos\CharaterEngine-20261004T202505Z-1-001\CharaterEngine`, remoto
   `github.com/ElCrockDelHood/CharaterEngine`.
-- `origin/main` = `75d0e93` (push del 2026-10-28). El trabajo posterior (de A13 a A26, Decisiones 54–71) está en la
+- `origin/main` = `75d0e93` (push del 2026-10-28). El trabajo posterior (de A13 a A27, Decisiones 54–72) está en la
   rama **`anatomy/a13-a24-base`**, pendiente de revisión antes de mergear a `main`.
 - Herramientas en `C:\DEV\Tools`: Blender 3.6.23 (referencia), Godot 4.7.2 (tests), UPBGE 0.50 (opcional).
 - Tests: `.venv\Scripts\python.exe scripts\test.py`, `scripts\lint.py`, `scripts\engine_tests.py blender godot`
   (logs en `logs/`). Último estado: pytest todo verde, lint OK, Blender 40/40, Godot 60/60.
-- Decisiones: `docs/reorientation/DECISION_LOG.md` (última: **71**; siguiente libre: **72**).
+- Decisiones: `docs/reorientation/DECISION_LOG.md` (última: **72**; siguiente libre: **73**).
   Índice de auditorías: `docs/audit/INDEX.md`.
 - Referencias externas (fuera del repo, nunca se commitean): `assets/anatomy/README.md`.
 
@@ -40,6 +40,6 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 1. Tolerancias del ajuste (A19 / A20 / A22 dan la dispersión medida).
 2. Licencia de publicación de BodyParts3D (Decisión 62; precedente público: human-atlas la toma como CC BY 4.0).
 3. ~~Reparentar `CLAVICLE_*` a `STERNUM`~~: hecho (Decisión 70).
-4. Columna: curva aplicada (Decisión 71); pendiente el espaciado cervical (mide 30 mm). Siguientes: tórax, cráneo, altura del hombro.
+4. Columna: curva y alturas aplicadas (Decisiones 71, 72). Siguientes: tórax, cráneo, altura del hombro; base del cuello (ANSUR cervicale 35–45 mm arriba).
 5. Revisar la rama `anatomy/a13-a24-base` y decidir el merge a `main`.
 6. `feature/audio-p0`: sigue "como está"; si se mergea, renumerar su decisión a la siguiente libre.
