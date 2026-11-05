@@ -13,7 +13,9 @@ variants sit side by side (first one on the left, seen from +X).
 Sample 2 presentation (none of it feeds back into the domain result or its hash): the layers are dented down to the
 blunt model's displacement (``CrushField``, per-shell ``compression_m``), the cutaway's section plane holds the strike
 line and halves the club with it, the right-hand variant is mirrored so the two clubs point outwards, and the club is
-drawn as rough wood rather than steel (a metal rod mirrors the blue coat).
+drawn as rough wood rather than steel (a metal rod mirrors the blue coat). When the blunt result says the ribs broke,
+the rib shell does not bend: it shatters like struck glass (``shatter_bone``: radial cracks, loose shards inward), or
+into the pieces of a ``ce-fracture/1`` event when ``--fracture-event`` gives one (``event_shards``, read as data only).
 
 Materials map OpenPBR parameters from ``domain/materials/catalog.py`` onto the Principled BSDF (both the 3.x and
 the 4.x+ socket names). Optical values are ASSUMED look-dev, not measurements.
@@ -25,6 +27,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import random
 import sys
 import time
 from pathlib import Path
@@ -42,6 +45,11 @@ WEDGE = (-WEDGE_HALF_ANGLE, WEDGE_HALF_ANGLE)   # open interval (angle from +X t
 THORAX_WEDGE = (math.radians(-90.0), math.radians(40.0))
 SEGMENTS = 64
 DENT_TAPER = 1.5     # crater rim width / impactor radius beyond the rod (ASSUMED, presentation only)
+# broken rib shell, all ASSUMED presentation (no published fragment data): radial cracks, crack rings as a share of the
+# hole radius, loose shards. At most 24 pieces on the visible half, the fragment budget agreed for the fracture event.
+SHATTER_SPOKES = 9
+SHATTER_RINGS = (0.3, 0.62)
+SHATTER_LOOSE = 8
 SAMPLES = {   # file prefix, cloth key in the JSON, config key of the cloth thickness, variant names (left, right)
     "forearm": {"prefix": "forearm", "cloth": "sleeve", "thickness": "sleeve_thickness_m",
                 "variants": ("unarmored", "armored")},
@@ -270,6 +278,159 @@ def dent_object(obj, field: CrushField, cloth=None):
         sol.vertex_group, sol.thickness_vertex_group = vg.name, keep
 
 
+def _prism_mesh(rings):
+    """Closed solid from two equal-length vertex rings (centre-fanned polygons): flat, hard-edged facets."""
+    bm = bmesh.new()
+    fronts, backs = ([bm.verts.new(v) for v in ring] for ring in rings)
+    n = len(fronts)
+    for ring in (fronts, backs):
+        hub = bm.verts.new(sum((v.co for v in ring), Vector()) / n)
+        for i in range(n):
+            bm.faces.new((hub, ring[i], ring[(i + 1) % n]))
+    for i in range(n):
+        bm.faces.new((fronts[i], backs[i], backs[(i + 1) % n], fronts[(i + 1) % n]))
+    return bm
+
+
+def _link_mesh(name: str, bm):
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    me = bpy.data.meshes.new(name)
+    bm.to_mesh(me)
+    bm.free()
+    obj = bpy.data.objects.new(name, me)
+    bpy.context.scene.collection.objects.link(obj)
+    return obj
+
+
+def _clip_x(poly, x_max: float):
+    """Sutherland-Hodgman against x <= x_max, for (x, z) polygons."""
+    out = []
+    for i, (x0, z0) in enumerate(poly):
+        x1, z1 = poly[(i + 1) % len(poly)]
+        if x0 <= x_max:
+            out.append((x0, z0))
+        if (x0 <= x_max) != (x1 <= x_max):
+            w = (x_max - x0) / (x1 - x0)
+            out.append((x_max, z0 + (z1 - z0) * w))
+    return out
+
+
+def event_shards(name: str, event: dict, origin: Vector, field: CrushField, thickness: float, time_s: float):
+    """Hard-edged plates of a ``ce-fracture/1`` event ``time_s`` after the blow (A33; every value ASSUMED there).
+
+    Local frame re-anchored on this specimen: z along the strike, y along the axis, ``origin`` = the impact on the
+    skin. Plate area = size² (keeps the event's mass at its shell thickness), long side along the radial direction of
+    the fragment, outline made irregular from the event's seed. The only presentation choices are ``time_s``, the
+    outline and the long-side direction.
+    """
+    z_axis, y_axis = field.s, field.u
+    x_axis = y_axis.cross(z_axis)
+    to_world = lambda v: x_axis * v[0] + y_axis * v[1] + z_axis * v[2]  # noqa: E731
+    out = []
+    for f in event["fragments"]:
+        rng = random.Random(event["seed"] + f["id"])
+        length, width = f["size_m"] * math.sqrt(f["aspect"]), f["size_m"] / math.sqrt(f["aspect"])
+        px, py = f["position_m"][0], f["position_m"][1]
+        norm = math.hypot(px, py) or 1.0
+        long_dir, across = Vector((px / norm, py / norm, 0.0)), Vector((-py / norm, px / norm, 0.0))
+        outline = []
+        for i in range(8):
+            ang = 2 * math.pi * (i + rng.uniform(-0.25, 0.25)) / 8
+            k = rng.uniform(0.75, 1.15)
+            outline.append(long_dir * (0.5 * length * k * math.cos(ang)) + across * (0.5 * width * k * math.sin(ang)))
+        spin = Matrix.Rotation(f["angular_speed_rad_s"] * time_s, 3, Vector(f["spin_axis"]))
+        centre = origin + to_world([f["position_m"][i] + f["velocity_m_s"][i] * time_s for i in range(3)])
+        rings = [[centre + to_world(spin @ (q + Vector((0.0, 0.0, dz)))) for q in outline]
+                 for dz in (-thickness / 2, thickness / 2)]
+        obj = _link_mesh(f"{name}_fragment_{f['id']:02d}", _prism_mesh(rings))
+        obj["ce_mass_kg"], obj["ce_kind"] = f["mass_kg"], f["kind"]
+        obj["ce_provenance"] = f"{event['schema']} {event['provenance']} (A33)"
+        out.append(obj)
+    return out
+
+
+def shatter_bone(obj, shell: dict, field: CrushField, mat, seed: int, event: dict | None = None, origin=None,
+                 time_s: float = 0.0):
+    """Break the undented rib shell ``obj`` like struck glass; returns the new shard objects.
+
+    A star-shaped hole is cut around the strike and refilled with plates split by radial cracks and rings around the
+    impact, each one flat and hard-edged, carried into the crater and slightly tilted; loose shards go on inward and
+    sit just in front of the section. Presentation only and ASSUMED: same ``seed``, same pieces; no fragment size or
+    speed here comes from the domain. With ``event`` the hole stays and its pieces replace the plates and loose shards.
+    """
+    rng = random.Random(seed)
+    r_in, r_out = shell["r_inner_m"], shell["r_outer_m"]
+    x_axis, s, u, p0 = Vector((1.0, 0.0, 0.0)), field.s, field.u, field.p0
+    hole = field.radius * (1.0 + 0.7 * DENT_TAPER)
+    step = 2 * math.pi / SHATTER_SPOKES
+    angles = [step * j + rng.uniform(-0.3, 0.3) * step for j in range(SHATTER_SPOKES)]
+    spokes = [[hole * (f + rng.uniform(-0.05, 0.05)) for f in SHATTER_RINGS] + [hole * rng.uniform(0.9, 1.08)]
+              for _ in angles]
+    at = lambda rho, ang: (rho * math.cos(ang), rho * math.sin(ang))  # noqa: E731
+    outline, cells = [], []
+    for j, ang in enumerate(angles):
+        nxt = (j + 1) % SHATTER_SPOKES
+        ang2 = angles[nxt] + (2 * math.pi if nxt == 0 else 0.0)
+        notch = at(hole * rng.uniform(0.76, 0.88), (ang + ang2) / 2)
+        outline += [at(spokes[j][2], ang), notch]
+        cells.append([(0.0, 0.0), at(spokes[j][0], ang), at(spokes[nxt][0], ang2)])
+        cells.append([at(spokes[j][0], ang), at(spokes[j][1], ang), at(spokes[nxt][1], ang2), at(spokes[nxt][0], ang2)])
+        cells.append([at(spokes[j][1], ang), at(spokes[j][2], ang), notch, at(spokes[nxt][2], ang2),
+                      at(spokes[nxt][1], ang2)])
+
+    def on_shell(x: float, z: float, rr: float) -> Vector:
+        return p0 + x_axis * x + u * z - s * math.sqrt(max(rr * rr - x * x, 1e-8))
+
+    # the hole: a prism along the strike through the struck wall only
+    cutter = _link_mesh("shatter_cutter", _prism_mesh(
+        [[p0 + x_axis * x + u * z - s * front for x, z in outline] for front in (0.01, r_out + 0.02)]))
+    mod = obj.modifiers.new("hole", "BOOLEAN")
+    mod.operation, mod.solver, mod.object = "DIFFERENCE", "EXACT", cutter
+    bpy.context.view_layer.update()
+    cut_mesh = bpy.data.meshes.new_from_object(obj.evaluated_get(bpy.context.evaluated_depsgraph_get()))
+    obj.modifiers.remove(mod)
+    obj.data = cut_mesh
+    bpy.data.objects.remove(cutter)
+    if hasattr(cut_mesh, "use_auto_smooth"):                        # 3.x: the broken edge stays sharp
+        cut_mesh.use_auto_smooth, cut_mesh.auto_smooth_angle = True, math.radians(35.0)
+
+    if event is not None:
+        shards = event_shards(obj.name, event, origin, field, event["shell_thickness_m"], time_s)
+        for o in shards:
+            o.data.materials.append(mat)
+        return shards
+    shards = []
+    for poly in cells:
+        cx, cz = sum(q[0] for q in poly) / len(poly), sum(q[1] for q in poly) / len(poly)
+        # shrink for the crack gap, then cut flush just in front of the section so nothing z-fights with the tissue
+        poly = _clip_x([(cx + (x - cx) * 0.88, cz + (z - cz) * 0.88) for x, z in poly], 0.0003)
+        if len(poly) < 3:
+            continue
+        tilt_x, tilt_z, sink = rng.uniform(-0.2, 0.2), rng.uniform(-0.2, 0.2), rng.uniform(-0.002, 0.003)
+        rings = []
+        for rr in (r_out, r_in):
+            ring = []
+            for x, z in poly:
+                pt = on_shell(x, z, rr)
+                ring.append(pt + field.offset(pt)[1] + s * (sink + tilt_x * (x - cx) + tilt_z * (z - cz)))
+            rings.append(ring)
+        shards.append(_link_mesh(f"{obj.name}_shard_{len(shards):02d}", _prism_mesh(rings)))
+    deepest = r_in - field.depth_at_radius(r_in)                    # how far from the axis the plates ended up
+    for _ in range(SHATTER_LOOSE):
+        front = max(0.006, deepest - rng.uniform(0.004, 0.028))
+        centre = p0 + x_axis * rng.uniform(0.001, 0.004) + u * rng.uniform(-1.1, 1.1) * field.radius - s * front
+        size = rng.uniform(0.004, 0.009)
+        bm = bmesh.new()
+        for _v in range(7):
+            bm.verts.new(centre + Vector((rng.uniform(-0.4, 0.4), rng.uniform(-1, 1), rng.uniform(-1, 1))) * size)
+        bmesh.ops.convex_hull(bm, input=bm.verts[:])
+        shards.append(_link_mesh(f"{obj.name}_shard_{len(shards):02d}", bm))
+    for o in shards:
+        o.data.materials.append(mat)
+        o["ce_provenance"] = "ASSUMED presentation pattern, no published fragment data"
+    return shards
+
+
 def impactor_objects(name: str, ends, radius: float, shift: Vector, cut_normal: Vector | None = None):
     """End-on impactor (rod with a rounded tip): tip centre = where the domain says it stopped.
 
@@ -369,7 +530,13 @@ def build_variant(r: dict, mats: dict, spec: dict, side: float):
             continue                                   # sleeve comes from the XPBD mesh
         t0, t1 = (s["z_range"] or (0.0, 1.0))
         o = shell_sector(f"{r['variant']}_{s['name']}", a, b, s["r_inner_m"], s["r_outer_m"], t0, t1, **mesh_kw)
-        if field is not None:
+        broken = field is not None and r["blunt"]["fractured"] and s["material"] == "bone"
+        if broken:
+            # the ribs broke: no smooth bend, the shell shatters into the crater (the seed follows the domain result)
+            skin = max(sh["r_outer_m"] for sh in r["shells"] if sh["material"] == "skin")
+            objs += shatter_bone(o, s, field, mats["bone"], int(r["sha256"][:8], 16), r.get("fracture_event"),
+                                 field.p0 - field.s * skin, r.get("fracture_time_s", 0.0))
+        elif field is not None:
             dent_object(o, field)
         o.data.materials.append(mats[s["material"]])
         o["ce_provenance"] = s["provenance"]
@@ -543,6 +710,8 @@ def main() -> int:
     ap.add_argument("--resolution", default="1920x1080")
     ap.add_argument("--turntable", type=int, default=0)
     ap.add_argument("--sample", choices=sorted(SAMPLES), default="forearm")
+    ap.add_argument("--fracture-event", type=Path, help="ce-fracture/1 JSON: its pieces replace the drawn shatter pattern")
+    ap.add_argument("--fracture-time-ms", type=float, default=5.0, help="time after the blow the pieces are drawn at")
     ap.add_argument("--gpu-probe", action="store_true")
     a = ap.parse_args(argv)
     a.out.mkdir(parents=True, exist_ok=True)
@@ -561,6 +730,13 @@ def main() -> int:
     variants = [json.loads((a.input / f"{spec['prefix']}_{v}.json").read_text(encoding="utf-8")) for v in names]
     if thorax:
         variants[1] = mirror_y(variants[1], spec["cloth"])
+    if a.fracture_event:
+        event = json.loads(a.fracture_event.read_text(encoding="utf-8"))
+        if event.get("schema") != "ce-fracture/1":
+            raise SystemExit(f"unsupported fracture event schema: {event.get('schema')}")
+        for r in variants:                         # the event is the fractured blow's: it only applies where ribs broke
+            if r.get("blunt", {}).get("fractured") and event["fractured"]:
+                r["fracture_event"], r["fracture_time_s"] = event, a.fracture_time_ms / 1000.0
     mats = {row["kind"]: principled_from_openpbr(row["kind"], row["optical_openpbr"])
             for row in variants[0]["materials"] if row["optical_openpbr"]}
     if a.sample == "thorax":                       # presentation only: rib shell, tendon and cavity read apart
@@ -571,6 +747,13 @@ def main() -> int:
                 bsdf = mats[kind].node_tree.nodes["Principled BSDF"]
                 _set(bsdf, ["Base Color"], colour)
                 _set(bsdf, ["Subsurface Color"], colour)   # 3.x: the subsurface colour dominates the base colour
+        # presentation only: crisp bone (subsurface blur made the broken shell look smeared), no wet glare on the cavity
+        if "bone" in mats:
+            bsdf = mats["bone"].node_tree.nodes["Principled BSDF"]
+            _set(bsdf, ["Subsurface Weight", "Subsurface"], 0.0)
+            _set(bsdf, ["Roughness"], 0.4)
+        if "viscera" in mats:
+            _set(mats["viscera"].node_tree.nodes["Principled BSDF"], ["Roughness"], 0.6)
         # presentation only: any metal rod mirrors the blue coat (a blue cast even at roughness 0.45), so the club is
         # drawn as dark varnished wood, a rough dielectric (ASSUMED look-dev; the domain impactor is unchanged)
         club = bpy.data.materials.new("impactor_presentation")
@@ -583,9 +766,9 @@ def main() -> int:
         club["ce_provenance"] = "ASSUMED presentation (club)"
         mats["impactor_presentation"] = club
         scene.view_settings.exposure = -1.5        # presentation only: at 0 EV Filmic washes every layer to pastel
-    centres = {}
+    centres, built = {}, {}
     for r, side in zip(variants, (-1.0, 1.0)):
-        _, centres[r["variant"]] = build_variant(r, mats, spec, side)
+        built[r["variant"]], centres[r["variant"]] = build_variant(r, mats, spec, side)
     target = (centres[names[0]] + centres[names[1]]) / 2
     r_max = max(sh["r_outer_m"] for r in variants for sh in r["shells"])
     k = max(1.0, r_max / 0.06)                       # forearm sample (outer radius 0.0515 m) keeps k = 1
@@ -619,6 +802,22 @@ def main() -> int:
             report["renders"].append(render_still(scene, a.out / f"closeup_{v}_{eng}.png", eng, a.samples,
                                                   device, thorax))
             print(f"[material] {json.dumps(report['renders'][-1])}", flush=True)
+    # broken ribs: the rib shell alone, seen from the struck side, so the break pattern reads
+    for (v, c), r in zip(centres.items(), variants):
+        if not (thorax and r["blunt"]["fractured"]):
+            continue
+        sy = -1.0 if r.get("mirrored") else 1.0
+        others = [o for vv in built.values() for o in vv if not (o.name.startswith(v) and "_bone" in o.name)]
+        for o in others:
+            o.hide_render = True
+        aim = c + Vector((-0.02, -0.05 * sy, 0.0))
+        scene.camera = camera(f"cam_bone_{v}", aim + Vector((-0.2, -0.3 * sy, 0.14)) * k, aim, 130.0)
+        for eng in engines:
+            report["renders"].append(render_still(scene, a.out / f"fracture_bone_{v}_{eng}.png", eng, a.samples,
+                                                  device, thorax))
+            print(f"[material] {json.dumps(report['renders'][-1])}", flush=True)
+        for o in others:
+            o.hide_render = False
     if a.turntable > 0:
         pivot = bpy.data.objects.new("turntable_pivot", None)
         scene.collection.objects.link(pivot)
