@@ -1462,6 +1462,21 @@ only; no result is computed differently.
 
 ---
 
+## 82. A34 — SABRE CUT FROM RIGID-BODY DYNAMICS, OPT-IN
+
+**Decision** (2026-11-05, owner approved the separate task on the thread "me parece bien"): `domain/physics/cut.py` gains a weapon
+model: `1 / m_eff = 1 / M + r² / I_cg`, speed `v_grip + ω x`, centre of percussion, and the arm as a mass attached at the grip
+between the exact free and pinned limits. `blade_impact` returns an ordinary `Blade`, so the cut, the layers and `collision.split`
+are unchanged. **Not adopted**: `Blade(0.6, 10.0, 0.028)` stays, and no A09, A10 or Godot result moves; adopting it needs its own
+decision. **Provenance**: the physics is DERIVED. Mass, balance and blade length are medians of six sabres measured by M. Easton
+(informal, ESTIMATE). Inertia and centre of percussion are calculated from an ASSUMED taper; no measured sabre inertia was found.
+The swing is the largest unknown, and the tip speeds tried come from an unverified reading of a small study with a sport weapon.
+**Finding**: the placeholder's 30 J is near the top of the 6–33 J range tried, and the swing matters more than the impact point.
+
+**Date**: 2026-11-05 · **Status**: FINAL (values ESTIMATE, adoption PENDING)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary

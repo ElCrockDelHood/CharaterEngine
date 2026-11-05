@@ -33,6 +33,7 @@ C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`
 | A30 | Skull bones at BodyParts3D positions, mandible excluded | 74 | FINAL (values ESTIMATE) |
 | A31 | Head width and depth ratios from ANSUR II | 75 | FINAL (DERIVED) |
 | A32 | Jaw pivot at the TMJ, chin kept at 0.87 H | 78 | FINAL (values ESTIMATE, chin height PROVEN) |
+| A34 | Sabre cut: effective mass, rotational inertia, impact point (`.es.md`) | 82 | opt-in, not adopted (values ESTIMATE) |
 
 Open items: `docs/reorientation/HANDOFF.md` §4.
 

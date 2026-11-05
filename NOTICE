@@ -85,6 +85,12 @@ commercially on the strength of this project's terms.
 - A study of bachelor-level students in Nepal, cited by URL in
   docs/architecture/JAW_ATM_PROPOSAL.md. Contrast for the opening limit (A32).
 
+- Easton, M. How much do 1796 pattern light cavalry sabres weigh? Easton Antique Arms, 2018,
+  republished 2019. Measured mass, balance and blade length of six sabres, in
+  src/character_engine/domain/physics/cut.py (A34). Measurements cited with attribution.
+- Greene, A.; Barona, F.; Simon, X. (2023). J Emerg Invest, doi:10.59720/21-230. Sabre tip
+  speeds tried in A34; no value enters a default.
+
 The complete list, with what each source supports, is in
 src/character_engine/data/anatomy/references/source_registry.json.
 
