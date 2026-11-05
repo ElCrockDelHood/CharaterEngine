@@ -27,6 +27,10 @@ drawing, not a prediction of how a real bone breaks.
 7. **Determinism:** the seed defaults to a 48-bit hash of segment and striker numbers (it stays exact in JSON parsers that read
    numbers as doubles).
 
+8. **No bone, no fragments:** of the 17 segments only the abdomen has no bone shell (thickness 0 in its tissue profile: wall over
+   viscera). There the event has `fractured: false`, `reason: "no_bone_layer"` and no fragments, even when `strike_model.py` reports a
+   fracture (see A15); no shell is invented. A shell that holds gives `reason: "shell_held"`; a fracture gives `reason: null`.
+
 ## Constants
 
 | Constant | Value | Range | Provenance |
@@ -62,7 +66,7 @@ All pattern values ASSUMED.
   "frame": {"x": [..], "y": [..], "z": [..]},
   "patch_radius_m": 0.09, "shell_thickness_m": 0.009,
   "patch_mass_kg": 0.46, "excess_energy_j": 80.5, "fragment_kinetic_j": 8.05,
-  "provenance": "ASSUMED",
+  "provenance": "ASSUMED", "reason": null,
   "fragments": [
     {"id": 0, "kind": "piece", "inner": true, "size_m": 0.09, "aspect": 3.0, "mass_kg": 0.15,
      "position_m": [x, y, z], "velocity_m_s": [x, y, z],

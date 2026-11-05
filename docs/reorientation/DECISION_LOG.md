@@ -1472,6 +1472,11 @@ replaces nothing: wounds, `strike_model.py`, the gameplay table and every earlie
 catalog; every other constant ASSUMED, with its range in the audit. No published fragment data was used (Mott / Grady only frame the
 power-law form). Evidence: `docs/audit/A33_FRACTURE_EVENT.md`. Tests: `tests/unit/test_fracture_event.py`.
 
+**Amendment** (2026-11-05, bug reported by the Godot thread): `strike_fracture` raised `StopIteration` on the abdomen, the only one of
+the 17 segments with no bone shell. It now returns `fractured: false`, `reason: "no_bone_layer"` and no fragments; no shell is invented.
+The schema gains one key, `reason` (`null`, `shell_held` or `no_bone_layer`), still `ce-fracture/1`. `strike_model.py` is unchanged, so it
+can still report a fracture there from its lumbar force range (ASSUMED; noted in A15). No number moves.
+
 **Date**: 2026-11-05 · **Status**: FINAL (opt-in; values ASSUMED, reversible)
 
 ---

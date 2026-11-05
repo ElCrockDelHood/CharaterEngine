@@ -24,6 +24,10 @@ Model (every constant below is ESTIMATE or ASSUMED, with its range):
   kinetic energy reported can be lower than the share. Inner fragments (under the contact patch) leave in a cone around
   the inward normal: the input of a secondary-injury model. Outer ones scatter radially, with an inward bias.
 
+No bone, no fragments: a region whose layered model has no bone shell where it is struck (the abdomen: wall over viscera,
+thickness 0 in its tissue profile) gives ``fractured = False`` with ``reason = "no_bone_layer"``, even when
+``strike_model.py`` reports a fracture there (its force range stands for the lumbar spine, ASSUMED). No shell is invented.
+
 Local frame of positions and velocities: ``x`` lateral, ``y`` along the segment axis, ``z`` inward along the strike.
 Not modelled: spalling outward, crack propagation in time, fragment collisions, drag in tissue, bone anisotropy.
 """
@@ -43,6 +47,8 @@ from .strike_model import REGION_RESPONSE, StrikeOutcome, Striker, strike_blunt
 
 Vec = Tuple[float, float, float]
 SCHEMA = "ce-fracture/1"
+REASON_SHELL_HELD = "shell_held"
+REASON_NO_BONE_LAYER = "no_bone_layer"
 
 PATCH_FACTOR = 2.0               # ASSUMED, 1.5–3: fractured patch radius / contact radius
 MOBILE_FRACTION = 0.6            # ASSUMED, 0.4–0.9: share of the patch that detaches
@@ -110,6 +116,7 @@ class FractureEvent:
     fragment_kinetic_j: float
     fragments: Tuple[Fragment, ...]
     provenance: str = "ASSUMED"
+    reason: Optional[str] = None # why there are no fragments: shell_held | no_bone_layer; None when fractured
 
     def to_dict(self) -> Dict[str, object]:
         """JSON-ready, with a fixed key order (schema ``ce-fracture/1``)."""
@@ -120,7 +127,7 @@ class FractureEvent:
             "frame": {"x": list(self.frame_x), "y": list(self.frame_y), "z": list(self.frame_z)},
             "patch_radius_m": self.patch_radius_m, "shell_thickness_m": self.shell_thickness_m,
             "patch_mass_kg": self.patch_mass_kg, "excess_energy_j": self.excess_energy_j,
-            "fragment_kinetic_j": self.fragment_kinetic_j, "provenance": self.provenance,
+            "fragment_kinetic_j": self.fragment_kinetic_j, "provenance": self.provenance, "reason": self.reason,
             "fragments": [{"id": f.id, "kind": f.kind, "inner": f.inner, "size_m": f.size_m, "aspect": f.aspect,
                            "mass_kg": f.mass_kg, "position_m": list(f.position_m),
                            "velocity_m_s": list(f.velocity_m_s), "angular_speed_rad_s": f.angular_speed_rad_s,
@@ -139,7 +146,7 @@ class FractureEvent:
             tuple(Fragment(f["id"], f["kind"], f["inner"], f["size_m"], f["aspect"], f["mass_kg"], tuple(f["position_m"]),
                            tuple(f["velocity_m_s"]), f["angular_speed_rad_s"], tuple(f["spin_axis"]))
                   for f in d["fragments"]),
-            d["provenance"])
+            d["provenance"], d.get("reason"))
 
 
 def fragment_count(pattern: Pattern, excess_energy_j: float) -> int:
@@ -194,7 +201,8 @@ def fracture_event(outcome: StrikeOutcome, bone: str, impact_point: Vec, inward_
                    axis: Vec = (0.0, 0.0, 1.0), seed: Optional[int] = None,
                    shell_outer_radius_m: Optional[float] = None) -> FractureEvent:
     """Fragments of one blow. ``bone_depth_m``: skin to bone along the normal; ``speed_m_s``: of the blow (speed cap);
-    ``shell_outer_radius_m``: limits the patch width to the struck half of the bone."""
+    ``shell_outer_radius_m``: limits the patch width to the struck half of the bone. ``shell_thickness_m`` = 0 means
+    there is no bone shell here: no fragments, ``reason = "no_bone_layer"``."""
     seed = default_seed(outcome) if seed is None else seed
     region = BodyRegion(outcome.region)
     pattern = REGION_PATTERN[region]
@@ -203,9 +211,10 @@ def fracture_event(outcome: StrikeOutcome, bone: str, impact_point: Vec, inward_
     base = {"segment": outcome.segment, "region": outcome.region, "bone": bone, "pattern": pattern.name, "seed": seed,
             "impact_point_m": tuple(round(c, 6) for c in impact_point), "frame_x": fx, "frame_y": fy, "frame_z": fz,
             "patch_radius_m": round(patch_r, 6), "shell_thickness_m": round(shell_thickness_m, 6)}
-    if not outcome.fractured:
+    if not outcome.fractured or shell_thickness_m <= 0.0:
+        reason = REASON_NO_BONE_LAYER if shell_thickness_m <= 0.0 else REASON_SHELL_HELD
         return FractureEvent(fractured=False, patch_mass_kg=0.0, excess_energy_j=0.0, fragment_kinetic_j=0.0,
-                             fragments=(), **base)
+                             fragments=(), reason=reason, **base)
     rho = material(MaterialKind.BONE).mechanical.density.value
     half_width = patch_r if shell_outer_radius_m is None else min(patch_r, 0.5 * math.pi * shell_outer_radius_m)
     # circle when the bone is wide enough; else the part of that circle inside a band of half width ``half_width``
@@ -264,12 +273,12 @@ def strike_fracture(body: LayeredBody, segment: str, striker: Striker, from_dir:
     centre = tuple(a[i] + (b[i] - a[i]) * t_axial for i in range(3))
     u = _unit(from_dir)
     r_skin = next(s.r_outer for s in lc.shells if s.material is MaterialKind.SKIN)
-    bone_shell = next(s for s in lc.shells if s.material is MaterialKind.BONE)
+    bone_shell = next((s for s in lc.shells if s.material is MaterialKind.BONE), None)
     impact = tuple(centre[i] + u[i] * r_skin for i in range(3))
     axis = tuple(b[i] - a[i] for i in range(3))
     if sum(c * c for c in axis) < 1e-12:            # point segment (neck, abdomen, pelvis): the body's vertical
         axis = (0.0, 0.0, 1.0)
     return outcome, fracture_event(
-        outcome, lc.placement.weight_bone, impact, (-u[0], -u[1], -u[2]), striker.contact_radius_m, bone_shell.thickness,
-        bone_depth_m=r_skin - bone_shell.r_outer, speed_m_s=striker.speed_m_s, axis=axis, seed=seed,
-        shell_outer_radius_m=bone_shell.r_outer)
+        outcome, lc.placement.weight_bone, impact, (-u[0], -u[1], -u[2]), striker.contact_radius_m,
+        bone_shell.thickness if bone_shell else 0.0, bone_depth_m=r_skin - bone_shell.r_outer if bone_shell else 0.0,
+        speed_m_s=striker.speed_m_s, axis=axis, seed=seed, shell_outer_radius_m=bone_shell.r_outer if bone_shell else None)

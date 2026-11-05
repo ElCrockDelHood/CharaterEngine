@@ -14,6 +14,8 @@ from character_engine.domain.physics.fracture_event import (
     FRAGMENT_KE_FRACTION,
     N_MAX,
     N_MIN,
+    REASON_NO_BONE_LAYER,
+    REASON_SHELL_HELD,
     REGION_PATTERN,
     SCHEMA,
     SPIDERWEB,
@@ -132,6 +134,49 @@ def test_json_round_trip_and_key_order(body):
     assert FractureEvent.from_dict(json.loads(json.dumps(d))) == e
     with pytest.raises(ValueError):
         FractureEvent.from_dict({**d, "schema": "other"})
+
+
+STRIKERS = (Striker(6.0, 9.0, 0.05), HEAVY)
+
+
+def _finite(x):
+    if isinstance(x, dict):
+        return all(_finite(v) for v in x.values())
+    if isinstance(x, list):
+        return all(_finite(v) for v in x)
+    return not isinstance(x, float) or math.isfinite(x)
+
+
+def test_every_segment_runs_with_finite_numbers(body):
+    assert len(body.capsules) == 17
+    for seg in body.capsules:
+        for st in STRIKERS:
+            o, e = strike_fracture(body, seg, st)
+            assert math.isfinite(o.peak_force_n) and math.isfinite(o.dissipated_j)
+            assert _finite(e.to_dict())
+            assert (e.reason is None) == e.fractured
+            assert e.fractured == bool(e.fragments)
+
+
+def test_segments_without_a_bone_shell_give_no_fragments_and_say_why(body):
+    without = [seg for seg, lc in body.capsules.items() if not any(s.material.value == "bone" for s in lc.shells)]
+    assert without == ["abdomen"]
+    for st in STRIKERS:
+        o, e = strike_fracture(body, "abdomen", st)
+        assert o.fractured                                  # strike_model: lumbar spine force range, unchanged
+        assert not e.fractured and e.fragments == () and e.reason == REASON_NO_BONE_LAYER
+        assert e.patch_mass_kg == 0.0 and e.shell_thickness_m == 0.0
+
+
+def test_a_shell_that_holds_says_so(body):
+    e = strike_fracture(body, "head", Striker(0.5, 6.0, 0.03))[1]
+    assert e.reason == REASON_SHELL_HELD
+
+
+def test_reason_is_optional_when_reading_older_json(body):
+    d = strike_fracture(body, "thorax", HEAVY)[1].to_dict()
+    del d["reason"]
+    assert FractureEvent.from_dict(d).reason is None
 
 
 def test_earlier_results_do_not_depend_on_this_module(body):

@@ -30,6 +30,10 @@ resultado es un dibujo plausible, no una predicción de cómo se rompe un hueso 
 7. **Determinismo:** la semilla por defecto es un hash de 48 bits del segmento y los números del golpe (se mantiene exacta en los
    lectores de JSON que leen números como double).
 
+8. **Sin hueso no hay fragmentos:** de los 17 segmentos solo el abdomen no tiene cáscara de hueso (espesor 0 en su perfil de tejidos:
+   pared sobre vísceras). Ahí el evento da `fractured: false`, `reason: "no_bone_layer"` y ningún fragmento, aunque `strike_model.py`
+   informe una fractura (ver A15); no se inventa una cáscara. Una cáscara que aguanta da `reason: "shell_held"`; una fractura, `reason: null`.
+
 ## Constantes
 
 | Constante | Valor | Rango | Procedencia |
@@ -65,7 +69,7 @@ Todos los valores de los patrones son ASSUMED.
   "frame": {"x": [..], "y": [..], "z": [..]},
   "patch_radius_m": 0.09, "shell_thickness_m": 0.009,
   "patch_mass_kg": 0.46, "excess_energy_j": 80.5, "fragment_kinetic_j": 8.05,
-  "provenance": "ASSUMED",
+  "provenance": "ASSUMED", "reason": null,
   "fragments": [
     {"id": 0, "kind": "piece", "inner": true, "size_m": 0.09, "aspect": 3.0, "mass_kg": 0.15,
      "position_m": [x, y, z], "velocity_m_s": [x, y, z],
