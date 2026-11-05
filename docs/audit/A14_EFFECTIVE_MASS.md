@@ -42,8 +42,8 @@ the physically consistent choice.
 * **Kicks:** no peer-reviewed source read reports effective mass in kg for several kick types in one sample. A
   single-subject case (ITF master, 60 kg) reports the front kick with the highest effective mass, "44 %" of body
   mass, and contact times of 0.026 s (roundhouse) to 0.119 s (front kick). Peak forces in taekwondo studies span
-  ≈ 700–3000 N. Treat kick effective mass as **UNKNOWN**. A leg is ≈ 16 % of body mass (≈ 11–12 kg at 70 kg) by
-  standard segment tables, so a kick plausibly sits at 1–2 × the leg, but that is an ESTIMATE to verify.
+  ≈ 700–3000 N. (Written 2026-10-29, when kick effective mass was unknown here. Superseded by A17, Decision 81, branch
+  `physics/kicks-and-falls`, not yet on `main`: see §4 item 3.)
 * **Weapons:** use the implement formula. A baseball-bat example (Cross, cited in search results; full text not
   readable) gives an equivalent mass ≈ 0.8 kg for a 0.9 kg bat struck near the centre of percussion. The value
   drops fast toward the tip. No sourced value for swords was found. A blade's effective mass is below its mass
@@ -69,9 +69,14 @@ the physically consistent choice.
 2. **Target effective mass per region** (`m_t`) becomes a new table, provenance ESTIMATE until sourced. Head + neck
    ≈ 5–8 kg relaxed; torso tens of kg; limbs about segment mass. Bracing raises it.
 3. **Striker effective mass per technique** should be stored as a range with provenance (punch 2–7 kg
-   impulse-based; kick UNKNOWN; weapons from the implement formula with a per-weapon `M`, `I_cm`, impact point).
+   impulse-based; kicks ≈ 4–6 kg, see below; weapons from the implement formula with a per-weapon `M`, `I_cm`, impact point).
    This replaces the single `energy_j` per move in `gameplay_shenmue.json`, whose values (jab 60 J … shoulder throw
    260 J) have no recorded mass/speed decomposition.
+   **Kicks** (A17, Decision 81, branch `physics/kicks-and-falls`, not yet on `main`): energy and impulse routes, from different data,
+   agree at ≈ 4–6 kg (ESTIMATE, DERIVED from Vagner 2023, Gavagan & Sayers 2017 and de Leva 1996). Force over acceleration gives
+   20–73 % of the body (Góra 2024), which is a braced body at one instant, kept only as a high bound. **Not resolved:** the front kick
+   (+30 %) and crescent kick (−52 %) still disagree with their table energies (owner's decision), the crescent kick has no data of its own
+   (roundhouse values), and no side kick mass fits ½ m v².
 4. **Contact time** (5–120 ms reported) is what separates peak force from impulse. Keep it as an output, not an
    input, until a compliance model exists.
 
@@ -102,7 +107,7 @@ Gameplay table with calibrated shells plus reduced mass (`python scripts/gamepla
 
 168 pairs: layered higher in 87, lower in 19.
 
-Reading: with a heavy striker (a whole leg, ≈ 15 kg) against light segments, most of a kick's energy becomes
+Reading (this table still uses the script's whole leg, ≈ 15 kg, which A17 replaces with ≈ 4–6 kg on its branch; the kick rows here overstate the knockback share): with a heavy striker against light segments, most of a kick's energy becomes
 knockback, so kicks now read like jabs in tissue damage, and the shoulder throw (whole body) drops to minor. That is
 physically consistent but exposes two gaps: the move energies in the table were never decomposed into mass × speed,
 and the damage a kick or throw does is mostly momentum (knockdown, head acceleration), which no model consumes yet.
@@ -124,7 +129,7 @@ How a fractured shell comes apart (fragment count, sizes, speeds, as JSON for th
 
 1. Read the full texts (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) and register them in `source_registry`
    with exact tables. Automated access was refused, so this needs PDFs from the owner.
-2. A sourced kick dataset (front / roundhouse / side) with effective mass in kg.
+2. Kick effective mass: answered for front and roundhouse kicks in A17 (branch `physics/kicks-and-falls`); a side kick and a crescent kick of its own are still missing.
 3. Sword and stick effective mass from mass, inertia and impact point (needs real weapon measurements).
 4. Make the reduced-mass energy the default (changes every result hash) once the fractions and striker masses are
    verified; feed `momentum_j` / `target_speed_m_s` to a knockdown / concussion model.

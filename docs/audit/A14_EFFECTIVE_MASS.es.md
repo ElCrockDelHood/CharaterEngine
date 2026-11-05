@@ -42,9 +42,8 @@ cociente sale grande. Para simular importa la cantidad de movimiento realmente t
 * **Patadas:** ninguna fuente revisada por pares que haya leído reporta masa efectiva en kg para varios tipos de
   patada en una misma muestra. Un caso de un solo sujeto (maestro ITF, 60 kg) da la patada frontal con la mayor
   masa efectiva, "44 %" de la masa corporal, y tiempos de contacto de 0,026 s (circular) a 0,119 s (frontal). Las
-  fuerzas pico en estudios de taekwondo van de ≈ 700 a 3000 N. La masa efectiva de patada queda **UNKNOWN**. Una
-  pierna es ≈ 16 % de la masa corporal (≈ 11–12 kg con 70 kg) según tablas estándar de segmentos, así que una
-  patada estaría plausiblemente entre 1 y 2 veces la pierna, pero eso es un ESTIMATE a verificar.
+  fuerzas pico en estudios de taekwondo van de ≈ 700 a 3000 N. (Escrito el 2026-10-29, cuando acá no se conocía la masa efectiva de patada. Lo
+  reemplaza A17, Decisión 81, rama `physics/kicks-and-falls`, todavía no en `main`: ver §4, punto 3.)
 * **Armas:** se usa la fórmula de implemento. Un ejemplo con bate de béisbol (Cross, citado en resultados de
   búsqueda; texto completo no legible) da una masa equivalente ≈ 0,8 kg para un bate de 0,9 kg golpeado cerca del
   centro de percusión. El valor cae rápido hacia la punta. No se encontró un valor con fuente para espadas. La masa
@@ -72,9 +71,14 @@ cociente sale grande. Para simular importa la cantidad de movimiento realmente t
    fuente. Cabeza + cuello ≈ 5–8 kg relajado; torso, decenas de kg; miembros, aproximadamente la masa del segmento.
    Apoyarse o rigidizar la sube.
 3. **Masa efectiva del que golpea por técnica**: guardarla como rango con procedencia (piña 2–7 kg por impulso;
-   patada UNKNOWN; armas con la fórmula de implemento y `M`, `I_cm` y punto de impacto por arma). Esto reemplaza el
+   patadas ≈ 4–6 kg, ver abajo; armas con la fórmula de implemento y `M`, `I_cm` y punto de impacto por arma). Esto reemplaza el
    único `energy_j` por movimiento de `gameplay_shenmue.json`, cuyos valores (jab 60 J … proyección de hombro 260 J)
    no tienen registrada una descomposición en masa y velocidad.
+   **Patadas** (A17, Decisión 81, rama `physics/kicks-and-falls`, todavía no en `main`): las rutas por energía y por impulso, con datos
+   distintos, coinciden en ≈ 4–6 kg (ESTIMATE, DERIVED de Vagner 2023, Gavagan y Sayers 2017 y de Leva 1996). Fuerza sobre aceleración da
+   20–73 % del cuerpo (Góra 2024): es un cuerpo apoyado en un instante, y queda solo como cota alta. **Sin resolver:** la patada frontal
+   (+30 %) y la creciente (−52 %) siguen sin coincidir con la energía de la tabla (decisión del dueño), la creciente no tiene datos propios
+   (usa valores de la circular), y ninguna masa de patada lateral sirve para ½ m v².
 4. **Tiempo de contacto** (se reportan 5–120 ms): es lo que separa fuerza pico de impulso. Conviene dejarlo como
    salida, no como entrada, hasta que exista un modelo de compliance.
 
@@ -106,7 +110,7 @@ Tabla de gameplay con cáscaras calibradas más masa reducida (`python scripts/g
 
 168 pairs: layered higher in 87, lower in 19.
 
-Lectura: con un atacante pesado (una pierna entera, ≈ 15 kg) contra segmentos livianos, casi toda la energía de una
+Lectura (esta tabla sigue usando la pierna entera del script, ≈ 15 kg, que A17 reemplaza por ≈ 4–6 kg en su rama; las filas de patadas sobrestiman la parte de empuje): con un atacante pesado contra segmentos livianos, casi toda la energía de una
 patada pasa a empuje, así que en daño de tejido las patadas ahora se leen como jabs, y la proyección de hombro (cuerpo
 entero) baja a leve. Es físicamente coherente, pero deja ver dos huecos: las energías de los movimientos de la tabla
 nunca se descompusieron en masa × velocidad, y el daño de una patada o una proyección es sobre todo cantidad de
@@ -131,7 +135,7 @@ está en `A33_FRACTURE_EVENT.es.md` (`domain/physics/fracture_event.py`, Decisi�
 1. Leer los textos completos (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) y registrarlos en
    `source_registry` con las tablas exactas. El acceso automatizado fue rechazado, así que hacen falta los PDF que
    pueda conseguir el dueño.
-2. Un conjunto de datos de patadas con fuente (frontal / circular / lateral) con masa efectiva en kg.
+2. Masa efectiva de patada: respondida para la frontal y la circular en A17 (rama `physics/kicks-and-falls`); faltan una patada lateral y datos propios de la creciente.
 3. Masa efectiva de espada y palo a partir de masa, inercia y punto de impacto (requiere mediciones de armas reales).
 4. Hacer que la energía por masa reducida sea la opción por defecto (cambia todos los hashes de resultados) cuando
    se verifiquen las fracciones y las masas del atacante; pasar `momentum_j` / `target_speed_m_s` a un modelo de
