@@ -1378,14 +1378,28 @@ Tests: `tests/unit/test_skull_positions.py`.
 
 ---
 
+## 75. A31 — HEAD WIDTH AND DEPTH RATIOS FROM ANSUR II
+
+**Decision** (owner, 2026-11-05 02:14, card "Cráneo y ratios de cabeza"): `scripts/fix_head_ratios.py` replaces two ASSUMPTION
+values in `references/anthropometry.json`: `head_width_ratio` 0.08 → 0.0862 (head breadth 154.6 ± 5.6 mm) and `head_depth_ratio`
+0.07 → 0.1121 (head length 201.0 ± 6.6 mm), from ANSUR II men 1.75–1.85 m (n = 1814; ranges p5–p95), provenance DERIVED, source
+`ANSUR_II_2012` (registered; US Army population, cleared for unlimited public release). No code or runtime reads these two keys
+today, so nothing changes at runtime: gameplay table in sync, every Godot replay identical (60/60), Blender 40/40, clips unchanged.
+Fingerprints of `anthropometry.json` and `source_registry.json` updated. Audit `docs/audit/A31_HEAD_RATIOS.md`. Tests:
+`tests/unit/test_head_ratios.py`.
+
+**Date**: 2026-11-05 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 74
+**Total Decisions**: 75
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 66 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 67 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

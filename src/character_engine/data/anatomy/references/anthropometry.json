@@ -111,13 +111,15 @@
       },
       "head_width_ratio": {
         "name": "head_width_to_total_height",
-        "value": 0.08,
+        "value": 0.0862,
         "range": [
-          0.07,
-          0.09
+          0.0809,
+          0.092
         ],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "confidence": "MEDIUM",
+        "provenance": "DERIVED",
+        "source_id": "ANSUR_II_2012",
+        "notes": "ANSUR II (2012 US Army survey), men 1.75-1.85 m, n = 1814: head breadth 154.6 +/- 5.6 mm; mean of individual ratios, range p5-p95. Measured on the head (skin). US Army personnel, not the civilian population"
       }
     },
     "depth_proportions": {
@@ -133,13 +135,15 @@
       },
       "head_depth_ratio": {
         "name": "head_depth_to_total_height",
-        "value": 0.07,
+        "value": 0.1121,
         "range": [
-          0.06,
-          0.08
+          0.1059,
+          0.1183
         ],
-        "confidence": "LOW",
-        "provenance": "ASSUMPTION"
+        "confidence": "MEDIUM",
+        "provenance": "DERIVED",
+        "source_id": "ANSUR_II_2012",
+        "notes": "ANSUR II (2012 US Army survey), men 1.75-1.85 m, n = 1814: head length 201.0 +/- 6.6 mm; mean of individual ratios, range p5-p95. Measured on the head (skin). US Army personnel, not the civilian population"
       }
     },
     "segment_lengths": {

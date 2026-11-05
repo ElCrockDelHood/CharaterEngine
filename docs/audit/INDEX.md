@@ -1,4 +1,4 @@
-# Audit index (A07 – A25)
+# Audit index (A07 – A31)
 
 One line per audit: what it decided or measured, and the decision that recorded it. Older audits (A01 – A06,
 C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`.es.md`) exist where noted.
@@ -24,12 +24,14 @@ C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`
 | A22 | Whole skeleton vs BodyParts3D by regions | 66 | measured, tolerances PENDING |
 | A23 | Hip joint centres 180.2 mm apart | 67 | FINAL (value ESTIMATE) |
 | A24 | Shoulder girdle: shoulder centres 406.8 mm, clavicle SC → AC, scapula AC → AI | 68 | FINAL (values ESTIMATE; clavicle re-parent pending) |
-| A26a | Clavicle re-parented to STERNUM (`docs/architecture/CLAVICLE_REPARENT_PROPOSAL.md`) | 70 | FINAL |
+| A25 | PROXY pieces for anatomy missing from BodyParts3D (muscles, ligaments, coccyx, ossicles) | 69 | FINAL (ESTIMATE / PLACEHOLDER) |
 | A26 | Spine sagittal curves from BodyParts3D (vertebra by vertebra) | 71 | FINAL (values ESTIMATE; cervical spacing finding pending) |
+| A26a | Clavicle re-parented to STERNUM (`docs/architecture/CLAVICLE_REPARENT_PROPOSAL.md`) | 70 | FINAL |
 | A27 | Vertebral heights from BodyParts3D, contrast Busscher 2010 (CC BY-NC) | 72 | FINAL (values ESTIMATE) |
 | A28 | Thorax: sternum to the xiphoid, ribs from their vertebra | 73 | FINAL (values ESTIMATE) |
+| A29 | Limb chains, hands, feet: diagnosis, recommendation NOT to move joints (`docs/architecture/LIMB_CHAINS_PROPOSAL.md`) | — | proposal; variant F of the foot left to the animation thread |
 | A30 | Skull bones at BodyParts3D positions, mandible excluded | 74 | FINAL (values ESTIMATE) |
-| A25 | PROXY pieces for anatomy missing from BodyParts3D (muscles, ligaments, coccyx, ossicles) | 69 | FINAL (ESTIMATE / PLACEHOLDER) |
+| A31 | Head width and depth ratios from ANSUR II | 75 | FINAL (DERIVED) |
 
 Related proposals (`docs/architecture/`): `ASSET_FITTING_PROPOSAL.md` (F0 – F6), `FEMUR_ANCHOR_LANDMARKS_PROPOSAL.md`,
 `PELVIS_LANDMARKS_PROPOSAL.md`, `PELVIS_HIP_CENTERS_PROPOSAL.md` (applied as A23), `SHOULDER_GIRDLE_PROPOSAL.md`

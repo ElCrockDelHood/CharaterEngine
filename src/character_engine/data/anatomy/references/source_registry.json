@@ -49,6 +49,22 @@
         ],
         "notes": "International anthropometric reference data."
       },
+      "ansur_ii_2012": {
+        "id": "ANSUR_II_2012",
+        "name": "2012 Anthropometric Survey of U.S. Army Personnel (ANSUR II)",
+        "authors": "Gordon, C.C. et al.",
+        "year": 2015,
+        "type": "PRIMARY_RESEARCH",
+        "publisher": "U.S. Army Natick Soldier RD&E Center, Report NATICK/TR-15/007",
+        "coverage": "93 measures on 4082 men and 1986 women; public working databases cleared for unlimited public release (MFR 2017)",
+        "population": "U.S. Army personnel (active, reserve, National Guard); not the civilian population",
+        "status": "ACQUIRED",
+        "confidence": "MEDIUM",
+        "required_for": [
+          "head_width_ratio",
+          "head_depth_ratio"
+        ]
+      },
       "drillis_contini_1966": {
         "id": "DRILLIS_CONTINI_1966",
         "name": "Body Segment Parameters",

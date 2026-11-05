@@ -4,6 +4,8 @@
 **Date:** 2026-11-05 · a data change needs the owner's OK and a numbered Decision · Related: A10, A13, A20, A22,
 Decision 16.
 
+> Owner, 2026-11-05: limb joints not moved; variant F of the foot is left to the animation thread.
+
 ## Conclusion
 
 The large A22 distances of the hand (97 mm) and foot (90 mm) are **not canonical defects**. The canonical limbs

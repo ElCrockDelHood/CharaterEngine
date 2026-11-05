@@ -30,8 +30,8 @@ CONTRACT_FINGERPRINTS = {
         "Decision 33 (frozen pre-retarget audit fixture, keeps the old labels)",
     ),
     "references/anthropometry.json": (
-        "0ec140dacc4c0f174db9bd49a8fd49e8fffc1142c9e9e518ae0aff53812b4219",
-        "Decision 15 (Drillis & Contini 1966 ratios, base stature 1.80 m)",
+        "68691873011f64d5d49102618bcad1b755ed31f47e6c4ae80064b56d413d1343",
+        "Decisions 15 (Drillis & Contini 1966 ratios, base stature 1.80 m), 75 (head ratios, ANSUR II)",
     ),
     "references/biomechanics.json": (
         "1c1134f9f10846bf32b07c71f20297c37c11a323f9cafb80383d12f02563a61c",
@@ -42,8 +42,8 @@ CONTRACT_FINGERPRINTS = {
         "Decision 16 (Trotter 1970 / Trotter & Gleser 1952 regressions)",
     ),
     "references/source_registry.json": (
-        "df3bab2c0e821f367f8d9592bfc95d34e178b07112d8a93fd78bffc3aa755a7b",
-        "Decisions 15, 16, 35, 36, 54, 65, 67, 68, 71, 72, 73, 74 (sources and pending data requirements)",
+        "b57b70e1c9b2e21e7d41ab9187a500401940f8fc83154fd9790aef9865538706",
+        "Decisions 15, 16, 35, 36, 54, 65, 67, 68, 71, 72, 73, 74, 75 (sources and pending data requirements)",
     ),
 }
 

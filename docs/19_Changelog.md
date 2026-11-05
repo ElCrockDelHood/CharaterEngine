@@ -2,6 +2,12 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-05 · Decision 75: head ratios from ANSUR II (A31)
+
+### Changed
+- `head_width_ratio` 0.0862 and `head_depth_ratio` 0.1121 (were ASSUMPTION 0.08 / 0.07), DERIVED from ANSUR II; `ANSUR_II_2012`
+  registered as a source; fingerprints updated. No consumer reads them yet: no runtime change.
+
 ## [Unreleased] — 2026-11-05 · Decision 74: skull bones at BodyParts3D positions (A30)
 
 ### Changed
