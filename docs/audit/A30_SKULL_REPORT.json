@@ -1,0 +1,32 @@
+{
+  "finding": "A30 skull bones at schematic positions (A22 median 50 mm)",
+  "variant": "A without MANDIBLE; vertex kept at 1.80 m",
+  "sha256_lf_before": "a79f32f1cb19e59d0db628856426f923b889c15b26d4f8bbe723d0fdc404b7c0",
+  "sha256_lf_after": "c3a5920a2d03ed9932cf57407c9ef4b045ee660262326d5fc9163b5d22f0ef8d",
+  "changed_bones": [
+    "FRONTAL",
+    "PARIETAL_L",
+    "PARIETAL_R",
+    "TEMPORAL_L",
+    "TEMPORAL_R",
+    "OCCIPITAL",
+    "SPHENOID",
+    "ETHMOID",
+    "MAXILLA_L",
+    "MAXILLA_R",
+    "ZYGOMATIC_L",
+    "ZYGOMATIC_R",
+    "NASAL_L",
+    "NASAL_R",
+    "LACRIMAL_L",
+    "LACRIMAL_R",
+    "PALATINE_L",
+    "PALATINE_R",
+    "INFERIOR_NASAL_CONCHA_L",
+    "INFERIOR_NASAL_CONCHA_R",
+    "VOMER",
+    "HYOID"
+  ],
+  "provenance": "ESTIMATE: BodyParts3D centroids (one subject, internal use), stature map, y relative to the C1 body",
+  "applied": true
+}

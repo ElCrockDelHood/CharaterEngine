@@ -1362,14 +1362,30 @@ angle 38.2° → 5.1°, sternum 74.7 → 4.8 mm. Fingerprints updated. Audit `do
 
 ---
 
+## 74. A30 — SKULL BONES AT THEIR BODYPARTS3D POSITIONS (VARIANT A WITHOUT MANDIBLE, ESTIMATE)
+
+**Decision** (owner, 2026-11-05 02:14, card "Cráneo y ratios de cabeza"): `scripts/fix_skull_positions.py` moves 22 skull
+bones (with the hyoid) to their BodyParts3D centroids, keeping length and direction (one subject, ESTIMATE; mirror-averaged,
+midline x = 0). `FRONTAL` tail stays at the 1.80 m vertex (the bone becomes 98 mm long). `MANDIBLE` is not moved: its head stays at
+the chin (0.87 H, PROVEN) and game jaw pivot; moving the pivot to the TMJ is a separate step. Measured before committing:
+gameplay table in sync, every Godot replay identical (60/60), Blender 40/40 (IK rest 13.6 mm, T-pose PASS, vertex 1.800 m),
+only `head` clip directions change. The Godot joint-height check reads 1.733 m (was 1.767; it measures joint heads, and `FRONTAL`
+head is lower) and the game GLB 1.666 m (was 1.650). `eye_*` goes from 1.650 to about 1.667 m (PROVEN 1.685 m). A22 skull median
+50.0 → 6.4 mm. `SKULL_BONE_POSITIONS` registered, fingerprints updated. Audit `docs/audit/A30_SKULL.md`.
+Tests: `tests/unit/test_skull_positions.py`.
+
+**Date**: 2026-11-05 · **Status**: FINAL (owner); values ESTIMATE
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 73
+**Total Decisions**: 74
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 65 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 66 (+4 deferred; Decision 62 final for internal use, publication licence pending; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

@@ -28,6 +28,7 @@ C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`
 | A26 | Spine sagittal curves from BodyParts3D (vertebra by vertebra) | 71 | FINAL (values ESTIMATE; cervical spacing finding pending) |
 | A27 | Vertebral heights from BodyParts3D, contrast Busscher 2010 (CC BY-NC) | 72 | FINAL (values ESTIMATE) |
 | A28 | Thorax: sternum to the xiphoid, ribs from their vertebra | 73 | FINAL (values ESTIMATE) |
+| A30 | Skull bones at BodyParts3D positions, mandible excluded | 74 | FINAL (values ESTIMATE) |
 | A25 | PROXY pieces for anatomy missing from BodyParts3D (muscles, ligaments, coccyx, ossicles) | 69 | FINAL (ESTIMATE / PLACEHOLDER) |
 
 Related proposals (`docs/architecture/`): `ASSET_FITTING_PROPOSAL.md` (F0 – F6), `FEMUR_ANCHOR_LANDMARKS_PROPOSAL.md`,

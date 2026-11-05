@@ -2,6 +2,15 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-05 · Decision 74: skull bones at BodyParts3D positions (A30)
+
+### Changed
+- 22 skull bones (with the hyoid) move to their BodyParts3D centroids (ESTIMATE; `scripts/fix_skull_positions.py`); `FRONTAL` tail
+  stays at the 1.80 m vertex; `MANDIBLE` not moved. Fingerprints updated; clips and game body re-baked (`head` directions only).
+
+### Behaviour
+- No gameplay or replay change. `eye_*` rises about 17 mm, towards the PROVEN eye height.
+
 ## [Unreleased] — 2026-11-05 · Decision 73: thorax (A28)
 
 ### Changed

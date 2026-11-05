@@ -1,6 +1,6 @@
-# Proposal A30 — skull bone positions (NOT applied)
+# Proposal A30 — skull bone positions (variant A without MANDIBLE applied, Decision 74)
 
-**Status:** PROPOSAL, measured in a throw-away working copy (reverted; canonical data and fingerprints unchanged) ·
+**Status:** variant A APPLIED without `MANDIBLE` (`docs/audit/A30_SKULL.md`); this file keeps the proposal as approved ·
 **Date:** 2026-11-05 · needs the owner's OK and a numbered Decision · low gameplay impact · Related: A22, A27.
 
 ## Finding
