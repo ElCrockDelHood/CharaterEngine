@@ -1,0 +1,78 @@
+## Demo of the bone fragments (fracture_demo.tscn). Run it, or record it with Godot's movie writer:
+##
+##   godot --path runtime/godot res://fracture_demo.tscn
+##   godot --path runtime/godot res://fracture_demo.tscn --fixed-fps 30 --write-movie builds/fracture_demo.avi
+##
+## Three still blows, one per pattern (ribs, long bone, skull with A33's heavy test blow, not a gameplay move), then a
+## live exchange of blows with strike physics on. Quits at the end of the script.
+extends Node3D
+
+const SHOTS := [
+	{"at": 0.5, "key": "unarmed_heavy|thorax", "look": Vector3(0.0, 1.35, 0.0), "dist": 0.75, "label": "Costillas: piezas largas"},
+	{"at": 3.0, "key": "unarmed_heavy|thigh", "look": Vector3(0.1, 0.75, 0.0), "dist": 0.75, "label": "Fémur: cuña y piezas"},
+	{"at": 5.5, "key": "test_heavy_blow|head", "look": Vector3(0.0, 1.65, 0.0), "dist": 0.7, "label": "Cráneo: golpe de prueba, no es de juego"},
+]
+const FIGHT_AT := 8.0
+const END_AT := 15.0
+
+var arena: CESoulsArena
+var table: Dictionary
+var cam: Camera3D
+var title: Label
+var clock := 0.0
+var next_shot := 0
+var fighting := false
+
+
+func _ready() -> void:
+	table = CEFractureFx.load_table()
+	arena = CESoulsArena.build(CEGameplayData.load_default())
+	arena.autostep = false
+	arena.strike_physics = true
+	arena.start_distance_m = 1.2
+	var script := {}
+	for f in range(30, 420, 70):              # the player presses light every 70 frames
+		script[f] = {"player": {"light": true}}
+	arena.autoplay_script = script
+	add_child(arena)
+	cam = Camera3D.new()
+	add_child(cam)
+	cam.current = true
+	var fill := DirectionalLight3D.new()      # the camera looks at the side the arena's light leaves dark
+	fill.rotation_degrees = Vector3(-25, 200, 0)
+	fill.light_energy = 0.7
+	add_child(fill)
+	arena.combat.souls_event.connect(func(ev: Dictionary) -> void:
+		if ev["kind"] == "fracture":
+			print("fracture at clock %.2f s: %s %s" % [clock, ev["fighter"], ev["detail"]]))
+	var layer := CanvasLayer.new()
+	add_child(layer)
+	title = Label.new()
+	title.position = Vector2(20, 165)
+	title.add_theme_font_size_override("font_size", 26)
+	layer.add_child(title)
+	_aim(Vector3(0.0, 1.2, 0.0), 2.0)
+
+
+func _aim(look: Vector3, dist: float) -> void:
+	var ch: CECharacter = arena.characters["opponent"]
+	var target := ch.global_position + look
+	cam.global_position = target + (ch.global_transform.basis.z.normalized() + Vector3(0.6, 0.15, 0.0)).normalized() * dist
+	cam.look_at(target, Vector3.UP)
+
+
+func _process(delta: float) -> void:
+	clock += delta
+	if next_shot < SHOTS.size() and clock >= float(SHOTS[next_shot]["at"]):
+		var s: Dictionary = SHOTS[next_shot]
+		_aim(s["look"], s["dist"])
+		title.text = s["label"]
+		CEFractureFx.spawn_on(arena.characters["opponent"], table["events"][s["key"]])
+		next_shot += 1
+	if not fighting and clock >= FIGHT_AT:
+		fighting = true
+		arena.autostep = true
+		title.text = "Pelea: física de golpe activada"
+		_aim(Vector3(0.0, 1.2, 0.0), 1.5)
+	if clock >= END_AT:
+		get_tree().quit()

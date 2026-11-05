@@ -1,0 +1,2261 @@
+{
+ "decisions": [
+  80
+ ],
+ "events": {
+  "staff_heavy|forearm": {
+   "bone": "RADIUS_L",
+   "excess_energy_j": 9.108,
+   "fractured": true,
+   "fragment_kinetic_j": 0.9108,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 471.572,
+     "aspect": 2.0,
+     "id": 0,
+     "inner": true,
+     "kind": "wedge",
+     "mass_kg": 0.005654495946980686,
+     "position_m": [
+      -0.000643,
+      0.011413,
+      0.036159
+     ],
+     "size_m": 0.01992,
+     "spin_axis": [
+      0.245083,
+      -0.948519,
+      -0.200614
+     ],
+     "velocity_m_s": [
+      4.176355,
+      0.38871,
+      14.185826
+     ]
+    },
+    {
+     "angular_speed_rad_s": 223.539,
+     "aspect": 2.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.003417421592311166,
+     "position_m": [
+      0.006828,
+      -0.018584,
+      0.038925
+     ],
+     "size_m": 0.015486,
+     "spin_axis": [
+      -0.657312,
+      0.584139,
+      -0.476155
+     ],
+     "velocity_m_s": [
+      3.08673,
+      -8.401437,
+      5.967022
+     ]
+    },
+    {
+     "angular_speed_rad_s": 614.283,
+     "aspect": 2.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0018672314058483207,
+     "position_m": [
+      -0.002419,
+      0.025446,
+      0.033982
+     ],
+     "size_m": 0.011447,
+     "spin_axis": [
+      0.426538,
+      0.851205,
+      -0.305803
+     ],
+     "velocity_m_s": [
+      -0.791744,
+      8.328382,
+      5.577287
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "y": [
+     0.0,
+     0.0,
+     -1.0
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.2331,
+    -0.04,
+    0.99345
+   ],
+   "patch_mass_kg": 0.010939148945140174,
+   "patch_radius_m": 0.028,
+   "pattern": "butterfly",
+   "provenance": "ASSUMED",
+   "region": "forearm",
+   "schema": "ce-fracture/1",
+   "seed": 20904051525211,
+   "segment": "forearm.L",
+   "shell_thickness_m": 0.0075
+  },
+  "staff_heavy|pelvis": {
+   "bone": "SACRUM",
+   "excess_energy_j": 27.976,
+   "fractured": true,
+   "fragment_kinetic_j": 2.7976,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 308.145,
+     "aspect": 1.2,
+     "id": 0,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.015765301903431235,
+     "position_m": [
+      0.009675,
+      -0.002097,
+      0.082498
+     ],
+     "size_m": 0.02352,
+     "spin_axis": [
+      -0.798201,
+      -0.034404,
+      -0.601408
+     ],
+     "velocity_m_s": [
+      1.184845,
+      2.923991,
+      9.696743
+     ]
+    },
+    {
+     "angular_speed_rad_s": 124.153,
+     "aspect": 1.2,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.011447226709322208,
+     "position_m": [
+      -0.002145,
+      0.017012,
+      0.083223
+     ],
+     "size_m": 0.020041,
+     "spin_axis": [
+      -0.102248,
+      0.512856,
+      -0.852364
+     ],
+     "velocity_m_s": [
+      -0.953217,
+      7.559042,
+      7.618907
+     ]
+    },
+    {
+     "angular_speed_rad_s": 701.641,
+     "aspect": 1.2,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.009549529064284246,
+     "position_m": [
+      -0.021211,
+      0.006333,
+      0.087438
+     ],
+     "size_m": 0.018305,
+     "spin_axis": [
+      0.824127,
+      0.164485,
+      -0.541996
+     ],
+     "velocity_m_s": [
+      -9.760353,
+      2.914349,
+      10.186164
+     ]
+    },
+    {
+     "angular_speed_rad_s": 537.952,
+     "aspect": 1.2,
+     "id": 3,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.005355390074048512,
+     "position_m": [
+      0.005912,
+      -0.025516,
+      0.081566
+     ],
+     "size_m": 0.013708,
+     "spin_axis": [
+      -0.230012,
+      0.623923,
+      -0.746869
+     ],
+     "velocity_m_s": [
+      1.752086,
+      -7.561406,
+      7.761744
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     -1.0,
+     0.0,
+     0.0
+    ],
+    "y": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.0,
+    -0.14,
+    1.00685
+   ],
+   "patch_mass_kg": 0.0421174477510862,
+   "patch_radius_m": 0.028,
+   "pattern": "small_pieces",
+   "provenance": "ASSUMED",
+   "region": "pelvis",
+   "schema": "ce-fracture/1",
+   "seed": 185926884652976,
+   "segment": "pelvis",
+   "shell_thickness_m": 0.015
+  },
+  "staff_heavy|thigh": {
+   "bone": "FEMUR_L",
+   "excess_energy_j": 55.007,
+   "fractured": true,
+   "fragment_kinetic_j": 3.856162,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 433.047,
+     "aspect": 2.0,
+     "id": 0,
+     "inner": true,
+     "kind": "wedge",
+     "mass_kg": 0.01638796617794652,
+     "position_m": [
+      0.002908,
+      0.011055,
+      0.069965
+     ],
+     "size_m": 0.024821,
+     "spin_axis": [
+      0.908637,
+      0.276318,
+      0.313093
+     ],
+     "velocity_m_s": [
+      0.539312,
+      0.390555,
+      14.985213
+     ]
+    },
+    {
+     "angular_speed_rad_s": 434.142,
+     "aspect": 2.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.010879181696611374,
+     "position_m": [
+      0.000298,
+      -0.019797,
+      0.070769
+     ],
+     "size_m": 0.020224,
+     "spin_axis": [
+      0.132776,
+      -0.598257,
+      0.790227
+     ],
+     "velocity_m_s": [
+      0.188113,
+      -12.479337,
+      8.320503
+     ]
+    },
+    {
+     "angular_speed_rad_s": 793.329,
+     "aspect": 2.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.007505314040468013,
+     "position_m": [
+      0.004974,
+      0.025072,
+      0.078998
+     ],
+     "size_m": 0.016797,
+     "spin_axis": [
+      0.095947,
+      0.995194,
+      0.019553
+     ],
+     "velocity_m_s": [
+      2.347334,
+      11.831152,
+      8.041176
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     0.9984218806050312,
+     0.0,
+     -0.05615824364341366
+    ],
+    "y": [
+     -0.05615824364341366,
+     -0.0,
+     -0.9984218806050312
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.07835,
+    -0.08,
+    0.7451
+   ],
+   "patch_mass_kg": 0.03477246191502591,
+   "patch_radius_m": 0.028,
+   "pattern": "butterfly",
+   "provenance": "ASSUMED",
+   "region": "thigh",
+   "schema": "ce-fracture/1",
+   "seed": 119213281344892,
+   "segment": "thigh.L",
+   "shell_thickness_m": 0.014
+  },
+  "staff_heavy|thorax": {
+   "bone": "THORACIC_6",
+   "excess_energy_j": 65.04875,
+   "fractured": true,
+   "fragment_kinetic_j": 2.842928,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 340.611,
+     "aspect": 3.0,
+     "id": 0,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.009564386840821736,
+     "position_m": [
+      0.008748,
+      -0.00137,
+      0.054569
+     ],
+     "size_m": 0.02365,
+     "spin_axis": [
+      -0.571991,
+      0.733443,
+      0.36727
+     ],
+     "velocity_m_s": [
+      -4.0924,
+      0.700676,
+      14.413928
+     ]
+    },
+    {
+     "angular_speed_rad_s": 190.058,
+     "aspect": 3.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.007332545009740913,
+     "position_m": [
+      -0.014989,
+      0.003245,
+      0.056688
+     ],
+     "size_m": 0.020708,
+     "spin_axis": [
+      0.479656,
+      -0.611217,
+      -0.629559
+     ],
+     "velocity_m_s": [
+      -3.555677,
+      0.769712,
+      14.552138
+     ]
+    },
+    {
+     "angular_speed_rad_s": 756.632,
+     "aspect": 3.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.005934353755768215,
+     "position_m": [
+      0.019746,
+      -0.001442,
+      0.050393
+     ],
+     "size_m": 0.018629,
+     "spin_axis": [
+      -0.661087,
+      -0.086935,
+      -0.745256
+     ],
+     "velocity_m_s": [
+      3.628366,
+      -0.26505,
+      14.552138
+     ]
+    },
+    {
+     "angular_speed_rad_s": 1084.627,
+     "aspect": 3.0,
+     "id": 3,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.002108942628773927,
+     "position_m": [
+      -0.023324,
+      -0.002187,
+      0.053684
+     ],
+     "size_m": 0.011105,
+     "spin_axis": [
+      -0.753955,
+      -0.559206,
+      -0.344733
+     ],
+     "velocity_m_s": [
+      -3.622141,
+      -0.339686,
+      14.552138
+     ]
+    },
+    {
+     "angular_speed_rad_s": 2067.963,
+     "aspect": 3.0,
+     "id": 4,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.00033024041554691533,
+     "position_m": [
+      0.02573,
+      0.006599,
+      0.057083
+     ],
+     "size_m": 0.004395,
+     "spin_axis": [
+      -0.734183,
+      -0.219785,
+      -0.642394
+     ],
+     "velocity_m_s": [
+      3.523976,
+      0.903819,
+      14.552138
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     -1.0,
+     0.0,
+     0.0
+    ],
+    "y": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.0,
+    -0.13875,
+    1.36305
+   ],
+   "patch_mass_kg": 0.025270468650651707,
+   "patch_radius_m": 0.028,
+   "pattern": "transverse_ribs",
+   "provenance": "ASSUMED",
+   "region": "thorax",
+   "schema": "ce-fracture/1",
+   "seed": 138171688944642,
+   "segment": "thorax",
+   "shell_thickness_m": 0.009
+  },
+  "staff_light|forearm": {
+   "bone": "RADIUS_L",
+   "excess_energy_j": 5.387,
+   "fractured": true,
+   "fragment_kinetic_j": 0.5387,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 213.287,
+     "aspect": 2.0,
+     "id": 0,
+     "inner": true,
+     "kind": "wedge",
+     "mass_kg": 0.009001291518528512,
+     "position_m": [
+      -0.002399,
+      0.011176,
+      0.03538
+     ],
+     "size_m": 0.025133,
+     "spin_axis": [
+      0.721418,
+      -0.692373,
+      0.013269
+     ],
+     "velocity_m_s": [
+      1.178751,
+      1.761551,
+      8.805484
+     ]
+    },
+    {
+     "angular_speed_rad_s": 1366.36,
+     "aspect": 2.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0014858885306192119,
+     "position_m": [
+      0.005282,
+      -0.019081,
+      0.039115
+     ],
+     "size_m": 0.010211,
+     "spin_axis": [
+      -0.482891,
+      0.749385,
+      -0.453033
+     ],
+     "velocity_m_s": [
+      3.132201,
+      -11.315245,
+      7.827174
+     ]
+    },
+    {
+     "angular_speed_rad_s": 836.142,
+     "aspect": 2.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0004519688959924509,
+     "position_m": [
+      0.006504,
+      0.024719,
+      0.035185
+     ],
+     "size_m": 0.005632,
+     "spin_axis": [
+      0.866118,
+      0.499805,
+      -0.005802
+     ],
+     "velocity_m_s": [
+      2.069277,
+      7.864794,
+      5.421639
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "y": [
+     0.0,
+     0.0,
+     -1.0
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.2331,
+    -0.04,
+    0.99345
+   ],
+   "patch_mass_kg": 0.010939148945140174,
+   "patch_radius_m": 0.028,
+   "pattern": "butterfly",
+   "provenance": "ASSUMED",
+   "region": "forearm",
+   "schema": "ce-fracture/1",
+   "seed": 200232634118253,
+   "segment": "forearm.L",
+   "shell_thickness_m": 0.0075
+  },
+  "staff_light|thigh": {
+   "bone": "FEMUR_L",
+   "excess_energy_j": 21.349,
+   "fractured": true,
+   "fragment_kinetic_j": 2.1349,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 264.056,
+     "aspect": 2.0,
+     "id": 0,
+     "inner": true,
+     "kind": "wedge",
+     "mass_kg": 0.014039664646478748,
+     "position_m": [
+      -0.002571,
+      0.011138,
+      0.072924
+     ],
+     "size_m": 0.022974,
+     "spin_axis": [
+      -0.407643,
+      -0.684909,
+      0.603926
+     ],
+     "velocity_m_s": [
+      2.889562,
+      -0.501529,
+      11.574109
+     ]
+    },
+    {
+     "angular_speed_rad_s": 136.585,
+     "aspect": 2.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.012460455827806674,
+     "position_m": [
+      0.007687,
+      -0.018246,
+      0.069238
+     ],
+     "size_m": 0.021643,
+     "spin_axis": [
+      0.62285,
+      -0.782093,
+      -0.019699
+     ],
+     "velocity_m_s": [
+      3.316199,
+      -7.871256,
+      5.694201
+     ]
+    },
+    {
+     "angular_speed_rad_s": 578.457,
+     "aspect": 2.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.008272341440740485,
+     "position_m": [
+      -0.008642,
+      0.024055,
+      0.073203
+     ],
+     "size_m": 0.017635,
+     "spin_axis": [
+      0.631948,
+      -0.694067,
+      -0.344838
+     ],
+     "velocity_m_s": [
+      -3.022842,
+      8.414601,
+      5.960726
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     0.9984218806050312,
+     0.0,
+     -0.05615824364341366
+    ],
+    "y": [
+     -0.05615824364341366,
+     -0.0,
+     -0.9984218806050312
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.07835,
+    -0.08,
+    0.7451
+   ],
+   "patch_mass_kg": 0.03477246191502591,
+   "patch_radius_m": 0.028,
+   "pattern": "butterfly",
+   "provenance": "ASSUMED",
+   "region": "thigh",
+   "schema": "ce-fracture/1",
+   "seed": 255014700127279,
+   "segment": "thigh.L",
+   "shell_thickness_m": 0.014
+  },
+  "staff_light|thorax": {
+   "bone": "THORACIC_6",
+   "excess_energy_j": 29.29675,
+   "fractured": true,
+   "fragment_kinetic_j": 2.43574,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 228.026,
+     "aspect": 3.0,
+     "id": 0,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.012415376932100293,
+     "position_m": [
+      0.011238,
+      -0.002093,
+      0.056533
+     ],
+     "size_m": 0.026945,
+     "spin_axis": [
+      -0.502255,
+      -0.495624,
+      0.708588
+     ],
+     "velocity_m_s": [
+      -2.310709,
+      0.459602,
+      12.403844
+     ]
+    },
+    {
+     "angular_speed_rad_s": 574.57,
+     "aspect": 3.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.007033168582174507,
+     "position_m": [
+      -0.019625,
+      0.002617,
+      0.049715
+     ],
+     "size_m": 0.02028,
+     "spin_axis": [
+      -0.57976,
+      -0.005008,
+      0.814772
+     ],
+     "velocity_m_s": [
+      -3.606115,
+      0.480866,
+      14.552138
+     ]
+    },
+    {
+     "angular_speed_rad_s": 229.438,
+     "aspect": 3.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.005821923136376906,
+     "position_m": [
+      0.025539,
+      0.001054,
+      0.056262
+     ],
+     "size_m": 0.018452,
+     "spin_axis": [
+      -0.390123,
+      0.631413,
+      0.670165
+     ],
+     "velocity_m_s": [
+      3.634941,
+      0.149987,
+      14.552138
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     -1.0,
+     0.0,
+     0.0
+    ],
+    "y": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.0,
+    -0.13875,
+    1.36305
+   ],
+   "patch_mass_kg": 0.025270468650651707,
+   "patch_radius_m": 0.028,
+   "pattern": "transverse_ribs",
+   "provenance": "ASSUMED",
+   "region": "thorax",
+   "schema": "ce-fracture/1",
+   "seed": 94352134249275,
+   "segment": "thorax",
+   "shell_thickness_m": 0.009
+  },
+  "test_heavy_blow|head": {
+   "bone": "OCCIPITAL",
+   "excess_energy_j": 204.041,
+   "fractured": true,
+   "fragment_kinetic_j": 20.4041,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 190.072,
+     "aspect": 1.8,
+     "id": 0,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.016196619413506034,
+     "position_m": [
+      0.011783,
+      -0.00053,
+      0.015939
+     ],
+     "size_m": 0.036214,
+     "spin_axis": [
+      0.323525,
+      0.934684,
+      -0.147299
+     ],
+     "velocity_m_s": [
+      1.306895,
+      0.663055,
+      16.838279
+     ]
+    },
+    {
+     "angular_speed_rad_s": 406.033,
+     "aspect": 1.8,
+     "id": 1,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.010668812643042576,
+     "position_m": [
+      0.019993,
+      0.004205,
+      0.012968
+     ],
+     "size_m": 0.029392,
+     "spin_axis": [
+      0.117847,
+      0.387469,
+      0.914319
+     ],
+     "velocity_m_s": [
+      -5.125694,
+      -1.890548,
+      15.57967
+     ]
+    },
+    {
+     "angular_speed_rad_s": 185.762,
+     "aspect": 1.8,
+     "id": 2,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.009401215995776084,
+     "position_m": [
+      0.0234,
+      0.012169,
+      0.017972
+     ],
+     "size_m": 0.02759,
+     "spin_axis": [
+      -0.753836,
+      0.609306,
+      -0.245921
+     ],
+     "velocity_m_s": [
+      0.836816,
+      0.53493,
+      19.324529
+     ]
+    },
+    {
+     "angular_speed_rad_s": 257.841,
+     "aspect": 1.8,
+     "id": 3,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.008911076955241981,
+     "position_m": [
+      0.022402,
+      0.021727,
+      0.015913
+     ],
+     "size_m": 0.026862,
+     "spin_axis": [
+      0.282807,
+      0.919542,
+      0.272878
+     ],
+     "velocity_m_s": [
+      -5.479653,
+      -1.8467,
+      16.132507
+     ]
+    },
+    {
+     "angular_speed_rad_s": 167.423,
+     "aspect": 1.8,
+     "id": 4,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.008500066033753665,
+     "position_m": [
+      0.014905,
+      0.032094,
+      0.017007
+     ],
+     "size_m": 0.026235,
+     "spin_axis": [
+      -0.774746,
+      0.042445,
+      -0.630846
+     ],
+     "velocity_m_s": [
+      -3.269861,
+      1.286429,
+      15.091064
+     ]
+    },
+    {
+     "angular_speed_rad_s": 245.58,
+     "aspect": 1.8,
+     "id": 5,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.008162514396852335,
+     "position_m": [
+      0.009513,
+      0.037947,
+      0.013459
+     ],
+     "size_m": 0.025709,
+     "spin_axis": [
+      -0.31475,
+      -0.492316,
+      0.811516
+     ],
+     "velocity_m_s": [
+      1.687356,
+      5.046432,
+      17.328239
+     ]
+    },
+    {
+     "angular_speed_rad_s": 415.287,
+     "aspect": 1.8,
+     "id": 6,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.008058423700938054,
+     "position_m": [
+      -0.000922,
+      0.042519,
+      0.017881
+     ],
+     "size_m": 0.025544,
+     "spin_axis": [
+      -0.259327,
+      -0.605231,
+      0.752625
+     ],
+     "velocity_m_s": [
+      -0.281126,
+      12.968387,
+      5.559186
+     ]
+    },
+    {
+     "angular_speed_rad_s": 702.239,
+     "aspect": 1.8,
+     "id": 7,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.007832459321101154,
+     "position_m": [
+      -0.014922,
+      0.043178,
+      0.015276
+     ],
+     "size_m": 0.025183,
+     "spin_axis": [
+      0.197301,
+      -0.521727,
+      0.829984
+     ],
+     "velocity_m_s": [
+      -5.636395,
+      16.309631,
+      7.395472
+     ]
+    },
+    {
+     "angular_speed_rad_s": 556.924,
+     "aspect": 1.8,
+     "id": 8,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0077951724903922515,
+     "position_m": [
+      -0.029891,
+      0.038364,
+      0.018845
+     ],
+     "size_m": 0.025123,
+     "spin_axis": [
+      0.136405,
+      0.818171,
+      0.558561
+     ],
+     "velocity_m_s": [
+      -8.514794,
+      10.928523,
+      5.937444
+     ]
+    },
+    {
+     "angular_speed_rad_s": 390.922,
+     "aspect": 1.8,
+     "id": 9,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.007725591452932785,
+     "position_m": [
+      -0.039724,
+      0.032642,
+      0.012947
+     ],
+     "size_m": 0.025011,
+     "spin_axis": [
+      -0.236566,
+      0.272879,
+      0.932509
+     ],
+     "velocity_m_s": [
+      -11.259297,
+      9.252021,
+      6.245562
+     ]
+    },
+    {
+     "angular_speed_rad_s": 740.669,
+     "aspect": 1.8,
+     "id": 10,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.007070438490278872,
+     "position_m": [
+      -0.048392,
+      0.024083,
+      0.018997
+     ],
+     "size_m": 0.023927,
+     "spin_axis": [
+      0.02592,
+      -0.877438,
+      0.478989
+     ],
+     "velocity_m_s": [
+      -15.029991,
+      7.479853,
+      7.195009
+     ]
+    },
+    {
+     "angular_speed_rad_s": 388.44,
+     "aspect": 1.8,
+     "id": 11,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.006710917293833617,
+     "position_m": [
+      -0.055821,
+      0.009165,
+      0.014854
+     ],
+     "size_m": 0.023311,
+     "spin_axis": [
+      -0.89692,
+      0.442116,
+      -0.008275
+     ],
+     "velocity_m_s": [
+      -15.043062,
+      2.469883,
+      6.533347
+     ]
+    },
+    {
+     "angular_speed_rad_s": 478.176,
+     "aspect": 1.8,
+     "id": 12,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.006425937159710321,
+     "position_m": [
+      -0.057786,
+      -0.01179,
+      0.017872
+     ],
+     "size_m": 0.02281,
+     "spin_axis": [
+      0.625398,
+      0.675742,
+      -0.390193
+     ],
+     "velocity_m_s": [
+      -13.422195,
+      -2.738412,
+      5.870869
+     ]
+    },
+    {
+     "angular_speed_rad_s": 510.917,
+     "aspect": 1.8,
+     "id": 13,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.005778585179595726,
+     "position_m": [
+      -0.057171,
+      -0.022091,
+      0.013058
+     ],
+     "size_m": 0.021631,
+     "spin_axis": [
+      0.633242,
+      -0.644817,
+      -0.428037
+     ],
+     "velocity_m_s": [
+      -12.822827,
+      -4.954898,
+      5.891508
+     ]
+    },
+    {
+     "angular_speed_rad_s": 587.465,
+     "aspect": 1.8,
+     "id": 14,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.00560548606659461,
+     "position_m": [
+      -0.04676,
+      -0.042991,
+      0.013388
+     ],
+     "size_m": 0.021305,
+     "spin_axis": [
+      -0.151781,
+      -0.340648,
+      0.927858
+     ],
+     "velocity_m_s": [
+      -11.548507,
+      -10.617636,
+      6.723276
+     ]
+    },
+    {
+     "angular_speed_rad_s": 454.189,
+     "aspect": 1.8,
+     "id": 15,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.005468715958305707,
+     "position_m": [
+      -0.039546,
+      -0.052433,
+      0.017397
+     ],
+     "size_m": 0.021043,
+     "spin_axis": [
+      0.803022,
+      -0.284082,
+      0.523882
+     ],
+     "velocity_m_s": [
+      -7.195656,
+      -9.54058,
+      5.121386
+     ]
+    },
+    {
+     "angular_speed_rad_s": 534.909,
+     "aspect": 1.8,
+     "id": 16,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.00506110568689312,
+     "position_m": [
+      -0.02539,
+      -0.062822,
+      0.01766
+     ],
+     "size_m": 0.020244,
+     "spin_axis": [
+      0.020524,
+      0.702862,
+      -0.711031
+     ],
+     "velocity_m_s": [
+      -5.604862,
+      -13.867938,
+      6.410463
+     ]
+    },
+    {
+     "angular_speed_rad_s": 495.45,
+     "aspect": 1.8,
+     "id": 17,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0032440234013588424,
+     "position_m": [
+      -0.000891,
+      -0.069777,
+      0.013384
+     ],
+     "size_m": 0.016207,
+     "spin_axis": [
+      -0.799092,
+      0.109405,
+      -0.591171
+     ],
+     "velocity_m_s": [
+      -0.162746,
+      -12.747165,
+      5.463516
+     ]
+    },
+    {
+     "angular_speed_rad_s": 342.838,
+     "aspect": 1.8,
+     "id": 18,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0029096319674686718,
+     "position_m": [
+      0.010381,
+      -0.070993,
+      0.01667
+     ],
+     "size_m": 0.015349,
+     "spin_axis": [
+      -0.672783,
+      -0.619098,
+      -0.405069
+     ],
+     "velocity_m_s": [
+      2.201051,
+      -15.052128,
+      6.519516
+     ]
+    },
+    {
+     "angular_speed_rad_s": 537.74,
+     "aspect": 1.8,
+     "id": 19,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.002638098320949558,
+     "position_m": [
+      0.030262,
+      -0.067159,
+      0.016423
+     ],
+     "size_m": 0.014615,
+     "spin_axis": [
+      -0.12776,
+      0.280265,
+      0.951383
+     ],
+     "velocity_m_s": [
+      6.08432,
+      -13.502529,
+      6.347159
+     ]
+    },
+    {
+     "angular_speed_rad_s": 462.142,
+     "aspect": 1.8,
+     "id": 20,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.002452386851702234,
+     "position_m": [
+      0.054856,
+      -0.051915,
+      0.013215
+     ],
+     "size_m": 0.014092,
+     "spin_axis": [
+      -0.747929,
+      0.596692,
+      0.290795
+     ],
+     "velocity_m_s": [
+      10.979458,
+      -10.390978,
+      6.478675
+     ]
+    },
+    {
+     "angular_speed_rad_s": 624.477,
+     "aspect": 1.8,
+     "id": 21,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0013648283901469835,
+     "position_m": [
+      0.066087,
+      -0.040188,
+      0.01369
+     ],
+     "size_m": 0.010512,
+     "spin_axis": [
+      0.764516,
+      -0.443757,
+      -0.467542
+     ],
+     "velocity_m_s": [
+      14.925062,
+      -9.075936,
+      7.486274
+     ]
+    },
+    {
+     "angular_speed_rad_s": 1519.581,
+     "aspect": 1.8,
+     "id": 22,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.001004782833467277,
+     "position_m": [
+      0.077103,
+      -0.017776,
+      0.014033
+     ],
+     "size_m": 0.00902,
+     "spin_axis": [
+      0.486618,
+      0.868818,
+      -0.091426
+     ],
+     "velocity_m_s": [
+      14.126854,
+      -3.256915,
+      6.213185
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     -1.0,
+     0.0,
+     0.0
+    ],
+    "y": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.0,
+    -0.11535,
+    1.71415
+   ],
+   "patch_mass_kg": 0.14898689000384246,
+   "patch_radius_m": 0.08,
+   "pattern": "spiderweb",
+   "provenance": "ASSUMED",
+   "region": "head",
+   "schema": "ce-fracture/1",
+   "seed": 14912297474208,
+   "segment": "head",
+   "shell_thickness_m": 0.0065
+  },
+  "unarmed_heavy|forearm": {
+   "bone": "RADIUS_L",
+   "excess_energy_j": 7.583,
+   "fractured": true,
+   "fragment_kinetic_j": 0.7583,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 104.8,
+     "aspect": 2.0,
+     "id": 0,
+     "inner": true,
+     "kind": "wedge",
+     "mass_kg": 0.02280452367671404,
+     "position_m": [
+      0.011223,
+      0.034986,
+      0.036833
+     ],
+     "size_m": 0.040004,
+     "spin_axis": [
+      0.908454,
+      -0.323785,
+      -0.264337
+     ],
+     "velocity_m_s": [
+      0.123183,
+      -0.838569,
+      7.13571
+     ]
+    },
+    {
+     "angular_speed_rad_s": 55.118,
+     "aspect": 2.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.008815196161225712,
+     "position_m": [
+      -0.006793,
+      -0.063276,
+      0.036627
+     ],
+     "size_m": 0.024872,
+     "spin_axis": [
+      0.486706,
+      0.863892,
+      -0.129645
+     ],
+     "velocity_m_s": [
+      -0.391999,
+      -3.651674,
+      2.448436
+     ]
+    },
+    {
+     "angular_speed_rad_s": 114.155,
+     "aspect": 2.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.004538289443333808,
+     "position_m": [
+      0.011781,
+      0.080089,
+      0.035653
+     ],
+     "size_m": 0.017846,
+     "spin_axis": [
+      0.642184,
+      0.766306,
+      -0.019342
+     ],
+     "velocity_m_s": [
+      1.126607,
+      4.924646,
+      3.367913
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "y": [
+     0.0,
+     0.0,
+     -1.0
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.2331,
+    -0.04,
+    0.99345
+   ],
+   "patch_mass_kg": 0.03615800928127356,
+   "patch_radius_m": 0.09,
+   "pattern": "butterfly",
+   "provenance": "ASSUMED",
+   "region": "forearm",
+   "schema": "ce-fracture/1",
+   "seed": 67866028261450,
+   "segment": "forearm.L",
+   "shell_thickness_m": 0.0075
+  },
+  "unarmed_heavy|pelvis": {
+   "bone": "SACRUM",
+   "excess_energy_j": 14.055,
+   "fractured": true,
+   "fragment_kinetic_j": 1.4055,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 16.657,
+     "aspect": 1.2,
+     "id": 0,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.35610072277370003,
+     "position_m": [
+      0.035303,
+      -0.010183,
+      0.08307
+     ],
+     "size_m": 0.11178,
+     "spin_axis": [
+      -0.166822,
+      0.788669,
+      -0.591753
+     ],
+     "velocity_m_s": [
+      -0.172145,
+      0.197512,
+      2.526074
+     ]
+    },
+    {
+     "angular_speed_rad_s": 36.733,
+     "aspect": 1.2,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.07814452710563745,
+     "position_m": [
+      -0.051777,
+      0.037001,
+      0.088259
+     ],
+     "size_m": 0.052363,
+     "spin_axis": [
+      0.834198,
+      -0.544511,
+      0.087303
+     ],
+     "velocity_m_s": [
+      -1.466093,
+      1.047705,
+      1.801975
+     ]
+    },
+    {
+     "angular_speed_rad_s": 254.769,
+     "aspect": 1.2,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0008967485693847088,
+     "position_m": [
+      -0.063244,
+      -0.052442,
+      0.083266
+     ],
+     "size_m": 0.005609,
+     "spin_axis": [
+      0.945539,
+      0.32547,
+      0.004964
+     ],
+     "velocity_m_s": [
+      -1.495682,
+      -1.240235,
+      1.943
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     -1.0,
+     0.0,
+     0.0
+    ],
+    "y": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.0,
+    -0.14,
+    1.00685
+   ],
+   "patch_mass_kg": 0.4351419984487222,
+   "patch_radius_m": 0.09,
+   "pattern": "small_pieces",
+   "provenance": "ASSUMED",
+   "region": "pelvis",
+   "schema": "ce-fracture/1",
+   "seed": 240922826387530,
+   "segment": "pelvis",
+   "shell_thickness_m": 0.015
+  },
+  "unarmed_heavy|thigh": {
+   "bone": "FEMUR_L",
+   "excess_energy_j": 38.82,
+   "fractured": true,
+   "fragment_kinetic_j": 3.882,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 112.107,
+     "aspect": 2.0,
+     "id": 0,
+     "inner": true,
+     "kind": "wedge",
+     "mass_kg": 0.11254128207733798,
+     "position_m": [
+      0.002018,
+      0.036687,
+      0.078835
+     ],
+     "size_m": 0.065045,
+     "spin_axis": [
+      -0.606985,
+      -0.775116,
+      -0.175396
+     ],
+     "velocity_m_s": [
+      0.856633,
+      0.386461,
+      7.835536
+     ]
+    },
+    {
+     "angular_speed_rad_s": 199.502,
+     "aspect": 2.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.009870098676741134,
+     "position_m": [
+      0.007568,
+      -0.063188,
+      0.071066
+     ],
+     "size_m": 0.019263,
+     "spin_axis": [
+      0.783078,
+      0.335181,
+      0.523872
+     ],
+     "velocity_m_s": [
+      0.743797,
+      -6.210359,
+      4.169828
+     ]
+    },
+    {
+     "angular_speed_rad_s": 760.261,
+     "aspect": 2.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0026721436008216443,
+     "position_m": [
+      0.021991,
+      0.079088,
+      0.072667
+     ],
+     "size_m": 0.010023,
+     "spin_axis": [
+      0.117028,
+      0.730377,
+      0.672944
+     ],
+     "velocity_m_s": [
+      1.936472,
+      6.882621,
+      4.766568
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     0.9984218806050312,
+     0.0,
+     -0.05615824364341366
+    ],
+    "y": [
+     -0.05615824364341366,
+     -0.0,
+     -0.9984218806050312
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.07835,
+    -0.08,
+    0.7451
+   ],
+   "patch_mass_kg": 0.12508352435490075,
+   "patch_radius_m": 0.09,
+   "pattern": "butterfly",
+   "provenance": "ASSUMED",
+   "region": "thigh",
+   "schema": "ce-fracture/1",
+   "seed": 44011921714330,
+   "segment": "thigh.L",
+   "shell_thickness_m": 0.014
+  },
+  "unarmed_heavy|thorax": {
+   "bone": "THORACIC_6",
+   "excess_energy_j": 47.73775,
+   "fractured": true,
+   "fragment_kinetic_j": 4.773775,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 51.604,
+     "aspect": 3.0,
+     "id": 0,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.07891828044419594,
+     "position_m": [
+      0.031624,
+      -0.003527,
+      0.049299
+     ],
+     "size_m": 0.067935,
+     "spin_axis": [
+      -0.372985,
+      -0.811394,
+      -0.450024
+     ],
+     "velocity_m_s": [
+      -1.267339,
+      0.468044,
+      6.2667
+     ]
+    },
+    {
+     "angular_speed_rad_s": 97.21,
+     "aspect": 3.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.07530017240958264,
+     "position_m": [
+      -0.053854,
+      -0.011714,
+      0.056458
+     ],
+     "size_m": 0.066359,
+     "spin_axis": [
+      0.384787,
+      0.636151,
+      -0.668768
+     ],
+     "velocity_m_s": [
+      -1.676091,
+      -0.364565,
+      6.861123
+     ]
+    },
+    {
+     "angular_speed_rad_s": 38.767,
+     "aspect": 3.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0662392410167222,
+     "position_m": [
+      0.071017,
+      0.00437,
+      0.049601
+     ],
+     "size_m": 0.062239,
+     "spin_axis": [
+      -0.064801,
+      -0.717084,
+      0.693968
+     ],
+     "velocity_m_s": [
+      0.99603,
+      0.061296,
+      3.991657
+     ]
+    },
+    {
+     "angular_speed_rad_s": 100.187,
+     "aspect": 3.0,
+     "id": 3,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.04062750519873237,
+     "position_m": [
+      -0.08068,
+      -0.024045,
+      0.051884
+     ],
+     "size_m": 0.048743,
+     "spin_axis": [
+      -0.196097,
+      -0.651456,
+      -0.732906
+     ],
+     "velocity_m_s": [
+      -1.372488,
+      -0.409043,
+      5.728582
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     -1.0,
+     0.0,
+     0.0
+    ],
+    "y": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.0,
+    -0.13875,
+    1.36305
+   ],
+   "patch_mass_kg": 0.26108519906923316,
+   "patch_radius_m": 0.09,
+   "pattern": "transverse_ribs",
+   "provenance": "ASSUMED",
+   "region": "thorax",
+   "schema": "ce-fracture/1",
+   "seed": 150622333850352,
+   "segment": "thorax",
+   "shell_thickness_m": 0.009
+  },
+  "unarmed_light|forearm": {
+   "bone": "RADIUS_L",
+   "excess_energy_j": 3.397,
+   "fractured": true,
+   "fragment_kinetic_j": 0.3397,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 106.695,
+     "aspect": 2.0,
+     "id": 0,
+     "inner": true,
+     "kind": "wedge",
+     "mass_kg": 0.023828790359208627,
+     "position_m": [
+      -0.011781,
+      0.034236,
+      0.033856
+     ],
+     "size_m": 0.040892,
+     "spin_axis": [
+      -0.380037,
+      -0.605782,
+      -0.698999
+     ],
+     "velocity_m_s": [
+      -0.585987,
+      1.074058,
+      4.228603
+     ]
+    },
+    {
+     "angular_speed_rad_s": 89.923,
+     "aspect": 2.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.009273099703869348,
+     "position_m": [
+      -0.011781,
+      -0.061025,
+      0.032975
+     ],
+     "size_m": 0.02551,
+     "spin_axis": [
+      0.68274,
+      -0.719989,
+      0.124426
+     ],
+     "velocity_m_s": [
+      -0.943353,
+      -3.188384,
+      2.216675
+     ]
+    },
+    {
+     "angular_speed_rad_s": 279.55,
+     "aspect": 2.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0030561192181955826,
+     "position_m": [
+      -0.011781,
+      0.078146,
+      0.036729
+     ],
+     "size_m": 0.014645,
+     "spin_axis": [
+      -0.61038,
+      0.542953,
+      -0.576748
+     ],
+     "velocity_m_s": [
+      -1.22529,
+      3.775703,
+      2.646362
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "y": [
+     0.0,
+     0.0,
+     -1.0
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.2331,
+    -0.04,
+    0.99345
+   ],
+   "patch_mass_kg": 0.03615800928127356,
+   "patch_radius_m": 0.09,
+   "pattern": "butterfly",
+   "provenance": "ASSUMED",
+   "region": "forearm",
+   "schema": "ce-fracture/1",
+   "seed": 200358169493303,
+   "segment": "forearm.L",
+   "shell_thickness_m": 0.0075
+  },
+  "unarmed_light|thigh": {
+   "bone": "FEMUR_L",
+   "excess_energy_j": 9.463,
+   "fractured": true,
+   "fragment_kinetic_j": 0.9463,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 19.16,
+     "aspect": 2.0,
+     "id": 0,
+     "inner": true,
+     "kind": "wedge",
+     "mass_kg": 0.07274034459703015,
+     "position_m": [
+      -0.003813,
+      0.036544,
+      0.074661
+     ],
+     "size_m": 0.052293,
+     "spin_axis": [
+      -0.152097,
+      -0.894433,
+      0.420542
+     ],
+     "velocity_m_s": [
+      -0.466708,
+      -0.064211,
+      4.1329
+     ]
+    },
+    {
+     "angular_speed_rad_s": 74.342,
+     "aspect": 2.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.03158038791468921,
+     "position_m": [
+      0.00432,
+      -0.063493,
+      0.075649
+     ],
+     "size_m": 0.034456,
+     "spin_axis": [
+      -0.34153,
+      0.668646,
+      0.660507
+     ],
+     "velocity_m_s": [
+      0.163709,
+      -2.40625,
+      1.607875
+     ]
+    },
+    {
+     "angular_speed_rad_s": 133.954,
+     "aspect": 2.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.02076279184318139,
+     "position_m": [
+      0.000463,
+      0.082157,
+      0.074182
+     ],
+     "size_m": 0.027938,
+     "spin_axis": [
+      -0.35205,
+      -0.133004,
+      -0.926483
+     ],
+     "velocity_m_s": [
+      0.019755,
+      3.505943,
+      2.337333
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     0.9984218806050312,
+     0.0,
+     -0.05615824364341366
+    ],
+    "y": [
+     -0.05615824364341366,
+     -0.0,
+     -0.9984218806050312
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.07835,
+    -0.08,
+    0.7451
+   ],
+   "patch_mass_kg": 0.12508352435490075,
+   "patch_radius_m": 0.09,
+   "pattern": "butterfly",
+   "provenance": "ASSUMED",
+   "region": "thigh",
+   "schema": "ce-fracture/1",
+   "seed": 93059109812592,
+   "segment": "thigh.L",
+   "shell_thickness_m": 0.014
+  },
+  "unarmed_light|thorax": {
+   "bone": "THORACIC_6",
+   "excess_energy_j": 16.89275,
+   "fractured": true,
+   "fragment_kinetic_j": 1.689275,
+   "fragments": [
+    {
+     "angular_speed_rad_s": 27.301,
+     "aspect": 3.0,
+     "id": 0,
+     "inner": true,
+     "kind": "piece",
+     "mass_kg": 0.11550538487739671,
+     "position_m": [
+      0.036373,
+      -0.005193,
+      0.054591
+     ],
+     "size_m": 0.082187,
+     "spin_axis": [
+      0.242566,
+      -0.601898,
+      0.760842
+     ],
+     "velocity_m_s": [
+      -0.554505,
+      0.290023,
+      3.564726
+     ]
+    },
+    {
+     "angular_speed_rad_s": 49.483,
+     "aspect": 3.0,
+     "id": 1,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.0800090320238317,
+     "position_m": [
+      -0.063211,
+      -0.00737,
+      0.056456
+     ],
+     "size_m": 0.068402,
+     "spin_axis": [
+      -0.530636,
+      0.762464,
+      -0.370234
+     ],
+     "velocity_m_s": [
+      -0.860605,
+      -0.100334,
+      3.465738
+     ]
+    },
+    {
+     "angular_speed_rad_s": 49.228,
+     "aspect": 3.0,
+     "id": 2,
+     "inner": false,
+     "kind": "piece",
+     "mass_kg": 0.06557078216800477,
+     "position_m": [
+      0.082157,
+      -0.000515,
+      0.054341
+     ],
+     "size_m": 0.061924,
+     "spin_axis": [
+      -0.710833,
+      -0.112946,
+      0.694233
+     ],
+     "velocity_m_s": [
+      0.870376,
+      -0.005458,
+      3.481573
+     ]
+    }
+   ],
+   "frame": {
+    "x": [
+     -1.0,
+     0.0,
+     0.0
+    ],
+    "y": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "z": [
+     -0.0,
+     1.0,
+     -0.0
+    ]
+   },
+   "impact_point_m": [
+    0.0,
+    -0.13875,
+    1.36305
+   ],
+   "patch_mass_kg": 0.26108519906923316,
+   "patch_radius_m": 0.09,
+   "pattern": "transverse_ribs",
+   "provenance": "ASSUMED",
+   "region": "thorax",
+   "schema": "ce-fracture/1",
+   "seed": 98514849364167,
+   "segment": "thorax",
+   "shell_thickness_m": 0.009
+  }
+ },
+ "fracture_commit": "10bb235",
+ "generator": "runtime/godot/tests/make_fracture_events.py",
+ "provenance": "ASSUMED (A33): a plausible drawing, not a prediction of how a real bone breaks",
+ "regions_without_bone_shell": [
+  "abdomen"
+ ],
+ "repo_commit": "30a1578",
+ "schema": "ce-fracture/1",
+ "test_heavy_blow": {
+  "contact_radius_m": 0.04,
+  "mass_kg": 8.0,
+  "speed_m_s": 12.0
+ }
+}
