@@ -49,6 +49,7 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 4. Opcional: escribir al licenciante de BodyParts3D para cerrar la discrepancia con las cabeceras CC BY-SA 2.1 JP de los OBJ
    (hoy declarada en `NOTICE`, Decisión 76).
 5. `feature/audio-p0`: sigue "como está"; si se mergea, renumerar su decisión a la siguiente libre.
+   El historial no se reescribe salvo pedido explícito: el `LICENSE` anterior sigue en commits viejos y en `main` hasta el merge.
 
 **Anatomía** (cada cambio de datos canónicos necesita el OK del dueño y una Decisión)
 
@@ -63,5 +64,5 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 
 **Sin verificar**: UPBGE no se corrió en estos cambios; el CI de GitHub no se pudo ver.
 
-**Cerrado, no reabrir sin motivo**: manos y pies NO se mueven (A29); licencias de publicación y del código (Decisiones 76, 77);
-la línea de copyright de `LICENSE` queda como está por decisión del dueño (Decisión 77).
+**Cerrado, no reabrir sin motivo**: manos y pies NO se mueven (A29); licencias de publicación y del código (Decisiones 76, 77).
+`LICENSE` lleva solo el nombre del dueño; el dato personal anterior ya no está en el árbol de la rama (Decisión 77).
