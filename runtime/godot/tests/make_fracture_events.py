@@ -37,7 +37,6 @@ def main() -> int:
     args = ap.parse_args()
     sys.path.insert(0, str(args.physics_root / "src"))
     from character_engine.domain.gameplay.souls import UNARMED_CONTACT_RADIUS_M
-    from character_engine.domain.materials.catalog import MaterialKind
     from character_engine.domain.physics.body_strike import LayeredBody
     from character_engine.domain.physics.fracture_event import SCHEMA, strike_fracture
     from character_engine.domain.physics.strike_model import Striker
@@ -47,9 +46,7 @@ def main() -> int:
     body = LayeredBody(pts)
     table = json.loads(GAMEPLAY.read_text(encoding="utf-8"))
     events = {}
-    # strike_fracture needs a bone shell; a segment without one (the force model can still say "fractured") has no shards.
-    no_bone = sorted(r for r, seg in SEGMENT_OF_REGION.items()
-                     if not any(sh.material is MaterialKind.BONE for sh in body.capsules[seg].shells))
+    no_bone = set()         # reason "no_bone_layer": no shards, though the force model can still say "fractured" (A15)
     for move_id, mv in sorted(table["souls_like_rules"]["moves"].items()):
         weapon = table["weapons"][mv["weapon_id"]]
         if weapon["category"] == "blade":                 # the fracture model is blunt only
@@ -57,9 +54,9 @@ def main() -> int:
         radius = UNARMED_CONTACT_RADIUS_M if weapon["category"] == "unarmed" else weapon["contact_radius_m"]
         striker = Striker.from_move(mv["energy_j"], radius, mv["kind"])
         for region, segment in SEGMENT_OF_REGION.items():
-            if region in no_bone:
-                continue
             _, event = strike_fracture(body, segment, striker)
+            if event.reason == "no_bone_layer":
+                no_bone.add(region)
             if event.fractured:
                 events[f"{move_id}|{region}"] = event.to_dict()
     _, heavy = strike_fracture(body, "head", Striker(**{"effective_mass_kg": TEST_BLOW["mass_kg"],
@@ -69,7 +66,7 @@ def main() -> int:
     doc = {"schema": SCHEMA, "generator": "runtime/godot/tests/make_fracture_events.py", "repo_commit": _commit(REPO),
            "fracture_commit": _commit(args.physics_root), "decisions": [80],
            "provenance": "ASSUMED (A33): a plausible drawing, not a prediction of how a real bone breaks",
-           "regions_without_bone_shell": no_bone, "test_heavy_blow": TEST_BLOW, "events": events}
+           "regions_without_bone_shell": sorted(no_bone), "test_heavy_blow": TEST_BLOW, "events": events}
     OUT.write_text(json.dumps(doc, indent=1, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
     print(f"wrote {OUT}: {len(events)} events, largest {max(len(e['fragments']) for e in events.values())} fragments")
     return 0
