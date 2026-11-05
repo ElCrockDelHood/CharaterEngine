@@ -1415,14 +1415,30 @@ decision. Test: `tests/unit/test_notice.py`.
 
 ---
 
+## 77. PROJECT CODE UNDER THE MIT LICENSE
+
+**Decision** (owner, 2026-11-05 03:25, card "MIT en inglés"): `LICENSE` becomes the standard MIT text in English, copyright
+Mariano Martin Galli, 2026, with no personal identifiers. It replaces the Spanish MIT-like text, which GitHub reported as
+"Other". `pyproject.toml` moves from "Proprietary" to MIT, with the matching classifier. MIT covers the project's own code;
+it does not relicense third-party material: BodyParts3D-derived values keep CC BY 4.0 with attribution (Decision 76), and ANSUR II
+and Busscher et al. 2010 are cited under their own terms (`NOTICE`). Earlier copies keep the terms they were published under.
+
+**Not done, still the owner's decision:** the previous `LICENSE` text with a personal identifier stays in the git history and on
+`main` until the merge. No history was rewritten and nothing was force-pushed. Test: `tests/unit/test_notice.py`. No canonical
+data, fingerprint, gameplay or runtime change.
+
+**Date**: 2026-11-05 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 76
+**Total Decisions**: 77
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 68 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 69 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

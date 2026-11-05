@@ -101,6 +101,8 @@ editor, IK/FK rig, mocap, runtime IK, simulation extraction, animals) are in
 
 ## Licence and attribution
 
-The project's own terms are in [LICENSE](LICENSE). Third-party attributions are in [NOTICE](NOTICE). Part of the canonical
-skeleton adapts values measured from BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0
-International; reuse of those values must keep that attribution (Decision 76). No third-party mesh is in this repository.
+The project's own code is under the [MIT License](LICENSE) (Decision 77). Third-party attributions are in [NOTICE](NOTICE).
+Part of the canonical skeleton adapts values measured from BodyParts3D, © The Database Center for Life Science licensed under
+CC Attribution 4.0 International; those values keep CC BY 4.0 and their reuse must keep that attribution (Decision 76). ANSUR II
+and Busscher et al. 2010 are cited under their own terms (Busscher: CC BY-NC, no commercial use of its values). No third-party
+mesh is in this repository.

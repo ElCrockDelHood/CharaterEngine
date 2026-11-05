@@ -11,7 +11,7 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 - Herramientas en `C:\DEV\Tools`: Blender 3.6.23 (referencia), Godot 4.7.2 (tests), UPBGE 0.50 (opcional).
 - Tests: `.venv\Scripts\python.exe scripts\test.py`, `scripts\lint.py`, `scripts\engine_tests.py blender godot`
   (logs en `logs/`). Último estado: pytest todo verde, lint OK, Blender 40/40, Godot 60/60.
-- Decisiones: `docs/reorientation/DECISION_LOG.md` (última: **76**; siguiente libre: **77**).
+- Decisiones: `docs/reorientation/DECISION_LOG.md` (última: **77**; siguiente libre: **78**).
   Índice de auditorías: `docs/audit/INDEX.md`.
 - Referencias externas (fuera del repo, nunca se commitean): `assets/anatomy/README.md`.
 
@@ -38,7 +38,7 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 ## 4. Pendiente del dueño
 
 1. Tolerancias del ajuste (A19 / A20 / A22 dan la dispersión medida).
-2. ~~Licencia de publicación de BodyParts3D~~: CC BY 4.0 con atribución (Decisión 76, `NOTICE`). Queda a decisión del dueño la licencia propia: `LICENSE` (texto tipo MIT en español, GitHub lo lee como "Other") contradice `pyproject.toml` ("Proprietary").
+2. ~~Licencia de publicación de BodyParts3D~~: CC BY 4.0 con atribución (Decisión 76, `NOTICE`). ~~Licencia del código~~: MIT (Decisión 77). Falta decidir: el `LICENSE` anterior, con un dato personal, sigue en el historial y en `main` hasta el merge; borrarlo del historial exige reescribirlo con push forzado (solo con OK explícito del dueño).
 3. ~~Reparentar `CLAVICLE_*` a `STERNUM`~~: hecho (Decisión 70).
 4. Columna: curva y alturas aplicadas (Decisiones 71, 72). Tórax, cráneo y ratios de cabeza aplicados (Decisiones 73–75). Manos y pies: NO mover (A29). Pendientes: pivote de la mandíbula en la ATM, variante F del pie (hilo de animación), altura del hombro, base del cuello (ANSUR cervicale 35–45 mm arriba).
 5. Revisar la rama `anatomy/a13-a24-base` y decidir el merge a `main`.

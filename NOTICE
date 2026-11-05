@@ -1,9 +1,11 @@
 Character Engine: third-party notices and attributions
 =======================================================
 
-The terms for the project's own work are in LICENSE. This file lists the third-party
-material the repository adapts or cites, and the conditions that travel with it.
-Decision 76 (docs/reorientation/DECISION_LOG.md) records the publication decision.
+The project's own code is under the MIT License (LICENSE, Decision 77). The MIT License does
+not replace the terms of third-party material: values derived from BodyParts3D keep CC BY 4.0
+with attribution, and ANSUR II and Busscher et al. 2010 are cited under their own terms.
+This file lists that material and the conditions that travel with it. Decisions 76 and 77 are
+in docs/reorientation/DECISION_LOG.md.
 
 
 1. BodyParts3D: adapted, attribution required
