@@ -1418,14 +1418,13 @@ decision. Test: `tests/unit/test_notice.py`.
 ## 77. PROJECT CODE UNDER THE MIT LICENSE
 
 **Decision** (owner, 2026-11-05 03:25, card "MIT en inglés"): `LICENSE` becomes the standard MIT text in English, copyright
-Mariano Martin Galli, 2026. It replaces the Spanish MIT-like text, which GitHub reported as
+Mariano Martin Galli, 2026, with no personal identifiers. It replaces the Spanish MIT-like text, which GitHub reported as
 "Other". `pyproject.toml` moves from "Proprietary" to MIT, with the matching classifier. MIT covers the project's own code;
 it does not relicense third-party material: BodyParts3D-derived values keep CC BY 4.0 with attribution (Decision 76), and ANSUR II
 and Busscher et al. 2010 are cited under their own terms (`NOTICE`). Earlier copies keep the terms they were published under.
 
-**Owner correction** (2026-11-05 03:37): the owner wants the identification in the copyright line, as proof of ownership, so
-`LICENSE` keeps that line exactly as it was before this Decision. It appears only there: not in `NOTICE`, the README or
-`pyproject.toml`. No history was rewritten and nothing was force-pushed; the owner did not ask for a history clean-up. Test: `tests/unit/test_notice.py`. No canonical
+**Not done, still the owner's decision:** the previous `LICENSE` text with a personal identifier stays in the git history and on
+`main` until the merge. No history was rewritten and nothing was force-pushed. Test: `tests/unit/test_notice.py`. No canonical
 data, fingerprint, gameplay or runtime change.
 
 **Date**: 2026-11-05 · **Status**: FINAL

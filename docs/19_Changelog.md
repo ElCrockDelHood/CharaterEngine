@@ -5,7 +5,7 @@ All notable changes to Character Engine. Dates are ISO 8601.
 ## [Unreleased] — 2026-11-05 · Decision 77: project code under the MIT License
 
 ### Changed
-- `LICENSE` is the standard MIT text in English, keeping the owner's copyright line; `pyproject.toml` license and classifier aligned (was "Proprietary").
+- `LICENSE` is the standard MIT text in English; `pyproject.toml` license and classifier aligned (was "Proprietary").
   Third-party material keeps its own terms (`NOTICE`).
 
 ## [Unreleased] — 2026-11-05 · Decision 76: publication of BodyParts3D-derived values

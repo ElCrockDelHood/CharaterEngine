@@ -15,10 +15,10 @@ def test_notice_keeps_the_required_attributions():
 
 
 def test_project_licence_is_mit_everywhere():
-    """Decision 77: LICENSE and pyproject agree, and LICENSE names the owner."""
+    """Decision 77: LICENSE and pyproject agree, and LICENSE carries no personal identifier."""
     licence = (ROOT / "LICENSE").read_text(encoding="utf-8")
     assert licence.startswith("MIT License\n") or licence.startswith("MIT License\r\n")
-    assert "Copyright (c) [2026] Mariano Martin Galli" in licence and "Permission is hereby granted" in licence
+    assert "Copyright (c) 2026 Mariano Martin Galli" in licence and "DNI" not in licence
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     assert 'license = { text = "MIT" }' in pyproject and "License :: OSI Approved :: MIT License" in pyproject
 
