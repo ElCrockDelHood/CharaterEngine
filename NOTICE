@@ -24,7 +24,7 @@ meshes themselves; the changes were landmark and centroid measurement, scaling t
 stature, remapping onto the canonical skeleton, and rounding:
 
 - canonical coordinates in src/character_engine/data/anatomy/human_adult_206.json
-  (hips, shoulder girdle, spine, thorax, skull: Decisions 67, 68, 71-74), and everything
+  (hips, shoulder girdle, spine, thorax, skull, jaw: Decisions 67, 68, 71-74, 78), and everything
   generated from that skeleton (builds/exports/skeleton_serialized.json, the Godot body and
   clips in runtime/godot/addons/character_engine/data/, assets/anatomy/proxies/);
 - the value tables in scripts/fix_*.py;
@@ -77,6 +77,13 @@ commercially on the strength of this project's terms.
   J Biomech 35:543-548. Geometry convention only.
 - Wu, G. et al. (2005). ISB recommendation on definitions of joint coordinate systems, part II
   (shoulder). J Biomech 38:981-992. Landmark convention only.
+
+- Posselt, U. Hinge opening axis of the mandible. Acta Odontologica Scandinavica. Contrast for
+  the opening limit (A32); no value taken.
+- Abushouk, S. et al. (2025). Maximal Mouth Opening Index among Dental Students in Khartoum
+  University. Open Dent J 19:e18742106392815. CC BY 4.0. Contrast for the opening limit (A32).
+- A study of bachelor-level students in Nepal, cited by URL in
+  docs/architecture/JAW_ATM_PROPOSAL.md. Contrast for the opening limit (A32).
 
 The complete list, with what each source supports, is in
 src/character_engine/data/anatomy/references/source_registry.json.

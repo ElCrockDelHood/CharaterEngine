@@ -6,12 +6,12 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 
 - Repo: `C:\DEV\Proyectos\CharaterEngine-20261004T202505Z-1-001\CharaterEngine`, remoto
   `github.com/ElCrockDelHood/CharaterEngine`.
-- **Todo está en `main`** (A13–A31, Decisiones 54–77; mezcla por fast-forward del 2026-11-05, autorizada por el dueño). Los
+- **Todo está en `main`** (A13–A32, Decisiones 54–78; mezcla por fast-forward del 2026-11-05, autorizada por el dueño). Los
   hilos nuevos y los existentes parten de `main`: `git pull origin main`.
 - Herramientas en `C:\DEV\Tools`: Blender 3.6.23 (referencia), Godot 4.7.2 (tests), UPBGE 0.50 (opcional).
 - Tests: `.venv\Scripts\python.exe scripts\test.py`, `scripts\lint.py`, `scripts\engine_tests.py blender godot`
   (logs en `logs/`). Último estado (2026-11-05): pytest todo verde, lint OK, Blender y Godot en verde (Godot 60/60).
-- Decisiones: `docs/reorientation/DECISION_LOG.md` (última: **77**; siguiente libre: **78**).
+- Decisiones: `docs/reorientation/DECISION_LOG.md` (última: **78**; siguiente libre: **79**).
   Índice de auditorías: `docs/audit/INDEX.md`.
 - Referencias externas (fuera del repo, nunca se commitean): `assets/anatomy/README.md`.
 
@@ -28,6 +28,7 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 | Correcciones del esqueleto canónico: peroné lateral, centros de cadera 180,2 mm, cintura escapular (hombros 406,8 mm, clavícula SC→AC, escápula AC→AI), clavícula bajo el esternón, columna (curva y alturas), tórax, cráneo | A21, A23, A24, A26–A28, A30 / 65, 67, 68, 70–74 |
 | Ratios de ancho y largo de cabeza desde ANSUR II | A31 / 75 |
 | Diagnóstico de brazos, piernas, manos y pies: no mover articulaciones | A29 |
+| Pivote de la mandíbula en la ATM, mentón conservado | A32 / 78 |
 | Licencias: `NOTICE`, BodyParts3D bajo CC BY 4.0 con atribución, código del proyecto bajo MIT | 76, 77 |
 
 ## 3. Reglas que siguen vigentes
@@ -52,7 +53,7 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 
 **Anatomía** (cada cambio de datos canónicos necesita el OK del dueño y una Decisión)
 
-6. Pivote de la mandíbula en la articulación temporomandibular.
+6. ~~Pivote de la mandíbula en la ATM~~: hecho (A32, Decisión 78). Queda el deslizamiento del cóndilo, para el trabajo de cara.
 7. Altura del hombro y base del cuello (ANSUR cervicale queda 35–45 mm arriba).
 8. Costillas con fuente poblacional; curvas de la columna con una referencia Cobb que permita uso comercial.
 9. Mallas reales para reemplazar los proxies de `assets/anatomy/proxies/` (A25).

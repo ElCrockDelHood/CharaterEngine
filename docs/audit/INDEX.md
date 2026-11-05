@@ -32,7 +32,7 @@ C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`
 | A29 | Limb chains, hands, feet: diagnosis, recommendation NOT to move joints (`docs/architecture/LIMB_CHAINS_PROPOSAL.md`) | — | proposal; variant F of the foot left to the animation thread |
 | A30 | Skull bones at BodyParts3D positions, mandible excluded | 74 | FINAL (values ESTIMATE) |
 | A31 | Head width and depth ratios from ANSUR II | 75 | FINAL (DERIVED) |
-| A32 | Jaw pivot at the TMJ, chin kept at 0.87 H (`docs/architecture/JAW_ATM_PROPOSAL.md`) | — | proposal, not applied |
+| A32 | Jaw pivot at the TMJ, chin kept at 0.87 H | 78 | FINAL (values ESTIMATE, chin height PROVEN) |
 
 Open items: `docs/reorientation/HANDOFF.md` §4.
 

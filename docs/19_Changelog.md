@@ -2,6 +2,13 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-05 · Decision 78: jaw pivot at the temporomandibular joint (A32)
+
+### Changed
+- `MANDIBLE` head at the TMJ axis (ESTIMATE, BodyParts3D) and tail at the chin (height PROVEN 0.87 H, y ESTIMATE). 208 nodes and
+  CE-GAME-v1 unchanged; opening limit stays at 25° (ASSUMED). Fingerprints updated; body and clips re-baked. Gameplay, replays
+  and clip data unchanged; A22 mandible 64.7 → 8.3 mm.
+
 ## [Unreleased] — 2026-11-05 · Decision 77: project code under the MIT License
 
 ### Changed

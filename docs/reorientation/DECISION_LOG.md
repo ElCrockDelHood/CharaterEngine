@@ -1431,14 +1431,28 @@ data, fingerprint, gameplay or runtime change.
 
 ---
 
+## 78. A32 — JAW PIVOT AT THE TEMPOROMANDIBULAR JOINT
+
+**Decision** (owner, 2026-11-05 17:50, card "Aplicar A, apertura en 25°"): `scripts/fix_jaw_atm.py` moves `MANDIBLE` head from
+the chin to the midline point of the condylar axis (0, −0.0168, 1.6539), ESTIMATE from BodyParts3D `FJ3289` (one subject). Its
+tail becomes the chin (0, −0.0914, 1.566): z PROVEN at 0.87 H (Drillis & Contini 1966), y ESTIMATE. 208 nodes and CE-GAME-v1 (66
+bones) unchanged; the rig code needs no change, because `jaw` already runs from `MANDIBLE` head to tail. `JAW_OPEN_MAX_DEG` stays at 25°,
+ASSUMED; condylar translation is not modelled. Gameplay table in sync, every Godot replay identical (60/60), Blender 40/40, clips
+unchanged; A22 mandible 64.7 → 8.3 mm, global RMS unchanged. Fingerprints of `human_adult_206.json` and `source_registry.json`
+updated. Audit `docs/audit/A32_JAW_ATM.md`; proposal `docs/architecture/JAW_ATM_PROPOSAL.md`. Tests: `tests/unit/test_jaw_atm.py`.
+
+**Date**: 2026-11-05 · **Status**: FINAL (values ESTIMATE, chin height PROVEN)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 77
+**Total Decisions**: 78
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 69 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 70 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

@@ -1,7 +1,7 @@
-# Proposal A32 — jaw pivot at the temporomandibular joint (not applied)
+# Proposal A32 — jaw pivot at the temporomandibular joint (variant A applied, Decision 78)
 
-**Status:** PROPOSAL, measured in a throw-away working copy (reverted; canonical data and fingerprints unchanged) ·
-**Date:** 2026-11-05 · applying it needs the owner's OK and **Decision 78** · Related: A18, A22, A30, Decisions 52, 74, 76;
+**Status:** variant A APPLIED with the limit at 25° (`docs/audit/A32_JAW_ATM.md`); this file keeps the proposal as approved ·
+**Date:** 2026-11-05 · Related: A18, A22, A30, Decisions 52, 74, 76;
 `RIG-GAME-001_SPEC.md` (which already says `jaw` = "canonical MANDIBLE head = TMJ").
 
 ## Finding

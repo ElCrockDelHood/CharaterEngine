@@ -1,0 +1,27 @@
+{
+  "finding": "A32 jaw pivot at the chin; the jaw must rotate at the temporomandibular joint",
+  "variant": "A: head at the TMJ axis midpoint, tail at the chin",
+  "mandible": {
+    "head": {
+      "x": 0.0,
+      "y": -0.0168,
+      "z": 1.6539
+    },
+    "tail": {
+      "x": 0.0,
+      "y": -0.0914,
+      "z": 1.566
+    }
+  },
+  "sha256_lf_before": "c3a5920a2d03ed9932cf57407c9ef4b045ee660262326d5fc9163b5d22f0ef8d",
+  "sha256_lf_after": "7d02124917b0d3f5ea7df5a5a631b365bcf68ae3de55b31e4ae4c0225fcfd60f",
+  "registry_sha256_lf_before": "b57b70e1c9b2e21e7d41ab9187a500401940f8fc83154fd9790aef9865538706",
+  "registry_sha256_lf_after": "7c1ce374834f023ba36489fc682ecb10501b5b96886584997614177b2f93e2d6",
+  "changed": true,
+  "provenance": {
+    "head": "ESTIMATE: BodyParts3D FJ3289, condylar heads, one subject, x1.0468, frame offset calibrated on the A30 skull bones",
+    "tail_z": "PROVEN: chin 0.87 H, DRILLIS_CONTINI_1966",
+    "tail_y": "ESTIMATE: BodyParts3D FJ3289 menton, same map"
+  },
+  "applied": true
+}

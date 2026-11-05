@@ -1,4 +1,4 @@
-"""Decision 74 (A30): skull bones at BodyParts3D positions (ESTIMATE); vertex and mandible unchanged."""
+"""Decision 74 (A30): skull bones at BodyParts3D positions (ESTIMATE); vertex unchanged. Mandible: Decision 78."""
 
 import importlib.util
 import json
@@ -33,10 +33,10 @@ def _mid(b, k):
     return (b["head"][k] + b["tail"][k]) / 2
 
 
-def test_vertex_and_mandible_unchanged(B):
+def test_vertex_unchanged_and_chin_height_kept(B):
+    # Decision 78 moved the jaw pivot to the TMJ on purpose; the chin height (0.87 H, PROVEN) is now the mandible tail.
     assert B["FRONTAL"]["tail"]["z"] == pytest.approx(1.80)
-    assert B["MANDIBLE"]["head"] == {"x": 0.0, "y": 0.0, "z": 1.566}          # chin, 0.87 H (PROVEN), jaw pivot
-    assert B["MANDIBLE"]["tail"] == {"x": 0.0, "y": 0.0, "z": 1.5994}
+    assert B["MANDIBLE"]["tail"]["z"] == 1.566
 
 
 def test_midline_and_mirror(B):
