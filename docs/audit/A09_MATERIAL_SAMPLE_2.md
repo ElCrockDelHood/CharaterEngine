@@ -58,7 +58,7 @@ Energy sweep (1.2 kg, speed 2–14 m/s): ribs first break at **8 m/s (38 J) unve
 The legacy mapping (`blunt_impact_to_wound`: `E / 400 J` × depth to bone) stays at fat / severity 1 up to 14 m/s
 (118 J) because 400 J is its single reference constant; it never reaches the rib layer in this range.
 
-Reproducibility: two simulation runs gave identical result `sha256` (`e75bfcc7…` unvested, `acab4965…` vested).
+Reproducibility: two simulation runs gave identical result `sha256` (`e75bfcc7…` unvested, `acab4965…` vested, on the anatomy of that date; on the consolidated anatomy, Decision 79, `7203602b…` and `024f3b42…`: only the spine axis and the cloth positions changed, every reported depth, severity and fracture is the same).
 Renders at 1920×1080, Cycles 128 samples (final pass): EEVEE 10.6 s; Cycles 319.1 s (comparison), 311.9 s and
 316.0 s (close-ups); Blender total 960.7 s. Earlier passes, kept for the record: the first (EEVEE 9.9 s, Cycles
 243.5 / 284.6 / 293.5 s, total 836 s) showed the coat z-fighting with skin and vest; the next three fixed the cloth,
@@ -87,8 +87,9 @@ still takes a blue cast next to the coat; EEVEE still shows a dark, smeared rod 
   With bone fracture toughness alone a 30 J cut would sever the forearm.
 * XPBD compliances and damping: ASSUMED. Optics: ASSUMED look-dev.
 * Impactor mass PLACEHOLDER; speeds, contact radius, garment thicknesses and gaps ESTIMATE.
-* **Geometry:** the thorax block is a sphere (T12–T1 span 0.146 m is shorter than two radii of 0.13 m); sample 2 stacks
-  the layers on a cylinder along that span. It shows layer behaviour, not chest shape. Block-dummy radii are ESTIMATE.
+* **Geometry:** the block-dummy thorax is a short capsule of radius 0.13 m (segment 47 mm, centred at z ≈ 1.363 m since the
+  spine heights of Decision 72); sample 2 stacks the layers on a cylinder along the T12–T1 span, 0.306 m since that decision (0.146 m
+  before). It shows layer behaviour, not chest shape. Block-dummy radii are ESTIMATE.
 * Not modelled: rate dependence, pressure waves through a shell that holds, glancing blows, rib flexion, steel plate
   under blunt load (rejected on purpose by `blunt_through`), force-based injury criteria.
 
@@ -103,7 +104,7 @@ Contact velocity projection removes the separating velocity that position projec
 
 1. Source tissue crush behaviour, rib fracture energy and bone chopping energy (register in `source_registry`).
 2. Intermediate chest outcomes (rib fracture without cavity penetration) and a force / acceleration criterion.
-3. A real thorax shape (the sphere block) before judging silhouettes.
+3. A real thorax shape (the block capsule) before judging silhouettes.
 4. Steel plate / lamellar armour under blunt load.
 5. Godot port of the layer contact (GDScript first) once the interface with the wound thread is agreed.
 6. Draw the blunt crush (dent the layers down to the affected depth) in the Blender scene.

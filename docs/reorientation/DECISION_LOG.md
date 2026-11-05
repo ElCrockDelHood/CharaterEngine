@@ -1445,14 +1445,31 @@ updated. Audit `docs/audit/A32_JAW_ATM.md`; proposal `docs/architecture/JAW_ATM_
 
 ---
 
+## 79. PHYSICS RESULTS REGENERATED ON THE CONSOLIDATED ANATOMY
+
+**Finding** (2026-11-05, owner: "hace lo que creas necesario"): the physics commits (Decisions 49, 55, 58–60) were already on
+`main`; the anatomy of Decisions 72–78 changed `human_adult_206.json` under them. No physics code needed adapting: 206 bones
+with the same names, the same 17 block segments and weight bones, the same tissue profiles and gameplay table. Measured on
+`1af5282`: **unchanged** A10 appendix, A14 reduced-mass table, A15 (87 higher, 0 lower, table identical), A16 move table, A17
+sensitivity. **Moved**: A10 hashes (sabre `286ab4a0…` → `eb8de081…`, club `60ffb62f…` → `132f8a1f…`): head row +0.1 mm with the
+sabre, and the neck rows now land on the neck instead of the thorax block (sabre: 58.2 mm to bone, serious; club: through, 60 mm,
+fracture, moderate). Sample 2 hashes (`e75bfcc7…` → `7203602b…`, `acab4965…` → `024f3b42…`): the spine axis and the cloth positions
+changed; every reported depth, severity and fracture is the same. **Assumption made false, corrected in the text**: the thorax
+block is no longer described as a sphere with T12–T1 at 0.146 m; that span is 0.306 m. A09 and A10 updated. Docs and a docstring
+only; no result is computed differently.
+
+**Date**: 2026-11-05 · **Status**: FINAL
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 78
+**Total Decisions**: 79
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 70 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 71 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)

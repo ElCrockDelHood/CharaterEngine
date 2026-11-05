@@ -12,8 +12,8 @@ Same pipeline as sample 1 (``forearm_strike.py``), with a blunt model instead of
    also assessed with the legacy mapping (``blunt_impact_to_wound``: E / 400 J · depth to bone) for comparison, and
    an energy sweep shows where each variant starts to fracture ribs.
 
-Geometry limit (block dummy): the thorax block is a sphere at chest height (its spine segment, T12 tail to T1 head,
-is 0.146 m long, shorter than two radii). The sample therefore stacks the layers on a cylinder along that segment;
+Geometry limit (block dummy): the thorax block is a short capsule at chest height, not a chest shape. The sample
+stacks the layers on a cylinder along the spine segment, T12 tail to T1 head (0.306 m since Decision 72);
 it shows layer behaviour, not chest shape. Every non-canonical input is listed in :class:`SampleConfig`.
 """
 

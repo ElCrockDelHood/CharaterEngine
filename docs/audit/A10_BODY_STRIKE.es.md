@@ -8,19 +8,19 @@ La interfaz única de contacto para el mockup de pelea: `LayeredBody(points)` ar
 
 ## Simplificaciones (todas quedan en el resultado)
 
-- El rayo choca con la envolvente de piel de la primera cápsula que encuentra. Los segmentos que se superponen (hombro, cadera, cuello bajo la esfera del tórax) no se resuelven.
+- El rayo choca con la envolvente de piel de la primera cápsula que encuentra. Los segmentos que se superponen (hombro, cadera) no se resuelven.
 - Los modelos de capas son unidimensionales a través del espesor, así que solo cuenta la componente normal: energía x cos(incidencia)^2. Los golpes rasantes pierden casi toda la energía; la parte tangencial se descarta, no se convierte en un tajo.
 - No hay simulación de tela (eso queda en las muestras XPBD): las prendas son capas de material simples.
 - Solo se tabulan golpes centrales; los golpes descentrados usan la misma cuerda a través de las capas (aproximación).
 
-## Resultados (golpe frontal central, uno por segmento, determinista: prefijo sha256 de la tabla sable `286ab4a06de9758e`, garrote `60ffb62fb53165fa`)
+## Resultados (golpe frontal central, uno por segmento, determinista: prefijo sha256 de la tabla sable `eb8de08115fb959c`, garrote `132f8a1f66afebe3`)
 
 Sable: 0,6 kg de masa efectiva (PLACEHOLDER) a 10 m/s (ESTIMATE), 30 J.
 
 | Segment | Hit | Stopped in | Depth (mm) | Severity | Deepest layer | Fracture |
 |---|---|---|---|---|---|---|
-| head | self | bone | 15.6 | SERIOUS | bone | no |
-| neck | thorax | tendon | 48.5 | SERIOUS | tendon | no |
+| head | self | bone | 15.7 | SERIOUS | bone | no |
+| neck | self | bone | 58.2 | SERIOUS | bone | no |
 | thorax | self | bone | 50.9 | SERIOUS | bone | no |
 | abdomen | self | viscera | 97.4 | CRITICAL | viscera | no |
 | pelvis | self | bone | 78.7 | SERIOUS | bone | no |
@@ -42,7 +42,7 @@ Garrote: 1,2 kg (PLACEHOLDER) a 9 m/s (ESTIMATE), 48,6 J, radio de contacto 30 m
 | Segment | Hit | Stopped in | Depth (mm) | Severity | Deepest layer | Fracture |
 |---|---|---|---|---|---|---|
 | head | self | through | 85.0 | CRITICAL | viscera | yes |
-| neck | thorax | bone | 48.7 | MODERATE | tendon | no |
+| neck | self | through | 60.0 | MODERATE | bone | yes |
 | thorax | self | through | 130.0 | CRITICAL | viscera | yes |
 | abdomen | self | through | 130.0 | SEVERE | viscera | yes |
 | pelvis | self | through | 140.0 | SEVERE | viscera | yes |
@@ -61,7 +61,7 @@ Garrote: 1,2 kg (PLACEHOLDER) a 9 m/s (ESTIMATE), 48,6 J, radio de contacto 30 m
 
 ## Qué dicen las tablas y qué no
 
-- La fila del tórax reproduce exactamente la muestra 2 (garrote: 130 mm, costillas fracturadas, severidad 5). La fila del cuello golpea el bloque del tórax, porque ese bloque es una esfera que cubre el cuello desde el frente: es un problema de forma del block dummy, no de las capas.
+- La fila del tórax reproduce exactamente la muestra 2 (garrote: 130 mm, costillas fracturadas, severidad 5). Con la anatomía consolidada (Decisiones 72–78, tablas regeneradas según la Decisión 79) la fila del cuello cae en el cuello: las alturas de la columna bajaron el bloque del tórax, que ya no cubre el cuello desde el frente. Solo cambiaron la fila de la cabeza (+0,1 mm) y las del cuello; con la anatomía anterior los hashes eran `286ab4a0…` y `60ffb62f…`.
 - Todos los huesos largos se fracturan con el garrote (energía de fractura del hueso 25 J, ASSUMED, todo o nada). Es consecuencia de una constante sin fuente, no un hallazgo sobre brazos. El sable amputa la mano y se detiene en el hueso en el resto, por la energía de corte del hueso (ASSUMED).
 - La severidad sale de las reglas de trauma existentes, que no se cambiaron. Donde la conversión legacy de 400 J y este modelo discrepan (muestra 2), la discrepancia se reporta, no se resuelve: reemplazar la constante es decisión del hilo de heridas.
 

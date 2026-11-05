@@ -63,7 +63,7 @@ el hueso) se queda en grasa / severidad 1 hasta 14 m/s (118 J), porque 400 J es 
 en este rango nunca llega a la capa de costillas.
 
 Reproducibilidad: dos corridas de la simulación dieron el mismo `sha256` del resultado (`e75bfcc7…` sin chaleco,
-`acab4965…` con chaleco). Renders a 1920×1080, Cycles 128 samples (pasada final): EEVEE 10,6 s; Cycles 319,1 s (comparación), 311,9 s y
+`acab4965…` con chaleco, con la anatomía de esa fecha; con la anatomía consolidada, Decisión 79, `7203602b…` y `024f3b42…`: solo cambiaron el eje de la columna y las posiciones de la tela, las profundidades, severidades y fracturas informadas son las mismas). Renders a 1920×1080, Cycles 128 samples (pasada final): EEVEE 10,6 s; Cycles 319,1 s (comparación), 311,9 s y
 316,0 s (primeros planos); total de Blender 960,7 s. Pasadas anteriores, para el registro: la primera (EEVEE 9,9 s,
 Cycles 243,5 / 284,6 / 293,5 s, total 836 s) mostraba el abrigo parpadeando contra la piel y el chaleco
 (z-fighting); las tres siguientes arreglaron la tela, el encuadre y la exposición, pero seguían viéndose lavadas.
@@ -97,8 +97,9 @@ abrigo; en EEVEE la barra sigue viéndose oscura y borroneada donde toca la tela
   antebrazo entero.
 * Compliances y amortiguación de XPBD: ASSUMED. Óptica: ASSUMED (look-dev).
 * Masa del impactor PLACEHOLDER; velocidades, radio de contacto, espesores y huecos de la ropa ESTIMATE.
-* **Geometría:** el bloque de tórax es una esfera (el tramo T12–T1 de 0,146 m es más corto que dos radios de 0,13 m);
-  la muestra 2 apila las capas sobre un cilindro a lo largo de ese tramo. Muestra el comportamiento de las capas, no
+* **Geometría:** el tórax del maniquí es una cápsula corta de radio 0,13 m (segmento de 47 mm, centrado en z ≈ 1,363 m desde las
+  alturas de columna de la Decisión 72); la muestra 2 apila las capas sobre un cilindro a lo largo del tramo T12–T1, de 0,306 m
+  desde esa decisión (0,146 m antes). Muestra el comportamiento de las capas, no
   la forma del pecho. Los radios del maniquí de bloques son ESTIMATE.
 * No modelado: dependencia de la velocidad, ondas de presión a través de una cáscara que aguanta, golpes rasantes,
   flexión de costilla, placa de acero bajo carga contundente (rechazada a propósito por `blunt_through`), criterios de
@@ -118,7 +119,7 @@ quita la velocidad de separación que la proyección de posición agrega de otro
    hueso (registrarlas en `source_registry`).
 2. Resultados intermedios del pecho (fractura de costilla sin penetración de la cavidad) y un criterio de fuerza /
    aceleración.
-3. Una forma real de tórax (el bloque esfera) antes de juzgar siluetas.
+3. Una forma real de tórax (la cápsula del maniquí) antes de juzgar siluetas.
 4. Placa de acero / armadura laminar bajo carga contundente.
 5. Port a Godot del contacto por capas (primero GDScript) cuando se acuerde la interfaz con el hilo de heridas.
 6. Dibujar el aplastamiento contundente (abollar las capas hasta la profundidad afectada) en la escena de Blender.

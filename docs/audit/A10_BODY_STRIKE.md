@@ -8,19 +8,19 @@ The single contact interface for the fight mockup: `LayeredBody(points)` builds 
 
 ## Simplifications (all reported in the result)
 
-- The ray hits the skin envelope of the first capsule it meets; overlapping segments (shoulder, hip, neck under the thorax sphere) are not resolved.
+- The ray hits the skin envelope of the first capsule it meets; overlapping segments (shoulder, hip) are not resolved.
 - The layer models are one-dimensional through the thickness, so only the normal component counts: energy x cos(incidence)^2. Glancing blows lose most energy; the tangential part is dropped, not turned into a slash.
 - No cloth simulation (that stays in the XPBD samples): garments are plain material layers.
 - Central strikes are the only ones tabulated below; off-centre hits use the same chord through the layers (an approximation).
 
-## Results (frontal central strike, one per segment, deterministic: table sha256 prefix sabre `286ab4a06de9758e`, club `60ffb62fb53165fa`)
+## Results (frontal central strike, one per segment, deterministic: table sha256 prefix sabre `eb8de08115fb959c`, club `132f8a1f66afebe3`)
 
 Sabre: 0.6 kg effective mass (PLACEHOLDER) at 10 m/s (ESTIMATE), 30 J.
 
 | Segment | Hit | Stopped in | Depth (mm) | Severity | Deepest layer | Fracture |
 |---|---|---|---|---|---|---|
-| head | self | bone | 15.6 | SERIOUS | bone | no |
-| neck | thorax | tendon | 48.5 | SERIOUS | tendon | no |
+| head | self | bone | 15.7 | SERIOUS | bone | no |
+| neck | self | bone | 58.2 | SERIOUS | bone | no |
 | thorax | self | bone | 50.9 | SERIOUS | bone | no |
 | abdomen | self | viscera | 97.4 | CRITICAL | viscera | no |
 | pelvis | self | bone | 78.7 | SERIOUS | bone | no |
@@ -42,7 +42,7 @@ Club: 1.2 kg (PLACEHOLDER) at 9 m/s (ESTIMATE), 48.6 J, contact radius 30 mm.
 | Segment | Hit | Stopped in | Depth (mm) | Severity | Deepest layer | Fracture |
 |---|---|---|---|---|---|---|
 | head | self | through | 85.0 | CRITICAL | viscera | yes |
-| neck | thorax | bone | 48.7 | MODERATE | tendon | no |
+| neck | self | through | 60.0 | MODERATE | bone | yes |
 | thorax | self | through | 130.0 | CRITICAL | viscera | yes |
 | abdomen | self | through | 130.0 | SEVERE | viscera | yes |
 | pelvis | self | through | 140.0 | SEVERE | viscera | yes |
@@ -61,7 +61,7 @@ Club: 1.2 kg (PLACEHOLDER) at 9 m/s (ESTIMATE), 48.6 J, contact radius 30 mm.
 
 ## What the tables say, and what they do not
 
-- The thorax row reproduces sample 2 exactly (club: 130 mm, ribs fractured, severity 5). The neck row hits the thorax block, because the thorax block is a sphere that covers the neck from the front: a block-dummy shape issue, not a layer issue.
+- The thorax row reproduces sample 2 exactly (club: 130 mm, ribs fractured, severity 5). On the consolidated anatomy (Decisions 72–78, tables regenerated under Decision 79) the neck row lands on the neck: the spine heights moved the thorax block down, so it no longer covers the neck from the front. Only the head row (+0.1 mm) and the neck rows changed; on the previous anatomy the hashes were `286ab4a0…` and `60ffb62f…`.
 - Every long bone fractures under the club (bone fracture energy 25 J, ASSUMED, all or nothing). That is a consequence of one unsourced constant, not a finding about arms. The sabre transects the hand and stops in bone elsewhere, which is the cut energy of bone (ASSUMED) at work.
 - Severity comes from the existing trauma rules, which were not changed. Where the legacy 400 J mapping and this model disagree (sample 2), the disagreement is reported, not resolved: replacing the constant is the wounds thread's decision.
 
