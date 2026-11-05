@@ -1481,11 +1481,32 @@ can still report a fracture there from its lumbar force range (ASSUMED; noted in
 
 ---
 
+## 81. KICK EFFECTIVE MASS AND FALL MODEL IN THE MOVE STRIKERS
+
+**Finding** (2026-11-05, requested through the physics thread, approved by the owner): "effective mass" names three quantities in
+the kick literature. Peak force over foot acceleration gives 20 % of the body for a turning kick and 73 % for a side kick (Góra 2024);
+impulse over foot speed at impact gives 5.3–6.1 kg for a roundhouse (DERIVED, Gavagan & Sayers 2017); the leg's energy from its hip,
+knee and foot speeds gives 3.9–5.8 kg at the foot's speed (DERIVED, Vagner 2023, de Leva 1996). Only the last two fit ½ m v², and they
+agree. The old 15 kg leg at a roundhouse foot speed was neither.
+
+**Decision**: `move_strikers.py` uses those masses for `front_kick`, `crescent_kick` and `sweep`, with force over acceleration kept as
+the high bound. `FallLanding` models the throw as a body dropped on its back, and the `shoulder_throw` record is the trunk landing.
+Measured seoi-nage head and neck loads are stored beside it (Murayama 2020, Nakanishi 2021, Lockhart 2022). All ESTIMATE or ASSUMED
+except the measured values. Flags move: front kick +105 % → +30 %, crescent +40 % → −52 %, sweep +119 % → −24 %, throw +181 % → +7 %;
+the last two now pass. The throw's agreement rests on two ASSUMED heights. `gameplay_shenmue.json`, `Striker.from_move`,
+`strike_model.py`, `head_kinematics.py` and every hash are unchanged; only the A17 tables move. **Owner** (2026-11-15, "sigamos adelante" after the
+recommendation to keep them): the table energies of the front kick (150 J) and the crescent kick (220 J) stay as gameplay values; both
+records keep their flag. Audit: `docs/audit/A17_MOVE_STRIKERS.md`.
+
+**Date**: 2026-11-05 · **Status**: ESTIMATE
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 80
+**Total Decisions**: 81
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
 **Final Decisions**: 72 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)

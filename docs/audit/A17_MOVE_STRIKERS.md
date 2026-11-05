@@ -1,6 +1,6 @@
 # A17 — Per-move striker records and head-impact sensitivity
 
-Status: ESTIMATE / ASSUMED, additive and opt-in (Decision 60). Code: `domain/physics/move_strikers.py`; tests:
+Status: ESTIMATE / ASSUMED, additive and opt-in (Decision 60, kicks and fall: Decision 81). Code: `domain/physics/move_strikers.py`; tests:
 `tests/unit/test_move_strikers.py`; tools: `scripts/head_sensitivity.py` (`--summary` for one line per move).
 Nothing existing changes: `Striker.from_move`, `strike_model.py`, `head_kinematics.py` (hook lever arm stays 0.08 m),
 the gameplay table and every earlier hash are as before. Spanish: `A17_MOVE_STRIKERS.es.md`.
@@ -10,10 +10,9 @@ the gameplay table and every earlier hash are as before. Spanish: `A17_MOVE_STRI
 Each move of `gameplay_shenmue.json` gets effective mass, speed and head lever arm as low / nominal / high, with
 provenance per field: SOURCED (read in a paper), ESTIMATE (derived from sourced numbers or the engine's estimates),
 ASSUMED (placeholder). Sources: Walilko 2005 (2.9 ± 2.0 kg, 9.14 ± 2.06 m/s, straight punches); Mosler 2024 (velocity
-at max force: jab 6.8, cross 8.6 m/s); Natale 2026 (kinematic punch mass 3.5–10 kg, preprint); roundhouse foot speed
-5.6–7.2 m/s (Gavagan & Sayers 2017); kicks up to 18 m/s (Corcoran 2024); whole leg ≈ 15 kg (ESTIMATE) from segment fractions
-(de Leva 1996, SOURCED; A14). Rule: nominal ½ m v² must be within 25 % of the table's `energy_j`; where it is not, the record
-carries a flag and the numbers are not bent.
+at max force: jab 6.8, cross 8.6 m/s); Natale 2026 (kinematic punch mass 3.5–10 kg, preprint); the kick and fall sources
+are listed below; segment fractions de Leva 1996 (SOURCED; A14). Rule: nominal ½ m v² must be within 25 % of the table's
+`energy_j`; where it is not, the record carries a flag and the numbers are not bent.
 
 | Move | m kg (low / nom / high) | v m/s (low / nom / high) | head lever m | E nominal J | E table J | nominal vs table | E range J | provenance |
 |---|---|---|---|---|---|---|---|---|
@@ -21,21 +20,75 @@ carries a flag and the numbers are not bent.
 | straight | 0.9 / 2.9 / 4.9 | 6.54 / 8.6 / 10.66 | 0.03 / 0.04 / 0.06 | 107 | 90 | ok +19 % | 19–278 | mass SOURCED, speed SOURCED, speed_range ESTIMATE, lever_arm ASSUMED |
 | hook | 0.9 / 2.9 / 4.9 | 7.08 / 9.14 / 11.2 | 0.04 / 0.08 / 0.1 | 121 | 130 | ok -7 % | 23–307 | mass ESTIMATE, speed ESTIMATE, lever_arm ASSUMED |
 | elbow_assault | 3.5 / 5 / 10 | 6.8 / 8 / 9.14 | 0.04 / 0.08 / 0.1 | 160 | 170 | ok -6 % | 81–418 | mass ESTIMATE, speed ASSUMED, lever_arm ASSUMED |
-| front_kick | 4.27 / 15 / 33 | 5.6 / 6.4 / 18 | 0.03 / 0.04 / 0.06 | 307 | 150 | **flag** +105 % | 67–5346 | mass ESTIMATE, speed ESTIMATE, speed_high SOURCED, lever_arm ASSUMED |
-| crescent_kick | 4.27 / 15 / 33 | 5.6 / 6.4 / 18 | 0.04 / 0.08 / 0.1 | 307 | 220 | **flag** +40 % | 67–5346 | mass ESTIMATE, speed SOURCED, speed_high SOURCED, lever_arm ASSUMED |
-| sweep | 4.27 / 15 / 33 | 5.6 / 6.4 / 18 | 0.03 / 0.04 / 0.06 | 307 | 140 | **flag** +119 % | 67–5346 | mass ESTIMATE, speed ESTIMATE, lever_arm ASSUMED |
-| shoulder_throw | 40 / 75 / 100 | 3 / 4.41 / 5.5 | 0.03 / 0.04 / 0.06 | 729 | 260 | **flag** +181 % | 180–1512 | mass ESTIMATE, speed ESTIMATE, lever_arm ASSUMED |
+| front_kick | 4.27 / 5.32 / 33 | 7.7 / 8.56 / 9.61 | 0.03 / 0.04 / 0.06 | 195 | 150 | **flag** +30 % | 127–1524 | mass ESTIMATE, mass_high ASSUMED, speed SOURCED, lever_arm ASSUMED |
+| crescent_kick | 3.85 / 5.24 / 15.09 | 5.57 / 6.38 / 14.34 | 0.04 / 0.08 / 0.1 | 107 | 220 | **flag** -52 % | 60–1552 | mass ESTIMATE, speed ESTIMATE, lever_arm ASSUMED |
+| sweep | 3.85 / 5.24 / 15.09 | 5.57 / 6.38 / 14.34 | 0.03 / 0.04 / 0.06 | 107 | 140 | ok -24 % | 60–1552 | mass ESTIMATE, speed ESTIMATE, lever_arm ASSUMED |
+| shoulder_throw | 26.08 / 32.59 / 43.46 | 3.52 / 4.13 / 5.01 | 0.03 / 0.04 / 0.06 | 278 | 260 | ok +7 % | 162–545 | mass ESTIMATE, speed ESTIMATE, release_height ASSUMED, lever_arm ASSUMED |
 
 ### Flagged moves (nominal physics ≠ table energy)
 
-* **front_kick (+105 %), crescent_kick (+40 %), sweep (+119 %)**: a whole leg (≈ 15 kg) at the measured roundhouse
-  foot speed (6.4 m/s mid-range) carries ≈ 307 J; the table gives 140–220 J. Either the coupled mass of a kick is
-  closer to the shank + foot (≈ 4.3 kg) than to the whole leg, or the table energies are low. No source settles it:
-  no kick effective mass in kg was found (A14).
-* **shoulder_throw (+181 %)**: a throw is the defender's body landing; 75 kg falling from centre-of-mass height
-  (4.41 m/s, DERIVED) is ≈ 729 J, the table has 260 J. The table energy reads as a fraction of the fall energy, not
-  as a strike.
-* Punches and the elbow sit within the band (jab +12 %, straight +19 %, hook −7 %, elbow −6 %).
+* **front_kick (+30 %)**: the measured leg speeds give 195 J at maximum speed, against 150 J in the table. A novice
+  gives 172 J and an elite 236 J, so the table sits a little below every level. It was +105 % when a whole leg was
+  given a roundhouse foot speed.
+* **crescent_kick (−52 %)**: no crescent data exists in what was read, so it carries roundhouse values. The energy a
+  roundhouse delivers at impact is 86–138 J; its leg carries 395 J at maximum speed. The table's 220 J sits between the
+  two, so it is possible but not what was measured at impact.
+* The sweep (−24 %) and the throw (+7 %) are now inside the band, and the punches and the elbow stay there (jab +12 %,
+  straight +19 %, hook −7 %, elbow −6 %). **The table was not changed**: whether a crescent kick should be worth 220 J
+  is a gameplay decision for the owner.
+
+## Kick effective mass
+
+"Effective mass" names three different quantities in the kick literature, and they differ by a factor of ten. Only the
+first two can go into ½ m v².
+
+| Definition | Kick | Value | At 75 kg | Source |
+|---|---|---|---|---|
+| Leg energy at the foot's speed, 2E / v_foot² | front, novice / sub-elite / elite | DERIVED | 5.79 / 5.32 / 5.10 kg | Vagner 2023 Table 1 speeds, de Leva fractions |
+| Same | roundhouse, elite | DERIVED | 3.85 kg | Vagner 2023 Table 2 |
+| Impulse / foot speed at impact | roundhouse, Muay Thai / karate / taekwondo | 5.28 / 5.55 / 6.10 kg (8.0 / 6.6 / 6.4 % body) | 5.24 kg (mean 7.0 %) | DERIVED from Gavagan 2017, Tables 1-2 and Results |
+| Peak force / foot acceleration | turning; side | 20.12 %; 73.09 % (medians, 4 men) | 15.1; 54.8 kg | Góra 2024 |
+| Same method family, abstract only | turning; side | ≈ 18 %; ≈ 85 % (5 women) | 13.5; 63.8 kg | Góra 2025, Acta Bioeng Biomech |
+| Not read directly | front | 44 % (one master) | 33 kg | Wąsik 2023, via A14 and Corcoran 2024 |
+
+Reading: the two energy and momentum routes use different data and agree, at 4–6 kg, a little over the shank and foot
+(4.27 kg). Force over acceleration is measured at one instant against a fixed plate, and it counts the rest of the body
+braced behind the leg: real, but it is not the energy of a moving limb. It is kept only as the high bound. Góra's own
+Discussion says the value "requires confirmation". `Striker.from_move` already gave 3.7–5.4 kg for these moves (9 m/s),
+which is consistent with this.
+
+Leg energy: `leg_chain_energy_j` gives thigh, shank and foot their de Leva masses, with thigh and shank at the mean speed
+of their end joints (mid-length centre of mass, ASSUMED); rotation about the segment's own centre adds under 3 %.
+
+Speeds differ just as much: a roundhouse reaches 13.2–14.7 m/s at its maximum but 5.6–7.2 m/s at impact, 41–54 % of the
+maximum (Gavagan 2017). The front kick has no measured speed at impact in what was read, so its record uses the maximum,
+which makes 195 J an upper estimate of what arrives. The ratio was not transferred from the roundhouse: a front kick
+extends in a line, and 38 J would contradict its measured forces (2846 ± 805 N sub-elite, Vagner 2023).
+
+## Fall model
+
+`FallLanding` replaces a 75 kg striker falling on itself. It drops the body from a release height onto its back:
+
+| Release height of the centre of mass (ASSUMED) | Speed m/s | Total fall energy J | Trunk J (32.6 kg) | Limbs and head J |
+|---|---|---|---|---|
+| 0.75 m, lowered by the thrower | 3.52 | 464 | 201 | 262 |
+| 0.99 m, standing (0.55 × 1.80 m) | 4.13 | 640 | 278 | 362 |
+| 1.40 m, lifted over the back | 5.01 | 942 | 409 | 533 |
+
+The record is the trunk (thorax + abdomen + pelvis, 43.46 %), the part that lands as one block. Its 278 J sits at +7 % of
+the table's 260 J; that agreement rests on two ASSUMED heights, so it is a plausibility check, not a validation. The
+resting height of the centre of mass is 0.12 m (ASSUMED).
+
+Measured head and neck loads for seoi-nage, which the head grid below must not override:
+
+| Subject | Breakfall | Surface | Linear g | Angular rad/s² | Source |
+|---|---|---|---|---|---|
+| Dummy 75 kg, 5 throws by one expert | no | tatami over 60 mm sponge | 20.3 ± 9.8 (9.1–30.8) | 1890 ± 1152 (641–3195) | Murayama 2020 |
+| Novice judoka | yes | not read | not read | 276 | Ishikawa 2018 as printed in Lockhart 2022 |
+
+Same dummy setup, Nakanishi 2021: upper neck compression 4223 N, Nij median 0.68, beam criterion median 0.90. Reading:
+seoi-nage stays below the Rowson 10 % line (5260 rad/s²) even without a breakfall, and the neck is the larger concern.
+The head grid below still simulates a blow to the head, so for the throw it answers a different question.
 
 ## Head-impact sensitivity (no published lever arm exists for hooks)
 
@@ -46,14 +99,14 @@ speed, and so on). `python scripts/head_sensitivity.py --summary`:
 
 | Move | Default lever (m) | P at nominal, default lever | P range over the grid | alpha range (rad/s^2) |
 |---|---|---|---|---|
-| crescent_kick | 0.08 | 0.99 | 0.07-0.99 | 3616-53641 |
+| crescent_kick | 0.08 | 0.99 | 0.07-0.99 | 3494-39648 |
 | elbow_assault | 0.08 | 0.99 | 0.08-0.99 | 4148-23768 |
-| front_kick | 0.04 | 0.79 | 0.07-0.99 | 3616-53641 |
+| front_kick | 0.04 | 0.92 | 0.09-0.99 | 4972-28638 |
 | hook | 0.08 | 0.99 | 0.05-0.99 | 2615-25008 |
 | jab | 0.04 | 0.10 | 0.03-0.99 | 1751-19783 |
-| shoulder_throw | 0.04 | 0.16 | 0.05-0.99 | 2715-17194 |
+| shoulder_throw | 0.04 | 0.09 | 0.06-0.99 | 3092-15181 |
 | straight | 0.04 | 0.60 | 0.05-0.99 | 2416-23802 |
-| sweep | 0.04 | 0.79 | 0.07-0.99 | 3616-53641 |
+| sweep | 0.04 | 0.24 | 0.07-0.99 | 3494-39648 |
 
 Reading: every move spans almost the whole probability range (≈ 0.05 → 0.99). The Rowson curve is steep (10 % →
 90 % between 5260 and 7483 rad/s²), so a lever arm change of 2 cm, well inside the ASSUMED band, moves a blow from
@@ -66,9 +119,9 @@ Full grid (`python scripts/head_sensitivity.py`):
 
 | Striker | m (kg) | v (m/s) | F_peak (N) | d = 0.03 m | d = 0.04 m | d = 0.06 m | d = 0.08 m | d = 0.1 m |
 |---|---|---|---|---|---|---|---|---|
-| low | 4.27 | 5.6 | 2712 | 0.07 (3.6 k) | 0.09 (4.8 k) | 0.83 (7.2 k) | 0.99 (9.6 k) | 0.99 (12.1 k) |
-| nominal | 15.0 | 6.4 | 3978 | 0.11 (5.3 k) | 0.79 (7.1 k) | 0.99 (10.6 k) | 0.99 (14.1 k) | 0.99 (17.7 k) |
-| high | 33.0 | 18.0 | 12069 | 0.99 (16.1 k) | 0.99 (21.5 k) | 0.99 (32.2 k) | 0.99 (42.9 k) | 0.99 (53.6 k) |
+| low | 3.85 | 5.57 | 2620 | 0.07 (3.5 k) | 0.09 (4.7 k) | 0.76 (7.0 k) | 0.99 (9.3 k) | 0.99 (11.6 k) |
+| nominal | 5.24 | 6.38 | 3260 | 0.08 (4.3 k) | 0.24 (5.8 k) | 0.97 (8.7 k) | 0.99 (11.6 k) | 0.99 (14.5 k) |
+| high | 15.09 | 14.34 | 8921 | 0.99 (11.9 k) | 0.99 (15.9 k) | 0.99 (23.8 k) | 0.99 (31.7 k) | 0.99 (39.6 k) |
 
 ### elbow_assault
 
@@ -82,9 +135,9 @@ Full grid (`python scripts/head_sensitivity.py`):
 
 | Striker | m (kg) | v (m/s) | F_peak (N) | d = 0.03 m | d = 0.04 m | d = 0.06 m | d = 0.08 m | d = 0.1 m |
 |---|---|---|---|---|---|---|---|---|
-| low | 4.27 | 5.6 | 2712 | 0.07 (3.6 k) | 0.09 (4.8 k) | 0.83 (7.2 k) | 0.99 (9.6 k) | 0.99 (12.1 k) |
-| nominal | 15.0 | 6.4 | 3978 | 0.11 (5.3 k) | 0.79 (7.1 k) | 0.99 (10.6 k) | 0.99 (14.1 k) | 0.99 (17.7 k) |
-| high | 33.0 | 18.0 | 12069 | 0.99 (16.1 k) | 0.99 (21.5 k) | 0.99 (32.2 k) | 0.99 (42.9 k) | 0.99 (53.6 k) |
+| low | 4.27 | 7.7 | 3729 | 0.09 (5.0 k) | 0.61 (6.6 k) | 0.99 (9.9 k) | 0.99 (13.3 k) | 0.99 (16.6 k) |
+| nominal | 5.32 | 8.56 | 4391 | 0.26 (5.9 k) | 0.92 (7.8 k) | 0.99 (11.7 k) | 0.99 (15.6 k) | 0.99 (19.5 k) |
+| high | 33.0 | 9.61 | 6444 | 0.97 (8.6 k) | 0.99 (11.5 k) | 0.99 (17.2 k) | 0.99 (22.9 k) | 0.99 (28.6 k) |
 
 ### hook
 
@@ -106,9 +159,9 @@ Full grid (`python scripts/head_sensitivity.py`):
 
 | Striker | m (kg) | v (m/s) | F_peak (N) | d = 0.03 m | d = 0.04 m | d = 0.06 m | d = 0.08 m | d = 0.1 m |
 |---|---|---|---|---|---|---|---|---|
-| low | 40.0 | 3.0 | 2036 | 0.05 (2.7 k) | 0.07 (3.6 k) | 0.15 (5.4 k) | 0.83 (7.2 k) | 0.99 (9.0 k) |
-| nominal | 75.0 | 4.41 | 3077 | 0.08 (4.1 k) | 0.16 (5.5 k) | 0.94 (8.2 k) | 0.99 (10.9 k) | 0.99 (13.7 k) |
-| high | 100.0 | 5.5 | 3869 | 0.10 (5.2 k) | 0.72 (6.9 k) | 0.99 (10.3 k) | 0.99 (13.8 k) | 0.99 (17.2 k) |
+| low | 26.08 | 3.52 | 2319 | 0.06 (3.1 k) | 0.08 (4.1 k) | 0.41 (6.2 k) | 0.95 (8.2 k) | 0.99 (10.3 k) |
+| nominal | 32.59 | 4.13 | 2767 | 0.07 (3.7 k) | 0.09 (4.9 k) | 0.87 (7.4 k) | 0.99 (9.8 k) | 0.99 (12.3 k) |
+| high | 43.46 | 5.01 | 3416 | 0.09 (4.6 k) | 0.36 (6.1 k) | 0.99 (9.1 k) | 0.99 (12.1 k) | 0.99 (15.2 k) |
 
 ### straight
 
@@ -122,9 +175,9 @@ Full grid (`python scripts/head_sensitivity.py`):
 
 | Striker | m (kg) | v (m/s) | F_peak (N) | d = 0.03 m | d = 0.04 m | d = 0.06 m | d = 0.08 m | d = 0.1 m |
 |---|---|---|---|---|---|---|---|---|
-| low | 4.27 | 5.6 | 2712 | 0.07 (3.6 k) | 0.09 (4.8 k) | 0.83 (7.2 k) | 0.99 (9.6 k) | 0.99 (12.1 k) |
-| nominal | 15.0 | 6.4 | 3978 | 0.11 (5.3 k) | 0.79 (7.1 k) | 0.99 (10.6 k) | 0.99 (14.1 k) | 0.99 (17.7 k) |
-| high | 33.0 | 18.0 | 12069 | 0.99 (16.1 k) | 0.99 (21.5 k) | 0.99 (32.2 k) | 0.99 (42.9 k) | 0.99 (53.6 k) |
+| low | 3.85 | 5.57 | 2620 | 0.07 (3.5 k) | 0.09 (4.7 k) | 0.76 (7.0 k) | 0.99 (9.3 k) | 0.99 (11.6 k) |
+| nominal | 5.24 | 6.38 | 3260 | 0.08 (4.3 k) | 0.24 (5.8 k) | 0.97 (8.7 k) | 0.99 (11.6 k) | 0.99 (14.5 k) |
+| high | 15.09 | 14.34 | 8921 | 0.99 (11.9 k) | 0.99 (15.9 k) | 0.99 (23.8 k) | 0.99 (31.7 k) | 0.99 (39.6 k) |
 
 Cell: concussion probability (rotational acceleration, thousands of rad/s^2).
 
@@ -132,13 +185,22 @@ Cell: concussion probability (rotational acceleration, thousands of rad/s^2).
 
 * Rotational velocity (Rowson's second column) is not added: with the same peak force, contact time and lever arm it
   follows from the same data and adds no information.
-* Kicks and the throw are flagged, not resolved; their table energies were never decomposed into mass × speed.
+* The crescent kick and the sweep carry roundhouse numbers: no kinematic data for either was read.
+* The front kick's push during contact (0.119 s in one subject) has no model. Its momentum is larger than its energy
+  suggests, and only the 33 kg high bound hints at that.
+* The fall has no contact time, peak ground force or surface: no landing force or body speed of a thrown person was
+  read. Unread: Ishii & Koshida 2025 (the PDF could not be extracted), the Wąsik 2023 paper, a 2026 preprint on front-kick
+  impulse (its site refused automated reading) and the 2001 harai-goshi sweep paper.
+* Most subjects are small samples of trained men, and the measured kicks are mostly to pads, not bodies.
 * Low / high combine low mass with low speed and high with high, so the energy range is the widest possible (kicks
-  67–5346 J); real blows sit inside it.
+  60–1552 J); real blows sit inside it.
 * Lever arms, the elbow's speed and every kick / throw mass are ESTIMATE or ASSUMED.
 
 ## Open items
 
 1. A sourced lever arm (or angular impulse) per blow type, or a boxing-specific risk function.
-2. A kick effective mass in kg, to resolve the kick flags.
-3. A fall / throw model (ground contact) instead of treating the throw as a strike.
+2. Measured speed at impact and impulse for the front kick, and any kinematic data for crescent kicks and sweeps.
+3. Landing force and contact time of a thrown body, to add ground contact to `FallLanding`.
+
+Closed (owner, 2026-11-15): the table energies of `front_kick` (150 J) and `crescent_kick` (220 J) stay as gameplay values; both
+records keep their flag.
