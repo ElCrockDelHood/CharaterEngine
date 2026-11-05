@@ -22,6 +22,7 @@
 > - **Combat**: strike physics, head kinematics and per-move strikers (A14–A17, Decisions 58–60, opt-in);
 >   Souls-like arena and reaction library in Godot. Godot 4 is the primary runtime (40); Blender is the
 >   production line (42, 45).
+> - **Branch**: everything is on `main` (Decisions up to 77, merged 2026-11-05).
 > - **Licences**: project code MIT (77); BodyParts3D-derived values CC BY 4.0 with attribution (76); see `NOTICE`.
 > - Full suite: ~1275 pytest tests (`python scripts/test.py`); Blender addon 40/40, Godot 60/60.
 > - Source of truth for what changed since this snapshot: `docs/audit/INDEX.md`, `docs/reorientation/HANDOFF.md`

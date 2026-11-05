@@ -6,11 +6,11 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 
 - Repo: `C:\DEV\Proyectos\CharaterEngine-20261004T202505Z-1-001\CharaterEngine`, remoto
   `github.com/ElCrockDelHood/CharaterEngine`.
-- `origin/main` = `75d0e93` (push del 2026-10-28). El trabajo posterior (de A13 a A31, Decisiones 54–77) está en la
-  rama **`anatomy/a13-a24-base`**, pendiente de revisión antes de mergear a `main`.
+- **Todo está en `main`** (A13–A31, Decisiones 54–77; mezcla por fast-forward del 2026-11-05, autorizada por el dueño). Los
+  hilos nuevos y los existentes parten de `main`: `git pull origin main`.
 - Herramientas en `C:\DEV\Tools`: Blender 3.6.23 (referencia), Godot 4.7.2 (tests), UPBGE 0.50 (opcional).
 - Tests: `.venv\Scripts\python.exe scripts\test.py`, `scripts\lint.py`, `scripts\engine_tests.py blender godot`
-  (logs en `logs/`). Último estado: pytest todo verde, lint OK; última corrida de motores (Decisión 75): Blender 40/40, Godot 60/60.
+  (logs en `logs/`). Último estado (2026-11-05): pytest todo verde, lint OK, Blender y Godot en verde (Godot 60/60).
 - Decisiones: `docs/reorientation/DECISION_LOG.md` (última: **77**; siguiente libre: **78**).
   Índice de auditorías: `docs/audit/INDEX.md`.
 - Referencias externas (fuera del repo, nunca se commitean): `assets/anatomy/README.md`.
@@ -42,14 +42,13 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 
 **Del dueño**
 
-1. Abrir el PR de `anatomy/a13-a24-base` hacia `main` (si todavía no aparece abierto), revisarlo y hacer el merge. El cuerpo
-   listo para pegar está en `C:\DEV\Assets\PR_anatomy_a13-a24-base_body.md`.
+1. `feature/audio-p0`: 4 commits que todavía no están en `main` (worktree `CharaterEngine-audio-p0`). El dueño quiere una sola
+   rama al final: decidir si se mezcla (renumerando su Decisión a la siguiente libre) o se descarta.
 2. Tolerancias del ajuste de assets (A19 / A20 / A22 dan la dispersión medida).
 3. Aprobar o no el contrato del manifiesto de assets F0 (Decisión 61, PROPUESTO).
 4. Opcional: escribir al licenciante de BodyParts3D para cerrar la discrepancia con las cabeceras CC BY-SA 2.1 JP de los OBJ
    (hoy declarada en `NOTICE`, Decisión 76).
-5. `feature/audio-p0`: sigue "como está"; si se mergea, renumerar su decisión a la siguiente libre.
-   El historial no se reescribe salvo pedido explícito: el `LICENSE` anterior sigue en commits viejos y en `main` hasta el merge.
+5. Historial: el `LICENSE` anterior, con un dato personal, sigue en commits viejos. No se reescribe salvo pedido explícito.
 
 **Anatomía** (cada cambio de datos canónicos necesita el OK del dueño y una Decisión)
 
