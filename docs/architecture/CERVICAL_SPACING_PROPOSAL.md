@@ -22,7 +22,7 @@ one subject, ESTIMATE), against the canonical segments (mid-bone z, metres):
 | L5 | 1.055 | 1.194 | **+139** |
 | Sacrum | 1.019 | 1.084 | +64 |
 
-- **Spans:** C1–C7 canonical 30 mm vs ~108 mm between body mids in BP3D; T1–T12 146 mm vs ~298 mm; L1–L5 130 mm vs
+- **Spans:** C1–C7 canonical 30 mm vs ~98 mm between body mids in BP3D; T1–T12 146 mm vs ~298 mm; L1–L5 130 mm vs
   ~123 mm. The canonical stubs are 4–5 mm tall from C1 to T7; real vertebrae are 15–50 mm.
 - C7 and T1 already agree, so the shoulders are in the right place. The neck is too short *upwards* and the trunk is
   compressed *downwards*: everything from T4 to L5 sits 5–16 cm too high.
@@ -35,7 +35,7 @@ one subject, ESTIMATE), against the canonical segments (mid-bone z, metres):
   1.087 m ✓; canonical L4 is 1.220 m ✗.
 - Suprasternale 1.476 m: BP3D 1.469, canonical 1.487 (both within ~10 mm).
 - Cervicale (C7 spinous tip, skin) 1.557 m: BP3D's most posterior C7 vertex gives 1.514 and canonical C7 is 1.521.
-  **Both are ~35–40 mm low.** That is the largest uncertainty at the neck base; it is not resolved here. C7 is kept.
+  **Both are ~35–45 mm low.** That is the largest uncertainty at the neck base; it is not resolved here. C7 is kept.
 
 **Sources:** Pró, *Anatomía Clínica* ch. 2 (qualitative only). A citable per-vertebra source exists and is free to
 read online: Busscher I. et al. (2010), "Comparative anatomical dimensions of the complete human and porcine spine",
@@ -51,7 +51,7 @@ could replace the BP3D body heights or serve as a control.
 | Fixed | T1 and below; stature (skull unchanged, `FRONTAL` tail 1.80 m); shoulders; hips | T1 and above as in A; hips (`FEMUR.head` 0.954 m); stature; shoulders |
 | Rule | Stub ends at the midpoints between BP3D body mids | Same; below T1 a shift fades in linearly to +23.3 mm at the sacrum, so BP3D's hip height (0.931) meets the canonical 0.954 |
 | Neck | `neck_01` 30 → 107 mm; `head` pivot (C1 head) 1.552 → 1.628 m, still under `OCCIPITAL` 1.633 | same |
-| Provenance | ESTIMATE (one subject); ±40 mm at the neck base (cervicale control) | ESTIMATE; L4 vs iliocristale within ~15 mm |
+| Provenance | ESTIMATE (one subject); ±45 mm at the neck base (cervicale control) | ESTIMATE; L4 vs iliocristale within ~17 mm |
 
 ## Measured impact (working copy, reverted)
 
