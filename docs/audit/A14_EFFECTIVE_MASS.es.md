@@ -123,6 +123,9 @@ tambaleo) está en `A16_HEAD_KINEMATICS_KNOCKDOWN.es.md` (`domain/physics/head_k
 Los rangos de golpeador por movimiento con procedencia, y la sensibilidad del impacto en la cabeza a la palanca,
 están en `A17_MOVE_STRIKERS.es.md` (`domain/physics/move_strikers.py`, Decisión 60).
 
+Cómo se deshace una cáscara fracturada (cantidad, tamaños y velocidades de los fragmentos, en JSON para los renderizadores)
+está en `A33_FRACTURE_EVENT.es.md` (`domain/physics/fracture_event.py`, Decisión 80).
+
 ## 6. Pendientes
 
 1. Leer los textos completos (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) y registrarlos en

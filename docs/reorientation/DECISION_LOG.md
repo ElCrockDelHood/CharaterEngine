@@ -1462,17 +1462,31 @@ only; no result is computed differently.
 
 ---
 
+## 80. A33 — BONE FRAGMENTS OF A FRACTURED BLOW (ADDITIVE, OPT-IN)
+
+**Decision** (owner, 2026-11-05: bone hits should look like glass breaking, in fragments; "sigamos adelante"): new
+`domain/physics/fracture_event.py` turns a fractured `StrikeOutcome` into fragments per region pattern (skull `spiderweb`, thorax
+`transverse_ribs`, long bones `butterfly`, the rest `small_pieces`): at most 24, with masses that add up to the mobilised patch, and
+10 % of the excess energy as kinetic energy. JSON schema `ce-fracture/1` is the contract with the Blender and Godot threads. It
+replaces nothing: wounds, `strike_model.py`, the gameplay table and every earlier result are unchanged. Provenance: bone density from the
+catalog; every other constant ASSUMED, with its range in the audit. No published fragment data was used (Mott / Grady only frame the
+power-law form). Evidence: `docs/audit/A33_FRACTURE_EVENT.md`. Tests: `tests/unit/test_fracture_event.py`.
+
+**Date**: 2026-11-05 · **Status**: FINAL (opt-in; values ASSUMED, reversible)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 79
+**Total Decisions**: 80
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 71 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 72 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
-**Reversible Decisions**: 7 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values)
+**Reversible Decisions**: 8 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values; fracture fragment values)
 **Critical Decisions**: 6 (Source of Truth, Architecture Direction, Backend Priority, Provenance System, Mesh Generation, Data Invention Rule)
 
 ### 14.2 Decision Impact

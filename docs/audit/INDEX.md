@@ -1,4 +1,4 @@
-# Audit index (A07 – A32)
+# Audit index (A07 – A33)
 
 One line per audit: what it decided or measured, and the decision that recorded it. Older audits (A01 – A06,
 C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`.es.md`) exist where noted.
@@ -33,6 +33,7 @@ C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`
 | A30 | Skull bones at BodyParts3D positions, mandible excluded | 74 | FINAL (values ESTIMATE) |
 | A31 | Head width and depth ratios from ANSUR II | 75 | FINAL (DERIVED) |
 | A32 | Jaw pivot at the TMJ, chin kept at 0.87 H | 78 | FINAL (values ESTIMATE, chin height PROVEN) |
+| A33 | Bone fragments of a fractured blow, schema `ce-fracture/1` (additive, opt-in; `.es.md`) | 80 | FINAL (values ASSUMED) |
 
 Open items: `docs/reorientation/HANDOFF.md` §4.
 

@@ -117,6 +117,9 @@ What the momentum part does (head acceleration → concussion probability, impul
 Per-move striker ranges with provenance, and the head-impact sensitivity to the lever arm, are in
 `A17_MOVE_STRIKERS.md` (`domain/physics/move_strikers.py`, Decision 60).
 
+How a fractured shell comes apart (fragment count, sizes, speeds, as JSON for the renderers) is in
+`A33_FRACTURE_EVENT.md` (`domain/physics/fracture_event.py`, Decision 80).
+
 ## 6. Open items
 
 1. Read the full texts (MDPI 2024/2025, Walilko 2005, Lenetsky 2015, Cross) and register them in `source_registry`
