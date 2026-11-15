@@ -1462,6 +1462,24 @@ regenerated.
 
 ---
 
+## 85. LEG GROUNDING IN THE RETARGET
+
+**Decision** (owner request, 2026-11-15 "que se trabaje la parada, los pasos los pies y las piernas bien ubicados,
+como que se retuerce todo"): side-by-side videos of the Quaternius source and our body showed the crouch idle
+hovering 23 cm (crouch walk 20 cm), the jump sinking 10-14 cm, idle soles 2.5 cm under the ground and idle knees
+turned 17 deg (p90 26 deg) away from the source's. Copied joint rotations on other leg proportions cannot keep
+both. `retarget_mocap` now grounds the legs (`domain/animation/leg_ground.py`, addon `leg_ground.py`): per frame
+each ankle's wanted height is its rest height plus the source ankle's lift scaled like the root motion; the
+source's lower foot sets a vertical shift of the whole body; both legs are re-solved with the two-bone IK of
+`foot_lock`, the knee pointing where the source's knee points. Horizontal paths are unchanged (`foot_lock` still
+handles sliding). Result on 7 clips: knees within 1-4 deg (median), idle soles at -0.1 cm, crouch at -1.6 cm,
+walk -0.9 cm. The jump clips still put the toes about 11 cm under the ground with the ankles at the right height
+(pointed feet), and their feet differ 14-17 deg in yaw: open.
+
+**Date**: 2026-11-15 · **Status**: FINAL (opt-out `ground_legs=False`)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
