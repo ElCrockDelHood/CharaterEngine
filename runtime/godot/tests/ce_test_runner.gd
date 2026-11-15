@@ -441,16 +441,17 @@ class Runner extends Node:
 					down_at, sim.frame - down_at, kd, p_conc, op.health]])
 
 		# ---- D1 reaction library (generated offline in Blender, read as plain JSON) -
-		runner.check("D1 reaction library: schema 6 (subframes), body hits carry wound + reaction + per-clip blend, parries carry recoil and no wound", func():
+		runner.check("D1 reaction library: schema 7 (subframes, grazes), body hits carry wound + reaction + per-clip blend, parries carry recoil and no wound", func():
 			var path := "res://addons/character_engine/data/reaction_library_d1.json"
 			if not FileAccess.file_exists(path):
 				return [false, "missing " + path]
 			var lib = JSON.parse_string(FileAccess.get_file_as_string(path))
-			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 6:
-				return [false, "not a schema-6 document"]
+			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 7:
+				return [false, "not a schema-7 document"]
 			var blend := {"Death01": 2, "Hit_Knockback": 2, "Hit_Head": 4, "Hit_Chest": 6}
 			var hits := 0
 			var parries := 0
+			var grazes := 0
 			var bad: Array = []
 			for e in lib["entries"]:
 				var n := (e["frames"] as Array).size()
@@ -468,6 +469,10 @@ class Runner extends Node:
 							or int(pb["blend_in_frames"]) != int(blend[pb["clip"]]) \
 							or (pb["attacker_reaction"] != null and int(pb["attacker_reaction"]["starts_frame"]) != int(e["first_contact"]["frame"]) + 1):
 						bad.append(e["id"])
+				elif e["event"] == "graze":
+					grazes += 1
+					if e["first_contact"] == null or e["wound"] == null or e["reaction"] != null 							or e["reaction_playback"] != null or e["parry_playback"] != null 							or (e["wound"]["layers_breached"] as Array).has("muscle"):
+						bad.append(e["id"])
 				elif e["event"] == "parry":
 					parries += 1
 					var pp = e["parry_playback"]
@@ -479,8 +484,8 @@ class Runner extends Node:
 				elif e["event"] != "none" or e["first_contact"] != null or e["first_parry"] != null \
 						or e["reaction_playback"] != null or e["parry_playback"] != null:
 					bad.append(e["id"])
-			return [bad.is_empty() and lib["entries"].size() > 0, "%d entries, %d body hits, %d parries%s" % [
-					lib["entries"].size(), hits, parries, "" if bad.is_empty() else "  bad: " + str(bad)]])
+			return [bad.is_empty() and lib["entries"].size() > 0, "%d entries, %d body hits, %d grazes, %d parries%s" % [
+					lib["entries"].size(), hits, grazes, parries, "" if bad.is_empty() else "  bad: " + str(bad)]])
 
 		# ---- D1 experiment library (offline experiments, read as plain JSON) -------
 		runner.check("D1 experiments: exp001 contact threshold has conditions, grid, bisection and a consistent threshold", func():

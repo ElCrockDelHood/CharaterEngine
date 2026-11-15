@@ -262,6 +262,7 @@ def main() -> int:
         deepest_penetration,
         entry_sha256,
         first_event,
+        is_graze,
         parry_frames,
         reaction_for,
         sample_times,
@@ -348,6 +349,9 @@ def main() -> int:
                              "severity": asm.severity.value, "lethality": asm.lethality,
                              "bleeding_rate": asm.bleeding_rate, "fracture": asm.fracture,
                              "incapacitating": asm.incapacitating, "provenance": asm.provenance.value}
+                if first and is_graze(wound["layers_breached"]):
+                    event = "graze"                      # skin and fat only: no reaction clip (Decision 84)
+                elif first:
                     clip, rule = reaction_for(wound["region"], wound["severity"], wound["lethality"],
                                               wound["incapacitating"])
                     reaction = {"clip": clip, "rule": rule, "provenance": "ASSUMED",
@@ -395,7 +399,8 @@ def main() -> int:
         "bone_map": "quaternius_ual",
         "sources": [{"file": p.name, "sha256": file_sha256(p), "licence": "CC0 1.0 (Quaternius)"}
                     for p in a.lib],
-        "rule": "reaction_for (ASSUMED): lethal -> Death01; head/neck -> Hit_Head; incapacitating leg -> "
+        "rule": "graze (ASSUMED, Decision 84): a wound in skin and fat only plays no reaction. "
+                "reaction_for (ASSUMED): lethal -> Death01; head/neck -> Hit_Head; incapacitating leg -> "
                 "Hit_Knockback (fall); severe -> Hit_Knockback; else Hit_Chest. Parry (blade-to-blade distance <= "
                 "PLACEHOLDER blade width before any body contact, in the strike phase: tip approaching the defender and blade pointing at it) -> "
                 "attacker Hit_Chest recoil, no wound. Defender blend-in per clip: Death01 2, Hit_Knockback 2, "

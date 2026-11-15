@@ -1462,6 +1462,20 @@ regenerated.
 
 ---
 
+## 84. GRAZES PLAY NO REACTION (D1 REACTION LIBRARY SCHEMA 7)
+
+**Decision** (owner request, 2026-11-15 "Corregi todo", review item 1): a 2.2 mm blade contact on the upper arm
+threw the defender into a full Hit_Chest clip. A body contact whose wound breaches only skin and fat
+(`is_graze`, ASSUMED rule tied to the existing tissue model, no depth threshold invented) becomes the event
+`graze`: the wound is kept, no reaction clip plays and the attacker keeps its clip. Schema 7 adds the event;
+Godot's library check accepts it. Review item 2 (Death01 from a 7.6 cm cut computed without resistance) needs
+the blade-dynamics model of branch `physics/cut-blade-dynamics` (Decision 82) and stays open until that branch is
+merged.
+
+**Date**: 2026-11-15 · **Status**: FINAL (rule reversible)
+
+---
+
 ## 85. LEG GROUNDING IN THE RETARGET
 
 **Decision** (owner request, 2026-11-15 "que se trabaje la parada, los pasos los pies y las piernas bien ubicados,

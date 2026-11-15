@@ -19,6 +19,7 @@ from character_engine.domain.gameplay.reaction_library import (
     deepest_penetration,
     entry_sha256,
     first_event,
+    is_graze,
     parry_frames,
     parry_reaction_for,
     reaction_for,
@@ -121,7 +122,7 @@ def _hit(eid="hit"):
     e["first_contact"] = {"time": 0.5, "frame": 1, "segment": "forearm.L", "bone": "RADIUS_L", "penetration_m": 0.03,
                           "penetration_at_contact_m": 0.01, "entry_point": [0, 0, 1]}
     e["wound"] = {"type": "incision", "bone": "RADIUS_L", "region": "forearm", "depth_m": 0.01, "width_m": 0.035,
-                  "layers_breached": ["skin"], "severity": 2, "lethality": 0.01, "bleeding_rate": 0.2,
+                  "layers_breached": ["skin", "fat", "muscle"], "severity": 2, "lethality": 0.01, "bleeding_rate": 0.2,
                   "fracture": False, "incapacitating": False, "provenance": "estimate"}
     clip, rule = reaction_for("forearm", 2, 0.01, False)
     e["reaction"] = {"clip": clip, "rule": rule, "provenance": "ASSUMED"}
@@ -147,6 +148,15 @@ def _parry(eid="parry", reached=False):
     return e
 
 
+def _graze(eid="graze"):
+    e = _hit(eid)
+    e["event"] = "graze"
+    e["wound"]["layers_breached"] = ["skin", "fat"]
+    e["reaction"] = e["reaction_playback"] = None
+    e["sha256"] = entry_sha256(e)
+    return e
+
+
 def _none(eid="none"):
     e = _base(eid)
     e["sha256"] = entry_sha256(e)
@@ -161,8 +171,28 @@ def _doc(*entries):
 def test_valid_document_and_summary():
     doc = _doc(_hit(), _parry(), _parry("p2", reached=True), _none())
     assert validate_library(doc) == []
-    assert summary(doc) == {"entries": 4, "body_hits": 1, "parries": 2, "reactions": {"Hit_Chest": 1},
+    assert summary(doc) == {"entries": 4, "body_hits": 1, "grazes": 0, "parries": 2, "reactions": {"Hit_Chest": 1},
                             "parries_reaching_body_after": 1, "filtered_parry_contacts": 0}
+
+
+def test_graze_plays_no_reaction():
+    assert is_graze(["skin"]) and is_graze(["skin", "fat"])
+    assert not is_graze(["skin", "fat", "muscle"]) and not is_graze([])
+    doc = _doc(_hit(), _graze(), _none())
+    assert validate_library(doc) == []
+    assert summary(doc)["grazes"] == 1 and summary(doc)["body_hits"] == 1
+    deep = _graze("deep")
+    deep["wound"]["layers_breached"] = ["skin", "fat", "muscle"]
+    deep["sha256"] = entry_sha256(deep)
+    assert any("only skin and fat" in p for p in validate_library(_doc(deep)))
+    shallow_hit = _hit("shallow")
+    shallow_hit["wound"]["layers_breached"] = ["skin", "fat"]
+    shallow_hit["sha256"] = entry_sha256(shallow_hit)
+    assert any("is a graze" in p for p in validate_library(_doc(shallow_hit)))
+    reacting = _graze("reacting")
+    reacting["reaction"] = {"clip": "Hit_Chest", "rule": "body_stagger", "provenance": "ASSUMED"}
+    reacting["sha256"] = entry_sha256(reacting)
+    assert any("plays no reaction" in p for p in validate_library(_doc(reacting)))
 
 
 def test_parry_while_withdrawing_is_rejected():
