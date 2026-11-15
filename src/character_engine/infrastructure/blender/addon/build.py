@@ -21,6 +21,7 @@ from character_engine.domain.anatomy.reference.source import ProvenanceState
 from character_engine.domain.animation import BoneMap, retarget_scale, stance_scale
 from character_engine.domain.assets import normalization
 from character_engine.domain.rigging import (
+    COLLISION_SEGMENTS,
     ENVELOPE_RADIUS_M,
     EquipmentSocket,
     RigDefinition,
@@ -492,13 +493,17 @@ def _capsule(bm, a: Vector, b: Vector, radius: float, segments: int = 12, rings:
 def build_block_dummy(context, armature, with_collision: bool = True):
     """Block mannequin: one capsule per body segment, 100 % weighted to one bone (ESTIMATE radii).
 
+    Built from the contact layout ``COLLISION_SEGMENTS`` (Decision 83): limb capsules overlap at the joints,
+    a shoulder capsule joins the arm to the trunk, and hands and feet have their own radii.
+
     Returns (blocks object, list of collision objects). Collision capsules are separate objects
     parented to their bone with a COLLISION modifier, so cloth, soft bodies and particles hit them.
     """
     name = armature["ce_character"]
     pts = bone_points(armature)
     stature = float(armature.get("ce_stature_m", 1.80))
-    placements = block_placements({n: (tuple(h), tuple(t)) for n, (h, t) in pts.items()}, stature)
+    placements = block_placements({n: (tuple(h), tuple(t)) for n, (h, t) in pts.items()}, stature,
+                                  segments=COLLISION_SEGMENTS)
     bm = bmesh.new()
     owned = []
     spans = []

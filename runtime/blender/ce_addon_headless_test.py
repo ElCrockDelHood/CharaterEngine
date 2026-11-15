@@ -846,7 +846,7 @@ def main(reset: bool = True) -> int:
         assert bpy.ops.character_engine.block_dummy(with_collision=True) == {"FINISHED"}
         blocks = bpy.data.objects[f"{arm.name}_Blocks"]
         cols = [o for o in bpy.data.objects if o.get("ce_character") == arm.name and o.get("ce_role") == "collision"]
-        assert len(cols) == 17, len(cols)
+        assert len(cols) == 19, len(cols)          # 17 segments + 2 shoulders (Decision 83)
         bad = [v.index for v in blocks.data.vertices if len(v.groups) != 1 or abs(v.groups[0].weight - 1.0) > 1e-6]
         assert not bad, f"{len(bad)} vertices not 100 % weighted to one bone"
         assert all(o.modifiers.get("Collision") for o in cols)

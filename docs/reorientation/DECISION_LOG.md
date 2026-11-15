@@ -1445,6 +1445,23 @@ updated. Audit `docs/audit/A32_JAW_ATM.md`; proposal `docs/architecture/JAW_ATM_
 
 ---
 
+## 83. CONTACT BODY WITHOUT GAPS AT THE JOINTS (COLLISION LAYOUT)
+
+**Decision** (owner request, 2026-11-15 "Necesitamos un mejor cuerpo de coliciones" and "Corregi todo", thread
+"Debug visual en vivo", review item 6-7): the visual review found 1-5 cm gaps between the block-dummy capsules at
+shoulder (3.1 cm), elbow (4.3), wrist (2.9), knee (4.9) and ankle (1.0) in the 1.80 m adult, and bone-thin hands
+(radius 1.8 cm) and feet (3 cm). `COLLISION_SEGMENTS` (`domain/rigging/block_dummy.py`) keeps the trunk and head
+segments, adds a shoulder capsule (clavicle sternal end to humeral head, weighted to the clavicle) and centres the
+limb capsule ends on the shared joints so neighbours overlap; hands take radius 3.5 cm and feet 4 cm (ESTIMATE, no
+source read: about half a palm and half a foot breadth). The Blender addon builds the block dummy and its collision
+capsules from it (19 capsules). `BLOCK_SEGMENTS` and `block_placements`' default are unchanged, so the physics
+strike models (A09, A10, Decision 79) and their hashes do not move. Contact results (the D1 reaction library) are
+regenerated.
+
+**Date**: 2026-11-15 · **Status**: FINAL (radii reversible)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary

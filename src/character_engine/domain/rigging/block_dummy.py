@@ -8,6 +8,12 @@ A test mannequin for collisions and coarse "muscle" volume, built over the canon
 * every vertex of a block is weighted 100 % to ``weight_bone``; the same capsule doubles as the
   collision shape.
 
+``COLLISION_SEGMENTS`` (Decision 83) is the contact body: the same trunk, a shoulder, and limb capsules whose
+ends are centred **on** the shared joints so neighbours overlap there (the default ``BLOCK_SEGMENTS`` stop a radius
+short of every joint and leave 1-5 cm gaps at shoulder, elbow, wrist, knee and ankle that a blade can pass
+through), and hands and feet with their own radii (ESTIMATE). ``BLOCK_SEGMENTS`` stay as they were: the
+physics strike models (A09, A10) read them.
+
 Pure Python: the Blender addon turns the placements into meshes, weights and collision objects.
 """
 
@@ -15,7 +21,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Dict, List, Mapping, Sequence, Tuple
+from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..anatomy.reference.source import ProvenanceState
 from ..tissue import BodyRegion
@@ -42,6 +48,9 @@ class BlockSegment:
     end: Tuple[Joint, ...]
     weight_bone: str
     on_ground: bool = False                 # lift the capsule so it never goes below the ground z = 0
+    free_start: bool = True                 # free end: the cap stops at the joint; False: centred on it
+    free_end: bool = True
+    radius_m: Optional[float] = None        # 1.80 m adult radius overriding the region's envelope (ESTIMATE)
 
 
 @dataclass(frozen=True)
@@ -87,6 +96,39 @@ BLOCK_SEGMENTS: Tuple[BlockSegment, ...] = (
 )
 
 
+#: Contact-body radii for a 1.80 m adult where the envelope is a bone-thin stick (ESTIMATE, no source read):
+#: about half a palm breadth for the hand and half a foot breadth for the foot.
+HAND_COLLISION_RADIUS_M = 0.035
+FOOT_COLLISION_RADIUS_M = 0.04
+
+
+def _collision_side(s: str) -> Tuple[BlockSegment, ...]:
+    return (
+        BlockSegment(f"shoulder.{s}", BodyRegion.UPPER_ARM, ((f"CLAVICLE_{s}", "head"),), ((f"HUMERUS_{s}", "head"),),
+                     f"CLAVICLE_{s}", free_start=False, free_end=False),
+        BlockSegment(f"upper_arm.{s}", BodyRegion.UPPER_ARM, ((f"HUMERUS_{s}", "head"),), ((f"HUMERUS_{s}", "tail"),),
+                     f"HUMERUS_{s}", free_start=False, free_end=False),
+        BlockSegment(f"forearm.{s}", BodyRegion.FOREARM, ((f"RADIUS_{s}", "head"), (f"ULNA_{s}", "head")),
+                     ((f"RADIUS_{s}", "tail"), (f"ULNA_{s}", "tail")), f"RADIUS_{s}", free_start=False, free_end=False),
+        BlockSegment(f"hand.{s}", BodyRegion.HAND, ((f"CAPITATE_{s}", "head"),), ((f"PHALANX_DISTAL_3_{s}", "tail"),),
+                     f"METACARPAL_3_{s}", free_start=False, radius_m=HAND_COLLISION_RADIUS_M),
+        BlockSegment(f"thigh.{s}", BodyRegion.THIGH, ((f"FEMUR_{s}", "head"),), ((f"FEMUR_{s}", "tail"),), f"FEMUR_{s}",
+                     free_start=False, free_end=False),
+        BlockSegment(f"leg.{s}", BodyRegion.LEG, ((f"TIBIA_{s}", "head"),), ((f"TIBIA_{s}", "tail"),), f"TIBIA_{s}",
+                     free_start=False, free_end=False),
+        BlockSegment(f"foot.{s}", BodyRegion.FOOT, ((f"CALCANEUS_{s}", "head"),), ((f"METATARSAL_3_{s}", "tail"),),
+                     f"TALUS_{s}", on_ground=True, radius_m=FOOT_COLLISION_RADIUS_M),
+    )
+
+
+COLLISION_SEGMENTS: Tuple[BlockSegment, ...] = (
+    *BLOCK_SEGMENTS[:5],        # trunk and head as before: they already overlap, and centring the thorax on T1
+                                # would push it 13 cm up into the neck
+    *_collision_side("L"),
+    *_collision_side("R"),
+)
+
+
 def _sub(a: Vec, b: Vec) -> Vec:
     return (a[0] - b[0], a[1] - b[1], a[2] - b[2])
 
@@ -127,17 +169,19 @@ def block_placements(points: Mapping[str, Tuple[Vec, Vec]], stature_m: float = R
     for seg in segments:
         p0 = _avg([points[b][0 if end == "head" else 1] for b, end in seg.start])
         p1 = _avg([points[b][0 if end == "head" else 1] for b, end in seg.end])
-        r = round(ENVELOPE_RADIUS_M[seg.region] * k, 5)
+        r = round((seg.radius_m if seg.radius_m is not None else ENVELOPE_RADIUS_M[seg.region]) * k, 5)
         d = _sub(p1, p0)
         length = _norm(d)
-        if length <= 2 * r:
+        inset = r * (seg.free_start + seg.free_end)
+        if length <= inset:
             mid = _avg([p0, p1])
             a = b = mid
-            r = max(r, length / 2)
+            r = max(r, length / 2) if inset == 2 * r else r
         else:
             u = (d[0] / length, d[1] / length, d[2] / length)
-            a = (p0[0] + u[0] * r, p0[1] + u[1] * r, p0[2] + u[2] * r)
-            b = (p1[0] - u[0] * r, p1[1] - u[1] * r, p1[2] - u[2] * r)
+            s0, s1 = (r if seg.free_start else 0.0), (r if seg.free_end else 0.0)
+            a = (p0[0] + u[0] * s0, p0[1] + u[1] * s0, p0[2] + u[2] * s0)
+            b = (p1[0] - u[0] * s1, p1[1] - u[1] * s1, p1[2] - u[2] * s1)
         if seg.on_ground:
             lift = r - min(a[2], b[2])
             if lift > 0:

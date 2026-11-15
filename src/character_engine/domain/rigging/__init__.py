@@ -2,6 +2,7 @@
 
 from .block_dummy import (
     BLOCK_SEGMENTS,
+    COLLISION_SEGMENTS,
     ENVELOPE_RADIUS_M,
     BlockPlacement,
     BlockSegment,
@@ -36,6 +37,7 @@ from .sockets import EQUIPMENT_SOCKETS, EquipmentSocket, socket_points, validate
 
 __all__ = [
     "BLOCK_SEGMENTS",
+    "COLLISION_SEGMENTS",
     "ENVELOPE_RADIUS_M",
     "BlockPlacement",
     "BlockSegment",
