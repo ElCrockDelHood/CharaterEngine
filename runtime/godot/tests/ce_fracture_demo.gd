@@ -35,6 +35,8 @@ func _ready() -> void:
 		script[f] = {"player": {"light": true}}
 	arena.autoplay_script = script
 	add_child(arena)
+	for fid in arena.animators:               # idle clip from the start, not the rest T-pose
+		(arena.animators[fid] as CESoulsAnimator).update_from(arena.combat.fighters[fid], 0, 0)
 	cam = Camera3D.new()
 	add_child(cam)
 	cam.current = true
@@ -61,6 +63,19 @@ func _aim(look: Vector3, dist: float) -> void:
 	cam.look_at(target, Vector3.UP)
 
 
+## Fight framing: both fighters in view from the side, the camera at FIGHT_CAM_M from their midpoint.
+const FIGHT_CAM_M := 3.4
+
+
+func _aim_fight() -> void:
+	var a: Vector3 = (arena.characters["player"] as CECharacter).global_position
+	var b: Vector3 = (arena.characters["opponent"] as CECharacter).global_position
+	var mid := (a + b) * 0.5 + Vector3(0.0, 1.1, 0.0)
+	var across := (b - a).cross(Vector3.UP).normalized()
+	cam.global_position = mid + across * FIGHT_CAM_M + Vector3(0.0, 0.5, 0.0)
+	cam.look_at(mid, Vector3.UP)
+
+
 func _process(delta: float) -> void:
 	clock += delta
 	if next_shot < SHOTS.size() and clock >= float(SHOTS[next_shot]["at"]):
@@ -73,6 +88,7 @@ func _process(delta: float) -> void:
 		fighting = true
 		arena.autostep = true
 		title.text = "Pelea: física de golpe activada"
-		_aim(Vector3(0.0, 1.2, 0.0), 1.5)
+	if fighting:
+		_aim_fight()
 	if clock >= END_AT:
 		get_tree().quit()
