@@ -1551,14 +1551,30 @@ walk -0.9 cm. The jump clips still put the toes about 11 cm under the ground wit
 
 ---
 
+## 87. A36 — JUDO / JUJUTSU THROWS: GRIP, UNBALANCING, FALL AND BREAKFALL (ADDITIVE, OPT-IN)
+
+**Decision** (owner, 2026-11-15 "Quiero que mi character luche Judo Jujutsu"; 2026-11-16 "sigamos con tus recomendaciones", after
+`docs/architecture/JUDO_THROWS_PROPOSAL.md`): five throws (seoi-nage, o-goshi, o-soto-gari, o-uchi-gari, de-ashi-barai) are modelled as
+kumikata → kuzushi → throw → fall → ukemi. `domain/physics/judo.py`: balance is the centre of mass against the feet on the ground, with
+the impulse turned into travel by the inverted pendulum; a reaped or swept foot leaves the support. The fall is `FallLanding`
+(Decision 81); head loads are the measured ones or `null`. Event schema `ce-throw/1`. `domain/animation/judo_clips.py`: seven paired key
+poses per throw on CE-GAME-v1, hands and reaping leg placed by IK, schema `ce-judo-clips/1`, **PLACEHOLDER**: written from descriptions,
+not traced from a photo sequence (none free and complete was found). Heel offset, release heights, ukemi rule and tori's pull ASSUMED.
+Nothing existing changes; not baked, no gameplay moves yet. Audit:
+`docs/audit/A36_JUDO_THROWS.md`. Tests: `tests/unit/test_judo.py`.
+
+**Date**: 2026-11-16 · **Status**: FINAL (opt-in; poses PLACEHOLDER, values reversible)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 84 (numbered to 85; Decision 82 is on branch `physics/cut-blade-dynamics`)
+**Total Decisions**: 85 (numbered to 87; 86 is unused and Decision 82 is on branch `physics/cut-blade-dynamics`)
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 75 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 76 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 8 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values; fracture fragment values)

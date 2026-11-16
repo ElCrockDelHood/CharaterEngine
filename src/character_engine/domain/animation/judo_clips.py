@@ -1,0 +1,392 @@
+"""Paired key poses (tori and uke) for the first five judo throws, on the CE-GAME-v1 game rig (A36).
+
+**PLACEHOLDER** block-out, authored from written descriptions of each throw and single illustrations (no motion
+capture and no frame-by-frame source was used); to be judged by eye on the contact sheet
+(``scripts/judo_contact_sheet.py``) and corrected before any bake.
+
+How a key is described, so it can be edited by hand:
+
+* **Directions**: a pose gives a game bone the direction it points to, in the fighter's own frame, with
+  :func:`v` ``(fwd, left, up)``. Bones not named keep their rest rotation relative to the parent. ``trunk`` is the
+  pelvis (the spine follows), ``chest`` is ``spine_02``, ``neck`` is ``neck_01``. Feet stay flat unless named.
+* **Root**: where the pelvis is in the world (x, y), the turns of the whole body about world axes, in order, and the
+  height: on the ground (lowest point at ``clearance``) or an explicit pelvis height while airborne.
+* **Reach**: a hand or a foot is put on a point of the other fighter with two-bone IK (``foot_lock.two_bone_ik``), which
+  is what makes the grips and the reaping leg actually touch.
+
+World frame: Z up, tori starts at the origin facing -Y, uke stands in front of tori facing +Y.
+The output keeps the convention of ``souls_clips`` (rest-frame rotation of each bone about its head, children
+inherit), plus the root transform, so the same kind of Blender bake can consume it.
+"""
+
+from __future__ import annotations
+
+import math
+from dataclasses import dataclass, field
+from typing import Dict, List, Mapping, Optional, Tuple
+
+from ..anatomy.reference.source import ProvenanceState
+from ..rigging.game_rig import GAME_BONES
+from ..rigging.hand_poses import (
+    IDENTITY,
+    Quat,
+    Vec,
+    _add,
+    _cross,
+    _sub,
+    _unit,
+    apply_hand_pose,
+    quat_axis_angle,
+    quat_mul,
+    quat_rotate,
+)
+from .foot_lock import two_bone_ik
+
+PROVENANCE = ProvenanceState.PLACEHOLDER
+SCHEMA = "ce-judo-clips/1"
+FPS = 60
+Points = Mapping[str, Tuple[Vec, Vec]]
+Pose = Mapping[str, Vec]
+
+ALIASES: Mapping[str, str] = {"trunk": "pelvis", "chest": "spine_02", "neck": "neck_01"}
+LIMBS: Mapping[str, Tuple[str, str]] = {"arm_l": ("upperarm_l", "lowerarm_l"), "arm_r": ("upperarm_r", "lowerarm_r"),
+                                        "leg_l": ("thigh_l", "calf_l"), "leg_r": ("thigh_r", "calf_r")}
+_FLAT = ("foot_l", "foot_r", "ball_l", "ball_r")
+_AXES: Mapping[str, Vec] = {"x": (1.0, 0.0, 0.0), "y": (0.0, 1.0, 0.0), "z": (0.0, 0.0, 1.0)}
+
+
+def v(fwd: float = 0.0, left: float = 0.0, up: float = 0.0) -> Vec:
+    """A direction in the fighter's own frame (rest frame: forward is -Y, left is +X, up is +Z)."""
+    return _unit((left, -fwd, up))
+
+
+def _conj(q: Quat) -> Quat:
+    return (q[0], -q[1], -q[2], -q[3])
+
+
+def _arc(a: Vec, b: Vec) -> Quat:
+    """Shortest rotation that takes unit ``a`` to unit ``b``."""
+    dot = max(-1.0, min(1.0, a[0] * b[0] + a[1] * b[1] + a[2] * b[2]))
+    axis = _cross(a, b)
+    if math.sqrt(sum(c * c for c in axis)) < 1e-9:
+        if dot > 0:
+            return IDENTITY
+        axis = _cross(a, (1.0, 0.0, 0.0) if abs(a[0]) < 0.9 else (0.0, 1.0, 0.0))
+    return quat_axis_angle(axis, math.acos(dot))
+
+
+@dataclass(frozen=True)
+class Root:
+    x: float = 0.0
+    y: float = 0.0
+    turns: Tuple[Tuple[str, float], ...] = ()        # (world axis, degrees), applied in order about the pelvis
+    z: Optional[float] = None                        # pelvis height; None: on the ground
+    clearance: float = 0.0                           # ground offset of the lowest bone point (lying: half a body depth)
+
+    def rotation(self) -> Quat:
+        q = IDENTITY
+        for axis, deg in self.turns:
+            q = quat_mul(quat_axis_angle(_AXES[axis], math.radians(deg)), q)
+        return q
+
+
+@dataclass(frozen=True)
+class Target:
+    bone: str                                        # bone of the other fighter
+    t: float = 0.5                                   # 0 = head of the bone, 1 = tail
+    offset: Vec = (0.0, 0.0, 0.0)                    # (left, fwd, up) in the other fighter's root frame, metres
+    pole: Optional[Vec] = None                       # (left, fwd, up) hint for the elbow / knee, own root frame
+
+
+@dataclass(frozen=True)
+class FighterKey:
+    pose: Pose
+    root: Root
+    reach: Mapping[str, Target] = field(default_factory=dict)
+
+
+@dataclass(frozen=True)
+class Key:
+    frame: int
+    phase: str                                       # kumikata | kuzushi | tsukuri | kake | fall | landing | end
+    tori: FighterKey
+    uke: FighterKey
+
+
+@dataclass(frozen=True)
+class ThrowClip:
+    throw_id: str
+    keys: Tuple[Key, ...]
+
+    @property
+    def frames(self) -> int:
+        return self.keys[-1].frame
+
+
+def pose_rotations(points: Points, pose: Pose) -> Dict[str, Quat]:
+    """Rest-frame rotation of every named bone so that it points along its direction (parents first)."""
+    wanted = {ALIASES.get(k, k): d for k, d in pose.items()}
+    for b in _FLAT:
+        wanted.setdefault(b, _unit(_sub(points[b][1], points[b][0])))
+    world: Dict[Optional[str], Quat] = {None: IDENTITY}
+    out: Dict[str, Quat] = {}
+    for g in GAME_BONES:
+        parent = world[g.parent]
+        q = IDENTITY
+        if g.name in wanted:
+            rest = _unit(_sub(points[g.name][1], points[g.name][0]))
+            q = _arc(rest, quat_rotate(_conj(parent), _unit(wanted[g.name])))
+            out[g.name] = q
+        world[g.name] = quat_mul(parent, q)
+    return out
+
+
+def place(points: Points, body: Points, root: Root) -> Dict[str, Tuple[Vec, Vec]]:
+    """Body-frame points to world: turn about the rest pelvis, move the pelvis to (x, y), then set the height."""
+    pivot, q = points["pelvis"][0], root.rotation()
+
+    def tr(p: Vec) -> Vec:
+        r = quat_rotate(q, _sub(p, pivot))
+        return (r[0] + root.x, r[1] + root.y, r[2])
+
+    out = {b: (tr(h), tr(t)) for b, (h, t) in body.items()}
+    low = min(min(h[2], t[2]) for h, t in out.values())
+    dz = (root.clearance - low) if root.z is None else root.z - out["pelvis"][0][2]
+    return {b: ((h[0], h[1], h[2] + dz), (t[0], t[1], t[2] + dz)) for b, (h, t) in out.items()}
+
+
+def _local(root: Root, d: Vec) -> Vec:
+    return quat_rotate(_conj(root.rotation()), d)
+
+
+def _frame_vec(root: Root, lfu: Vec) -> Vec:
+    """(left, fwd, up) of a fighter's root frame as a world vector."""
+    return quat_rotate(root.rotation(), (lfu[0], -lfu[1], lfu[2]))
+
+
+def _world(points: Points, fk: FighterKey, pose: Pose) -> Dict[str, Tuple[Vec, Vec]]:
+    return place(points, apply_hand_pose(points, pose_rotations(points, pose)), fk.root)
+
+
+def _target_point(other: Points, other_root: Root, t: Target) -> Vec:
+    h, tail = other[t.bone]
+    p = tuple(h[i] + (tail[i] - h[i]) * t.t for i in range(3))
+    return _add(p, _frame_vec(other_root, t.offset))
+
+
+def _with_reach(points: Points, fk: FighterKey, other: Points, other_root: Root) -> Tuple[Pose, Dict[str, float]]:
+    pose: Dict[str, Vec] = dict(fk.pose)
+    miss: Dict[str, float] = {}
+    for _ in range(2):                                # the second pass corrects limbs whose parent moved
+        mine = _world(points, fk, pose)
+        for limb, tgt in fk.reach.items():
+            upper, lower = LIMBS[limb]
+            goal = _target_point(other, other_root, tgt)
+            hip, knee, end = mine[upper][0], mine[upper][1], mine[lower][1]
+            pole = None if tgt.pole is None else _add(hip, _frame_vec(fk.root, tgt.pole))
+            ik = two_bone_ik(hip, knee, end, goal, pole)
+            pose[upper] = _local(fk.root, _unit(_sub(ik.knee, hip)))
+            pose[lower] = _local(fk.root, _unit(_sub(ik.ankle, ik.knee)))
+            miss[limb] = math.dist(ik.ankle, goal)
+    return pose, miss
+
+
+@dataclass(frozen=True)
+class SolvedKey:
+    frame: int
+    phase: str
+    tori: Dict[str, Tuple[Vec, Vec]]                 # world points
+    uke: Dict[str, Tuple[Vec, Vec]]
+    tori_pose: Pose
+    uke_pose: Pose
+    miss_m: Dict[str, float]                         # "tori.arm_l" -> distance left between the hand and its grip
+
+
+def solve_key(points: Points, key: Key) -> SolvedKey:
+    """World points of both fighters at a key, with every reach solved against the other fighter."""
+    tp, up = dict(key.tori.pose), dict(key.uke.pose)
+    tw, uw = _world(points, key.tori, tp), _world(points, key.uke, up)
+    miss: Dict[str, float] = {}
+    for _ in range(3):                                # grips on a moving arm settle in a few rounds
+        tp, mt = _with_reach(points, key.tori, uw, key.uke.root)
+        tw = _world(points, key.tori, tp)
+        up, mu = _with_reach(points, key.uke, tw, key.tori.root)
+        uw = _world(points, key.uke, up)
+        miss = {**{f"tori.{k}": d for k, d in mt.items()}, **{f"uke.{k}": d for k, d in mu.items()}}
+    return SolvedKey(key.frame, key.phase, tw, uw, tp, up, miss)
+
+
+def solve_clip(points: Points, clip: ThrowClip) -> List[SolvedKey]:
+    return [solve_key(points, k) for k in clip.keys]
+
+
+# --------------------------------------------------------------------------------------------------------------------
+# Pose vocabulary (all PLACEHOLDER). Right-handed tori; "r" and "l" are each fighter's own right and left.
+
+def _pose(*parts: Pose) -> Dict[str, Vec]:
+    out: Dict[str, Vec] = {}
+    for p in parts:
+        out.update(p)
+    return out
+
+
+def _legs(l_thigh: Vec, l_calf: Vec, r_thigh: Vec, r_calf: Vec) -> Dict[str, Vec]:
+    return {"thigh_l": l_thigh, "calf_l": l_calf, "thigh_r": r_thigh, "calf_r": r_calf}
+
+
+STAND: Pose = _pose(
+    {"trunk": v(0.06, 0, 1), "neck": v(0.05, 0, 1)},
+    _legs(v(0.12, 0.14, -1), v(-0.12, 0, -1), v(0.12, -0.14, -1), v(-0.12, 0, -1)),
+    {"upperarm_l": v(0.45, 0.2, -1), "lowerarm_l": v(1, -0.1, 0.2), "upperarm_r": v(0.45, -0.2, -1),
+     "lowerarm_r": v(1, 0.1, 0.2)})
+CROUCH: Pose = _pose(STAND, {"trunk": v(0.2, 0, 1)},
+                     _legs(v(0.55, 0.22, -0.85), v(-0.5, 0, -0.9), v(0.55, -0.22, -0.85), v(-0.5, 0, -0.9)))
+LYING: Pose = _pose(   # on the back after ushiro / mae-mawari ukemi: chin tucked, legs up, one arm slapping the mat
+    {"trunk": v(0, 0, 1), "chest": v(0.12, 0, 1), "neck": v(0.6, 0, 1)},
+    _legs(v(0.55, 0.2, -0.8), v(-0.2, 0, -1), v(0.7, -0.2, -0.7), v(-0.3, 0, -1)),
+    {"upperarm_l": v(-0.05, 0.75, -0.65), "lowerarm_l": v(-0.05, 0.75, -0.65), "upperarm_r": v(0.5, -0.3, -0.6),
+     "lowerarm_r": v(0.9, -0.1, 0.1)})
+REST: Pose = _pose(LYING, {"neck": v(0.15, 0, 1)},
+                   _legs(v(0.25, 0.15, -1), v(-0.25, 0, -1), v(0.1, -0.15, -1), v(-0.05, 0, -1)),
+                   {"upperarm_l": v(-0.02, 0.5, -0.85), "lowerarm_l": v(-0.02, 0.4, -0.9)})
+
+# Tori's hands on uke. Sleeve: uke's right forearm near the elbow. Lapel: the left of uke's chest, at the front.
+SLEEVE = Target("lowerarm_r", 0.12, pole=(0.3, 0.0, -1.0))
+LAPEL = Target("spine_03", 0.55, (0.09, 0.11, 0.0), pole=(-0.3, 0.0, -1.0))
+GRIPS: Mapping[str, Target] = {"arm_l": SLEEVE, "arm_r": LAPEL}
+#: Uke holds tori the same way (both right-handed): the first key only; after that uke's arms are posed.
+UKE_GRIPS: Mapping[str, Target] = GRIPS
+
+UKE_Y = -0.78                                         # uke's starting distance in front of tori, ASSUMED
+FACING = (("z", 180.0),)                              # uke faces tori
+
+
+def _uke(pose: Pose, x: float = 0.0, y: float = UKE_Y, turns: Tuple[Tuple[str, float], ...] = (), z: Optional[float] = None,
+         clearance: float = 0.0, reach: Optional[Mapping[str, Target]] = None) -> FighterKey:
+    return FighterKey(pose, Root(x, y, FACING + turns, z, clearance), reach or {})
+
+
+def _tori(pose: Pose, x: float = 0.0, y: float = 0.0, turns: Tuple[Tuple[str, float], ...] = (),
+          reach: Optional[Mapping[str, Target]] = GRIPS) -> FighterKey:
+    return FighterKey(pose, Root(x, y, turns), reach or {})
+
+
+_START = Key(0, "kumikata", _tori(STAND), _uke(STAND, reach=UKE_GRIPS))
+_ARMS_UP: Pose = {"upperarm_l": v(0.8, 0.3, -0.3), "lowerarm_l": v(1, 0, 0.3), "upperarm_r": v(0.8, -0.3, -0.3),
+                  "lowerarm_r": v(1, 0, 0.3)}
+_HOLD_SLEEVE: Mapping[str, Target] = {"arm_l": SLEEVE}
+LOW_HOLD: Pose = _pose(CROUCH, {"trunk": v(1, 0, 0.5), "neck": v(1, 0, 0.3)})      # tori supports uke's sleeve on landing
+UPRIGHT: Pose = _pose(STAND, {"upperarm_l": v(0.1, 0.15, -1), "lowerarm_l": v(0.3, 0, -1), "upperarm_r": v(0.1, -0.15, -1),
+                             "lowerarm_r": v(0.3, 0, -1)})
+
+
+def _o_soto_gari() -> ThrowClip:
+    lean = _pose(STAND, {"trunk": v(-0.3, -0.18, 1)})                      # uke on the right heel, back-right corner
+    step = _pose(STAND, {"trunk": v(0.3, 0, 1)}, _legs(v(0.1, 0.1, -1), v(-0.1, 0, -1), v(0.95, -0.05, -0.45), v(0.7, 0, -0.7)))
+    reap = _pose(STAND, {"trunk": v(0.9, 0, 0.6), "neck": v(0.9, 0, 0.5)},
+                 _legs(v(0.05, 0.1, -1), v(-0.05, 0, -1), v(-0.75, -0.05, -0.7), v(-0.9, 0, -0.35)))
+    uke_reaped = _pose(STAND, _ARMS_UP, {"trunk": v(-0.1, 0, 1), "neck": v(0.5, 0, 1)},
+                       _legs(v(0.2, 0.15, -1), v(-0.3, 0, -1), v(0.95, -0.15, 0.1), v(0.8, 0, -0.5)))
+    uke_air = _pose(LYING, _legs(v(0.8, 0.2, -0.4), v(0.3, 0, -1), v(0.95, -0.2, 0.2), v(0.6, 0, -0.8)))
+    over = _pose(STAND, {"trunk": v(0.75, 0, 0.7)}, _legs(v(0.3, 0.15, -1), v(-0.3, 0, -1), v(-0.25, -0.15, -1), v(-0.25, 0, -1)))
+    return ThrowClip("o_soto_gari", (
+        _START,
+        Key(12, "kuzushi", _tori(_pose(STAND, {"trunk": v(0.2, 0, 1)}), 0.20, -0.22), _uke(lean, reach=UKE_GRIPS)),
+        Key(18, "tsukuri", _tori(step, 0.27, -0.50), _uke(lean, turns=(("x", 10.0),))),
+        Key(24, "kake", _tori(reap, 0.27, -0.56), _uke(uke_reaped, turns=(("x", 38.0),))),
+        Key(32, "fall", _tori(over, 0.27, -0.56, reach=_HOLD_SLEEVE), _uke(uke_air, y=-1.05, turns=(("x", 72.0),), z=0.45)),
+        Key(38, "landing", _tori(LOW_HOLD, 0.30, -0.80, reach=_HOLD_SLEEVE), _uke(LYING, y=-1.30, turns=(("x", 90.0),), clearance=0.11)),
+        Key(60, "end", _tori(UPRIGHT, 0.30, -0.80, reach=None),
+            _uke(REST, y=-1.30, turns=(("x", 90.0),), clearance=0.11)),
+    ))
+
+
+def _o_uchi_gari() -> ThrowClip:
+    lean = _pose(STAND, {"trunk": v(-0.25, 0.15, 1)}, _legs(v(0.1, 0.3, -1), v(-0.1, 0, -1), v(0.1, -0.3, -1), v(-0.1, 0, -1)))
+    enter = _pose(CROUCH, {"trunk": v(0.3, 0, 1)}, _legs(v(0.3, 0.1, -1), v(-0.3, 0, -1), v(0.8, 0.05, -0.6), v(0.4, 0.3, -0.85)))
+    hook = Target("calf_l", 0.45, pole=(-0.6, 0.6, -0.2))
+    drive = _pose(STAND, {"trunk": v(0.8, 0, 0.7), "neck": v(0.8, 0, 0.6)}, _legs(v(-0.25, 0.1, -1), v(-0.45, 0, -0.9), v(0.6, 0, -0.8), v(0.2, 0, -1)))
+    uke_hooked = _pose(STAND, _ARMS_UP, {"trunk": v(-0.15, 0, 1), "neck": v(0.5, 0, 1)},
+                       _legs(v(0.9, 0.35, -0.1), v(0.6, 0.1, -0.7), v(0.15, -0.2, -1), v(-0.3, 0, -1)))
+    uke_air = _pose(LYING, _legs(v(0.9, 0.4, 0.1), v(0.5, 0, -0.8), v(0.7, -0.25, -0.5), v(0.2, 0, -1)))
+    return ThrowClip("o_uchi_gari", (
+        _START,
+        Key(12, "kuzushi", _tori(_pose(STAND, {"trunk": v(0.25, 0, 1)}), 0.0, -0.20), _uke(lean, reach=UKE_GRIPS)),
+        Key(18, "tsukuri", _tori(enter, -0.03, -0.38), _uke(lean, turns=(("x", 8.0),))),
+        Key(24, "kake", _tori(drive, -0.03, -0.48, reach={**GRIPS, "leg_r": hook}), _uke(uke_hooked, turns=(("x", 35.0),))),
+        Key(32, "fall", _tori(drive, -0.03, -0.62, reach=_HOLD_SLEEVE), _uke(uke_air, y=-1.10, turns=(("x", 72.0),), z=0.45)),
+        Key(38, "landing", _tori(LOW_HOLD, -0.03, -0.85, reach=_HOLD_SLEEVE), _uke(LYING, y=-1.36, turns=(("x", 90.0),), clearance=0.11)),
+        Key(60, "end", _tori(UPRIGHT, -0.03, -0.85, reach=None),
+            _uke(REST, y=-1.36, turns=(("x", 90.0),), clearance=0.11)),
+    ))
+
+
+def _hip_throw(throw_id: str, right_arm: Target, load_z: float, bend: Vec, depth: Pose) -> ThrowClip:
+    """O-goshi and seoi-nage share the shape: turn the back to uke, load, bend forward, uke rotates over."""
+    back = (("z", 180.0),)                                                 # tori has turned to face the same way as uke
+    hands = {"arm_l": SLEEVE, "arm_r": right_arm}
+    tip = _pose(STAND, {"trunk": v(0.3, 0, 1)}, _legs(v(-0.15, 0.12, -1), v(-0.4, 0, -0.9), v(-0.15, -0.12, -1), v(-0.4, 0, -0.9)))
+    loaded = _pose(STAND, _ARMS_UP, {"trunk": v(0, 0, 1), "chest": v(0.3, 0, 1), "neck": v(0.3, 0, 1)},
+                   _legs(v(-0.25, 0.15, -1), v(-0.5, 0, -0.8), v(-0.1, -0.15, -1), v(-0.4, 0, -0.9)))
+    tucked = _pose(LYING, _legs(v(0.85, 0.2, -0.3), v(0.1, 0, -1), v(0.95, -0.2, 0.0), v(0.3, 0, -1)))
+    throw = _pose(STAND, {"trunk": bend, "neck": bend}, _legs(v(0.25, 0.2, -1), v(-0.25, 0, -1), v(0.25, -0.2, -1), v(-0.25, 0, -1)))
+    ty = UKE_Y + 0.27                                                      # tori's hips just in front of uke's
+    return ThrowClip(throw_id, (
+        _START,
+        Key(12, "kuzushi", _tori(_pose(STAND, {"trunk": v(-0.05, 0, 1)}), 0.0, -0.08), _uke(tip, turns=(("x", -8.0),), reach=UKE_GRIPS)),
+        Key(20, "tsukuri", _tori(_pose(depth), -0.04, ty, back, hands), _uke(tip, turns=(("x", -14.0),))),
+        Key(28, "kake", _tori(throw, -0.04, ty, back, hands), _uke(loaded, x=-0.10, y=ty - 0.02, turns=(("x", -80.0),), z=load_z)),
+        Key(34, "fall", _tori(throw, -0.04, ty, back, _HOLD_SLEEVE), _uke(tucked, x=-0.10, y=ty + 0.45, turns=(("x", -170.0),), z=max(load_z - 0.30, 0.92))),
+        Key(40, "landing", _tori(LOW_HOLD, -0.04, ty + 0.25, back, _HOLD_SLEEVE), _uke(LYING, x=-0.10, y=ty + 0.95, turns=(("x", 90.0),), clearance=0.11)),
+        Key(62, "end", _tori(UPRIGHT, -0.04, ty + 0.25, back, None), _uke(REST, x=-0.10, y=ty + 0.95, turns=(("x", 90.0),), clearance=0.11)),
+    ))
+
+
+def _de_ashi_barai() -> ThrowClip:
+    stepping = _pose(STAND, _legs(v(0.1, 0.14, -1), v(-0.1, 0, -1), v(0.4, -0.1, -0.95), v(-0.05, 0, -1)))   # right foot advancing
+    sweep = Target("foot_r", 0.0, pole=(0.5, 0.6, 0.0))
+    tori_sweep = _pose(STAND, {"trunk": v(0.0, -0.12, 1)}, _legs(v(0.3, -0.3, -1), v(0, -0.3, -1), v(0.05, -0.1, -1), v(-0.05, 0, -1)))
+    swept = _pose(STAND, _ARMS_UP, {"trunk": v(0, -0.1, 1)}, _legs(v(0.05, 0.1, -1), v(-0.05, 0, -1), v(0.35, 0.55, -0.75), v(0.2, 0.5, -0.8)))
+    air = _pose(STAND, {"neck": v(0.2, 0.5, 1)}, _legs(v(0.3, 0.2, -1), v(-0.2, 0, -1), v(0.5, 0.5, -0.7), v(0.1, 0.3, -1)),
+                {"upperarm_r": v(0.3, -0.8, -0.5), "lowerarm_r": v(0.3, -0.8, -0.5), "upperarm_l": v(0.7, 0.2, -0.5), "lowerarm_l": v(1, 0, 0.2)})
+    side = _pose(air, _legs(v(0.45, 0.2, -0.9), v(-0.35, 0, -0.9), v(0.25, 0.0, -1), v(-0.2, 0, -1)),   # yoko ukemi, on the right side
+                 {"neck": v(0.1, 0.45, 1), "upperarm_r": v(0.6, 0, -0.8), "lowerarm_r": v(0.6, 0, -0.8),          # right arm slaps the mat
+                  "upperarm_l": v(0.5, 0.3, -0.7), "lowerarm_l": v(0.9, 0.2, -0.1)})
+    pull = _pose(STAND, {"trunk": v(0.35, -0.2, 1)})
+    return ThrowClip("de_ashi_barai", (
+        _START,
+        Key(10, "kuzushi", _tori(STAND, 0.0, 0.04), _uke(stepping, y=UKE_Y + 0.12, reach=UKE_GRIPS)),
+        Key(16, "tsukuri", _tori(tori_sweep, 0.05, -0.08, reach={**GRIPS, "leg_l": sweep}), _uke(stepping, y=UKE_Y + 0.12)),
+        Key(22, "kake", _tori(tori_sweep, 0.10, -0.12), _uke(swept, y=UKE_Y + 0.12, turns=(("y", 28.0),))),
+        Key(30, "fall", _tori(pull, 0.15, -0.15, reach=_HOLD_SLEEVE), _uke(air, x=0.22, y=UKE_Y + 0.12, turns=(("y", 62.0),), z=0.72)),
+        Key(36, "landing", _tori(LOW_HOLD, 0.30, -0.30, reach=_HOLD_SLEEVE), _uke(side, x=0.38, y=UKE_Y + 0.12, turns=(("y", 90.0),), clearance=0.10)),
+        Key(58, "end", _tori(UPRIGHT, 0.30, -0.30, reach=None),
+            _uke(side, x=0.38, y=UKE_Y + 0.12, turns=(("y", 90.0),), clearance=0.10)),
+    ))
+
+
+JUDO_CLIPS: Dict[str, ThrowClip] = {c.throw_id: c for c in (
+    _hip_throw("seoi_nage", Target("upperarm_r", 0.2, (0.0, 0.0, -0.03), pole=(-0.2, 0.3, -1.0)), 1.22, v(1, 0, 0.15),
+               _pose(CROUCH, {"trunk": v(0.45, 0, 1)}, _legs(v(0.7, 0.22, -0.7), v(-0.65, 0, -0.75), v(0.7, -0.22, -0.7), v(-0.65, 0, -0.75)))),
+    _hip_throw("o_goshi", Target("spine_01", 0.6, (0.12, -0.10, 0.0), pole=(-0.6, -0.2, -0.5)), 1.05, v(0.9, 0, 0.5), CROUCH),
+    _o_soto_gari(), _o_uchi_gari(), _de_ashi_barai(),
+)}
+
+PROBE_BONES = ("pelvis", "head", "hand_l", "hand_r", "foot_l", "foot_r")
+
+
+def clip_reference(points: Points) -> Dict[str, object]:
+    """Engine-neutral table: per key and fighter, the root transform, rest-frame bone rotations and probe positions."""
+    def fighter(fk: FighterKey, pose: Pose, world: Points) -> Dict[str, object]:
+        rot = pose_rotations(points, pose)
+        return {"root": {"pelvis": [round(c, 5) for c in world["pelvis"][0]], "rotation_wxyz": [round(c, 6) for c in fk.root.rotation()]},
+                "rotations_wxyz": {b: [round(c, 6) for c in q] for b, q in sorted(rot.items())},
+                "probes": {b: [round(c, 5) for c in world[b][0]] for b in PROBE_BONES}}
+    clips: Dict[str, object] = {}
+    for c in JUDO_CLIPS.values():
+        keys = []
+        for key, s in zip(c.keys, solve_clip(points, c)):
+            keys.append({"frame": s.frame, "phase": s.phase, "tori": fighter(key.tori, s.tori_pose, s.tori),
+                         "uke": fighter(key.uke, s.uke_pose, s.uke), "miss_m": {k: round(d, 4) for k, d in sorted(s.miss_m.items())}})
+        clips[c.throw_id] = {"throw": c.throw_id, "frames": c.frames, "seconds": round(c.frames / FPS, 4), "keys": keys}
+    return {"schema": SCHEMA, "fps": FPS, "provenance": PROVENANCE.value, "probe_bones": list(PROBE_BONES), "clips": clips}

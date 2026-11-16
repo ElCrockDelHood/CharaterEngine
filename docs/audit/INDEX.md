@@ -34,6 +34,7 @@ C1 – C6) are listed in `docs/reorientation/DECISION_LOG.md`. Spanish copies (`
 | A31 | Head width and depth ratios from ANSUR II | 75 | FINAL (DERIVED) |
 | A32 | Jaw pivot at the TMJ, chin kept at 0.87 H | 78 | FINAL (values ESTIMATE, chin height PROVEN) |
 | A33 | Bone fragments of a fractured blow, schema `ce-fracture/1` (additive, opt-in; `.es.md`) | 80 | FINAL (values ASSUMED) |
+| A36 | Judo / jujutsu throws: grip, unbalancing, fall, breakfall; schemas `ce-throw/1`, `ce-judo-clips/1` (`.es.md`) | 87 | FINAL (opt-in; poses PLACEHOLDER) |
 
 Open items: `docs/reorientation/HANDOFF.md` §4.
 
