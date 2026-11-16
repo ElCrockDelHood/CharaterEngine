@@ -21,6 +21,7 @@ from character_engine.domain.anatomy.reference.source import ProvenanceState
 from character_engine.domain.animation import BoneMap, retarget_scale, stance_scale
 from character_engine.domain.assets import normalization
 from character_engine.domain.rigging import (
+    COLLISION_SEGMENTS,
     ENVELOPE_RADIUS_M,
     EquipmentSocket,
     RigDefinition,
@@ -492,13 +493,17 @@ def _capsule(bm, a: Vector, b: Vector, radius: float, segments: int = 12, rings:
 def build_block_dummy(context, armature, with_collision: bool = True):
     """Block mannequin: one capsule per body segment, 100 % weighted to one bone (ESTIMATE radii).
 
+    Built from the contact layout ``COLLISION_SEGMENTS`` (Decision 83): limb capsules overlap at the joints,
+    a shoulder capsule joins the arm to the trunk, and hands and feet have their own radii.
+
     Returns (blocks object, list of collision objects). Collision capsules are separate objects
     parented to their bone with a COLLISION modifier, so cloth, soft bodies and particles hit them.
     """
     name = armature["ce_character"]
     pts = bone_points(armature)
     stature = float(armature.get("ce_stature_m", 1.80))
-    placements = block_placements({n: (tuple(h), tuple(t)) for n, (h, t) in pts.items()}, stature)
+    placements = block_placements({n: (tuple(h), tuple(t)) for n, (h, t) in pts.items()}, stature,
+                                  segments=COLLISION_SEGMENTS)
     bm = bmesh.new()
     owned = []
     spans = []
@@ -875,7 +880,8 @@ def _hierarchy_order(bones) -> List:
 
 def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Optional[int] = None,
                    frame_end: Optional[int] = None, root_location: bool = True,
-                   root_scale_mode: str = "stature", root_scale: Optional[float] = None) -> Dict[str, object]:
+                   root_scale_mode: str = "stature", root_scale: Optional[float] = None,
+                   ground_legs: bool = True) -> Dict[str, object]:
     """Bake source animation onto canonical bones via rest-to-rest rotation offsets.
 
     For each mapped pair  dst_world(t) = src_world(t) · (src_rest⁻¹ · dst_rest).
@@ -885,6 +891,8 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
     translation; "leg" keeps planted feet planted when the rigs' proportions differ; "stance" measures the
     scale per clip with a first retarget pass (``_measure_stance_scale``) and falls back to "stature" when the
     feet do not step. An explicit ``root_scale`` overrides the mode.
+    ``ground_legs`` (Decision 85, with root motion only) then puts the ankles at the heights the source asks
+    for and turns the knees like the source's (``leg_ground.py``).
     """
     scene = context.scene
     action = src_arm.animation_data.action if src_arm.animation_data else None
@@ -1008,12 +1016,17 @@ def retarget_mocap(context, src_arm, dst_arm, bone_map: BoneMap, frame_start: Op
                 p.keyframe_insert("rotation_quaternion", frame=frame)
                 keyed += 1
     scene.frame_set(frame_start)
+    grounded = None
+    if ground_legs and root_location:
+        from . import leg_ground
+        grounded = leg_ground.ground_legs(context, src_arm, dst_arm, mapping, stature_scale, frame_start, frame_end)
     dst_arm["ce_mocap_source"] = action.name
     dst_arm["ce_bone_map"] = bone_map.map_id
     dst_arm["ce_root_scale"] = round(stature_scale, 4)
     dst_arm["ce_root_scale_mode"] = scale_used
     stats = {"mapped_bones": len(mapping), "frames": frame_end - frame_start + 1, "keys": keyed,
-             "followers": len(follow), "root_scale": round(stature_scale, 4), "root_scale_mode": scale_used}
+             "followers": len(follow), "root_scale": round(stature_scale, 4), "root_scale_mode": scale_used,
+             "leg_ground": grounded}
     if stance is not None:
         stats["stance"] = {"reason": stance.reason, "source_m_s": stance.source.speed_m_s,
                            "target_m_s": stance.target.speed_m_s, "steps": [stance.source.steps, stance.target.steps]}
@@ -1038,7 +1051,7 @@ def _measure_stance_scale(context, src_arm, dst_arm, bone_map: BoneMap, frame_st
     previous = dst_arm.animation_data.action if dst_arm.animation_data else None
     if not points or src_hips is None or dst_hips not in dst_arm.data.bones:
         return stance_scale.stance_scale([], {}, [], [], {}, [], 1.0)
-    retarget_mocap(context, src_arm, dst_arm, bone_map, frame_start, frame_end, True, "stature")
+    retarget_mocap(context, src_arm, dst_arm, bone_map, frame_start, frame_end, True, "stature", ground_legs=False)
     trial = dst_arm.animation_data.action
     sw, dw = src_arm.matrix_world, dst_arm.matrix_world
     src_frames, dst_frames = [], []

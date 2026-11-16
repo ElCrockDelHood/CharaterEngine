@@ -34,7 +34,9 @@ any incapacitating wound -> knockback), schema 5 the strike-phase parry filter (
 ``blade_forward``, ``filtered_parry_frames``) and the blend-in per reaction clip (schema 4: one blend for every clip),
 schema 6 the subframe scan (Decision 56): ``SUBSTEPS`` samples per frame, ``frames`` holds the sample times, events
 carry ``time`` and the whole ``frame`` that shows them (``contact_frame``), and the wound depth is the deepest
-penetration sampled until the reaction starts (``deepest_penetration``).
+penetration sampled until the reaction starts (``deepest_penetration``), schema 7 the ``graze`` event (Decision 84):
+a body contact whose wound breaches no muscle (``is_graze``) keeps the wound but plays no reaction, so a 2 mm
+touch no longer throws the defender into a full hit clip.
 
 Pure Python, no engine code. The JSON written from it is read by Godot (plain JSON, no engine types).
 """
@@ -48,7 +50,8 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..trauma import Severity
 
-SCHEMA_VERSION = 6   # 2: playback; 3: blend-in, attacker reaction; 4: parry, rule by region; 5: filter, blends; 6: subframes
+SCHEMA_VERSION = 7   # 2: playback; 3: blend-in, attacker reaction; 4: parry, rule by region; 5: filter, blends; 6: subframes;
+#                      7: graze
 #: Scan samples per animation frame (Decision 56): the blade is measured at Blender subframes, 1/SUBSTEPS apart.
 SUBSTEPS = 4
 
@@ -67,7 +70,9 @@ PARRY_CONTACT_M = 0.035
 #: Defender reaction blend-in in frames per clip (ASSUMED): knock-down/death short, light stagger long.
 BLEND_IN_FRAMES: Mapping[str, int] = {"Death01": 2, "Hit_Knockback": 2, "Hit_Head": 4, "Hit_Chest": 6}
 
-EVENTS = ("body_hit", "parry", "none")
+EVENTS = ("body_hit", "graze", "parry", "none")
+#: Layers a wound must reach to count as a hit with a reaction; above them it is a graze (ASSUMED, Decision 84).
+GRAZE_LAYERS = ("skin", "fat")
 ENTRY_KEYS = ("id", "attack_clip", "defender_stance", "distance_m", "distance_provenance", "substeps", "frames",
               "signed_distance_m", "blade_distance_m", "blade_approach_m", "blade_forward", "filtered_parry_frames",
               "min_distance_m", "event", "first_contact", "first_parry",
@@ -102,6 +107,11 @@ def deepest_penetration(times: Sequence[float], signed: Sequence[float], start: 
     ASSUMED: the blade meets no resistance, so this is an upper bound of the cut depth (Decision 56)."""
     end = contact_frame(start) + 1
     return max([0.0] + [-s for t, s in zip(times, signed) if start <= t <= end and s < 0.0])
+
+
+def is_graze(layers_breached: Sequence[str]) -> bool:
+    """True when the cut stays in skin and fat (ASSUMED rule, Decision 84): no reaction clip is played."""
+    return bool(layers_breached) and all(layer in GRAZE_LAYERS for layer in layers_breached)
 
 
 def reaction_for(region: str, severity: int, lethality: float, incapacitating: bool) -> Tuple[str, str]:
@@ -248,6 +258,22 @@ def _check_body_hit(e: Mapping[str, Any], eid: str) -> List[str]:
     return problems
 
 
+def _check_graze(e: Mapping[str, Any], eid: str) -> List[str]:
+    c, w = e["first_contact"], e["wound"]
+    if not c or [k for k in CONTACT_KEYS if k not in c] or c["penetration_m"] <= 0:
+        return [f"{eid}: bad first_contact"]
+    problems: List[str] = []
+    if c["frame"] != contact_frame(c["time"]):
+        problems.append(f"{eid}: first_contact frame must be the whole frame after its time")
+    if c["penetration_m"] != round(deepest_penetration(e["frames"], e["signed_distance_m"], c["time"]), 4):
+        problems.append(f"{eid}: penetration_m is not the deepest sampled before the reaction")
+    if not w or [k for k in WOUND_KEYS if k not in w] or not is_graze(w["layers_breached"]):
+        problems.append(f"{eid}: a graze needs a wound that breaches only skin and fat")
+    if any(e[k] is not None for k in ("reaction", "reaction_playback", "first_parry", "parry_playback")):
+        problems.append(f"{eid}: a graze plays no reaction and carries no parry")
+    return problems
+
+
 def _check_parry(e: Mapping[str, Any], eid: str) -> List[str]:
     problems: List[str] = []
     fp, pp = e["first_parry"], e["parry_playback"]
@@ -303,9 +329,15 @@ def validate_library(data: Mapping[str, Any]) -> List[str]:
         _, filtered = parry_frames(scan[0], *scan[2:])
         if e["filtered_parry_frames"] != filtered:
             problems.append(f"{eid}: filtered_parry_frames do not match the scan")
-        if e["event"] not in EVENTS or e["event"] != event:
+        if e["event"] == "graze" and event == "body_hit":
+            problems += _check_graze(e, eid)
+            if e["first_contact"] and e["first_contact"]["time"] != frame:
+                problems.append(f"{eid}: first_contact time is not the first body contact")
+        elif e["event"] not in EVENTS or e["event"] != event:
             problems.append(f"{eid}: event {e['event']} does not match the scan ({event})")
         elif event == "body_hit":
+            if e["wound"] and is_graze(e["wound"].get("layers_breached", [])):
+                problems.append(f"{eid}: a wound in skin and fat only is a graze, not a body hit")
             problems += _check_body_hit(e, eid)
             if e["first_contact"] and e["first_contact"]["time"] != frame:
                 problems.append(f"{eid}: first_contact time is not the first body contact")
@@ -328,9 +360,11 @@ def summary(data: Mapping[str, Any]) -> Dict[str, Any]:
     entries = data.get("entries", [])
     hits = [e for e in entries if e.get("event") == "body_hit"]
     parries = [e for e in entries if e.get("event") == "parry"]
+    grazes = [e for e in entries if e.get("event") == "graze"]
     per_clip: Dict[str, int] = {}
     for e in hits:
         per_clip[e["reaction"]["clip"]] = per_clip.get(e["reaction"]["clip"], 0) + 1
-    return {"entries": len(entries), "body_hits": len(hits), "parries": len(parries), "reactions": per_clip,
+    return {"entries": len(entries), "body_hits": len(hits), "grazes": len(grazes), "parries": len(parries),
+            "reactions": per_clip,
             "parries_reaching_body_after": sum(1 for e in parries if e["parry_playback"]["body_reached_after_parry"]),
             "filtered_parry_contacts": sum(len(e.get("filtered_parry_frames", [])) for e in entries)}

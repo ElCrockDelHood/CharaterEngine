@@ -12,6 +12,8 @@
 ##   - CESoulsCombat replays the 9 Souls-like reference scenarios identically to Python
 ##   - CEStrikePhysics (Decisions 58/59, opt-in) equals Python on every reference case; in CESoulsCombat it adds
 ##     fracture / concussion / knockdown to blunt hits and leaves the default replay unchanged
+##   - CEFractureFx (Decision 80): the ce-fracture/1 table agrees with the force model, shards follow the event, the
+##     arena spawns them on a fracture and the fight is identical with or without them
 ##   - CESoulsArena builds, maps keys to scenario commands, and plays the Sentinel scenarios like Python
 ##   - Souls clips (baked in Blender): names, lengths, game-rig tracks; retargeted poses equal Python; clip per state
 ##   - Block body (Blender capsule mesh): 66-bone skin, <= 4 influences, finite, bound to the skeleton; weapons/markers
@@ -439,16 +441,17 @@ class Runner extends Node:
 					down_at, sim.frame - down_at, kd, p_conc, op.health]])
 
 		# ---- D1 reaction library (generated offline in Blender, read as plain JSON) -
-		runner.check("D1 reaction library: schema 6 (subframes), body hits carry wound + reaction + per-clip blend, parries carry recoil and no wound", func():
+		runner.check("D1 reaction library: schema 7 (subframes, grazes), body hits carry wound + reaction + per-clip blend, parries carry recoil and no wound", func():
 			var path := "res://addons/character_engine/data/reaction_library_d1.json"
 			if not FileAccess.file_exists(path):
 				return [false, "missing " + path]
 			var lib = JSON.parse_string(FileAccess.get_file_as_string(path))
-			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 6:
-				return [false, "not a schema-6 document"]
+			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 7:
+				return [false, "not a schema-7 document"]
 			var blend := {"Death01": 2, "Hit_Knockback": 2, "Hit_Head": 4, "Hit_Chest": 6}
 			var hits := 0
 			var parries := 0
+			var grazes := 0
 			var bad: Array = []
 			for e in lib["entries"]:
 				var n := (e["frames"] as Array).size()
@@ -466,6 +469,10 @@ class Runner extends Node:
 							or int(pb["blend_in_frames"]) != int(blend[pb["clip"]]) \
 							or (pb["attacker_reaction"] != null and int(pb["attacker_reaction"]["starts_frame"]) != int(e["first_contact"]["frame"]) + 1):
 						bad.append(e["id"])
+				elif e["event"] == "graze":
+					grazes += 1
+					if e["first_contact"] == null or e["wound"] == null or e["reaction"] != null 							or e["reaction_playback"] != null or e["parry_playback"] != null 							or (e["wound"]["layers_breached"] as Array).has("muscle"):
+						bad.append(e["id"])
 				elif e["event"] == "parry":
 					parries += 1
 					var pp = e["parry_playback"]
@@ -477,8 +484,8 @@ class Runner extends Node:
 				elif e["event"] != "none" or e["first_contact"] != null or e["first_parry"] != null \
 						or e["reaction_playback"] != null or e["parry_playback"] != null:
 					bad.append(e["id"])
-			return [bad.is_empty() and lib["entries"].size() > 0, "%d entries, %d body hits, %d parries%s" % [
-					lib["entries"].size(), hits, parries, "" if bad.is_empty() else "  bad: " + str(bad)]])
+			return [bad.is_empty() and lib["entries"].size() > 0, "%d entries, %d body hits, %d grazes, %d parries%s" % [
+					lib["entries"].size(), hits, grazes, parries, "" if bad.is_empty() else "  bad: " + str(bad)]])
 
 		# ---- D1 experiment library (offline experiments, read as plain JSON) -------
 		runner.check("D1 experiments: exp001 contact threshold has conditions, grid, bisection and a consistent threshold", func():
@@ -565,6 +572,104 @@ class Runner extends Node:
 				return [same and markers == got["hits"].size(), "%d frames, %d hits, %d wound markers%s" % [
 						got["frames"], got["hits"].size(), markers, "" if same else "  diff: " + str(diff)]])
 			a2.queue_free()
+
+		# ---- bone fragments (Decision 80, ce-fracture/1) --------------------------
+		var ftable := CEFractureFx.load_table()
+		var fevents: Dictionary = ftable.get("events", {})
+		runner.check("fracture events: schema, at most 24 fragments, masses add up to the patch, same key = force model says fractured", func():
+			var bad: Array = []
+			for key in fevents:
+				var ev: Dictionary = fevents[key]
+				var total := 0.0
+				for f in ev["fragments"]:
+					total += float(f["mass_kg"])
+				if ev["schema"] != CEFractureFx.SCHEMA or not ev["fractured"] or (ev["fragments"] as Array).is_empty() \
+						or (ev["fragments"] as Array).size() > CEFractureFx.MAX_FRAGMENTS or absf(total - float(ev["patch_mass_kg"])) > 1e-9:
+					bad.append(key)
+			var cases_checked := 0
+			var phys := CEStrikePhysics.load_default()
+			for c in phys.cases():
+				var label := str(c["striker"]["label"])
+				if not (data.souls_rules()["moves"] as Dictionary).has(label) or label.begins_with("short_blade") 						or (ftable["regions_without_bone_shell"] as Array).has(c["region"]):
+					continue
+				cases_checked += 1
+				if fevents.has("%s|%s" % [label, c["region"]]) != bool(c["expect"]["fractured"]):
+					bad.append([label, c["region"], "disagrees with the force model"])
+			return [bad.is_empty() and fevents.size() > 0 and cases_checked > 0, "%d events (fragments from commit %s), %d force cases compared%s" % [
+					fevents.size(), ftable.get("fracture_commit", "?"), cases_checked, "" if bad.is_empty() else "  bad: " + str(bad.slice(0, 5))]])
+		runner.check("fracture shards: start at the event's position and speed, stop near the bone, same time = same pose", func():
+			var bad: Array = []
+			var worst := 0.0
+			for key in fevents:
+				var ev: Dictionary = fevents[key]
+				for f in ev["fragments"]:
+					var p0 := CEFractureFx._vec(f["position_m"])
+					var v := CEFractureFx._vec(f["velocity_m_s"])
+					var a := CEFractureFx.pose_at(f, ev["pattern"], ev["shell_thickness_m"], 0.0)
+					var b := CEFractureFx.pose_at(f, ev["pattern"], ev["shell_thickness_m"], 1e-5)
+					var far := CEFractureFx.pose_at(f, ev["pattern"], ev["shell_thickness_m"], 100.0)
+					var again := CEFractureFx.pose_at(f, ev["pattern"], ev["shell_thickness_m"], 100.0)
+					var travel := far.origin.distance_to(p0)
+					worst = maxf(worst, travel)
+					if a.origin.distance_to(p0) > 1e-6 or ((b.origin - a.origin) / 1e-5).distance_to(v) > 0.01 * maxf(v.length(), 1.0) \
+							or travel > CEFractureFx.MAX_TRAVEL_M + 1e-5 or not far.is_equal_approx(again):
+						bad.append([key, f["id"]])
+			return [bad.is_empty(), "largest travel %.3f m (limit %.2f)%s" % [worst, CEFractureFx.MAX_TRAVEL_M, "" if bad.is_empty() else "  bad: " + str(bad.slice(0, 5))]])
+		var farena := CESoulsArena.build(data, game_tpose)
+		farena.autostep = false
+		farena.show_hud = false
+		farena.animate = false
+		farena.strike_physics = true
+		farena.start_distance_m = 1.2
+		farena.autoplay_script = {1: {"player": {"light": true}}}
+		tree_root.add_child(farena)
+		var f_seen := 0
+		for _i in range(40):
+			farena.step_once()
+			if farena.fracture_fx.has("opponent") and is_instance_valid(farena.fracture_fx["opponent"]):
+				f_seen = (farena.fracture_fx["opponent"] as CEFractureFx).fragment_count
+				break
+		var f_hit: Dictionary = farena.combat.hits[0] if not farena.combat.hits.is_empty() else {}
+		var f_ev: Dictionary = fevents.get("%s|thorax" % f_hit.get("move_id", ""), {})
+		var f_node: Node3D = farena.fracture_fx.get("opponent")
+		var f_char: CECharacter = farena.characters["opponent"]
+		var f_expected := Vector3.ZERO
+		var f_got := Vector3.ZERO
+		if f_node != null:
+			f_expected = f_char.skeleton.global_transform * (f_char.skeleton.get_bone_global_pose(f_char.skeleton.find_bone(f_char.carrier_bone(str(f_ev["bone"])))) \
+					* (f_char.skeleton.get_bone_global_rest(f_char.skeleton.find_bone(f_char.carrier_bone(str(f_ev["bone"])))).affine_inverse() * CEFractureFx.canonical_to_skeleton(f_ev["impact_point_m"])))
+			await t.process_frame
+			f_got = f_node.global_position
+		runner.check("souls arena: a fracture spawns the event's shards on the defender's bone", func():
+			return [f_seen > 0 and f_seen == (f_ev.get("fragments", []) as Array).size() and f_node != null and f_got.distance_to(f_expected) < 0.01
+					and Vector2(f_got.x, f_got.z).distance_to(Vector2(farena.characters["player"].global_position.x, farena.characters["player"].global_position.z)) 							< Vector2(f_char.global_position.x, f_char.global_position.z).distance_to(Vector2(farena.characters["player"].global_position.x, farena.characters["player"].global_position.z)),
+					"%s: %d shards on %s, effect at %s, impact on the posed bone %s" % [f_hit.get("move_id", "?"), f_seen, f_ev.get("bone", "?"), f_got, f_expected]])
+		farena.queue_free()
+		runner.check("fracture shards do not change the fight: sentinel_cycle_600 with physics, arena with shards = sim alone", func():
+			var sc: Dictionary = {}
+			for cand in data.souls_reference_scenarios():
+				if cand["spec"]["scenario_id"] == "sentinel_cycle_600":
+					sc = cand
+			var spec: Dictionary = sc["spec"]
+			var alone := CESoulsCombat.replay(data, spec, CEStrikePhysics.load_default())
+			var a3 := CESoulsArena.build(data, game_tpose)
+			a3.autostep = false
+			a3.show_hud = false
+			a3.animate = false
+			a3.strike_physics = true
+			a3.player_weapon = str((spec.get("weapons", {}) as Dictionary).get("player", "unarmed"))
+			a3.sentinel_weapon = str((spec.get("weapons", {}) as Dictionary).get("opponent", "unarmed"))
+			a3.start_distance_m = float(spec["distance_m"])
+			a3.autoplay_script = {"0": {}}
+			tree_root.add_child(a3)
+			for _i in range(int(spec["frames"])):
+				a3.step_once()
+			var got := a3.combat.summary()
+			got["scenario_id"] = spec["scenario_id"]
+			var diff: Array = []
+			var same := CEGameplayData.deep_equal(got, alone, diff)
+			a3.queue_free()
+			return [same, "%d hits, %d events%s" % [got["hits"].size(), got["events"].size(), "" if same else "  diff: " + str(diff.slice(0, 5))]])
 
 		# ---- souls clips (STYLE-SOULS-001 step 4: baked in Blender, played by state) ----
 		var ctable := CESoulsAnimator.load_table()

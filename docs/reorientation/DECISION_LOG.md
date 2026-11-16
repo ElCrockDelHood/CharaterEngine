@@ -998,8 +998,8 @@ severity) was underestimated, and a blade passing through a body between two fra
 
 Subframes exposed a retarget defect: the bake could store a quaternion key with the opposite sign of the previous
 one (same rotation), so the interpolation between them spun the bone (Sword_Heavy_Combo: 5 flips, a 1.5 m blade jump
-at frame 14.5 and two false hits). `build.import_mocap` now keeps each bone's keys sign-continuous; this also protects
-any engine that interpolates the clips (Godot at 60 fps). Result: 7 body hits instead of 3 (four were blades passing
+at frame 14.5 and two false hits). The retarget bake (`build.retarget_mocap`) now keeps each bone's keys sign-continuous.
+Whether Godot playback was affected was not tested (correction 2026-11-05; an earlier wording claimed it was). Result: 7 body hits instead of 3 (four were blades passing
 through a thigh or arm between two frames), wound depths up to 2x deeper.
 
 Playback re-measurements after contact stay on whole frames. Experiment 001 keeps its own integer scan (separate
@@ -1502,14 +1502,63 @@ records keep their flag. Audit: `docs/audit/A17_MOVE_STRIKERS.md`.
 
 ---
 
+## 83. CONTACT BODY WITHOUT GAPS AT THE JOINTS (COLLISION LAYOUT)
+
+**Decision** (owner request, 2026-11-15 "Necesitamos un mejor cuerpo de coliciones" and "Corregi todo", thread
+"Debug visual en vivo", review item 6-7): the visual review found 1-5 cm gaps between the block-dummy capsules at
+shoulder (3.1 cm), elbow (4.3), wrist (2.9), knee (4.9) and ankle (1.0) in the 1.80 m adult, and bone-thin hands
+(radius 1.8 cm) and feet (3 cm). `COLLISION_SEGMENTS` (`domain/rigging/block_dummy.py`) keeps the trunk and head
+segments, adds a shoulder capsule (clavicle sternal end to humeral head, weighted to the clavicle) and centres the
+limb capsule ends on the shared joints so neighbours overlap; hands take radius 3.5 cm and feet 4 cm (ESTIMATE, no
+source read: about half a palm and half a foot breadth). The Blender addon builds the block dummy and its collision
+capsules from it (19 capsules). `BLOCK_SEGMENTS` and `block_placements`' default are unchanged, so the physics
+strike models (A09, A10, Decision 79) and their hashes do not move. Contact results (the D1 reaction library) are
+regenerated.
+
+**Date**: 2026-11-15 · **Status**: FINAL (radii reversible)
+
+---
+
+## 84. GRAZES PLAY NO REACTION (D1 REACTION LIBRARY SCHEMA 7)
+
+**Decision** (owner request, 2026-11-15 "Corregi todo", review item 1): a 2.2 mm blade contact on the upper arm
+threw the defender into a full Hit_Chest clip. A body contact whose wound breaches only skin and fat
+(`is_graze`, ASSUMED rule tied to the existing tissue model, no depth threshold invented) becomes the event
+`graze`: the wound is kept, no reaction clip plays and the attacker keeps its clip. Schema 7 adds the event;
+Godot's library check accepts it. Review item 2 (Death01 from a 7.6 cm cut computed without resistance) needs
+the blade-dynamics model of branch `physics/cut-blade-dynamics` (Decision 82) and stays open until that branch is
+merged.
+
+**Date**: 2026-11-15 · **Status**: FINAL (rule reversible)
+
+---
+
+## 85. LEG GROUNDING IN THE RETARGET
+
+**Decision** (owner request, 2026-11-15 "que se trabaje la parada, los pasos los pies y las piernas bien ubicados,
+como que se retuerce todo"): side-by-side videos of the Quaternius source and our body showed the crouch idle
+hovering 23 cm (crouch walk 20 cm), the jump sinking 10-14 cm, idle soles 2.5 cm under the ground and idle knees
+turned 17 deg (p90 26 deg) away from the source's. Copied joint rotations on other leg proportions cannot keep
+both. `retarget_mocap` now grounds the legs (`domain/animation/leg_ground.py`, addon `leg_ground.py`): per frame
+each ankle's wanted height is its rest height plus the source ankle's lift scaled like the root motion; the
+source's lower foot sets a vertical shift of the whole body; both legs are re-solved with the two-bone IK of
+`foot_lock`, the knee pointing where the source's knee points. Horizontal paths are unchanged (`foot_lock` still
+handles sliding). Result on 7 clips: knees within 1-4 deg (median), idle soles at -0.1 cm, crouch at -1.6 cm,
+walk -0.9 cm. The jump clips still put the toes about 11 cm under the ground with the ankles at the right height
+(pointed feet), and their feet differ 14-17 deg in yaw: open.
+
+**Date**: 2026-11-15 · **Status**: FINAL (opt-out `ground_legs=False`)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 81
+**Total Decisions**: 84 (numbered to 85; Decision 82 is on branch `physics/cut-blade-dynamics`)
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 72 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 75 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 8 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values; fracture fragment values)

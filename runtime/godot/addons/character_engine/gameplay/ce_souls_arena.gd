@@ -32,6 +32,8 @@ var data: CEGameplayData            # set by build() or loaded in _ready (RefCou
 var autoplay_script: Dictionary = {}
 
 var combat: CESoulsCombat
+var fracture_table: Dictionary = {}      # data/fracture_events.json, loaded with strike_physics
+var fracture_fx: Dictionary = {}         # fighter_id -> its CEFractureFx (one each: a new blow replaces the old shards)
 var sentinel: CESoulsCombat.Sentinel
 var characters: Dictionary = {}          # fighter_id -> CECharacter
 var animators: Dictionary = {}           # fighter_id -> CESoulsAnimator
@@ -78,6 +80,7 @@ func _build_scene() -> void:
 	combat = CESoulsCombat.new(data, [])
 	if strike_physics:
 		combat.physics = CEStrikePhysics.load_default()
+		fracture_table = CEFractureFx.load_table()
 	var player := combat.make_fighter("player", 0.0, 0.0, player_weapon)
 	var opponent := combat.make_fighter("opponent", 0.0, -start_distance_m, sentinel_weapon)
 	for f in [player, opponent]:
@@ -156,12 +159,27 @@ func step_once() -> void:
 func _on_event(ev: Dictionary) -> void:
 	if ev["kind"] == "move_start":
 		_move_start[ev["fighter"]] = int(ev["frame"])
+	if ev["kind"] == "fracture":
+		_spawn_fracture(ev["fighter"])
 	if ev["kind"] != "hit" or combat.hits.is_empty():
 		return
 	var hit: Dictionary = combat.hits.back()
 	var ch: CECharacter = characters.get(hit["defender"])
 	if ch != null:
 		ch.add_wound_marker(hit["bone_hit"], {"severity": hit["severity"]})
+
+
+## Shards of the last hit: the event of its move and region (the fight itself is not touched).
+func _spawn_fracture(fighter_id: String) -> void:
+	var hit: Dictionary = combat.hits.back()
+	var ev: Dictionary = (fracture_table.get("events", {}) as Dictionary).get("%s|%s" % [hit["move_id"], hit["physics"]["region"]], {})
+	var ch: CECharacter = characters.get(fighter_id)
+	if ev.is_empty() or ch == null:
+		return
+	var old = fracture_fx.get(fighter_id)
+	if is_instance_valid(old):
+		old.remove()
+	fracture_fx[fighter_id] = CEFractureFx.spawn_on(ch, ev)
 
 
 ## Canonical (x, y) ground position -> Godot (x, 0, -y); each character faces its opponent (+Z = canonical forward).
