@@ -66,7 +66,8 @@ Output: `ThrowEvent.to_dict()`, schema `ce-throw/1` (grips, both kuzushi margins
 
 ## 2. Key poses (`animation/judo_clips.py`)
 
-Seven keys per throw (kumikata, kuzushi, tsukuri, kake, fall, landing, end) for tori and uke, 58–62 frames at 60 fps. A
+Seven keys per throw (kumikata, kuzushi, tsukuri, kake, fall, landing, end) for tori and uke, 61–80 frames at 60 fps
+(1.0–1.3 s; timing ASSUMED). A
 key is written as bone directions in the fighter's own frame, a root transform (place, turns of the whole body, on the
 ground or at a height) and reaches: a hand or a foot placed on a point of the other fighter with two-bone IK. Output:
 `clip_reference()`, schema `ce-judo-clips/1`: per key and fighter the root transform and the rest-frame bone rotations, in
@@ -80,6 +81,27 @@ standing.
 Contact sheets: `python scripts/judo_contact_sheet.py` writes `builds/judo/<throw>.png` (side view over front view; tori
 blue, uke red, right limbs darker) and `builds/judo/judo_clips.json`.
 
+## 2b. In-betweens and the Blender bake
+
+Every frame between two keys is solved, not just interpolated (`judo_clips.solve_frames`): bone rotations and the root
+are interpolated with quaternion slerp along the short arc, eased with a smoothstep (ASSUMED timing), and every grip held
+at both keys is re-solved by IK on that frame, so the hands stay on the sleeve and lapel while both bodies move. A grip that moves to another point between two
+keys (the right hand going from the lapel to the armpit in seoi-nage) is interpolated, not snapped. A
+fighter on the mat at both keys stays on it; an airborne frame that would dip under the mat is lifted. `frame_table`
+gives, per frame and fighter, the armature object transform and the rest-frame bone rotations.
+
+`python scripts/bake_judo_clips.py` writes `builds/judo/judo_frames.json` (schema `ce-judo-frames/1`) and runs
+`runtime/blender/ce_bake_judo_clips.py` in Blender 3.6: two 66-bone game armatures `CE_TORI` and `CE_UKE` with the block
+body, one action per throw and fighter keyed on every frame (`seoi_nage.tori`, `seoi_nage.uke`, ...), saved to
+`builds/judo/judo_throws.blend`. Blender's posed probe points (pelvis, head, hands, feet) match the Python solve within
+0.02 mm on every frame of the five throws. It also renders the keys in Workbench, side and three-quarter views, to
+`builds/judo/<throw>_blender.png`. About 3 minutes of Python solving and 1 minute of Blender on the owner's laptop.
+
+Fastest point per throw (head, hands, feet), checked by the tests against 18 m/s: the thrown body's feet as it turns
+over tori in seoi-nage and o-goshi, 17.5 m/s; tori's reaping foot in o-uchi-gari, 16.8 m/s; o-soto-gari 14.6 m/s;
+de-ashi-barai 14.5 m/s. The fastest kick measured is 14.3 m/s (Vagner 2023, A17): these are at or a little above it,
+plausible for a body turning over another, but not measured.
+
 ## 3. References for the poses, and their limit
 
 Read: the technique descriptions of the five throws in Wikipedia (kuzushi, tsukuri and kake of o-goshi; the stepping and
@@ -92,15 +114,17 @@ A free, complete photo sequence of each of these five throws was not found. That
 
 ## 4. Limits
 
-* Block-out only: no in-betweens (a bake must take uke's forward rotation the long way round), no hand or finger poses,
-  no gi, no weight shift between tori's feet, no twist of the trunk against the hips.
+* Block-out only: no hand or finger poses, no gi, no weight shift between tori's feet, no twist of the trunk against the hips.
 * Tori's sleeve hand is 15–47 cm short at landing in some throws; tori should kneel or step, not yet posed.
 * The fall has no contact time or ground force (A17, open item 3). Ukemi has no arm-slap energy split.
-* Not baked: Blender and Godot do not play these yet; the gameplay table has no judo moves.
+* Not played in Godot yet; the gameplay table has no judo moves. The bake uses the anatomical rest pose, not the
+  T-pose of the Souls clips: a Godot export must convert the rest before it shares a skeleton with them.
+* In-betweens: planted feet are not locked (they slide a few centimetres between keys), and the timing is a
+  symmetric smoothstep; a real throw accelerates into kake and has no pause there.
 
 ## 5. Next
 
-1. Owner review of the contact sheets, pose by pose.
+1. Owner review of the contact sheets and the Blender strips, pose by pose.
 2. A photo or video sequence per throw to trace the keys from (owner's own drawings, or a source to approve).
-3. Blender bake of `ce-judo-clips/1` with two fighters, then Godot playback driven by `ce-throw/1`.
+3. Foot locking and throw timing in the in-betweens; then a Godot export and playback driven by `ce-throw/1`.
 4. A `judo` style in the gameplay table (needs the owner's OK: the table is generated and pinned).

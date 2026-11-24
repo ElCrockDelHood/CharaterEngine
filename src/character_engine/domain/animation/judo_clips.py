@@ -22,7 +22,7 @@ inherit), plus the root transform, so the same kind of Blender bake can consume 
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Dict, List, Mapping, Optional, Tuple
 
 from ..anatomy.reference.source import ProvenanceState
@@ -82,8 +82,11 @@ class Root:
     turns: Tuple[Tuple[str, float], ...] = ()        # (world axis, degrees), applied in order about the pelvis
     z: Optional[float] = None                        # pelvis height; None: on the ground
     clearance: float = 0.0                           # ground offset of the lowest bone point (lying: half a body depth)
+    quat: Optional[Quat] = None                      # explicit rotation (in-betweens); replaces ``turns``
 
     def rotation(self) -> Quat:
+        if self.quat is not None:
+            return self.quat
         q = IDENTITY
         for axis, deg in self.turns:
             q = quat_mul(quat_axis_angle(_AXES[axis], math.radians(deg)), q)
@@ -221,6 +224,112 @@ def solve_clip(points: Points, clip: ThrowClip) -> List[SolvedKey]:
 
 
 # --------------------------------------------------------------------------------------------------------------------
+# In-betweens: every frame between two keys, with the grips re-solved so the hands stay on the gi.
+
+def _dot4(a: Quat, b: Quat) -> float:
+    return sum(x * y for x, y in zip(a, b))
+
+
+def slerp(a: Quat, b: Quat, t: float) -> Quat:
+    """Spherical interpolation along the shorter arc."""
+    d = _dot4(a, b)
+    if d < 0.0:
+        b, d = tuple(-c for c in b), -d
+    if d > 0.9995:
+        q = tuple(x + (y - x) * t for x, y in zip(a, b))
+    else:
+        th = math.acos(d)
+        s = math.sin(th)
+        wa, wb = math.sin((1 - t) * th) / s, math.sin(t * th) / s
+        q = tuple(wa * x + wb * y for x, y in zip(a, b))
+    n = math.sqrt(sum(c * c for c in q))
+    return tuple(c / n for c in q)
+
+
+def ease(t: float) -> float:
+    """Smoothstep: zero speed at both keys (ASSUMED timing; real throws are not symmetric)."""
+    return t * t * (3.0 - 2.0 * t)
+
+
+def _between(points: Points, a: FighterKey, pa: Pose, wa: Points, b: FighterKey, pb: Pose, wb: Points, t: float) -> FighterKey:
+    ra, rb = pose_rotations(points, pa), pose_rotations(points, pb)
+    rot = {n: slerp(ra.get(n, IDENTITY), rb.get(n, IDENTITY), t) for n in set(ra) | set(rb)}
+    body = apply_hand_pose(points, rot)
+    named = {ALIASES.get(k, k) for k in (*pa, *pb)} | set(_FLAT)
+    pose = {n: _unit(_sub(body[n][1], body[n][0])) for n in named}
+    pel = [wa["pelvis"][0][i] + (wb["pelvis"][0][i] - wa["pelvis"][0][i]) * t for i in range(3)]
+    grounded = a.root.z is None and b.root.z is None                       # standing or lying in both keys: stay on the mat
+    clear = a.root.clearance + (b.root.clearance - a.root.clearance) * t
+    root = Root(pel[0], pel[1], z=None if grounded else pel[2], clearance=clear, quat=slerp(a.root.rotation(), b.root.rotation(), t))
+    reach = {k: tgt for k, tgt in a.reach.items() if b.reach.get(k) == tgt}  # only a grip held on the same point stays on
+    return FighterKey(pose, root, reach)
+
+
+def solve_frames(points: Points, clip: ThrowClip) -> List[SolvedKey]:
+    """Every frame of the clip: keys as solved, in-betweens eased and with held grips re-solved by IK."""
+    keys = solve_clip(points, clip)
+    out: List[SolvedKey] = []
+    for (ka, sa), (kb, sb) in zip(zip(clip.keys, keys), zip(clip.keys[1:], keys[1:])):
+        out.append(sa)
+        for f in range(ka.frame + 1, kb.frame):
+            t = ease((f - ka.frame) / (kb.frame - ka.frame))
+            tori = _between(points, ka.tori, sa.tori_pose, sa.tori, kb.tori, sb.tori_pose, sb.tori, t)
+            uke = _between(points, ka.uke, sa.uke_pose, sa.uke, kb.uke, sb.uke_pose, sb.uke, t)
+            s = solve_key(points, Key(f, ka.phase, tori, uke))
+            lift = [max(0.0, -min(min(h[2], e[2]) for h, e in w.values())) for w in (s.tori, s.uke)]
+            if any(lift):                                  # an airborne in-between must not dip under the mat
+                tori, uke = (fk if d == 0.0 else replace(fk, root=replace(fk.root, z=fk.root.z + d)) for fk, d in zip((tori, uke), lift))
+                s = solve_key(points, Key(f, ka.phase, tori, uke))
+            out.append(s)
+    out.append(keys[-1])
+    return out
+
+
+def frame_table(points: Points, clip: ThrowClip) -> List[Dict[str, object]]:
+    """Per frame and fighter: object transform (world = R * rest point + location) and rest-frame bone rotations.
+
+    This is what a bake keys: the armature object carries the root, its pose bones carry the rotations."""
+    rows: List[Dict[str, object]] = []
+    for s in solve_frames(points, clip):
+        row: Dict[str, object] = {"frame": s.frame, "phase": s.phase}
+        for who, world, pose in (("tori", s.tori, s.tori_pose), ("uke", s.uke, s.uke_pose)):
+            rot = pose_rotations(points, pose)
+            body = apply_hand_pose(points, rot)
+            # recover the root from three body points: pelvis head, and the hip line and spine of the posed body
+            q = _frame_from(body, world)
+            loc = _sub(world["pelvis"][0], quat_rotate(q, body["pelvis"][0]))
+            row[who] = {"location": loc, "rotation_wxyz": q, "bones_wxyz": rot}
+        rows.append(row)
+    return rows
+
+
+def _frame_from(body: Points, world: Points) -> Quat:
+    """Rotation taking the body-frame pelvis frame to the world one (both from the hip joints and the pelvis axis)."""
+    def basis(pts: Points) -> Tuple[Vec, Vec, Vec]:
+        x = _unit(_sub(pts["thigh_l"][0], pts["thigh_r"][0]))
+        up = _sub(pts["pelvis"][1], pts["pelvis"][0])
+        z = _unit(_sub(up, tuple(c * sum(u * w for u, w in zip(up, x)) for c in x)))
+        return x, _cross(z, x), z
+    a, b = basis(body), basis(world)
+    m = [[sum(b[k][i] * a[k][j] for k in range(3)) for j in range(3)] for i in range(3)]   # R = B * A^T
+    tr = m[0][0] + m[1][1] + m[2][2]
+    if tr > 0:
+        s = math.sqrt(tr + 1.0) * 2
+        q = (0.25 * s, (m[2][1] - m[1][2]) / s, (m[0][2] - m[2][0]) / s, (m[1][0] - m[0][1]) / s)
+    elif m[0][0] > m[1][1] and m[0][0] > m[2][2]:
+        s = math.sqrt(1.0 + m[0][0] - m[1][1] - m[2][2]) * 2
+        q = ((m[2][1] - m[1][2]) / s, 0.25 * s, (m[0][1] + m[1][0]) / s, (m[0][2] + m[2][0]) / s)
+    elif m[1][1] > m[2][2]:
+        s = math.sqrt(1.0 + m[1][1] - m[0][0] - m[2][2]) * 2
+        q = ((m[0][2] - m[2][0]) / s, (m[0][1] + m[1][0]) / s, 0.25 * s, (m[1][2] + m[2][1]) / s)
+    else:
+        s = math.sqrt(1.0 + m[2][2] - m[0][0] - m[1][1]) * 2
+        q = ((m[1][0] - m[0][1]) / s, (m[0][2] + m[2][0]) / s, (m[1][2] + m[2][1]) / s, 0.25 * s)
+    n = math.sqrt(sum(c * c for c in q))
+    return tuple(c / n for c in q)
+
+
+# --------------------------------------------------------------------------------------------------------------------
 # Pose vocabulary (all PLACEHOLDER). Right-handed tori; "r" and "l" are each fighter's own right and left.
 
 def _pose(*parts: Pose) -> Dict[str, Vec]:
@@ -292,11 +401,11 @@ def _o_soto_gari() -> ThrowClip:
     return ThrowClip("o_soto_gari", (
         _START,
         Key(12, "kuzushi", _tori(_pose(STAND, {"trunk": v(0.2, 0, 1)}), 0.20, -0.22), _uke(lean, reach=UKE_GRIPS)),
-        Key(18, "tsukuri", _tori(step, 0.27, -0.50), _uke(lean, turns=(("x", 10.0),))),
-        Key(24, "kake", _tori(reap, 0.27, -0.56), _uke(uke_reaped, turns=(("x", 38.0),))),
-        Key(32, "fall", _tori(over, 0.27, -0.56, reach=_HOLD_SLEEVE), _uke(uke_air, y=-1.05, turns=(("x", 72.0),), z=0.45)),
-        Key(38, "landing", _tori(LOW_HOLD, 0.30, -0.80, reach=_HOLD_SLEEVE), _uke(LYING, y=-1.30, turns=(("x", 90.0),), clearance=0.11)),
-        Key(60, "end", _tori(UPRIGHT, 0.30, -0.80, reach=None),
+        Key(22, "tsukuri", _tori(step, 0.27, -0.50), _uke(lean, turns=(("x", 10.0),))),
+        Key(32, "kake", _tori(reap, 0.27, -0.56), _uke(uke_reaped, turns=(("x", 38.0),))),
+        Key(40, "fall", _tori(over, 0.27, -0.56, reach=_HOLD_SLEEVE), _uke(uke_air, y=-1.05, turns=(("x", 72.0),), z=0.45)),
+        Key(48, "landing", _tori(LOW_HOLD, 0.30, -0.80, reach=_HOLD_SLEEVE), _uke(LYING, y=-1.30, turns=(("x", 90.0),), clearance=0.11)),
+        Key(70, "end", _tori(UPRIGHT, 0.30, -0.80, reach=None),
             _uke(REST, y=-1.30, turns=(("x", 90.0),), clearance=0.11)),
     ))
 
@@ -312,11 +421,11 @@ def _o_uchi_gari() -> ThrowClip:
     return ThrowClip("o_uchi_gari", (
         _START,
         Key(12, "kuzushi", _tori(_pose(STAND, {"trunk": v(0.25, 0, 1)}), 0.0, -0.20), _uke(lean, reach=UKE_GRIPS)),
-        Key(18, "tsukuri", _tori(enter, -0.03, -0.38), _uke(lean, turns=(("x", 8.0),))),
-        Key(24, "kake", _tori(drive, -0.03, -0.48, reach={**GRIPS, "leg_r": hook}), _uke(uke_hooked, turns=(("x", 35.0),))),
-        Key(32, "fall", _tori(drive, -0.03, -0.62, reach=_HOLD_SLEEVE), _uke(uke_air, y=-1.10, turns=(("x", 72.0),), z=0.45)),
-        Key(38, "landing", _tori(LOW_HOLD, -0.03, -0.85, reach=_HOLD_SLEEVE), _uke(LYING, y=-1.36, turns=(("x", 90.0),), clearance=0.11)),
-        Key(60, "end", _tori(UPRIGHT, -0.03, -0.85, reach=None),
+        Key(22, "tsukuri", _tori(enter, -0.03, -0.38), _uke(lean, turns=(("x", 8.0),))),
+        Key(32, "kake", _tori(drive, -0.03, -0.48, reach={**GRIPS, "leg_r": hook}), _uke(uke_hooked, turns=(("x", 35.0),))),
+        Key(40, "fall", _tori(drive, -0.03, -0.62, reach=_HOLD_SLEEVE), _uke(uke_air, y=-1.10, turns=(("x", 72.0),), z=0.45)),
+        Key(48, "landing", _tori(LOW_HOLD, -0.03, -0.85, reach=_HOLD_SLEEVE), _uke(LYING, y=-1.36, turns=(("x", 90.0),), clearance=0.11)),
+        Key(70, "end", _tori(UPRIGHT, -0.03, -0.85, reach=None),
             _uke(REST, y=-1.36, turns=(("x", 90.0),), clearance=0.11)),
     ))
 
@@ -334,11 +443,11 @@ def _hip_throw(throw_id: str, right_arm: Target, load_z: float, bend: Vec, depth
     return ThrowClip(throw_id, (
         _START,
         Key(12, "kuzushi", _tori(_pose(STAND, {"trunk": v(-0.05, 0, 1)}), 0.0, -0.08), _uke(tip, turns=(("x", -8.0),), reach=UKE_GRIPS)),
-        Key(20, "tsukuri", _tori(_pose(depth), -0.04, ty, back, hands), _uke(tip, turns=(("x", -14.0),))),
-        Key(28, "kake", _tori(throw, -0.04, ty, back, hands), _uke(loaded, x=-0.10, y=ty - 0.02, turns=(("x", -80.0),), z=load_z)),
-        Key(34, "fall", _tori(throw, -0.04, ty, back, _HOLD_SLEEVE), _uke(tucked, x=-0.10, y=ty + 0.45, turns=(("x", -170.0),), z=max(load_z - 0.30, 0.92))),
-        Key(40, "landing", _tori(LOW_HOLD, -0.04, ty + 0.25, back, _HOLD_SLEEVE), _uke(LYING, x=-0.10, y=ty + 0.95, turns=(("x", 90.0),), clearance=0.11)),
-        Key(62, "end", _tori(UPRIGHT, -0.04, ty + 0.25, back, None), _uke(REST, x=-0.10, y=ty + 0.95, turns=(("x", 90.0),), clearance=0.11)),
+        Key(26, "tsukuri", _tori(_pose(depth), -0.04, ty, back, hands), _uke(tip, turns=(("x", -14.0),))),
+        Key(36, "kake", _tori(throw, -0.04, ty, back, hands), _uke(loaded, x=-0.10, y=ty - 0.02, turns=(("x", -80.0),), z=load_z)),
+        Key(44, "fall", _tori(throw, -0.04, ty, back, _HOLD_SLEEVE), _uke(tucked, x=-0.10, y=ty + 0.45, turns=(("x", -170.0),), z=max(load_z - 0.30, 0.92))),
+        Key(58, "landing", _tori(LOW_HOLD, -0.04, ty + 0.25, back, _HOLD_SLEEVE), _uke(LYING, x=-0.10, y=ty + 0.95, turns=(("x", 90.0),), clearance=0.11)),
+        Key(80, "end", _tori(UPRIGHT, -0.04, ty + 0.25, back, None), _uke(REST, x=-0.10, y=ty + 0.95, turns=(("x", 90.0),), clearance=0.11)),
     ))
 
 
@@ -356,11 +465,11 @@ def _de_ashi_barai() -> ThrowClip:
     return ThrowClip("de_ashi_barai", (
         _START,
         Key(10, "kuzushi", _tori(STAND, 0.0, 0.04), _uke(stepping, y=UKE_Y + 0.12, reach=UKE_GRIPS)),
-        Key(16, "tsukuri", _tori(tori_sweep, 0.05, -0.08, reach={**GRIPS, "leg_l": sweep}), _uke(stepping, y=UKE_Y + 0.12)),
-        Key(22, "kake", _tori(tori_sweep, 0.10, -0.12), _uke(swept, y=UKE_Y + 0.12, turns=(("y", 28.0),))),
-        Key(30, "fall", _tori(pull, 0.15, -0.15, reach=_HOLD_SLEEVE), _uke(air, x=0.22, y=UKE_Y + 0.12, turns=(("y", 62.0),), z=0.72)),
-        Key(36, "landing", _tori(LOW_HOLD, 0.30, -0.30, reach=_HOLD_SLEEVE), _uke(side, x=0.38, y=UKE_Y + 0.12, turns=(("y", 90.0),), clearance=0.10)),
-        Key(58, "end", _tori(UPRIGHT, 0.30, -0.30, reach=None),
+        Key(18, "tsukuri", _tori(tori_sweep, 0.05, -0.08, reach={**GRIPS, "leg_l": sweep}), _uke(stepping, y=UKE_Y + 0.12)),
+        Key(26, "kake", _tori(tori_sweep, 0.10, -0.12), _uke(swept, y=UKE_Y + 0.12, turns=(("y", 28.0),))),
+        Key(33, "fall", _tori(pull, 0.15, -0.15, reach=_HOLD_SLEEVE), _uke(air, x=0.22, y=UKE_Y + 0.12, turns=(("y", 62.0),), z=0.72)),
+        Key(39, "landing", _tori(LOW_HOLD, 0.30, -0.30, reach=_HOLD_SLEEVE), _uke(side, x=0.38, y=UKE_Y + 0.12, turns=(("y", 90.0),), clearance=0.10)),
+        Key(61, "end", _tori(UPRIGHT, 0.30, -0.30, reach=None),
             _uke(side, x=0.38, y=UKE_Y + 0.12, turns=(("y", 90.0),), clearance=0.10)),
     ))
 

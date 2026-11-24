@@ -181,3 +181,64 @@ def test_clip_reference_is_stable_json(points):
     assert d["schema"] == "ce-judo-clips/1" and d["provenance"] == "placeholder"
     q = d["clips"]["seoi_nage"]["keys"][3]["uke"]["root"]["rotation_wxyz"]
     assert sum(c * c for c in q) == pytest.approx(1.0, abs=1e-5)
+
+
+@pytest.fixture(scope="module")
+def seoi_frames(points):
+    from character_engine.domain.animation.judo_clips import frame_table, solve_frames
+
+    clip = JUDO_CLIPS["seoi_nage"]
+    return clip, solve_frames(points, clip), frame_table(points, clip)
+
+
+def test_every_frame_is_solved_and_keys_are_kept(points, seoi_frames):
+    clip, frames, _ = seoi_frames
+    assert [s.frame for s in frames] == list(range(clip.frames + 1))
+    keyed = {s.frame: s for s in solve_clip(points, clip)}
+    for s in frames:
+        if s.frame in keyed:
+            assert s.tori["head"] == keyed[s.frame].tori["head"] and s.uke["pelvis"] == keyed[s.frame].uke["pelvis"]
+
+
+def test_in_betweens_stay_above_the_mat_and_keep_the_grips(seoi_frames):
+    _, frames, _ = seoi_frames
+    for s in frames:
+        low = min(min(h[2], t[2]) for pts in (s.tori, s.uke) for h, t in pts.values())
+        assert low > -1e-6, (s.frame, low)
+        if s.phase in ("kumikata", "kuzushi"):
+            assert max(s.miss_m.values()) < 0.10, (s.frame, s.miss_m)
+
+
+def test_motion_is_continuous(seoi_frames):
+    _, frames, _ = seoi_frames
+    for a, b in zip(frames, frames[1:]):
+        for who in ("tori", "uke"):
+            for bone in ("head", "hand_l", "hand_r", "foot_l", "foot_r"):
+                step = math.dist(getattr(a, who)[bone][1], getattr(b, who)[bone][1])
+                # 0.30 m per frame = 18 m/s. The fastest points are the thrown body's feet as it turns over tori (about
+                # 17.5 m/s) and tori's reaping foot (about 17 m/s): above the fastest kick measured, 14.3 m/s (Vagner
+                # 2023, A17). A jump in the in-betweens (a grip switching target) gave 22-28 m/s and fails here.
+                assert step < 0.30, (who, bone, a.frame, step)
+
+
+def test_frame_table_rebuilds_the_solved_world(points, seoi_frames):
+    from character_engine.domain.rigging.hand_poses import quat_rotate
+
+    _, frames, table = seoi_frames
+    for s, row in zip(frames[::7], table[::7]):
+        for who in ("tori", "uke"):
+            d = row[who]
+            body = apply_hand_pose(points, d["bones_wxyz"])
+            for b in ("head", "hand_l", "foot_r"):
+                got = tuple(quat_rotate(d["rotation_wxyz"], body[b][1])[i] + d["location"][i] for i in range(3))
+                assert got == pytest.approx(getattr(s, who)[b][1], abs=1e-6), (who, b, s.frame)
+
+
+def test_slerp_takes_the_short_arc():
+    from character_engine.domain.animation.judo_clips import ease, slerp
+    from character_engine.domain.rigging.hand_poses import quat_axis_angle
+
+    a, b = quat_axis_angle((1, 0, 0), math.radians(-170)), quat_axis_angle((1, 0, 0), math.radians(90))
+    mid = slerp(a, b, 0.5)
+    assert abs(mid[0]) == pytest.approx(abs(math.cos(math.radians(-220) / 2)), abs=1e-9)   # through -220, not through -40
+    assert ease(0.0) == 0.0 and ease(1.0) == 1.0 and ease(0.5) == 0.5

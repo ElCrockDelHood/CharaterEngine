@@ -1563,6 +1563,12 @@ not traced from a photo sequence (none free and complete was found). Heel offset
 Nothing existing changes; not baked, no gameplay moves yet. Audit:
 `docs/audit/A36_JUDO_THROWS.md`. Tests: `tests/unit/test_judo.py`.
 
+**Amendment** (2026-11-24, owner "segui adelante"): every frame between keys is solved (slerp, smoothstep, grips held on the
+same point re-solved by IK) and baked in Blender 3.6 by `scripts/bake_judo_clips.py` → `runtime/blender/ce_bake_judo_clips.py`:
+`CE_TORI` and `CE_UKE` with the block body, one action per throw and fighter, `builds/judo/judo_throws.blend`, frame table schema
+`ce-judo-frames/1`. Blender matches the Python solve within 0.02 mm on every frame. Throws retimed to 1.0–1.3 s (ASSUMED) so no point
+moves faster than 18 m/s. Rest pose is anatomical, not the T-pose of the Souls clips; not played in Godot yet.
+
 **Date**: 2026-11-16 · **Status**: FINAL (opt-in; poses PLACEHOLDER, values reversible)
 
 ---

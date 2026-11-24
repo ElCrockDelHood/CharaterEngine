@@ -20,6 +20,18 @@ tests: `tests/unit/test_judo.py`; herramienta: `scripts/judo_contact_sheet.py`. 
 * **Poses clave**: siete por técnica (kumikata, kuzushi, tsukuri, kake, caída, aterrizaje, fin) para tori y uke. Las manos
   que agarran y la pierna que siega se colocan sobre el otro luchador con IK.
 
+## Cuadros intermedios y horneado en Blender
+
+Cada cuadro entre dos poses se resuelve, no solo se interpola: rotaciones y raíz con slerp por el arco corto, suavizado
+(tiempo ASSUMED), y cada agarre que sigue en ambas poses se vuelve a resolver con IK en ese cuadro, así las manos no se
+sueltan mientras los cuerpos se mueven. `python scripts/bake_judo_clips.py` hornea en Blender 3.6 dos armaduras
+(`CE_TORI`, `CE_UKE`) con el cuerpo de bloques, una acción por técnica y luchador en cada cuadro, en
+`builds/judo/judo_throws.blend`. Blender coincide con Python a 0,02 mm en todos los cuadros. También renderiza las poses
+clave en vista lateral y de tres cuartos (`builds/judo/<técnica>_blender.png`). Límites: los pies apoyados no están
+bloqueados (patinan unos centímetros entre poses) y el tiempo es simétrico. Cada técnica dura 1,0–1,3 s (ASSUMED). El
+punto más rápido son los pies de uke al girar sobre tori en seoi-nage y o-goshi, 17,5 m/s; la patada más rápida medida
+es 14,3 m/s (Vagner 2023).
+
 ## Referencias y su límite
 
 Se leyeron las descripciones de las cinco técnicas en Wikipedia, cada una con una sola ilustración. Se encontraron, sin
@@ -32,7 +44,7 @@ principal límite de calidad.
 
 ## Límites y próximos pasos
 
-Solo bloqueo: sin intermedios, sin poses de manos, sin gi, sin torsión del tronco. La mano de tori queda 15–47 cm corta
-en el aterrizaje de algunas técnicas. Todavía no está horneado para Blender ni Godot, y la tabla de gameplay no tiene
+Solo bloqueo: sin poses de manos, sin gi, sin torsión del tronco. La mano de tori queda 15–47 cm corta
+en el aterrizaje de algunas técnicas. Todavía no se reproduce en Godot, y la tabla de gameplay no tiene
 movimientos de judo. Sigue: revisión del dueño de las hojas, una secuencia de fotos o video por técnica para calcar las
-poses, horneado en Blender con dos luchadores y reproducción en Godot.
+poses, bloqueo de pies y reproducción en Godot.
