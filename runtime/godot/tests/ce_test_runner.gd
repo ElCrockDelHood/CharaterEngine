@@ -441,13 +441,13 @@ class Runner extends Node:
 					down_at, sim.frame - down_at, kd, p_conc, op.health]])
 
 		# ---- D1 reaction library (generated offline in Blender, read as plain JSON) -
-		runner.check("D1 reaction library: schema 7 (subframes, grazes), body hits carry wound + reaction + per-clip blend, parries carry recoil and no wound", func():
+		runner.check("D1 reaction library: schema 8 (subframes, grazes, cut depth cap), body hits carry wound + reaction + per-clip blend, parries carry recoil and no wound", func():
 			var path := "res://addons/character_engine/data/reaction_library_d1.json"
 			if not FileAccess.file_exists(path):
 				return [false, "missing " + path]
 			var lib = JSON.parse_string(FileAccess.get_file_as_string(path))
-			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 7:
-				return [false, "not a schema-7 document"]
+			if typeof(lib) != TYPE_DICTIONARY or int(lib.get("schema_version", 0)) != 8:
+				return [false, "not a schema-8 document"]
 			var blend := {"Death01": 2, "Hit_Knockback": 2, "Hit_Head": 4, "Hit_Chest": 6}
 			var hits := 0
 			var parries := 0

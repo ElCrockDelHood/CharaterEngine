@@ -1573,6 +1573,31 @@ moves faster than 18 m/s. Rest pose is anatomical, not the T-pose of the Souls c
 
 ---
 
+## 88. REVIEW FIXES: CUT DEPTH CAPPED BY ENERGY, TOES ABOVE THE GROUND, WEAPONS OUT OF BODIES IN GODOT
+
+**Decision** (owner request, 2026-11-24 "arregla todo lo que sea necesario", thread "Debug visual en vivo"):
+
+* **Cut depth (review item 2).** The D1 library took the wound depth from the deepest geometric penetration, as if the
+  blade met no resistance, so a sweep across the chest went 8.3 cm into the cavity and ended in Death01. Schema 8 caps it
+  with the A09 cut model already on main (`cut_through`, layered capsule of the contact segment) and the PLACEHOLDER
+  sabre of the A09 forearm sample (0.6 kg, 10 m/s, 30 J) struck square: `first_contact.cut_depth_limit_m`, wound depth =
+  the smaller of the two. The chest cut now stops at the ribs (5.1 cm, Hit_Knockback, no death). Still an upper bound:
+  no strike angle, no draw cut. The refined sabre of branch `physics/cut-blade-dynamics` (Decision 82) can replace the
+  constants when that branch is merged.
+* **Toes (Decision 85 follow-up).** Our toes are longer than the source's: copying the toe angle in a push-off buried the
+  toe tips 3.5 cm. Leg grounding now bends each proximal toe up at its MTP joint until the tip touches the ground.
+* **Weapons in Godot (review items 12-13).** Measured over the fracture demo fight: weapons entered a body up to 9.4 cm
+  (the holder's own body included, minus the holding arm). `CEWeaponClearance` turns the weapon about the grip by the
+  smallest angle that clears every body capsule, right after each skeleton pose (`skeleton_updated`); measured after it:
+  0 cm. Visual only: hits, events and replays still come from `CESoulsCombat`. Capsules: game bones with the block-dummy
+  envelope radii (ESTIMATE).
+
+Review item 4 (Sword_Idle holds the sabre backwards) is the Quaternius clip; it stays as a relaxed, unguarded stance.
+
+**Date**: 2026-11-24 · **Status**: FINAL (constants reversible)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary

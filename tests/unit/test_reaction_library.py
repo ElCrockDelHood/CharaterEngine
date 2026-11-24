@@ -16,6 +16,7 @@ from character_engine.domain.gameplay.reaction_library import (
     attacker_reaction_for,
     blend_in_for,
     contact_frame,
+    cut_depth_limit,
     deepest_penetration,
     entry_sha256,
     first_event,
@@ -28,6 +29,7 @@ from character_engine.domain.gameplay.reaction_library import (
     strike_phase,
     summary,
     validate_library,
+    wound_depth,
 )
 
 GODOT_JSON = (Path(__file__).resolve().parents[2] / "runtime" / "godot" / "addons" / "character_engine" / "data"
@@ -120,8 +122,9 @@ def _hit(eid="hit"):
     e = _base(eid)
     e.update(signed_distance_m=[0.5, 0.2, -0.01, -0.03, -0.02], min_distance_m=-0.03, event="body_hit")
     e["first_contact"] = {"time": 0.5, "frame": 1, "segment": "forearm.L", "bone": "RADIUS_L", "penetration_m": 0.03,
-                          "penetration_at_contact_m": 0.01, "entry_point": [0, 0, 1]}
-    e["wound"] = {"type": "incision", "bone": "RADIUS_L", "region": "forearm", "depth_m": 0.01, "width_m": 0.035,
+                          "penetration_at_contact_m": 0.01, "cut_depth_limit_m": 0.05,
+                          "entry_point": [0, 0, 1]}
+    e["wound"] = {"type": "incision", "bone": "RADIUS_L", "region": "forearm", "depth_m": 0.03, "width_m": 0.035,
                   "layers_breached": ["skin", "fat", "muscle"], "severity": 2, "lethality": 0.01, "bleeding_rate": 0.2,
                   "fracture": False, "incapacitating": False, "provenance": "estimate"}
     clip, rule = reaction_for("forearm", 2, 0.01, False)
@@ -173,6 +176,25 @@ def test_valid_document_and_summary():
     assert validate_library(doc) == []
     assert summary(doc) == {"entries": 4, "body_hits": 1, "grazes": 0, "parries": 2, "reactions": {"Hit_Chest": 1},
                             "parries_reaching_body_after": 1, "filtered_parry_contacts": 0}
+
+
+def test_wound_depth_is_capped_by_the_cut_model():
+    from character_engine.domain.rigging import COLLISION_SEGMENTS, block_placements
+    from character_engine.domain.rigging.block_dummy import placements_by_name
+    bones = json.loads((Path(__file__).resolve().parents[2] / "src" / "character_engine" / "data" / "anatomy"
+                        / "human_adult_206.json").read_text(encoding="utf-8"))["bones"]
+    pts = {b["canonical_name"]: ((b["head"]["x"], b["head"]["y"], b["head"]["z"]),
+                                 (b["tail"]["x"], b["tail"]["y"], b["tail"]["z"])) for b in bones}
+    by = placements_by_name(block_placements(pts, segments=COLLISION_SEGMENTS))
+    thorax = cut_depth_limit(by["thorax"], 0.035)
+    assert 0.03 < thorax < 0.08                              # 30 J stop at the ribs, not in the cavity
+    assert cut_depth_limit(by["head"], 0.035) < thorax       # the skull stops it sooner
+    assert wound_depth({"penetration_m": 0.083, "cut_depth_limit_m": thorax}) == thorax
+    assert wound_depth({"penetration_m": 0.01, "cut_depth_limit_m": thorax}) == 0.01
+    e = _hit("capped")
+    e["wound"]["depth_m"] = 0.05
+    e["sha256"] = entry_sha256(e)
+    assert any("capped by the cut depth limit" in p for p in validate_library(_doc(e)))
 
 
 def test_graze_plays_no_reaction():

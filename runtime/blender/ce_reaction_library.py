@@ -259,6 +259,7 @@ def main() -> int:
         SCHEMA_VERSION,
         SUBSTEPS,
         contact_frame,
+        cut_depth_limit,
         deepest_penetration,
         entry_sha256,
         first_event,
@@ -268,6 +269,7 @@ def main() -> int:
         sample_times,
         summary,
         validate_library,
+        wound_depth,
     )
     from character_engine.domain.trauma import assess_wound, blade_contact_to_wound
 
@@ -285,6 +287,10 @@ def main() -> int:
     defender = mock.make_fighter(props, build, "CE_Fighter_A", sources[stances[0]], stances[0])
     attacker = mock.make_fighter(props, build, "CE_Fighter_B", sources[attacks[0]], attacks[0])
     attacker.rotation_euler = (0.0, 0.0, math.pi)
+    from character_engine.domain.rigging import COLLISION_SEGMENTS, block_placements
+    segments = {p.name: p for p in block_placements(
+        {n: (tuple(h), tuple(t)) for n, (h, t) in build.bone_points(defender).items()},
+        float(defender.get("ce_stature_m", 1.80)), segments=COLLISION_SEGMENTS)}
     bpy.ops.mesh.primitive_plane_add(size=12.0)
     scene.render.engine = "BLENDER_WORKBENCH"
     scene.display.shading.light, scene.display.shading.color_type = "STUDIO", "MATERIAL"
@@ -321,12 +327,15 @@ def main() -> int:
                         bone, _ = build.nearest_canonical_bone(defender, point, posed=True)
                         first = {"time": fr, "frame": contact_frame(fr), "segment": seg, "bone": bone,
                                  "penetration_m": None, "penetration_at_contact_m": round(-gap, 4),
+                                 "cut_depth_limit_m": None,
                                  "entry_point": [round(c, 4) for c in point]}
                         hit_point = point
                     parry_at.setdefault(fr, [round(c, 4) for c in mid])
                 event, event_frame = first_event(frames, signed, blade, approach, forward)
                 if first:
                     first["penetration_m"] = round(deepest_penetration(frames, signed, first["time"]), 4)
+                    first["cut_depth_limit_m"] = cut_depth_limit(segments[first["segment"]],
+                                                                 build.SABRE_PLACEHOLDER_WIDTH_M)
                 _, filtered = parry_frames(frames, blade, approach, forward)
                 first_parry = parry_play = None
                 if event != "body_hit":
@@ -341,7 +350,7 @@ def main() -> int:
                     play_back_stance(defender, attacker)
                 wound = reaction = playback = None
                 if first:
-                    w = blade_contact_to_wound(first["bone"], first["penetration_m"], build.SABRE_PLACEHOLDER_WIDTH_M)
+                    w = blade_contact_to_wound(first["bone"], wound_depth(first), build.SABRE_PLACEHOLDER_WIDTH_M)
                     asm = assess_wound(w)
                     wound = {"type": w.wound_type.value, "bone": w.bone_hit, "region": asm.region.value,
                              "depth_m": w.depth_m, "width_m": w.width_m,
@@ -409,6 +418,8 @@ def main() -> int:
                      "provenance": "ASSUMED"},
         "limitations": ["defender reacts only after the first contact (no anticipation)",
                         "reactions start the frame after contact; NLA blend-in per clip (ASSUMED table)",
+                        "wound depth capped by the A09 cut model with the PLACEHOLDER sabre (0.6 kg, 10 m/s, 30 J) "
+                        "struck square to the segment: an upper bound (Decision 88)",
                         "scan at 4 subframes per frame; wound depth = deepest penetration sampled until the reaction "
                         "starts, the blade meeting no resistance (ASSUMED upper bound, Decision 56)",
                         "strike-phase filter uses only signs (ASSUMED): tip motion towards the defender and blade direction "

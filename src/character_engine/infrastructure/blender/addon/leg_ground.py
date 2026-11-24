@@ -4,6 +4,8 @@ Runs at the end of ``build.retarget_mocap`` while the source rig is still there.
 shifted vertically so the support ankle sits at the height the source asks for, then each leg is re-solved with the
 two-bone IK of ``foot_lock`` (knee pointing like the source's knee, ``TALUS`` keeping its world orientation) so the
 other ankle reaches its own height. The new root location and leg rotations are keyed over the retarget keys.
+Last, a toe whose tip would go under the ground (a push-off on the toes) bends up at its MTP joint until the tip
+touches it (``_lift_toes``): our toes are longer than the source's, so copying the toe angle buried them 3.5 cm.
 """
 
 from __future__ import annotations
@@ -20,6 +22,35 @@ from .foot_lock import LEGS, _about, _basis, _key
 MIN_POLE_M = 0.01       # ESTIMATE: a source knee closer than this to its hip-ankle line keeps the current plane
 
 
+def _chain_tip(pbone):
+    """Armature-space tail of the last bone down a single-child chain (toe proximal -> distal)."""
+    while pbone.children:
+        pbone = pbone.children[0]
+    return pbone.tail
+
+
+def _lift_toes(arm, frame: int) -> int:
+    """Bend each proximal toe phalanx up about its MTP joint so the toe tip is not under z = 0. Returns lifts."""
+    mw = arm.matrix_world
+    inv = mw.inverted()
+    n = 0
+    for pb in arm.pose.bones:
+        if not pb.name.startswith("TOE_PHALANX_PROXIMAL_") or pb.parent is None:
+            continue
+        head, tip = mw @ pb.head, mw @ _chain_tip(pb)
+        if tip.z >= 0.0 or head.z <= 0.0:
+            continue                      # tip above ground, or the ball itself is down: nothing a toe can fix
+        v = tip - head
+        flat = Vector((v.x, v.y, 0.0))
+        if flat.length < 1e-6 or head.z >= v.length:
+            continue
+        want = flat.normalized() * (v.length ** 2 - head.z ** 2) ** 0.5 + Vector((0.0, 0.0, -head.z))
+        world = _about(head, v.rotation_difference(want)) @ (mw @ pb.matrix)
+        _key(pb, _basis(pb.bone, inv @ world, pb.parent.matrix), frame)
+        n += 1
+    return n
+
+
 def ground_legs(context, src_arm, dst_arm, mapping: Mapping[str, str], scale: float, frame_start: int,
                 frame_end: int) -> Dict[str, object]:
     """Key grounded legs over ``dst_arm``'s action. ``mapping``: canonical bone -> source bone."""
@@ -34,7 +65,7 @@ def ground_legs(context, src_arm, dst_arm, mapping: Mapping[str, str], scale: fl
     root = next(b for b in pb if b.parent is None)
     src_rest_z = {s: (smw @ src_arm.data.bones[mapping[legs[s][2]]].head_local).z for s in legs}
     dst_rest_z = {s: (mw @ dst_arm.data.bones[legs[s][2]].head_local).z for s in legs}
-    shifts, unreached = [], 0
+    shifts, unreached, lifted = [], 0, 0
     for f in range(frame_start, frame_end + 1):
         scene.frame_set(f)
         src = {s: [smw @ spb[mapping[n]].head for n in legs[s]] for s in legs}
@@ -66,8 +97,10 @@ def ground_legs(context, src_arm, dst_arm, mapping: Mapping[str, str], scale: fl
             _key(pb[tib], _basis(pb[tib].bone, tib_a, fem_a), f)
             _key(pb[tal], _basis(pb[tal].bone, tal_a, tib_a), f)
             unreached += 0 if ik.reached else 1
+        context.view_layer.update()
+        lifted += _lift_toes(dst_arm, f)
     scene.frame_set(frame_start)
     dst_arm["ce_leg_ground"] = True
-    return {"grounded_frames": len(shifts), "legs": 2, "unreached": unreached,
+    return {"grounded_frames": len(shifts), "legs": 2, "unreached": unreached, "toe_lifts": lifted,
             "root_dz_m": [round(min(shifts), 4), round(max(shifts), 4)] if shifts else None}
 

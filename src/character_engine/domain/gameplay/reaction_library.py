@@ -36,7 +36,9 @@ schema 6 the subframe scan (Decision 56): ``SUBSTEPS`` samples per frame, ``fram
 carry ``time`` and the whole ``frame`` that shows them (``contact_frame``), and the wound depth is the deepest
 penetration sampled until the reaction starts (``deepest_penetration``), schema 7 the ``graze`` event (Decision 84):
 a body contact whose wound breaches no muscle (``is_graze``) keeps the wound but plays no reaction, so a 2 mm
-touch no longer throws the defender into a full hit clip.
+touch no longer throws the defender into a full hit clip; schema 8 caps the wound depth with the energy cut model
+(Decision 88): ``first_contact.cut_depth_limit_m`` is how deep the placeholder sabre's energy cuts that segment
+(``cut_depth_limit``, A09's ``cut_through``) and the wound takes the smaller of it and ``penetration_m``.
 
 Pure Python, no engine code. The JSON written from it is read by Godot (plain JSON, no engine types).
 """
@@ -50,8 +52,8 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ..trauma import Severity
 
-SCHEMA_VERSION = 7   # 2: playback; 3: blend-in, attacker reaction; 4: parry, rule by region; 5: filter, blends; 6: subframes;
-#                      7: graze
+SCHEMA_VERSION = 8   # 2: playback; 3: blend-in, attacker reaction; 4: parry, rule by region; 5: filter, blends; 6: subframes;
+#                      7: graze; 8: cut depth limit
 #: Scan samples per animation frame (Decision 56): the blade is measured at Blender subframes, 1/SUBSTEPS apart.
 SUBSTEPS = 4
 
@@ -78,7 +80,12 @@ ENTRY_KEYS = ("id", "attack_clip", "defender_stance", "distance_m", "distance_pr
               "min_distance_m", "event", "first_contact", "first_parry",
               "wound", "reaction", "reaction_playback", "parry_playback", "energy_j", "energy_basis", "seed",
               "provenance", "sha256")
-CONTACT_KEYS = ("time", "frame", "segment", "bone", "penetration_m", "penetration_at_contact_m", "entry_point")
+CONTACT_KEYS = ("time", "frame", "segment", "bone", "penetration_m", "penetration_at_contact_m", "cut_depth_limit_m",
+                "entry_point")
+#: The library's sabre for the energy cap (A09 forearm sample values): mass PLACEHOLDER, speed ESTIMATE, 30 J,
+#: struck square to the segment (no angle loss), so the cap is itself an upper bound.
+LIBRARY_BLADE_MASS_KG = 0.6
+LIBRARY_BLADE_SPEED_M_S = 10.0
 PARRY_KEYS = ("time", "frame", "blade_distance_m", "point")
 PLAYBACK_KEYS = ("start_frame", "clip", "blend_in_frames", "frames", "signed_distance_m", "separated_at_frame",
                  "max_penetration_after_m", "penetrating_at_end", "wound_bone_consistent_ratio", "provenance",
@@ -107,6 +114,19 @@ def deepest_penetration(times: Sequence[float], signed: Sequence[float], start: 
     ASSUMED: the blade meets no resistance, so this is an upper bound of the cut depth (Decision 56)."""
     end = contact_frame(start) + 1
     return max([0.0] + [-s for t, s in zip(times, signed) if start <= t <= end and s < 0.0])
+
+
+def cut_depth_limit(placement: Any, blade_width_m: float) -> float:
+    """Depth below the skin the library's sabre can cut into this contact capsule (``cut_through``, A09)."""
+    from ..materials.layered_capsule import layered_capsule
+    from ..physics.cut import Blade, cut_through
+    blade = Blade(LIBRARY_BLADE_MASS_KG, LIBRARY_BLADE_SPEED_M_S, blade_width_m)
+    return round(cut_through(layered_capsule(placement), blade).skin_depth_m, 4)
+
+
+def wound_depth(contact: Mapping[str, Any]) -> float:
+    """Geometric depth capped by the energy cut model (schema 8)."""
+    return round(min(contact["penetration_m"], contact["cut_depth_limit_m"]), 4)
 
 
 def is_graze(layers_breached: Sequence[str]) -> bool:
@@ -228,6 +248,8 @@ def _check_body_hit(e: Mapping[str, Any], eid: str) -> List[str]:
         problems.append(f"{eid}: first_contact frame must be the whole frame after its time")
     if c["penetration_m"] != round(deepest_penetration(e["frames"], e["signed_distance_m"], c["time"]), 4):
         problems.append(f"{eid}: penetration_m is not the deepest sampled before the reaction")
+    if w and w.get("depth_m") != wound_depth(c):
+        problems.append(f"{eid}: wound depth must be the penetration capped by the cut depth limit")
     if not w or [k for k in WOUND_KEYS if k not in w]:
         problems.append(f"{eid}: bad wound")
     elif r is None or r.get("clip") not in REACTION_CLIPS.values():
@@ -267,6 +289,8 @@ def _check_graze(e: Mapping[str, Any], eid: str) -> List[str]:
         problems.append(f"{eid}: first_contact frame must be the whole frame after its time")
     if c["penetration_m"] != round(deepest_penetration(e["frames"], e["signed_distance_m"], c["time"]), 4):
         problems.append(f"{eid}: penetration_m is not the deepest sampled before the reaction")
+    if w and w.get("depth_m") != wound_depth(c):
+        problems.append(f"{eid}: wound depth must be the penetration capped by the cut depth limit")
     if not w or [k for k in WOUND_KEYS if k not in w] or not is_graze(w["layers_breached"]):
         problems.append(f"{eid}: a graze needs a wound that breaches only skin and fat")
     if any(e[k] is not None for k in ("reaction", "reaction_playback", "first_parry", "parry_playback")):

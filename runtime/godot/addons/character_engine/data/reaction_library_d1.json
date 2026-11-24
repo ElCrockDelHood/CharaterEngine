@@ -1,7 +1,7 @@
 {
- "schema_version": 7,
+ "schema_version": 8,
  "library": "D1 reaction library (Granaderos fight mock-up)",
- "generated_utc": "2026-11-15T18:52:34Z",
+ "generated_utc": "2026-11-24T17:54:18Z",
  "generated_by": "runtime/blender/ce_reaction_library.py (Blender 3.6.23)",
  "bone_map": "quaternius_ual",
  "sources": [
@@ -26,6 +26,7 @@
  "limitations": [
   "defender reacts only after the first contact (no anticipation)",
   "reactions start the frame after contact; NLA blend-in per clip (ASSUMED table)",
+  "wound depth capped by the A09 cut model with the PLACEHOLDER sabre (0.6 kg, 10 m/s, 30 J) struck square to the segment: an upper bound (Decision 86)",
   "scan at 4 subframes per frame; wound depth = deepest penetration sampled until the reaction starts, the blade meeting no resistance (ASSUMED upper bound, Decision 56)",
   "strike-phase filter uses only signs (ASSUMED): tip motion towards the defender and blade direction along the facing axis; a cut moving sideways at the moment of contact may be filtered",
   "parry = blade centre lines within the PLACEHOLDER blade width; the defender plays no parry clip and only the attacker recoils (no blocked-hit clip in the CC0 libraries)",
@@ -789,6 +790,7 @@
     "bone": "THORACIC_9",
     "penetration_m": 0.0831,
     "penetration_at_contact_m": 0.0831,
+    "cut_depth_limit_m": 0.0509,
     "entry_point": [
      0.0901,
      0.1641,
@@ -800,33 +802,32 @@
     "type": "incision",
     "bone": "THORACIC_9",
     "region": "thorax",
-    "depth_m": 0.0831,
+    "depth_m": 0.0509,
     "width_m": 0.035,
     "layers_breached": [
      "skin",
      "fat",
      "muscle",
      "tendon",
-     "bone",
-     "viscera"
+     "bone"
     ],
-    "severity": 6,
-    "lethality": 0.258,
+    "severity": 4,
+    "lethality": 0.126,
     "bleeding_rate": 4.45,
     "fracture": true,
     "incapacitating": true,
     "provenance": "estimate"
    },
    "reaction": {
-    "clip": "Death01",
-    "rule": "lethal",
+    "clip": "Hit_Knockback",
+    "rule": "severe",
     "provenance": "ASSUMED",
     "note": "placeholder for a baked L2/L3 manifestation (Decisions 44-45)"
    },
    "reaction_playback": {
     "start_frame": 10,
-    "clip": "Death01",
-    "clip_action": "CE_Fighter_A_Death01_Armature",
+    "clip": "Hit_Knockback",
+    "clip_action": "CE_Fighter_A_Hit_Knockback_Armature",
     "reaction_starts_frame": 11,
     "blend_in_frames": 2,
     "frames": [
@@ -856,100 +857,36 @@
      33,
      34,
      35,
-     36,
-     37,
-     38,
-     39,
-     40,
-     41,
-     42,
-     43,
-     44,
-     45,
-     46,
-     47,
-     48,
-     49,
-     50,
-     51,
-     52,
-     53,
-     54,
-     55,
-     56,
-     57,
-     58,
-     59,
-     60,
-     61,
-     62,
-     63,
-     64,
-     65,
-     66,
-     67,
-     68
+     36
     ],
     "signed_distance_m": [
      -0.0401,
      0.4496,
-     1.0615,
-     1.1086,
-     1.1141,
-     1.1361,
-     1.044,
-     0.9015,
-     0.7021,
-     0.4211,
-     0.2676,
-     0.3953,
-     0.5802,
-     0.7602,
-     0.9113,
-     1.0068,
-     1.0557,
-     1.0867,
-     1.1537,
-     1.2627,
-     1.409,
-     1.5003,
-     1.5191,
-     1.5142,
-     1.4369,
-     1.504,
-     1.6437,
-     1.5422,
-     1.4664,
-     1.4341,
-     1.4427,
-     1.4621,
-     1.5192,
-     1.539,
-     1.5985,
-     1.7265,
-     1.8067,
-     1.8115,
-     1.8144,
-     1.8185,
-     1.822,
-     1.8235,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234,
-     1.8234
+     1.0568,
+     0.7296,
+     0.6584,
+     0.3582,
+     0.4005,
+     0.6658,
+     0.6155,
+     0.8582,
+     1.0396,
+     1.0658,
+     1.2042,
+     1.2472,
+     1.3246,
+     1.4567,
+     1.6227,
+     1.7101,
+     1.7716,
+     1.8386,
+     1.8645,
+     1.883,
+     1.8806,
+     1.878,
+     1.8766,
+     1.8766,
+     1.8766
     ],
     "separated_at_frame": 11,
     "max_penetration_after_m": 0.0,
@@ -973,7 +910,7 @@
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "e544a05d0ce081f4ffe34579f41b1f8a2ac376f29f6f3f3237b31857b9deed1b"
+   "sha256": "4d12f649db530cfed82291e94b2dd0af6b79a91980e4c43cfc7e3c7d6030b769"
   },
   {
    "id": "Sword_Attack__vs__Sword_Idle__1.2m",
@@ -1728,6 +1665,7 @@
     "bone": "RIB_12_L",
     "penetration_m": 0.0347,
     "penetration_at_contact_m": 0.0347,
+    "cut_depth_limit_m": 0.0974,
     "entry_point": [
      0.2017,
      0.2435,
@@ -1845,7 +1783,7 @@
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "a096fd051eb304e729bd79c4f68212e79c1c1c59a04798aff18d08a320e1768c"
+   "sha256": "4b9c1f8efce3eac2ffc6c61c01244575b83c3c29c3d04e4efe2d197e4c19e9af"
   },
   {
    "id": "Sword_Attack__vs__Sword_Idle__1.6m",
@@ -2840,6 +2778,7 @@
     "bone": "FEMUR_L",
     "penetration_m": 0.0003,
     "penetration_at_contact_m": 0.0003,
+    "cut_depth_limit_m": 0.0698,
     "entry_point": [
      0.3094,
      0.1517,
@@ -2872,7 +2811,7 @@
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "c7881a18529d166bec8d8ca85e38cf45f120693e77e15dd56fe9a8525f24e968"
+   "sha256": "5f79000358dedd7d2a6b28e36f13e0d875afd5c5766242d8d43e0a5cc6a56274"
   },
   {
    "id": "Sword_Regular_A__vs__Sword_Idle__1.2m",
@@ -8667,6 +8606,7 @@
     "bone": "FEMUR_L",
     "penetration_m": 0.0003,
     "penetration_at_contact_m": 0.0003,
+    "cut_depth_limit_m": 0.0698,
     "entry_point": [
      0.3094,
      0.1517,
@@ -8699,7 +8639,7 @@
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "17ba4a432990b3da91f55937e7afe10208dcbefdefd296653e521eed8aca8958"
+   "sha256": "6e6eab2c01d5df533a87b684c60b23c3c4da1e84a65551104338ae9628b6b57b"
   },
   {
    "id": "Sword_Regular_Combo__vs__Sword_Idle__1.2m",
@@ -18794,6 +18734,7 @@
     "bone": "HUMERUS_L",
     "penetration_m": 0.0067,
     "penetration_at_contact_m": 0.0067,
+    "cut_depth_limit_m": 0.0447,
     "entry_point": [
      0.2835,
      -0.1034,
@@ -18827,7 +18768,7 @@
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "9dae19136eb8f828d620d8f2cf334a6a81338ff7b90c07baa4099acb999c03f3"
+   "sha256": "4363ec0b884dc20d5e5b9c26ebd6266844c5014bac07282ee02cbbcc2d746940"
   },
   {
    "id": "Sword_Dash__vs__Sword_Idle__1.2m",
@@ -21152,6 +21093,7 @@
     "bone": "CLAVICLE_L",
     "penetration_m": 0.0473,
     "penetration_at_contact_m": 0.036,
+    "cut_depth_limit_m": 0.0447,
     "entry_point": [
      0.1085,
      0.1505,
@@ -21163,33 +21105,32 @@
     "type": "incision",
     "bone": "CLAVICLE_L",
     "region": "thorax",
-    "depth_m": 0.0473,
+    "depth_m": 0.0447,
     "width_m": 0.035,
     "layers_breached": [
      "skin",
      "fat",
-     "muscle",
-     "tendon"
+     "muscle"
     ],
-    "severity": 4,
-    "lethality": 0.117,
+    "severity": 3,
+    "lethality": 0.083,
     "bleeding_rate": 4.45,
     "fracture": false,
     "incapacitating": true,
     "provenance": "estimate"
    },
    "reaction": {
-    "clip": "Hit_Knockback",
-    "rule": "severe",
+    "clip": "Hit_Chest",
+    "rule": "body_stagger",
     "provenance": "ASSUMED",
     "note": "placeholder for a baked L2/L3 manifestation (Decisions 44-45)"
    },
    "reaction_playback": {
     "start_frame": 10,
-    "clip": "Hit_Knockback",
-    "clip_action": "CE_Fighter_A_Hit_Knockback_Armature",
+    "clip": "Hit_Chest",
+    "clip_action": "CE_Fighter_A_Hit_Chest_Armature.001",
     "reaction_starts_frame": 11,
-    "blend_in_frames": 2,
+    "blend_in_frames": 6,
     "frames": [
      10,
      11,
@@ -21222,31 +21163,31 @@
     "signed_distance_m": [
      -0.0473,
      0.3357,
-     0.9561,
-     0.7296,
-     0.6584,
-     0.3582,
-     0.4005,
-     0.6658,
-     0.6155,
-     0.8582,
-     1.0396,
-     1.0658,
-     1.2042,
-     1.2472,
-     1.3246,
-     1.4567,
-     1.6227,
-     1.7101,
-     1.7716,
-     1.8386,
-     1.8645,
-     1.883,
-     1.8806,
-     1.878,
-     1.8766,
-     1.8766,
-     1.8766
+     0.6127,
+     0.5608,
+     0.5718,
+     0.6951,
+     0.7697,
+     0.8115,
+     0.6137,
+     0.3283,
+     0.2082,
+     0.2732,
+     0.4425,
+     0.6214,
+     0.7621,
+     0.837,
+     0.8317,
+     0.82,
+     0.8363,
+     0.8722,
+     0.9102,
+     0.9438,
+     0.969,
+     0.9853,
+     0.9923,
+     0.9923,
+     0.9923
     ],
     "separated_at_frame": 11,
     "max_penetration_after_m": 0.0,
@@ -21261,7 +21202,7 @@
      "blend_in_frames": 4,
      "provenance": "ASSUMED"
     },
-    "note": "NLA blend-in 2 frames (defender, per clip), 4 (attacker); attacker switches to its recovery clip"
+    "note": "NLA blend-in 6 frames (defender, per clip), 4 (attacker); attacker switches to its recovery clip"
    },
    "parry_playback": null,
    "energy_j": null,
@@ -21270,7 +21211,7 @@
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "ee7c8d92bfa6f8316b7570197e192aca9017f916139aecc1a72a7d220e2b58c4"
+   "sha256": "cee9900b387d67c7326e6b41871ff4c1d64571a6f89a034e4464d818a6000ece"
   },
   {
    "id": "Sword_Attack__vs__Sword_Block__1.2m",
@@ -22025,6 +21966,7 @@
     "bone": "CLAVICLE_R",
     "penetration_m": 0.0286,
     "penetration_at_contact_m": 0.0286,
+    "cut_depth_limit_m": 0.0447,
     "entry_point": [
      -0.1309,
      0.0275,
@@ -22059,7 +22001,7 @@
    "reaction_playback": {
     "start_frame": 10,
     "clip": "Hit_Chest",
-    "clip_action": "CE_Fighter_A_Hit_Chest_Armature.001",
+    "clip_action": "CE_Fighter_A_Hit_Chest_Armature.002",
     "reaction_starts_frame": 11,
     "blend_in_frames": 6,
     "frames": [
@@ -22142,7 +22084,7 @@
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "656291933798a38b02ec646e7461a2bb3838ac0a185642d2c39e4c7d6f9eaaed"
+   "sha256": "55916efec307708024fe88995c6eb977b52f2520a8db16f95db8a65477784915"
   },
   {
    "id": "Sword_Attack__vs__Sword_Block__1.6m",
@@ -23139,6 +23081,7 @@
     "bone": "RADIUS_R",
     "penetration_m": 0.0281,
     "penetration_at_contact_m": 0.0281,
+    "cut_depth_limit_m": 0.0396,
     "entry_point": [
      -0.4248,
      -0.3247,
@@ -23173,7 +23116,7 @@
    "reaction_playback": {
     "start_frame": 6,
     "clip": "Hit_Chest",
-    "clip_action": "CE_Fighter_A_Hit_Chest_Armature.002",
+    "clip_action": "CE_Fighter_A_Hit_Chest_Armature.003",
     "reaction_starts_frame": 7,
     "blend_in_frames": 6,
     "frames": [
@@ -23252,7 +23195,7 @@
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "689866a4eb0618fe25fdbd361d835463c94a9c2fd71b80bf314c2f47757c4c06"
+   "sha256": "399515284eb45702d551811ac2ccaf75d50135f6e4080a5a3245f149d32707d3"
   },
   {
    "id": "Sword_Regular_A__vs__Sword_Block__1.2m",
@@ -25569,6 +25512,7 @@
     "bone": "FEMUR_L",
     "penetration_m": 0.0342,
     "penetration_at_contact_m": 0.0342,
+    "cut_depth_limit_m": 0.0698,
     "entry_point": [
      0.0657,
      0.0686,
@@ -25698,7 +25642,7 @@
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "5bc2a8c2f646bb5b8eec82c5238c4f759221818b8141583c7ee998ba74cedc70"
+   "sha256": "2378b68dec8ce33c40af31f91c6c9d655bd365c5e044d51df39740bda2fcfe25"
   },
   {
    "id": "Sword_Regular_C__vs__Sword_Block__1.2m",
@@ -29175,6 +29119,7 @@
     "bone": "RADIUS_R",
     "penetration_m": 0.0281,
     "penetration_at_contact_m": 0.0281,
+    "cut_depth_limit_m": 0.0396,
     "entry_point": [
      -0.4248,
      -0.3247,
@@ -29209,7 +29154,7 @@
    "reaction_playback": {
     "start_frame": 6,
     "clip": "Hit_Chest",
-    "clip_action": "CE_Fighter_A_Hit_Chest_Armature.003",
+    "clip_action": "CE_Fighter_A_Hit_Chest_Armature.004",
     "reaction_starts_frame": 7,
     "blend_in_frames": 6,
     "frames": [
@@ -29372,7 +29317,7 @@
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "0c07f38bcddc6184a41a8d8a72e55f6b95dd6b77735437ed3cf29a50f0ee6bcf"
+   "sha256": "272f175c8a18eabfba5d0ab925b62e3b1c2a837832eecd480e8cb955bc0cd77e"
   },
   {
    "id": "Sword_Regular_Combo__vs__Sword_Block__1.2m",
@@ -34447,6 +34392,7 @@
     "bone": "FEMUR_L",
     "penetration_m": 0.0271,
     "penetration_at_contact_m": 0.0271,
+    "cut_depth_limit_m": 0.0698,
     "entry_point": [
      0.1352,
      -0.093,
@@ -34696,7 +34642,7 @@
    "determinism": "no randomness: fixed clips, frames, spacing and geometry",
    "sabre": "PLACEHOLDER 0.90 x 0.035 m on SOCKET-hand_grip.R (Decision 48)",
    "provenance": "estimate",
-   "sha256": "815b5dba480890966cb825627fb8071ab58956d5b72f1095a19ed5debbb5c864"
+   "sha256": "92f87ba30eb48d4aa7eccb8c6cad9ca9ca56f99dcff84f9049133213fc8466be"
   },
   {
    "id": "Sword_Heavy_Combo__vs__Sword_Block__1.2m",
