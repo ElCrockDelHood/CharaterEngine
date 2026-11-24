@@ -12,6 +12,10 @@ extends Node
 const CLIPS_GLB := "res://addons/character_engine/data/souls_clips.glb"
 const CLIPS_JSON := "res://addons/character_engine/data/souls_clips.json"
 const LIBRARY := "souls"
+## Cross-fade into each clip (seconds, ASSUMED): clips used to cut from one pose to the next, which read as stiff.
+## A hit lands fast, a return to the guard settles slower; everything else blends over a few frames.
+const BLEND_S := {"hit": 0.05, "stagger": 0.08, "idle": 0.2, "guard": 0.12, "walk": 0.15}
+const DEFAULT_BLEND_S := 0.1
 
 var character: CECharacter
 var player: AnimationPlayer
@@ -143,5 +147,5 @@ func update_from(f: CESoulsCombat.Fighter, frame: int, move_start_frame: int, te
 	if clip != current or restart:
 		current = clip
 		_last_move_frame = move_start_frame
-		player.play(LIBRARY + "/" + clip)
+		player.play(LIBRARY + "/" + clip, float(BLEND_S.get(clip, DEFAULT_BLEND_S)))
 		played.append([frame, clip])
