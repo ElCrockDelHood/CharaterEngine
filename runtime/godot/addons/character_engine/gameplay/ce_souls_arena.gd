@@ -43,6 +43,9 @@ const PLAYER_COLOR := Color(0.36, 0.46, 0.62)
 const SENTINEL_COLOR := Color(0.62, 0.34, 0.22)
 ## false: no clip playback (pure state tests).
 @export var animate: bool = true
+## Turn held weapons out of the bodies after each pose, for the eye only (CEWeaponClearance, Decision 88).
+@export var weapon_clearance: bool = true
+var last_clearance_deg: Dictionary = {}      # fighter_id -> angle the weapon was turned this frame
 var hud: Label
 var camera: Camera3D
 var frames_stepped := 0
@@ -73,6 +76,19 @@ func _ready() -> void:
 		_build_scene()
 
 
+func clear_weapons() -> void:
+	for fid in characters:
+		_clear_weapon(fid)
+
+
+func _clear_weapon(fid: String) -> void:
+	var others: Array = []
+	for o in characters:
+		if o != fid:
+			others.append(characters[o])
+	last_clearance_deg[fid] = CEWeaponClearance.solve(characters[fid], others)
+
+
 func _build_scene() -> void:
 	_built = true
 	ensure_input_map()
@@ -98,6 +114,11 @@ func _build_scene() -> void:
 		add_child(ch)
 		characters[f.fighter_id] = ch
 		ch.equip_weapon(data.weapon(f.weapon["weapon_id"]))
+		if ch.skeleton != null:                # right after each new pose, before the frame is drawn
+			var fid: String = f.fighter_id
+			ch.skeleton.skeleton_updated.connect(func() -> void:
+				if weapon_clearance:
+					_clear_weapon(fid))
 		ch.attach_body(PLAYER_COLOR if f.fighter_id == "player" else SENTINEL_COLOR)
 		if animate:
 			var an := CESoulsAnimator.new()

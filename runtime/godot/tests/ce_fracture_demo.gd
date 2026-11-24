@@ -22,6 +22,7 @@ var title: Label
 var clock := 0.0
 var next_shot := 0
 var fighting := false
+var clearance := {"frames": 0, "turned": 0, "still_inside": 0, "worst_m": 0.0}
 
 
 func _ready() -> void:
@@ -90,5 +91,16 @@ func _process(delta: float) -> void:
 		title.text = "Pelea: física de golpe activada"
 	if fighting:
 		_aim_fight()
+		for fid in arena.characters:
+			var others: Array = []
+			for o in arena.characters:
+				if o != fid:
+					others.append(arena.characters[o])
+			var left := CEWeaponClearance.residual(arena.characters[fid], others)
+			clearance["frames"] += 1
+			clearance["turned"] += 1 if float(arena.last_clearance_deg.get(fid, 0.0)) > 0.0 else 0
+			clearance["still_inside"] += 1 if left > 0.005 else 0
+			clearance["worst_m"] = maxf(clearance["worst_m"], left)
 	if clock >= END_AT:
+		print("weapon clearance: %s" % clearance)
 		get_tree().quit()
