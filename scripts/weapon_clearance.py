@@ -3,6 +3,7 @@
     python scripts/weapon_clearance.py                              # 11 sword / idle clips, margin 0
     python scripts/weapon_clearance.py --clips Sword_Attack --margin 0.01
     python scripts/weapon_clearance.py --gate                       # exit 1 when any clip fails
+    python scripts/weapon_clearance.py --fix                        # turn the wrist, re-measure, before/after PNGs
 
 Runs ``runtime/blender/ce_weapon_clearance.py`` in Blender 3.6 (background) through ``_logrun``
 (``logs/<UTC>_weapon_clearance.log``). Report (git-ignored): ``builds/reports/weapon_clearance/<UTC>.json`` plus
@@ -38,6 +39,8 @@ def main(argv=None) -> int:
     ap.add_argument("--clips", default=None, help="comma-separated clip names (default: the runtime script's list)")
     ap.add_argument("--margin", type=float, default=0.0, help="required clearance in metres (PLACEHOLDER)")
     ap.add_argument("--gate", action="store_true", help="exit 1 when the weapon enters its wielder in any clip")
+    ap.add_argument("--fix", action="store_true",
+                    help="also turn the wrist where needed, re-measure, and render the worst frame before / after")
     ap.add_argument("--blender", default=None)
     a = ap.parse_args(argv)
 
@@ -56,6 +59,8 @@ def main(argv=None) -> int:
         cmd += ["--lib", p]
     if a.clips:
         cmd += ["--clips", a.clips]
+    if a.fix:
+        cmd += ["--fix", "--shots", OUT / out.stem]
     code, secs, log = run_logged([str(c) for c in cmd], "weapon_clearance")
     if code != 0 or not out.exists():
         print(f"Blender failed (exit {code}); log: {log}")
@@ -67,7 +72,12 @@ def main(argv=None) -> int:
         mark = "OK " if s["passed"] else "MAL"
         worst = s["worst"]
         where = f"  peor {worst['body']} {-worst['gap_m'] * 100:.1f} cm (cuadro {worst['frame']})" if worst else ""
-        print(f"  {mark} {clip:22s} {s['frames_in_violation']:3d}/{s['frames']:3d} cuadros{where}")
+        fixed = ""
+        if "fix" in s:
+            after = s["fix"]["after"]
+            fixed = (f"  -> corregido: {after['frames_in_violation']} cuadros, giro max "
+                     f"{s['fix']['max_angle_deg']:.0f} grados")
+        print(f"  {mark} {clip:22s} {s['frames_in_violation']:3d}/{s['frames']:3d} cuadros{where}{fixed}")
     return 1 if a.gate and not doc["passed"] else 0
 
 
