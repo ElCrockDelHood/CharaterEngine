@@ -1,0 +1,189 @@
+"""Decision 89: quality tolerances in force (first batch, ESTIMATE), their judges and today's measurements.
+
+Committed measurements (A20, A22, the face contract) are judged here on every run. Measurements that live in
+``builds/`` (batch retarget, Blender headless, Godot perf) need Blender, Godot, the mocap library or the GT 740M:
+their tests skip with the reason when the report is not on this machine. A known failure is an ``xfail(strict=True)``
+with its measured value, never a relaxed limit: when it gets fixed the test turns red and asks for the update.
+"""
+
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+from character_engine.domain.animation import leg_quality as lq
+from character_engine.domain.quality import tolerances as tq
+from character_engine.domain.rigging.face import ARKIT_52, GAME_FACE_SHAPES
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts"))
+import quality_report as qr  # noqa: E402
+
+A20 = ROOT / "docs" / "audit" / "A20_F2_LONG_BONES_FIT.json"
+A22 = ROOT / "docs" / "audit" / "A22_SKELETON_REGIONS_FIT.json"
+
+
+def _json(p):
+    return json.loads(Path(p).read_text(encoding="utf-8"))
+
+
+def _report(key):
+    p = qr.DEFAULTS[key]
+    if not p.exists():
+        pytest.skip(f"{p.relative_to(ROOT)} not on this machine (needs the engine run named in its tolerance)")
+    return _json(p)
+
+
+# --- the table: exactly the approved batch, with the approved limits ---------------------------------------------
+
+APPROVED = {("AN-1", "all"): {"rms_mm": 4.0}, ("AN-3", "all"): {"mean_mm": 2.5, "p95_mm": 6.0},
+            ("MO-2", "game"): {"abs_m": 0.01}, ("MO-2", "cinema"): {"abs_m": 0.003},
+            ("MO-3", "game"): {"median_deg": 5.0, "p90_deg": 10.0}, ("MO-3", "cinema"): {"median_deg": 3.0, "p90_deg": 6.0},
+            ("RG-1", "all"): {"max_mm": 0.1}, ("RG-6", "game"): {"max_shapes": 20}, ("RG-6", "cinema"): {"shapes": 52},
+            ("PF-1", "game"): {"mean_ms": 16.7, "p95_ms": 20.0}, ("PF-4", "cinema"): {"seconds": 30.0}}
+
+
+def test_table_is_the_approved_first_batch():
+    assert {(t.id, t.profile): t.limit for t in tq.TOLERANCES} == APPROVED
+    assert set(tq.IN_FORCE) == {t.id for t in tq.TOLERANCES} and len(tq.IN_FORCE) == 8
+    assert all(t.provenance == "ESTIMATE" for t in tq.TOLERANCES)
+    assert {t.id for t in tq.TOLERANCES if t.level == "Q0"} == {"PF-1", "PF-4"}
+
+
+def test_doc_lists_every_tolerance_in_force():
+    doc = (ROOT / "docs" / "architecture" / "QUALITY_TOLERANCES.md").read_text(encoding="utf-8")
+    for tid in tq.IN_FORCE:
+        assert f"| {tid} |" in doc, tid
+    assert "Decision 89" in doc
+
+
+# --- judges at their limits ---------------------------------------------------------------------------------------
+
+def test_an1_limit_is_inclusive():
+    assert tq.judge_an1([{"bone": "X", "side": "L", "rms_mm": 4.0}]).status == tq.PASS
+    v = tq.judge_an1([{"bone": "X", "side": "L", "rms_mm": 4.001}])
+    assert v.status == tq.FAIL and v.measured["over"] == ["X_L 4.00"]
+    assert tq.judge_an1(None).status == tq.NOT_MEASURED
+
+
+def test_an3_needs_both_mean_and_p95():
+    assert tq.judge_an3({"P": {"mean_mm": 2.5, "p95_mm": 6.0}}).status == tq.PASS
+    assert tq.judge_an3({"P": {"mean_mm": 2.6, "p95_mm": 1.0}}).status == tq.FAIL
+    assert tq.judge_an3({"P": {"mean_mm": 1.0, "p95_mm": 6.1}}).status == tq.FAIL
+
+
+def _clip(cat, sole, knee_med=1.0, knee_p90=2.0):
+    return {"library": "lib", "clip": "c", "category": cat,
+            "legs": {"rm": {"sole_median_m": sole, "knee_median_deg": knee_med, "knee_p90_deg": knee_p90}}}
+
+
+def test_mo2_by_profile_and_jumps_excluded():
+    assert tq.judge_mo2([_clip("idle", -0.008)], "game").status == tq.PASS
+    assert tq.judge_mo2([_clip("idle", -0.008)], "cinema").status == tq.FAIL
+    assert tq.judge_mo2([_clip("jump", -0.11), _clip("idle", 0.001)], "cinema").status == tq.PASS
+    assert tq.judge_mo2([_clip("swim", -1.4), _clip("idle", 0.001)], "cinema").status == tq.PASS   # no ground
+    assert tq.judge_mo2([], "game").status == tq.NOT_MEASURED
+
+
+def test_mo3_by_profile():
+    assert tq.judge_mo3([_clip("idle", 0, 4.0, 9.0)], "game").status == tq.PASS
+    assert tq.judge_mo3([_clip("idle", 0, 4.0, 9.0)], "cinema").status == tq.FAIL
+    assert tq.judge_mo3([_clip("idle", 0, 1.0, 10.5)], "game").status == tq.FAIL
+
+
+def test_rg1_pf1_pf4_limits_and_missing_inputs():
+    assert tq.judge_rg1(0.1).status == tq.PASS and tq.judge_rg1(0.11).status == tq.FAIL
+    assert tq.judge_rg1(None).status == tq.NOT_MEASURED
+    assert tq.judge_pf1("GeForce GT 740M", {"avg_ms": 16.7, "p95_ms": 20.0}).status == tq.PASS
+    assert tq.judge_pf1("GeForce GT 740M", {"avg_ms": 10.0, "p95_ms": 21.0}).status == tq.FAIL
+    assert tq.judge_pf1("GeForce RTX 4060", {"avg_ms": 1.0, "p95_ms": 1.0}).status == tq.NOT_MEASURED  # not Q0 hardware
+    assert tq.judge_pf4(30.0).status == tq.PASS and tq.judge_pf4(30.5).status == tq.FAIL
+
+
+# --- leg metrics (MO-2 / MO-3 inputs) -----------------------------------------------------------------------------
+
+def _legs(knee_y_src, knee_y_dst, toe_z):
+    rest_s = {n: (0.0, 0.0, 0.0) for side in "LR" for n in lq.SOURCE_FOOT[side]}
+    rest_t = {n: (0.0, 0.0, 0.0) for side in "LR" for n in lq.TARGET_FOOT[side]}
+    src, dst = {}, {}
+    for side, x in (("L", 0.1), ("R", -0.1)):
+        s = side.lower()
+        src.update({f"thigh_{s}": (x, 0, 0.9), f"calf_{s}": (x, knee_y_src, 0.45), f"foot_{s}": (x, 0, 0.08),
+                    f"ball_{s}": (x, -0.1, 0.0), f"ball_{s}.tail": (x, -0.15, 0.0)})
+        dst.update({f"FEMUR_{side}": (x, 0, 0.95), f"FEMUR_{side}.tail": (x, knee_y_dst, 0.5),
+                    f"TIBIA_{side}": (x, knee_y_dst, 0.46), f"TALUS_{side}": (x, 0, 0.07),
+                    f"CALCANEUS_{side}": (x, 0.05, toe_z), f"TOE_PHALANX_PROXIMAL_3_{side}": (x, -0.1, toe_z),
+                    f"TOE_PHALANX_PROXIMAL_3_{side}.tail": (x, -0.15, toe_z)})
+    return [src], [dst], rest_s, rest_t
+
+
+def test_leg_metrics_on_a_known_pose():
+    src, dst, rs, rt = _legs(-0.05, -0.05, -0.006)
+    rec = lq.clip_legs(src, dst, rs, rt)
+    assert rec["sole_median_m"] == pytest.approx(-0.006) and rec["stance_samples"] == 2
+    assert rec["knee_median_deg"] == pytest.approx(0.0, abs=1e-6) and rec["knee_samples"] == 2
+    src, dst, rs, rt = _legs(-0.05, 0.05, 0.0)                     # target knee bends backwards
+    assert lq.clip_legs(src, dst, rs, rt)["knee_median_deg"] == pytest.approx(180.0)
+
+
+def test_straight_source_leg_carries_no_knee_direction():
+    src, dst, rs, rt = _legs(-0.005, -0.05, 0.0)                   # 5 mm: under the 1 cm limit
+    assert lq.clip_legs(src, dst, rs, rt)["knee_samples"] == 0
+
+
+# --- today's measurements -----------------------------------------------------------------------------------------
+
+def test_an1_long_bone_fit_passes():
+    v = tq.judge_an1(qr.an1_rows(_json(A20)))
+    assert v.status == tq.PASS and v.measured["bone_sides"] == 12, v.measured
+
+
+@pytest.mark.xfail(strict=True, reason="AN-3 fails today on one pair: INFERIOR_NASAL_CONCHA p95 8.15 mm > 6 mm "
+                                       "(mean 2.43 mm); Decision 89. The limit is not relaxed.")
+def test_an3_mirror_symmetry_passes():
+    v = tq.judge_an3(qr.an3_pairs(_json(A22)))
+    assert v.status == tq.PASS, v.measured["over"]
+
+
+def test_an3_fails_only_where_recorded():
+    v = tq.judge_an3(qr.an3_pairs(_json(A22)))
+    assert set(v.measured["over"]) == {"INFERIOR_NASAL_CONCHA"} and v.measured["pairs"] == 83
+
+
+def test_rg6_face_contract_counts():
+    assert tq.judge_rg6(len(GAME_FACE_SHAPES), "game").status == tq.PASS
+    assert tq.judge_rg6(len(ARKIT_52), "cinema").status == tq.PASS
+
+
+@pytest.mark.skip(reason="RG-6 asset part: no head mesh with ARKit blend shapes exists yet (Decision 89)")
+def test_rg6_on_a_head_mesh():
+    pass
+
+
+def test_rg1_and_pf4_from_the_blender_report():
+    rg1, pf4 = qr.blender_checks(_report("blender"))
+    assert tq.judge_rg1(rg1).status == tq.PASS, rg1
+    assert tq.judge_pf4(pf4).status == tq.PASS, pf4
+
+
+def test_pf1_from_the_godot_perf_report():
+    adapter, arena = qr.perf_arena(_report("perf"))
+    v = tq.judge_pf1(adapter, arena)
+    if v.status == tq.NOT_MEASURED:
+        pytest.skip(v.detail)
+    assert v.status == tq.PASS, v.measured
+
+
+@pytest.mark.xfail(strict=True, reason="MO-2 fails today (batch retarget 2026-11-25, 79 clips): 7 clips over 1 cm in "
+                                       "game, 12 over 0.3 cm in cinema, worst Sword_Heavy_Combo +1.79 cm; Decision 89")
+def test_mo2_sole_height_from_the_retarget_report():
+    clips = _report("retarget")["clips"]
+    assert tq.judge_mo2(clips, "game").status == tq.PASS and tq.judge_mo2(clips, "cinema").status == tq.PASS
+
+
+@pytest.mark.xfail(strict=True, reason="MO-3 fails today (batch retarget 2026-11-25, 86 clips): 33 clips in game, 61 in "
+                                       "cinema; even A_TPose gives 8.7 deg (rest-pose knee difference); Decision 89")
+def test_mo3_knee_direction_from_the_retarget_report():
+    clips = _report("retarget")["clips"]
+    assert tq.judge_mo3(clips, "game").status == tq.PASS and tq.judge_mo3(clips, "cinema").status == tq.PASS

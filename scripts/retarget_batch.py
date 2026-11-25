@@ -33,7 +33,7 @@ from engine_tests import find_blender
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from character_engine.domain.animation import clip_qa  # noqa: E402
+from character_engine.domain.animation import clip_qa, leg_quality  # noqa: E402
 
 SCRIPT = ROOT / "runtime" / "blender" / "ce_batch_retarget.py"
 OUT_DIR = ROOT / "builds" / "animations"
@@ -156,6 +156,9 @@ def evaluate_library(lib: str, samples: dict[str, dict], glb_checks: dict[str, d
         rec["integer_frames"] = abs(base.get("frame_end_raw", 0) - round(base.get("frame_end_raw", 0))) < 1e-3
         rec["glb"] = {v: c.get("glb_out") for v, c in (("standard", s), ("rm", r)) if c and c.get("glb_out")}
         rec["mapped_bones"] = base.get("mapped_bones")
+        rec["legs"] = {v: leg_quality.clip_legs(c["source"], c["target"], samples[v]["source_rest"],
+                                                samples[v]["target_rest"])
+                       for v, c in (("standard", s), ("rm", r)) if c and c["status"] == "ok"}   # MO-2 / MO-3
         rec["root_scale"] = {k: base.get(k) for k in ("root_scale", "root_scale_mode", "followers", "stance")}
         if r and r.get("foot_lock"):
             rec["foot_lock"] = r["foot_lock"]
@@ -179,6 +182,10 @@ def _f(x, nd=2):
     return "—" if x is None else f"{x:.{nd}f}"
 
 
+def _cm(x):
+    return "—" if x is None else f"{x * 100:.1f}"
+
+
 def markdown(report: dict) -> str:
     lines = [f"# Retarget batch QA — {report['started']}", "",
              f"Blender `{report['blender']}` · bone map `{report['bone_map']}` · {report['fps']} fps · "
@@ -188,15 +195,18 @@ def markdown(report: dict) -> str:
     for cat, s in report["summary"].items():
         fc = ", ".join(f"{k} ×{v}" for k, v in s["failed_checks"].items()) or "—"
         lines.append(f"| {cat} | {s['clips']} | {s['ok']} | {s['warn']} | {s['fail']} | {s['error']} | {fc} |")
-    lines += ["", "| Lib | Clip | Cat | Status | Slide m/s | Pen. m | Seam m | Root m/s | Stance m/s | Ratio |",
-              "|---|---|---|---|---|---|---|---|---|---|"]
+    lines += ["", "| Lib | Clip | Cat | Status | Slide m/s | Pen. m | Seam m | Root m/s | Stance m/s | Ratio | "
+              "Sole cm (RM) | Knee ° (RM) |",
+              "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in report["clips"]:
         tf = r.get("target_feet", {})
         lines.append(f"| {r['library']} | {r['clip']} | {r['category']} | {r['status']} | "
                      f"{_f(tf.get('slide_mean_m_s'))} | {_f(tf.get('penetration_m'), 3)} | "
                      f"{_f((r.get('loop_seam') or {}).get('position_m'), 3)} | "
                      f"{_f((r.get('root_motion_source') or {}).get('speed_m_s'))} | "
-                     f"{_f(r.get('stance_speed_source_m_s'))} | {_f(r.get('root_to_stance_speed_ratio'))} |")
+                     f"{_f(r.get('stance_speed_source_m_s'))} | {_f(r.get('root_to_stance_speed_ratio'))} | "
+                     f"{_cm((r.get('legs') or {}).get('rm', {}).get('sole_median_m'))} | "
+                     f"{_f((r.get('legs') or {}).get('rm', {}).get('knee_median_deg'), 1)} |")
     return "\n".join(lines) + "\n"
 
 

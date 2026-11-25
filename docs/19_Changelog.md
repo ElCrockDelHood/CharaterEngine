@@ -2,6 +2,15 @@
 
 All notable changes to Character Engine. Dates are ISO 8601.
 
+## [Unreleased] — 2026-11-25 · Decision 89: quality tolerances, first batch in force
+
+### Added
+- `docs/architecture/QUALITY_TOLERANCES.md`, `domain/quality/tolerances.py`, `scripts/quality_report.py`: profile (game /
+  cinema) and level (Q0–Q2) axes; AN-1, AN-3, MO-2, MO-3, RG-1, RG-6, PF-1, PF-4 judged (ESTIMATE). Today: AN-3, MO-2 and MO-3
+  fail (strict xfails with their values); the rest pass.
+- `domain/animation/leg_quality.py`: stance sole height and knee direction against the mocap source; the batch retarget
+  samples the source hips and knees for it.
+
 ## [Unreleased] — 2026-11-05 · Decision 78: jaw pivot at the temporomandibular joint (A32)
 
 ### Changed

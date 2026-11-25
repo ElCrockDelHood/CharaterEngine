@@ -11,7 +11,7 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 - Herramientas en `C:\DEV\Tools`: Blender 3.6.23 (referencia), Godot 4.7.2 (tests), UPBGE 0.50 (opcional).
 - Tests: `.venv\Scripts\python.exe scripts\test.py`, `scripts\lint.py`, `scripts\engine_tests.py blender godot`
   (logs en `logs/`). Último estado (2026-11-05): pytest todo verde, lint OK, Blender y Godot en verde (Godot 60/60).
-- Decisiones: `docs/reorientation/DECISION_LOG.md` (última: **78**; siguiente libre: **79**).
+- Decisiones: `docs/reorientation/DECISION_LOG.md` (última: **89**; siguiente libre: **90**).
   Índice de auditorías: `docs/audit/INDEX.md`.
 - Referencias externas (fuera del repo, nunca se commitean): `assets/anatomy/README.md`.
 

@@ -34,7 +34,8 @@ if str(SRC) not in sys.path:
 
 ARMATURE = "CE_Retarget"
 # Source joints sampled (Unreal-mannequin naming of the Quaternius rigs): root carries the root motion.
-SOURCE_JOINTS = ("root", "pelvis", "foot_l", "ball_l", "foot_r", "ball_r")
+SOURCE_JOINTS = ("root", "pelvis", "foot_l", "ball_l", "foot_r", "ball_r",
+                 "thigh_l", "calf_l", "thigh_r", "calf_r")   # hip and knee: knee direction (MO-2/MO-3, Decision 89)
 # Canonical bones sampled at head and tail: feet for contact / sliding / penetration, the rest for the loop seam.
 TARGET_BONES = ("SACRUM", "THORACIC_8", "CERVICAL_1", "HUMERUS_L", "HUMERUS_R", "RADIUS_L", "RADIUS_R",
                 "CAPITATE_L", "CAPITATE_R", "FEMUR_L", "FEMUR_R", "TIBIA_L", "TIBIA_R", "TALUS_L", "TALUS_R",

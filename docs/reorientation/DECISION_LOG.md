@@ -1605,14 +1605,37 @@ Review item 4 (Sword_Idle holds the sabre backwards) is the Quaternius clip; it 
 
 ---
 
+## 89. QUALITY TOLERANCES: AXES AND FIRST BATCH IN FORCE
+
+**Decision** (owner, 2026-11-25, "me gusta la idea, sigamos adelante con lo del primer lte vigente"; earlier: Character
+Engine serves film and games in general, not one title): quality thresholds use two axes, the **profile** (game / cinema)
+and the **quality level** Q0 / Q1 / Q2 ("Q", not "L", to avoid the engagement layers of Decision 44); canonical anatomy has one
+bar for all. First batch in force, all ESTIMATE: AN-1 anchor RMS ≤ 4 mm per bone (the 2 mm target is not in force); AN-3
+mirror mean ≤ 2.5 mm and p95 ≤ 6 mm per pair; MO-2 stance sole height ≤ 1 cm game / ≤ 0.3 cm cinema, jumps and swimming excluded;
+MO-3 knee direction median ≤ 5°, p90 ≤ 10° game / 3° and 6° cinema; RG-1 game rig against canonical in rest ≤ 0.1 mm; RG-6 ≤ 20
+ARKit shapes in game, 52 in cinema; PF-1 Q0 (GT 740M), 2-character arena, mean ≤ 16.7 ms and p95 ≤ 20 ms; PF-4 Workbench 1920×1080
+≤ 30 s. Every other row is a target. Table and definitions: `docs/architecture/QUALITY_TOLERANCES.md`; judges:
+`domain/quality/tolerances.py`; MO-2 / MO-3 metrics: `domain/animation/leg_quality.py`, sampled by the batch retarget (4 source
+leg joints added; the retarget itself is unchanged); report: `scripts/quality_report.py`; tests: `tests/unit/test_quality_tolerances.py`.
+Known failures are strict xfails with their measured value; hardware- or asset-dependent checks skip with the reason. No
+limit relaxed, no canonical data changed.
+
+**Measured 2026-11-25:** PASS AN-1 (worst 3.99 mm), RG-1 (0.0553 mm), RG-6 contract (20 / 52), PF-1 (11.08 / 13.71 ms), PF-4 (3.46
+s). FAIL AN-3 (INFERIOR_NASAL_CONCHA p95 8.15 mm), MO-2 (7 / 79 clips game, 12 / 79 cinema), MO-3 (33 / 86 game, 61 / 86 cinema;
+A_TPose 8.7°, so part of it is the rest-pose knee). Not measurable: RG-6 on a head mesh (none exists).
+
+**Date**: 2026-11-25 · **Status**: FINAL (values ESTIMATE; MO-3 definition open for review)
+
+---
+
 ## 14. SUMMARY
 
 ### 14.1 Decision Summary
 
-**Total Decisions**: 85 (numbered to 87; 86 is unused and Decision 82 is on branch `physics/cut-blade-dynamics`)
+**Total Decisions**: 87 (numbered to 89; 86 is unused and Decision 82 is on branch `physics/cut-blade-dynamics`)
 **Measured, tolerances pending**: 3 (Decision 63, F2 femur fit; Decision 64, long bones; Decision 66, regions)
 **Proposed Decisions**: 1 (Decision 61, asset manifest contract pending owner approval)
-**Final Decisions**: 76 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
+**Final Decisions**: 78 (+4 deferred; Decision 62 superseded by Decision 76; Decision 65 final topology, offset PLACEHOLDER; Decision 67 value ESTIMATE; Decision 68 values ESTIMATE; Decision 69 proxies)
 **Open Decisions**: 0 (Decision 17 closed by Decision 33 on 2026-10-24)
 **Deferred Decisions**: 4 (Decisions 29–32, numeric policies NP-003…NP-006)
 **Reversible Decisions**: 8 (base stature value; tissue/wound estimate values; material values; blunt crush and garment values; effective-mass values; head-kinematics / stagger values; per-move striker values; fracture fragment values)
