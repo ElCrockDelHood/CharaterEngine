@@ -155,7 +155,9 @@ def test_an1_long_bone_fit_passes():
 
 
 @pytest.mark.xfail(strict=True, reason="AN-3 fails today on one pair: INFERIOR_NASAL_CONCHA p95 8.15 mm > 6 mm "
-                                       "(mean 2.43 mm); Decision 89. The limit is not relaxed.")
+                                       "(mean 2.43 mm). Cause: real asymmetry of the single BodyParts3D subject (3.8 mm "
+                                       "position offset, 20.0 vs 15.4 mm tall), not mapping nor canonical data "
+                                       "(QUALITY_TOLERANCES.md, AN-3 diagnosis). The limit is not relaxed.")
 def test_an3_mirror_symmetry_passes():
     v = tq.judge_an3(qr.an3_pairs(_json(A22)))
     assert v.status == tq.PASS, v.measured["over"]

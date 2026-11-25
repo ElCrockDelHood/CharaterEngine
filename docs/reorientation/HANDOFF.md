@@ -54,7 +54,7 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 **Anatomía** (cada cambio de datos canónicos necesita el OK del dueño y una Decisión)
 
 6. ~~Pivote de la mandíbula en la ATM~~: hecho (A32, Decisión 78). Queda el deslizamiento del cóndilo, para el trabajo de cara.
-7. Altura del hombro y base del cuello (ANSUR cervicale queda 35–45 mm arriba).
+7. Altura del hombro y base del cuello: diagnosticado, NO mover todavía (`docs/architecture/NECK_BASE_SHOULDER_HEIGHT_PROPOSAL.md`): diferencia ósea o de postura del sujeto BP3D, no de piel; hace falta una fuente poblacional de la columna cervical de pie y la lectura del dueño de Drillis 0,818 H.
 8. Costillas con fuente poblacional; curvas de la columna con una referencia Cobb que permita uso comercial.
 9. Mallas reales para reemplazar los proxies de `assets/anatomy/proxies/` (A25).
 
