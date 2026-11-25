@@ -79,6 +79,28 @@ repository already measured and production judgement, not from a published norm 
   Only jumps fail. No limit was changed.
 - **PF-1:** the arena frame time grew from 2.9 to 11.1 ms since October. It still passes, with a smaller margin.
 
+## AN-3 diagnosis: INFERIOR_NASAL_CONCHA (2026-11-25)
+
+AN-3 compares the left BodyParts3D mesh mirrored about x = 0 with the right mesh, in the raw BodyParts3D frame. The canonical
+skeleton is not part of the measurement. The failing pair, measured again in pure Python on the OBJ files:
+
+| Check | mean / p95 / max (mm) | Reading |
+|-------|-----------------------|---------|
+| A22 rule (mirror about x = 0) | 2.43 / **8.15** / 9.85 | reproduced exactly |
+| Mirror about the subject's midline (vomer, sphenoid, ethmoid: x = −0.7 mm) | 2.12 / **7.12** / 8.78 | still fails |
+| Centroids aligned (shape only) | 1.91 / 5.96 / 7.61 | the shape alone is just under 6 mm |
+
+- **Position:** the right concha sits 3.84 mm forward or back of the left one; sideways 0.05 mm, vertically 0.21 mm.
+- **Shape:** the right one is 20.0 mm tall against 15.4 mm; volumes 1018 against 930 mm³; vertices 482 (left) and 572 (right) after
+  the 99 % reduction.
+- **Mapping:** correct (FJ3263 "Left inferior nasal concha", FMA54738; FJ3369 "Right", FMA54737).
+
+**Cause:** a real asymmetry of the single BodyParts3D subject, in both position and shape (nasal conchae often differ between
+sides). It is not a mapping error and not a canonical defect. Small, thin bones also feel the mesh reduction most.
+
+**Recommendation:** keep the p95 limit. Keep the pair in AN-3 as a strict xfail, now with its cause. Do not exclude it: an
+exclusion would hide the pair if another reference mesh fixed it or made it worse. Nothing to correct in the canonical data.
+
 ## Targets (not in force)
 
 | ID | Name | Threshold (game / cinema) | In force when |
