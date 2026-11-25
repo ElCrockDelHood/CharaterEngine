@@ -102,6 +102,50 @@ over tori in seoi-nage and o-goshi, 17.5 m/s; tori's reaping foot in o-uchi-gari
 de-ashi-barai 14.5 m/s. The fastest kick measured is 14.3 m/s (Vagner 2023, A17): these are at or a little above it,
 plausible for a body turning over another, but not measured.
 
+## 2c. The bodies do not go into each other (clearance)
+
+Owner, 2026-11-24: "que las manifestaciones no se atraviesen es muy importante". Measured on the block-body capsules
+(`domain/animation/body_clearance.py`; fingers and small metacarpals left out): before this, the key poses went up to
+19 cm into each other (o-goshi at kake) and the crossed forearms of the grip about 4 cm.
+
+What changed in `judo_clips.py`:
+
+* **Grips on the surface.** A grip point is pushed out of the target capsule by the target radius plus the gripping
+  end's radius (`_target_point`), so a hand rests on the sleeve instead of inside it. A gripping hand and forearm (or a
+  hooking shin) may press 1 cm into the other body (`GI_THICKNESS_M`, ASSUMED: the gi).
+* **Clearance search** (`clear_key`): while anything goes in deeper than 3 mm, try moves on the deepest overlaps and
+  keep the one that lowers the cost most -- move uke as one body (along the summed push, or along one pair), turn an
+  elbow or knee about its grip line (the grip stays), tilt a free limb, a hand, a foot or the head, and after kake let go
+  of a hold that is already slipping. When no single move helps, two in a row are tried. Cost: 10 × overlap + grip
+  slip + 4 × under the mat + 3 × frame-to-frame jump beyond 9 m/s + 4 × uke moved more than 6 cm from its authored
+  place. All weights and thresholds ASSUMED; accepted result: under 5 mm (`CLEAR_M`), a touch between proxies.
+* **In-betweens**: each frame starts from the fixes of the frame before, faded out by the next key, and is cleared with
+  the jump and the next key in the cost, so a fix does not snap.
+* **Authored changes** where the search alone could not: hips 31 cm apart in hip throws (the pelvis capsules touch);
+  o-goshi's waist arm slides in at tsukuri and grips at kake, on the near side of uke's back; hikite pulls the sleeve to
+  the front in hip throws; uke's drawn arm goes over tori's right shoulder; two breakdown keys in hip throws (uke lifted
+  onto the hips, then over high); the de-ashi-barai sole on the outside of the ankle; the o-uchi-gari reap follows uke
+  down; the hip throws' waist hold stays on until the landing.
+
+Result over every frame (`python scripts/bake_judo_clips.py` prints it):
+
+| Throw | Frames | Over 5 mm | Worst | Fastest point |
+|---|---|---|---|---|
+| Seoi-nage | 81 | 5 | 4.7 cm | 41.5 m/s |
+| O-goshi | 81 | 4 | 3.9 cm | 31.5 m/s |
+| O-soto-gari | 71 | 0 | 0.3 cm | 14.9 m/s |
+| O-uchi-gari | 71 | 1 | 0.8 cm | 27.2 m/s |
+| De-ashi-barai | 62 | 0 | 0.3 cm | 14.8 m/s |
+
+Every key pose of the five throws is under 5 mm (test). **Open:** in seoi-nage and o-goshi uke still goes 4–5 cm into
+tori in 4–5 frames while being loaded over the back, and in those throws and o-uchi-gari a hand or foot moves 27–42 m/s
+for a frame where the search turns a limb fast. A search on top of interpolated keys has reached its limit there; the
+next step is a solver that moves both bodies together frame by frame under the constraints (contact, grip, no jump), or
+more authored breakdown keys for the loading.
+
+The bake keeps the Blender ↔ Python parity (0.03 mm). The search makes the solve slow on the owner's laptop: about
+2–3 minutes per throw, cached per process; the judo tests take about 4 minutes.
+
 ## 3. References for the poses, and their limit
 
 Read: the technique descriptions of the five throws in Wikipedia (kuzushi, tsukuri and kake of o-goshi; the stepping and

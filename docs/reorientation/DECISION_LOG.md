@@ -1569,6 +1569,13 @@ same point re-solved by IK) and baked in Blender 3.6 by `scripts/bake_judo_clips
 `ce-judo-frames/1`. Blender matches the Python solve within 0.02 mm on every frame. Throws retimed to 1.0–1.3 s (ASSUMED) so no point
 moves faster than 18 m/s. Rest pose is anatomical, not the T-pose of the Souls clips; not played in Godot yet.
 
+**Amendment 2** (2026-11-25, owner "que las manifestaciones no se atraviesen es muy importante"): the two bodies are kept from
+going into each other on the block-body capsules (`domain/animation/body_clearance.py`): grips rest on the surface (1 cm of gi
+allowed, ASSUMED) and a clearance search (`judo_clips.clear_key`) moves uke, turns elbows / knees about their grip, tilts free limbs,
+hands, feet and head, and after kake may let go of a slipping hold; all weights ASSUMED, accepted under 5 mm. Every key pose is under
+5 mm; every frame of o-soto-gari and de-ashi-barai too, o-uchi-gari one frame at 8 mm. Open: seoi-nage and o-goshi still overlap
+4–5 cm in 4–5 loading frames, and some frames move a hand or foot at 27–42 m/s. Hip throws gain two breakdown keys. Audit A36 §2c.
+
 **Date**: 2026-11-16 · **Status**: FINAL (opt-in; poses PLACEHOLDER, values reversible)
 
 ---

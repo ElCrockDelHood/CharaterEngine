@@ -32,6 +32,31 @@ bloqueados (patinan unos centímetros entre poses) y el tiempo es simétrico. Ca
 punto más rápido son los pies de uke al girar sobre tori en seoi-nage y o-goshi, 17,5 m/s; la patada más rápida medida
 es 14,3 m/s (Vagner 2023).
 
+## Que los cuerpos no se atraviesen
+
+Pedido del dueño (2026-11-24). Medido sobre las cápsulas del cuerpo de bloques: antes, las poses clave se atravesaban
+hasta 19 cm (o-goshi en el kake). Ahora:
+
+* **Agarres en la superficie**: la mano se apoya sobre la manga o la solapa, no adentro (1 cm de gi permitido, ASSUMED).
+* **Búsqueda de separación**: mientras algo entre más de 3 mm, prueba mover a uke entero, girar codo o rodilla sin
+  soltar el agarre, inclinar un miembro libre, una mano, un pie o la cabeza, y después del kake soltar un agarre que ya
+  patina. Se queda con lo que más baja el costo (atravesar pesa más que patinar; también cuentan los saltos entre
+  cuadros y alejar a uke de donde va). Resultado aceptado: menos de 5 mm.
+* **Cambios de autoría** donde la búsqueda sola no alcanzaba: caderas a 31 cm en las técnicas de cadera, brazo de
+  cintura de o-goshi que entra en el tsukuri, poses intermedias de carga, barrido por afuera del tobillo.
+
+| Técnica | Cuadros | Sobre 5 mm | Peor | Punto más rápido |
+|---|---|---|---|---|
+| Seoi-nage | 81 | 5 | 4,7 cm | 41,5 m/s |
+| O-goshi | 81 | 4 | 3,9 cm | 31,5 m/s |
+| O-soto-gari | 71 | 0 | 0,3 cm | 14,9 m/s |
+| O-uchi-gari | 71 | 1 | 0,8 cm | 27,2 m/s |
+| De-ashi-barai | 62 | 0 | 0,3 cm | 14,8 m/s |
+
+**Pendiente:** en seoi-nage y o-goshi uke todavía entra 4–5 cm en tori en 4–5 cuadros de la carga, y hay cuadros con
+una mano o un pie a 27–42 m/s. El paso siguiente es un resolvedor que mueva los dos cuerpos juntos cuadro a cuadro con
+las restricciones, o más poses intermedias de autor en la carga.
+
 ## Referencias y su límite
 
 Se leyeron las descripciones de las cinco técnicas en Wikipedia, cada una con una sola ilustración. Se encontraron, sin

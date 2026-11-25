@@ -34,6 +34,25 @@ from character_engine.export.gltf_game import game_skeleton_points  # noqa: E402
 PROBES = ("pelvis", "head", "hand_l", "hand_r", "foot_l", "foot_r")
 
 
+def clearance_line(points, clip) -> str:
+    """How far the bodies still go into each other, and the fastest point, over every frame of a throw."""
+    import math
+
+    from character_engine.domain.animation.judo_clips import CLEAR_M, Key, overlaps, solve_frames
+
+    frames = solve_frames(points, clip)
+    depths = []
+    for s in frames:
+        k = max((k for k in clip.keys if k.frame <= s.frame), key=lambda k: k.frame)
+        found = overlaps(Key(s.frame, s.phase, k.tori, k.uke), s)
+        depths.append(found[0][2].depth_m if found else 0.0)
+    fast = max(math.dist(getattr(a, w)[b][1], getattr(c, w)[b][1]) * FPS for a, c in zip(frames, frames[1:])
+               for w in ("tori", "uke") for b in ("head", "hand_l", "hand_r", "foot_l", "foot_r"))
+    over = sum(d > CLEAR_M for d in depths)
+    return (f"overlap over {CLEAR_M * 1000:.0f} mm in {over} frames, worst {max(depths) * 100:.1f} cm; "
+            f"fastest point {fast:.1f} m/s")
+
+
 def frames_json(only: str = "") -> dict:
     points = game_skeleton_points(pose="anatomical")
     clips = {}
@@ -54,7 +73,7 @@ def frames_json(only: str = "") -> dict:
                             "probes": probes}
             rows.append(row)
         clips[throw_id] = {"frames": rows, "key_frames": [k.frame for k in clip.keys]}
-        print(f"solved {throw_id}: {len(rows)} frames", flush=True)
+        print(f"solved {throw_id}: {len(rows)} frames; {clearance_line(points, clip)}", flush=True)
     return {"schema": "ce-judo-frames/1", "fps": FPS, "provenance": PROVENANCE.value, "rest_pose": "anatomical",
             "clips": clips}
 

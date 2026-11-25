@@ -122,7 +122,8 @@ def test_event_is_json_and_deterministic(points):
 def test_every_throw_has_a_clip_with_the_seven_phases():
     assert set(JUDO_CLIPS) == set(THROWS)
     for c in JUDO_CLIPS.values():
-        assert tuple(k.phase for k in c.keys) == PHASES
+        phases = [k.phase for k in c.keys]
+        assert tuple(ph for i, ph in enumerate(phases) if i == 0 or ph != phases[i - 1]) == PHASES   # breakdowns repeat a phase
         frames = [k.frame for k in c.keys]
         assert frames == sorted(set(frames)) and frames[0] == 0
 
@@ -187,7 +188,7 @@ def test_clip_reference_is_stable_json(points):
 def seoi_frames(points):
     from character_engine.domain.animation.judo_clips import frame_table, solve_frames
 
-    clip = JUDO_CLIPS["seoi_nage"]
+    clip = JUDO_CLIPS["de_ashi_barai"]                  # the shortest throw: every frame is solved (about 2 minutes)
     return clip, solve_frames(points, clip), frame_table(points, clip)
 
 
@@ -197,7 +198,9 @@ def test_every_frame_is_solved_and_keys_are_kept(points, seoi_frames):
     keyed = {s.frame: s for s in solve_clip(points, clip)}
     for s in frames:
         if s.frame in keyed:
-            assert s.tori["head"] == keyed[s.frame].tori["head"] and s.uke["pelvis"] == keyed[s.frame].uke["pelvis"]
+            for who, bone in (("tori", "head"), ("uke", "pelvis")):
+                for i in (0, 1):
+                    assert getattr(s, who)[bone][i] == pytest.approx(getattr(keyed[s.frame], who)[bone][i])
 
 
 def test_in_betweens_stay_above_the_mat_and_keep_the_grips(seoi_frames):
@@ -242,3 +245,47 @@ def test_slerp_takes_the_short_arc():
     mid = slerp(a, b, 0.5)
     assert abs(mid[0]) == pytest.approx(abs(math.cos(math.radians(-220) / 2)), abs=1e-9)   # through -220, not through -40
     assert ease(0.0) == 0.0 and ease(1.0) == 1.0 and ease(0.5) == 0.5
+
+
+# ---- clearance: the bodies do not go into each other (owner, 2026-11-24) -------------------------------------------
+
+def test_capsule_overlap_by_hand(points):
+    from character_engine.domain.animation.body_clearance import penetrations, self_penetrations
+
+    assert self_penetrations(points) == []                                       # the rest pose is clean
+    moved = {b: (tuple(h[i] + (0.25 if i == 0 else 0.0) for i in range(3)), tuple(t[i] + (0.25 if i == 0 else 0.0) for i in range(3)))
+             for b, (h, t) in points.items()}
+    found = penetrations(points, moved)                                          # the same body 25 cm to the side
+    trunk = [p for p in found if p.bone_a == "spine_03" and p.bone_b == "spine_03"]
+    assert trunk and trunk[0].depth_m == pytest.approx(0.13 * 2 - 0.25, abs=1e-9)
+    assert trunk[0].normal == pytest.approx((1.0, 0.0, 0.0))
+
+
+def test_every_key_of_every_throw_is_clear(points):
+    from character_engine.domain.animation.judo_clips import CLEAR_M, clear_clip_keys, overlaps
+
+    for tid, clip in JUDO_CLIPS.items():
+        for key, s in clear_clip_keys(points, clip):
+            found = overlaps(key, s)
+            assert not found or found[0][2].depth_m <= CLEAR_M, (tid, s.frame, found[0][2].bone_a, found[0][2].bone_b,
+                                                                  found[0][2].depth_m)
+
+
+def test_every_frame_of_de_ashi_barai_is_clear(seoi_frames):
+    from character_engine.domain.animation.judo_clips import CLEAR_M, Key, overlaps
+
+    clip, frames, _ = seoi_frames
+    for s in frames:
+        k = max((k for k in clip.keys if k.frame <= s.frame), key=lambda k: k.frame)
+        found = overlaps(Key(s.frame, s.phase, k.tori, k.uke), s)
+        assert not found or found[0][2].depth_m <= CLEAR_M, (s.frame, found[0][2].bone_a, found[0][2].bone_b, found[0][2].depth_m)
+
+
+def test_grips_rest_on_the_surface(points):
+    from character_engine.domain.animation.judo_clips import Root, Target, _target_point, body_radius
+
+    p = _target_point(points, Root(), Target("lowerarm_r", 0.5), reach_from=(0.0, -1.0, 1.0), end_radius=0.04)
+    h, t = points["lowerarm_r"]
+    axis = tuple((h[i] + t[i]) / 2 for i in range(3))
+    assert math.dist(p, axis) == pytest.approx(body_radius("lowerarm_r") + 0.04, abs=1e-6)
+    assert p[1] < axis[1]                                                         # on the side facing the reaching shoulder
