@@ -10,6 +10,9 @@ All notable changes to Character Engine. Dates are ISO 8601.
   fail (strict xfails with their values); the rest pass.
 - `domain/animation/leg_quality.py`: stance sole height and knee direction against the mocap source; the batch retarget
   samples the source hips and knees for it.
+- Decision 89 amendment 1: MO-3 measured relative to the rest pose (thigh twist sampled as `thigh_*.x` / `FEMUR_*.x`); it
+  reads worse (game 11 / 84 pass, cinema 2 / 84) because the canonical rest offset is a straight-leg artefact; a hinge-axis
+  definition is proposed, not applied.
 
 ## [Unreleased] — 2026-11-05 · Decision 78: jaw pivot at the temporomandibular joint (A32)
 

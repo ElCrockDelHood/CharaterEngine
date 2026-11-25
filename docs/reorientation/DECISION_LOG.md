@@ -1626,6 +1626,20 @@ A_TPose 8.7°, so part of it is the rest-pose knee). Not measurable: RG-6 on a h
 
 **Date**: 2026-11-25 · **Status**: FINAL (values ESTIMATE; MO-3 definition open for review)
 
+**Amendment 1** (owner, 2026-11-25 16:14, card: MO-3 relative to the rest pose; a definition change, not a limit change):
+MO-3 now compares how far each knee has moved away from its hip-ankle line *since rest*. The rest offset is carried by the
+thigh's full rotation (head->tail axis plus a sampled local X axis, new points `thigh_*.x` and `FEMUR_*.x` in the batch
+retarget) and subtracted. Same 86 clips, plain → relative: game 53 / 86 → **11 / 84** pass, cinema 25 / 86 → **2 / 84** pass
+(A_TPose and the second copy now carry no knee direction). Worst: NinjaJump_Idle_Loop median 25.2°, Crouch_Idle 10.6°; p90
+Sprint_Loop 157.6°, Roll 150.1°. Idle 2.8° → 6.4°, Walk 3.9° → 7.3°.
+
+**Finding, for review:** the result is worse because the canonical rest offset (13.5 mm sideways, a straight-leg artefact of the
+`FEMUR` tail / `TIBIA` head layout) does not stay with the thigh when the knee bends: subtracting it adds about 11 mm sideways in
+Idle. On almost straight source legs the subtraction creates a 14 mm offset where there was 1 mm, so those frames pass the 1 cm
+gate and read about 157°. Limits unchanged; the MO-3 xfails carry the new values. A definition that drops the rest offset
+without these artefacts (the knee hinge axis from thigh and shin, judged only past a minimum bend) is proposed to the owner
+and not applied.
+
 ---
 
 ## 14. SUMMARY

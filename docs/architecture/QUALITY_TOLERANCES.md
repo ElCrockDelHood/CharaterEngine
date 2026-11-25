@@ -37,10 +37,11 @@ repository already measured and production judgement, not from a published norm 
   is within 3 cm of its rest height. On those frames the sole height *h* is the lowest target foot point (heel, ball,
   toe tip) minus its rest height. The clip value is the median *h* over the stance frames of both feet; the p95 of
   \|h\| is reported beside it. Excluded: jumps (for now: pointed toes in the air, Decision 85) and swimming (no ground).
-- **MO-3:** the direction the knee points away from the hip-ankle line, in the source and in the target, and the angle
-  between them, per leg and frame. Frames with an almost straight source leg (knee within 1 cm of that line, the leg
-  grounding's limit) carry no direction and are skipped. The target knee is the middle of the `FEMUR` tail – `TIBIA`
-  head gap.
+- **MO-3 (relative to rest, amendment 1, owner 2026-11-25):** per leg and frame, the knee's offset from the hip-ankle
+  line minus its rest offset, carried by the thigh's full rotation from rest (head→tail axis plus the sampled local X axis,
+  `thigh_*.x` / `FEMUR_*.x`), in the source and in the target, and the angle between the two. Frames where the source knee
+  has moved less than 1 cm (the leg grounding's limit) carry no direction and are skipped. The target knee is the middle
+  of the `FEMUR` tail – `TIBIA` head gap. Before the amendment the plain offsets were compared.
 - **MO-2 and MO-3** count one value per clip, from the root-motion variant when the library has one; the two variants gave
   identical values in the 2026-11-25 run.
 - **RG-6:** the contract counts are judged now. The count on a head mesh is not measured, because no head mesh with ARKit
@@ -55,8 +56,8 @@ repository already measured and production judgement, not from a published norm 
 | AN-3 | all | **FAIL** | 82 of 83 pairs pass; INFERIOR_NASAL_CONCHA mean 2.43 mm, **p95 8.15 mm** |
 | MO-2 | game | **FAIL** | 7 of 79 clips over 1 cm, worst Sword_Heavy_Combo +1.79 cm (ClimbUp +1.61, LayToIdle −1.76, Slide ×3, Hit_Knockback) |
 | MO-2 | cinema | **FAIL** | 12 of 79 clips over 0.3 cm (adds Crouch_Idle −0.70, Jog −0.46, Sprint −0.31, Death01, Zombie_Walk) |
-| MO-3 | game | **FAIL** | 33 of 86 clips; e.g. Crouch_Idle 10.4° / 14.2°, A_TPose 8.7° / 8.7°, Jump_Land p90 78° |
-| MO-3 | cinema | **FAIL** | 61 of 86 clips |
+| MO-3 | game | **FAIL** | relative to rest: 73 of 84 clips fail, 11 pass; worst median NinjaJump_Idle 25.2°, Crouch_Idle 10.6°; worst p90 Sprint 157.6°, Roll 150.1° |
+| MO-3 | cinema | **FAIL** | relative to rest: 82 of 84 fail, 2 pass |
 | RG-1 | all | **PASS** | 0.0553 mm (IK rest 0.0019 mm) |
 | RG-6 | game / cinema | **PASS (contract)** | 20 / 52 names; the asset part is not measurable yet |
 | PF-1 | game, Q0 | **PASS** | GT 740M: mean 11.08 ms, p95 13.71 ms (2026-10-30: 2.93 / 4.18 ms) |
@@ -64,9 +65,13 @@ repository already measured and production judgement, not from a published norm 
 
 **Reading:**
 
-- **MO-3 has a structural part:** `A_TPose` already gives 8.7° with no motion. In the rest pose, the canonical knee does not point
-  exactly where the source's knee points. Decision 85 reported knees within 1–4° on 7 clips with a method that is not in
-  the repository; this metric is stricter or different, and its definition is open for the owner's review. No limit was changed.
+- **MO-3, plain definition (first run):** 33 of 86 clips failed in game and 61 in cinema; `A_TPose` read 8.7° with no motion,
+  because in rest the canonical knee sits 13.5 mm *sideways* of its line and the source's 15 mm *forward*.
+- **MO-3, relative to rest (amendment 1):** worse, 73 / 84 and 82 / 84 fail (Idle 2.8° → 6.4°, Walk 3.9° → 7.3°). The canonical rest
+  offset is a straight-leg artefact of the bone layout: it does not stay with the thigh when the knee bends, so subtracting it
+  adds about 11 mm sideways in Idle. On almost straight source legs the subtraction creates a 14 mm offset where there was
+  1 mm, which passes the 1 cm gate and reads about 157° (Sprint, Roll). Proposed, not applied: the knee hinge axis
+  (thigh × shin), judged only past a minimum bend, which does not depend on the rest offset. No limit was changed.
 - **PF-1:** the arena frame time grew from 2.9 to 11.1 ms since October. It still passes, with a smaller margin.
 
 ## Targets (not in force)

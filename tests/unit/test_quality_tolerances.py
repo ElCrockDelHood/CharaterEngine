@@ -103,18 +103,21 @@ def test_rg1_pf1_pf4_limits_and_missing_inputs():
 
 # --- leg metrics (MO-2 / MO-3 inputs) -----------------------------------------------------------------------------
 
-def _legs(knee_y_src, knee_y_dst, toe_z):
-    rest_s = {n: (0.0, 0.0, 0.0) for side in "LR" for n in lq.SOURCE_FOOT[side]}
-    rest_t = {n: (0.0, 0.0, 0.0) for side in "LR" for n in lq.TARGET_FOOT[side]}
-    src, dst = {}, {}
+def _legs(knee_y_src, knee_y_dst, toe_z, side_offset=0.0):
+    """One frame and the rest pose of both legs. Rest legs are straight; ``side_offset`` puts the target knee that far
+    to the side of its hip-ankle line in rest *and* in the frame (a fixed rig difference, like the canonical 13.5 mm)."""
+    rest_s, rest_t, src, dst = {}, {}, {}, {}
     for side, x in (("L", 0.1), ("R", -0.1)):
-        s = side.lower()
-        src.update({f"thigh_{s}": (x, 0, 0.9), f"calf_{s}": (x, knee_y_src, 0.45), f"foot_{s}": (x, 0, 0.08),
-                    f"ball_{s}": (x, -0.1, 0.0), f"ball_{s}.tail": (x, -0.15, 0.0)})
-        dst.update({f"FEMUR_{side}": (x, 0, 0.95), f"FEMUR_{side}.tail": (x, knee_y_dst, 0.5),
-                    f"TIBIA_{side}": (x, knee_y_dst, 0.46), f"TALUS_{side}": (x, 0, 0.07),
-                    f"CALCANEUS_{side}": (x, 0.05, toe_z), f"TOE_PHALANX_PROXIMAL_3_{side}": (x, -0.1, toe_z),
-                    f"TOE_PHALANX_PROXIMAL_3_{side}.tail": (x, -0.15, toe_z)})
+        s, o = side.lower(), (side_offset if side == "L" else -side_offset)
+        for pts, ky in ((rest_s, 0.0), (src, knee_y_src)):
+            pts.update({f"thigh_{s}": (x, 0, 0.9), f"thigh_{s}.tail": (x, ky, 0.45), f"thigh_{s}.x": (x + 0.1, 0, 0.9),
+                        f"calf_{s}": (x, ky, 0.45), f"foot_{s}": (x, 0, 0.08),
+                        f"ball_{s}": (x, -0.1, 0.0), f"ball_{s}.tail": (x, -0.15, 0.0)})
+        for pts, ky, tz in ((rest_t, 0.0, 0.0), (dst, knee_y_dst, toe_z)):
+            pts.update({f"FEMUR_{side}": (x, 0, 0.95), f"FEMUR_{side}.tail": (x + o, ky, 0.5),
+                        f"FEMUR_{side}.x": (x + 0.1, 0, 0.95), f"TIBIA_{side}": (x + o, ky, 0.46),
+                        f"TALUS_{side}": (x, 0, 0.07), f"CALCANEUS_{side}": (x, 0.05, tz),
+                        f"TOE_PHALANX_PROXIMAL_3_{side}": (x, -0.1, tz), f"TOE_PHALANX_PROXIMAL_3_{side}.tail": (x, -0.15, tz)})
     return [src], [dst], rest_s, rest_t
 
 
@@ -127,8 +130,16 @@ def test_leg_metrics_on_a_known_pose():
     assert lq.clip_legs(src, dst, rs, rt)["knee_median_deg"] == pytest.approx(180.0)
 
 
+def test_knee_is_measured_relative_to_rest():
+    """A knee that sits 13.5 mm sideways in rest and keeps that offset is not a retarget error (owner, 2026-11-25)."""
+    src, dst, rs, rt = _legs(-0.05, -0.05, 0.0, side_offset=0.0135)
+    plain = lq.knee_errors(src, dst)
+    assert min(plain) > 10.0                                       # the fixed offset alone reads as 15 deg
+    assert lq.clip_legs(src, dst, rs, rt)["knee_median_deg"] == pytest.approx(0.0, abs=1e-6)
+
+
 def test_straight_source_leg_carries_no_knee_direction():
-    src, dst, rs, rt = _legs(-0.005, -0.05, 0.0)                   # 5 mm: under the 1 cm limit
+    src, dst, rs, rt = _legs(-0.005, -0.05, 0.0)                   # 5 mm from rest: under the 1 cm limit
     assert lq.clip_legs(src, dst, rs, rt)["knee_samples"] == 0
 
 
@@ -182,8 +193,8 @@ def test_mo2_sole_height_from_the_retarget_report():
     assert tq.judge_mo2(clips, "game").status == tq.PASS and tq.judge_mo2(clips, "cinema").status == tq.PASS
 
 
-@pytest.mark.xfail(strict=True, reason="MO-3 fails today (batch retarget 2026-11-25, 86 clips): 33 clips in game, 61 in "
-                                       "cinema; even A_TPose gives 8.7 deg (rest-pose knee difference); Decision 89")
+@pytest.mark.xfail(strict=True, reason="MO-3 (relative to rest, amendment 1) fails today (batch retarget 2026-11-25, "
+                                       "84 clips): 73 fail in game, 82 in cinema; worst p90 Sprint_Loop 157.6 deg; Decision 89")
 def test_mo3_knee_direction_from_the_retarget_report():
     clips = _report("retarget")["clips"]
     assert tq.judge_mo3(clips, "game").status == tq.PASS and tq.judge_mo3(clips, "cinema").status == tq.PASS
