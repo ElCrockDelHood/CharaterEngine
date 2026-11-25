@@ -1624,7 +1624,7 @@ limit relaxed, no canonical data changed.
 s). FAIL AN-3 (INFERIOR_NASAL_CONCHA p95 8.15 mm), MO-2 (7 / 79 clips game, 12 / 79 cinema), MO-3 (33 / 86 game, 61 / 86 cinema;
 A_TPose 8.7°, so part of it is the rest-pose knee). Not measurable: RG-6 on a head mesh (none exists).
 
-**Date**: 2026-11-25 · **Status**: FINAL (values ESTIMATE; MO-3 definition open for review)
+**Date**: 2026-11-25 · **Status**: FINAL (values ESTIMATE; MO-3 definition by amendment 2)
 
 **Amendment 1** (owner, 2026-11-25 16:14, card: MO-3 relative to the rest pose; a definition change, not a limit change):
 MO-3 now compares how far each knee has moved away from its hip-ankle line *since rest*. The rest offset is carried by the
@@ -1639,6 +1639,17 @@ Idle. On almost straight source legs the subtraction creates a 14 mm offset wher
 gate and read about 157°. Limits unchanged; the MO-3 xfails carry the new values. A definition that drops the rest offset
 without these artefacts (the knee hinge axis from thigh and shin, judged only past a minimum bend) is proposed to the owner
 and not applied.
+
+**Amendment 2** (owner, 2026-11-25 17:04, card: MO-3 with the knee hinge axis; supersedes amendment 1; limits unchanged): MO-3
+compares the knee's hinge axis, the normal of the thigh-shin plane `(knee - hip) x (ankle - knee)`, in the source and in the
+target, judged only on frames where the source knee is bent at least **15 deg**; a target leg that stays straight against a bent
+source counts as 90 deg. No rest pose is involved, so the rest-offset artefact of amendment 1 is gone, and the thigh twist
+sampling added for it was removed again. Minimum bend chosen from the data: rest bends are 3.5 deg (canonical) and 4.2 deg
+(source); the source bend's 10th percentile is 15 deg; pass counts are the same at 10, 15 and 20 deg (80 / 84 in game and
+cinema; 5 %, 10 % and 18 % of 8536 leg frames left out); at 25 deg 10 clips lose every frame. With 15 deg, 857 frames (10 %)
+are left out. Results, plain → amendment 1 → amendment 2 (clips passing): game 53 / 86 → 11 / 84 → **80 / 84**, cinema 25 / 86 →
+2 / 84 → **80 / 84**; Idle 2.8 → 6.4 → 2.1 deg median, Walk 3.9 → 7.3 → 2.1. Still failing, all jumps: Jump_Land p90 78.0, NinjaJump_Land
+p90 49.7, NinjaJump_Idle_Loop median 6.8, NinjaJump_Start median 6.7; the MO-3 xfail carries them. A_TPose has no bent frame.
 
 ---
 

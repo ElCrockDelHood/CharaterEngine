@@ -122,25 +122,29 @@ def _legs(knee_y_src, knee_y_dst, toe_z, side_offset=0.0):
 
 
 def test_leg_metrics_on_a_known_pose():
-    src, dst, rs, rt = _legs(-0.05, -0.05, -0.006)
+    src, dst, rs, rt = _legs(-0.15, -0.15, -0.006)
     rec = lq.clip_legs(src, dst, rs, rt)
     assert rec["sole_median_m"] == pytest.approx(-0.006) and rec["stance_samples"] == 2
     assert rec["knee_median_deg"] == pytest.approx(0.0, abs=1e-6) and rec["knee_samples"] == 2
-    src, dst, rs, rt = _legs(-0.05, 0.05, 0.0)                     # target knee bends backwards
+    src, dst, rs, rt = _legs(-0.15, 0.15, 0.0)                     # target knee bends backwards
     assert lq.clip_legs(src, dst, rs, rt)["knee_median_deg"] == pytest.approx(180.0)
 
 
-def test_knee_is_measured_relative_to_rest():
-    """A knee that sits 13.5 mm sideways in rest and keeps that offset is not a retarget error (owner, 2026-11-25)."""
-    src, dst, rs, rt = _legs(-0.05, -0.05, 0.0, side_offset=0.0135)
-    plain = lq.knee_errors(src, dst)
-    assert min(plain) > 10.0                                       # the fixed offset alone reads as 15 deg
-    assert lq.clip_legs(src, dst, rs, rt)["knee_median_deg"] == pytest.approx(0.0, abs=1e-6)
+def test_knee_hinge_axis_and_minimum_bend():
+    """Decision 89 amendment 2: the hinge axis (thigh x shin) is judged only past a 15 deg source bend."""
+    assert lq.MIN_FLEXION_DEG == 15.0
+    src, dst, _, _ = _legs(-0.15, 0.0, 0.0)                        # source bent about 37 deg, target leg straight
+    errors, excluded = lq.knee_errors(src, dst)
+    assert errors == [90.0, 90.0] and excluded == 0
+    src, dst, _, _ = _legs(-0.15, -0.15, 0.0)                      # same bend: axes agree
+    errors, _ = lq.knee_errors(src, dst)
+    assert max(errors) == pytest.approx(0.0, abs=1e-6)
 
 
 def test_straight_source_leg_carries_no_knee_direction():
-    src, dst, rs, rt = _legs(-0.005, -0.05, 0.0)                   # 5 mm from rest: under the 1 cm limit
-    assert lq.clip_legs(src, dst, rs, rt)["knee_samples"] == 0
+    src, dst, rs, rt = _legs(-0.05, -0.05, 0.0)                    # about 12.6 deg of bend: under the 15 deg minimum
+    rec = lq.clip_legs(src, dst, rs, rt)
+    assert rec["knee_samples"] == 0 and rec["knee_excluded_frames"] == 2
 
 
 # --- today's measurements -----------------------------------------------------------------------------------------
@@ -193,8 +197,19 @@ def test_mo2_sole_height_from_the_retarget_report():
     assert tq.judge_mo2(clips, "game").status == tq.PASS and tq.judge_mo2(clips, "cinema").status == tq.PASS
 
 
-@pytest.mark.xfail(strict=True, reason="MO-3 (relative to rest, amendment 1) fails today (batch retarget 2026-11-25, "
-                                       "84 clips): 73 fail in game, 82 in cinema; worst p90 Sprint_Loop 157.6 deg; Decision 89")
+JUMPS = {"ual1/Jump_Land", "ual2/NinjaJump_Land", "ual2/NinjaJump_Idle_Loop", "ual2/NinjaJump_Start"}
+
+
+@pytest.mark.xfail(strict=True, reason="MO-3 (hinge axis, amendment 2) fails today on 4 of 84 clips, all jumps, in game "
+                                       "and cinema: Jump_Land p90 78.0 deg, NinjaJump_Land p90 49.7, NinjaJump_Idle_Loop "
+                                       "median 6.8, NinjaJump_Start median 6.7; Decision 89")
 def test_mo3_knee_direction_from_the_retarget_report():
     clips = _report("retarget")["clips"]
     assert tq.judge_mo3(clips, "game").status == tq.PASS and tq.judge_mo3(clips, "cinema").status == tq.PASS
+
+
+def test_mo3_fails_only_on_the_recorded_jumps():
+    """Not an xfail: a knee failure outside the recorded jumps turns this red."""
+    clips = _report("retarget")["clips"]
+    for profile in ("game", "cinema"):
+        assert set(tq.judge_mo3(clips, profile).measured.get("over", {})) <= JUMPS, profile

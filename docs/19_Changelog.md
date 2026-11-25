@@ -13,6 +13,8 @@ All notable changes to Character Engine. Dates are ISO 8601.
 - Decision 89 amendment 1: MO-3 measured relative to the rest pose (thigh twist sampled as `thigh_*.x` / `FEMUR_*.x`); it
   reads worse (game 11 / 84 pass, cinema 2 / 84) because the canonical rest offset is a straight-leg artefact; a hinge-axis
   definition is proposed, not applied.
+- Decision 89 amendment 2: MO-3 judged on the knee hinge axis past a 15° source bend; 80 / 84 clips pass in game and cinema,
+  the 4 failures are jumps. The thigh-twist sampling of amendment 1 is removed.
 
 ## [Unreleased] — 2026-11-05 · Decision 78: jaw pivot at the temporomandibular joint (A32)
 

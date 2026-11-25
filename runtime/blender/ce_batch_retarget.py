@@ -35,7 +35,7 @@ if str(SRC) not in sys.path:
 ARMATURE = "CE_Retarget"
 # Source joints sampled (Unreal-mannequin naming of the Quaternius rigs): root carries the root motion.
 SOURCE_JOINTS = ("root", "pelvis", "foot_l", "ball_l", "foot_r", "ball_r",
-                 "thigh_l", "calf_l", "thigh_r", "calf_r")   # hip and knee: knee direction (MO-2/MO-3, Decision 89)
+                 "thigh_l", "calf_l", "thigh_r", "calf_r")   # hip and knee: knee hinge axis (MO-3, Decision 89)
 # Canonical bones sampled at head and tail: feet for contact / sliding / penetration, the rest for the loop seam.
 TARGET_BONES = ("SACRUM", "THORACIC_8", "CERVICAL_1", "HUMERUS_L", "HUMERUS_R", "RADIUS_L", "RADIUS_R",
                 "CAPITATE_L", "CAPITATE_R", "FEMUR_L", "FEMUR_R", "TIBIA_L", "TIBIA_R", "TALUS_L", "TALUS_R",
@@ -54,16 +54,6 @@ def load_addon():
     return build
 
 
-# Thigh bones whose local X axis is sampled too (point ``<name>.x`` = head + 0.1 m along it): the knee direction
-# relative to rest needs the femur's twist, which head and tail alone do not carry (MO-3, Decision 89 amendment).
-AXIS_BONES = ("thigh_l", "thigh_r", "FEMUR_L", "FEMUR_R")
-
-
-def _axis_point(head, m3) -> list:
-    from mathutils import Vector  # type: ignore
-    return _xyz(head + (m3 @ Vector((1.0, 0.0, 0.0))).normalized() * 0.1)
-
-
 def _xyz(v) -> list:
     return [round(float(v.x), 5), round(float(v.y), 5), round(float(v.z), 5)]
 
@@ -76,8 +66,6 @@ def sample_source(src) -> dict:
         if pb is not None:
             out[n] = _xyz(mw @ pb.head)
             out[n + ".tail"] = _xyz(mw @ pb.tail)
-            if n in AXIS_BONES:
-                out[n + ".x"] = _axis_point(mw @ pb.head, (mw @ pb.matrix).to_3x3())
     return out
 
 
@@ -89,8 +77,6 @@ def sample_target(dst) -> dict:
         if pb is not None:
             out[n] = _xyz(mw @ pb.head)
             out[n + ".tail"] = _xyz(mw @ pb.tail)
-            if n in AXIS_BONES:
-                out[n + ".x"] = _axis_point(mw @ pb.head, (mw @ pb.matrix).to_3x3())
     return out
 
 
@@ -103,8 +89,6 @@ def rest_points(arm, names, with_tail=True) -> dict:
             out[n] = _xyz(mw @ b.head_local)
             if with_tail:
                 out[n + ".tail"] = _xyz(mw @ b.tail_local)
-            if n in AXIS_BONES:
-                out[n + ".x"] = _axis_point(mw @ b.head_local, (mw @ b.matrix_local).to_3x3())
     return out
 
 
