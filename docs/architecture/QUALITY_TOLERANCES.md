@@ -60,11 +60,11 @@ repository already measured and production judgement, not from a published norm 
 | ID | Profile | Result | Measured |
 |----|---------|--------|----------|
 | AN-1 | all | **PASS** | worst RADIUS_R 3.99 mm (12 bone sides), re-fitted on today's canonical skeleton |
-| AN-3 | all | **PASS + 1 exception** | 82 of 83 pairs pass; INFERIOR_NASAL_CONCHA (mean 2.43, p95 8.15 mm) is a documented exception, **pending the owner's approval** (2026-11-26) |
+| AN-3 | all | **PASS + 1 exception** | 82 of 83 pairs pass; INFERIOR_NASAL_CONCHA (mean 2.43, p95 8.15 mm) is a documented exception, **approved by Mariano (2026-11-26)** |
 | MO-2 | game | **PASS** | 2026-11-26, amendment 3: 69 clips judged, 0 over 1 cm, worst Walk_Formal −0.12 cm; 11 not judged (fewer than 10 support frames). Before: 7 of 79 failed |
 | MO-2 | cinema | **PASS** | 0 of 69 over 0.3 cm. Before: 12 of 79 failed |
-| MO-3 | game | **FAIL** | 2026-11-26: 82 of 84 pass; the landings are fixed (Jump_Land p90 78.0 → 2.7°, NinjaJump_Land 49.7 → 3.2°); still failing: NinjaJump_Idle median 6.8°, NinjaJump_Start 6.7° (knees bent about 155° in the air) |
-| MO-3 | cinema | **FAIL** | 82 of 84 pass, the same 2 clips fail |
+| MO-3 | game | **PASS** | 2026-11-26, amendments 3 and 4: 84 of 84 pass, worst Slide_Exit median 2.8° / p90 4.5°. Landings fixed (Jump_Land p90 78.0 → 2.7°); tucked jumps fixed in the retarget (NinjaJump_Idle median 6.85 → 0.20°, NinjaJump_Start 6.73 → 0.20°) |
+| MO-3 | cinema | **PASS** | 84 of 84 pass |
 | RG-1 | all | **PASS** | 0.0553 mm (IK rest 0.0019 mm) |
 | RG-6 | game / cinema | **PASS (contract)** | 20 / 52 names; the asset part is not measurable yet |
 | PF-1 | game, Q0 | **PASS** | GT 740M: mean 11.08 ms, p95 13.71 ms (2026-10-30: 2.93 / 4.18 ms) |
@@ -90,7 +90,7 @@ reference turns that test red. It needs the owner's approval.
 
 | ID | Item | Reference | Evidence | Status |
 |----|------|-----------|----------|--------|
-| AN-3 | INFERIOR_NASAL_CONCHA | BodyParts3D 4.0 | mean 2.43 mm, p95 8.15 mm (real asymmetry of the single subject, below) | **pending owner approval** |
+| AN-3 | INFERIOR_NASAL_CONCHA | BodyParts3D 4.0 | mean 2.43 mm, p95 8.15 mm (real asymmetry of the single subject, below) | **approved by Mariano (2026-11-26)** |
 
 ## AN-3 diagnosis: INFERIOR_NASAL_CONCHA (2026-11-25)
 

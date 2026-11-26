@@ -24,6 +24,7 @@ Only heights change: the horizontal path of root and feet is the retarget's (``f
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from typing import Mapping, Optional, Sequence, Tuple
 
@@ -66,9 +67,57 @@ def plan(src_ankle_z: Mapping[str, float], src_rest_z: Mapping[str, float], dst_
     return GroundPlan(root, tuple((s, adj[s] - root) for s in sorted(adj)), support)
 
 
-def knee_pole(src_hip: Vec3, src_knee: Vec3, src_ankle: Vec3, dst_hip: Vec3) -> Tuple[float, float, float]:
-    """A pole point for the IK: the target hip plus the direction the source knee points away from its hip-ankle
-    line, so the knee turns like the source's (the copied rotations leave it up to 26 deg off on a straight leg)."""
+def _cross(a: Vec3, b: Vec3):
+    return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]
+
+
+def onto_source_leg_plane(src_hip: Vec3, src_knee: Vec3, src_ankle: Vec3, dst_hip: Vec3,
+                          dst_target: Vec3) -> Tuple[float, float, float]:
+    """Our ankle target moved, by the shortest path, onto the source's leg plane through our hip (Decision 89
+    amendment 4). Used only for a foot in the air: nothing on the ground fixes where it goes, so our knee can then bend
+    about the source's hinge axis exactly. The copied shin rotation leaves our ankle up to 6 deg out of that plane,
+    which a deep bend turns into a 7 deg tilt of the knee (UAL NinjaJump_Idle_Loop, NinjaJump_Start). An almost straight
+    source leg has no plane: the target is returned unchanged."""
+    u = [src_knee[i] - src_hip[i] for i in range(3)]
+    v = [src_ankle[i] - src_knee[i] for i in range(3)]
+    axis = _cross(u, v)
+    na = math.hypot(*axis)
+    if na < 1e-9 * max(1.0, math.hypot(*u) * math.hypot(*v)):
+        return tuple(dst_target)
+    axis = [c / na for c in axis]
+    k = sum((dst_target[i] - dst_hip[i]) * axis[i] for i in range(3))
+    return tuple(dst_target[i] - k * axis[i] for i in range(3))
+
+
+def knee_pole(src_hip: Vec3, src_knee: Vec3, src_ankle: Vec3, dst_hip: Vec3,
+              dst_target: Optional[Vec3] = None) -> Tuple[float, float, float]:
+    """A pole point for the IK so the knee turns like the source's (the copied rotations leave it up to 26 deg off on
+    a straight leg).
+
+    With ``dst_target`` (where our ankle is going) the knee bends about the source's *hinge axis*, the normal of its
+    thigh-shin plane, as far as our leg can (Decision 89 amendment 4): the axis is projected onto the plane square to
+    our hip -> target line, and the pole points along ``line x axis``. On a deeply bent knee our hip -> ankle line can
+    turn 25 deg away from the source's, and the plain offset below then tilted our knee plane by about 7 deg (UAL
+    NinjaJump_Idle_Loop, NinjaJump_Start). Without ``dst_target``, or for an almost straight source leg, the pole is the
+    source knee's offset from the middle of its hip-ankle line, moved to our hip."""
     mid = tuple((src_hip[i] + src_ankle[i]) / 2 for i in range(3))
     d = tuple(src_knee[i] - mid[i] for i in range(3))
-    return tuple(dst_hip[i] + d[i] for i in range(3))
+    plain = tuple(dst_hip[i] + d[i] for i in range(3))
+    if dst_target is None:
+        return plain
+    u = [src_knee[i] - src_hip[i] for i in range(3)]
+    v = [src_ankle[i] - src_knee[i] for i in range(3)]
+    axis = _cross(u, v)
+    line = [dst_target[i] - dst_hip[i] for i in range(3)]
+    na, nl = math.hypot(*axis), math.hypot(*line)
+    if na < 1e-9 * max(1.0, math.hypot(*u) * math.hypot(*v)) or nl < 1e-9:
+        return plain
+    axis, line = [c / na for c in axis], [c / nl for c in line]
+    k = sum(axis[i] * line[i] for i in range(3))
+    axis = [axis[i] - k * line[i] for i in range(3)]
+    n = math.hypot(*axis)
+    if n < 1e-6:
+        return plain
+    side = _cross(line, [c / n for c in axis])                  # where the knee points, square to our line
+    size = max(math.hypot(*d), 0.05)
+    return tuple(dst_hip[i] + side[i] * size for i in range(3))

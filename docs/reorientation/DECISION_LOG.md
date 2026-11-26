@@ -1663,7 +1663,7 @@ p90 49.7, NinjaJump_Idle_Loop median 6.8, NinjaJump_Start median 6.7; the MO-3 x
   (2) when both source feet are in contact the body goes as low as the foot that needs it most, so both of ours reach the
   ground. Before, a landing set the body from one foot and the other leg went straight while the source's knee was bent
   21–27°, which read 78° in MO-3 (Jump_Land, NinjaJump_Land). The clip QA statuses of the 86 clips did not change.
-- **AN-3, documented exception pending the owner's approval:** INFERIOR_NASAL_CONCHA on BodyParts3D 4.0 only (real asymmetry of
+- **AN-3, documented exception, approved by Mariano on 2026-11-26 (17:42):** INFERIOR_NASAL_CONCHA on BodyParts3D 4.0 only (real asymmetry of
   the single subject: 3.84 mm offset, 20.0 vs 15.4 mm tall; mapping and canonical data not involved). The verdict lists it; a
   test checks the evidence still matches (2.43 / 8.15 mm) and that it does not carry to another reference. Limit unchanged.
 - **Before → after** (clips failing, game / cinema): AN-3 1 pair → 0 + 1 exception; MO-2 7 / 12 of 79 → **0 / 0 of 69** judged
@@ -1672,6 +1672,18 @@ p90 49.7, NinjaJump_Idle_Loop median 6.8, NinjaJump_Start median 6.7; the MO-3 x
 - **Still failing, decision open:** MO-3 on NinjaJump_Idle_Loop (median 6.8°) and NinjaJump_Start (6.7°): knees bent about 155°
   in the air, where the copied rotations are not grounded; the axes drift about 7° at that bend (2° in ordinary clips). Not a
   source-data defect, so no exception was made: either a knee-axis calibration in the retarget, or an owner decision.
+
+**Amendment 4** (owner, 2026-11-26 17:39, card "Corregir el retarget"; limits unchanged, no exception): the two tucked jumps are
+fixed in the retarget. Cause, measured: with the copied rotations alone (leg grounding off) NinjaJump_Idle_Loop already reads
+7.2°: our copied shin direction leaves the ankle about 6° out of the source's leg plane, and with the knee bent about 155° our
+hip -> ankle line turns 24-26° from the source's, so the knee plane tilts. A better IK pole alone could not fix it (6.85 → 6.66°).
+Fix in leg grounding (Decision 85): the IK pole now keeps the source's hinge axis as far as our leg line allows
+(`knee_pole(..., dst_target)`), and for a foot *in the air* (beyond the contact band) the ankle target goes, by the shortest
+path, onto the source's leg plane through our hip (`onto_source_leg_plane`). Feet in contact are not moved. Knee flexion limits
+and the rig are unchanged. Results on the 86 clips: NinjaJump_Idle_Loop median 6.85 → **0.20°** (p90 7.48 → 0.21), NinjaJump_Start
+6.73 → **0.20°** (7.25 → 0.24); no clip worse by more than 0.5°; Sprint 2.22 → 0.37°, Jog 2.15 → 0.45°, ClimbUp 2.49 → 0.27°; MO-2
+unchanged on every clip; clip QA statuses, checks and loop seams unchanged. **MO-3: 84 / 84 pass in game and cinema** (worst
+Slide_Exit median 2.8°, p90 4.5°). With this, all 8 tolerances in force pass; AN-3 with its approved exception.
 
 ---
 

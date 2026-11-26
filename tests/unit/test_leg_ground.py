@@ -2,7 +2,7 @@
 
 import pytest
 
-from character_engine.domain.animation.leg_ground import ankle_targets, knee_pole, plan
+from character_engine.domain.animation.leg_ground import ankle_targets, knee_pole, onto_source_leg_plane, plan
 
 SRC_REST = {"L": 0.08, "R": 0.08}
 DST_REST = {"L": 0.07, "R": 0.07}
@@ -58,6 +58,55 @@ def test_landing_body_goes_low_enough_for_both_feet_in_contact():
 def test_source_ground_error_beyond_the_band_is_a_lift():
     g = plan({"L": 0.58, "R": 0.60}, SRC_REST, {"L": 0.50, "R": 0.52}, DST_REST, 0.9, {"L": 0.45, "R": 0.47})
     assert g.root_dz == pytest.approx(0.07 + 0.5 * 0.9 - 0.50)     # a jump is unchanged
+
+
+def test_knee_pole_keeps_the_source_hinge_axis_on_another_leg_line():
+    """Decision 89 amendment 4: deeply bent source knee (about 151 deg) and our hip -> target line turned 25 deg.
+    The pole reaches the smallest hinge-axis error our line allows (0 when the line lies in the source's leg plane)
+    and never does worse than the plain offset pole."""
+    import math
+
+    from character_engine.domain.animation.foot_lock import two_bone_ik
+    from character_engine.domain.animation.leg_quality import angle_deg, hinge
+
+    s_hip, s_knee, s_ank = (0.0, 0.0, 1.0), (0.05, -0.38, 0.86), (0.0, 0.0, 0.80)
+    axis = hinge(s_hip, s_knee, s_ank)[1]
+    e1 = (0.0, 0.0, -1.0)                                          # source hip -> ankle
+    off = (0.05, -0.38, 0.0)
+    e2 = tuple(c / math.hypot(*off) for c in off)                  # in the source leg plane, square to e1
+    in_plane = tuple(math.cos(math.radians(25)) * e1[i] + math.sin(math.radians(25)) * e2[i] for i in range(3))
+    off_plane = (0.0, math.sin(math.radians(25)), -math.cos(math.radians(25)))
+    hip, knee0, ankle0 = (0.3, 0.0, 1.0), (0.3, -0.40, 0.85), (0.3, 0.0, 0.79)
+    for line in (in_plane, off_plane):
+        target = tuple(hip[i] + 0.2 * line[i] for i in range(3))
+        floor = math.degrees(math.asin(abs(sum(axis[i] * line[i] for i in range(3)))))
+        errs = []
+        for pole in (knee_pole(s_hip, s_knee, s_ank, hip, target), knee_pole(s_hip, s_knee, s_ank, hip)):
+            ik = two_bone_ik(hip, knee0, ankle0, target, pole)
+            errs.append(angle_deg(axis, hinge(hip, ik.knee, ik.ankle)[1]))
+        assert errs[0] == pytest.approx(floor, abs=0.05) and errs[0] <= errs[1] + 1e-9, (errs, floor)
+    assert floor > 1.0                                             # the off-plane case really has a floor
+
+
+def test_airborne_ankle_goes_onto_the_source_leg_plane():
+    """Decision 89 amendment 4: with the ankle target in the source's leg plane, the IK knee bends about the source's
+    hinge axis (error about 0), whatever the line turned out of the plane before."""
+    import math
+
+    from character_engine.domain.animation.foot_lock import two_bone_ik
+    from character_engine.domain.animation.leg_quality import angle_deg, hinge
+
+    s_hip, s_knee, s_ank = (0.0, 0.0, 1.0), (0.05, -0.38, 0.86), (0.0, 0.0, 0.80)
+    axis = hinge(s_hip, s_knee, s_ank)[1]
+    hip, knee0, ankle0 = (0.3, 0.0, 1.0), (0.3, -0.40, 0.85), (0.3, 0.0, 0.79)
+    target = (0.3, 0.2 * math.sin(math.radians(25)), 1.0 - 0.2 * math.cos(math.radians(25)))   # out of the plane
+    moved = onto_source_leg_plane(s_hip, s_knee, s_ank, hip, target)
+    assert sum((moved[i] - hip[i]) * axis[i] for i in range(3)) == pytest.approx(0.0, abs=1e-12)
+    assert math.dist(moved, target) < 0.02                       # the shortest move: under 2 cm here
+    ik = two_bone_ik(hip, knee0, ankle0, moved, knee_pole(s_hip, s_knee, s_ank, hip, moved))
+    assert angle_deg(axis, hinge(hip, ik.knee, ik.ankle)[1]) == pytest.approx(0.0, abs=0.01)
+    straight = onto_source_leg_plane((0, 0, 1.0), (0, 0, 0.55), (0, 0, 0.1), hip, target)
+    assert straight == pytest.approx(target)                     # no plane: unchanged
 
 
 def test_knee_pole_copies_the_source_knee_direction():

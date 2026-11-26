@@ -215,20 +215,7 @@ def test_mo2_sole_height_from_the_retarget_report():
     assert tq.judge_mo2(clips, "game").status == tq.PASS and tq.judge_mo2(clips, "cinema").status == tq.PASS
 
 
-TUCKED = {"ual2/NinjaJump_Idle_Loop", "ual2/NinjaJump_Start"}   # knee bent about 155 deg in the air
-
-
-@pytest.mark.xfail(strict=True, reason="MO-3 fails today on 2 of 84 clips (batch retarget 2026-11-26), knee bent "
-                                       "about 155 deg in the air where rotations are copied without grounding: "
-                                       "NinjaJump_Idle_Loop median 6.8 / p90 7.5 deg, NinjaJump_Start 6.7 / 7.2; "
-                                       "Decision 89 amendment 3. Limits unchanged.")
 def test_mo3_knee_direction_from_the_retarget_report():
     clips = _report("retarget")["clips"]
     assert tq.judge_mo3(clips, "game").status == tq.PASS and tq.judge_mo3(clips, "cinema").status == tq.PASS
 
-
-def test_mo3_fails_only_on_the_recorded_tucked_clips():
-    """Not an xfail: a knee failure outside the two recorded clips turns this red (landings fixed, amendment 3)."""
-    clips = _report("retarget")["clips"]
-    for profile in ("game", "cinema"):
-        assert set(tq.judge_mo3(clips, profile).measured.get("over", {})) <= TUCKED, profile

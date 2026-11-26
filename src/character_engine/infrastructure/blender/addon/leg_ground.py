@@ -93,7 +93,9 @@ def ground_legs(context, src_arm, dst_arm, mapping: Mapping[str, str], scale: fl
         for s, (fem, tib, tal) in legs.items():
             hip, knee, ank = mw @ pb[fem].head, mw @ pb[tib].head, mw @ pb[tal].head
             target = ank + Vector((0.0, 0.0, g.foot(s)))
-            pole = ground_domain.knee_pole(*src[s], tuple(hip))
+            if err[s] > ground_domain.CONTACT_BAND_M:            # foot in the air: into the source leg plane
+                target = Vector(ground_domain.onto_source_leg_plane(*src[s], tuple(hip), tuple(target)))
+            pole = ground_domain.knee_pole(*src[s], tuple(hip), tuple(target))   # source hinge axis (D89 am. 4)
             pole = pole if (Vector(pole) - hip).length >= MIN_POLE_M else None
             ik = lock_domain.two_bone_ik(tuple(hip), tuple(knee), tuple(ank), tuple(target), pole)
             new_knee, new_ank = Vector(ik.knee), Vector(ik.ankle)

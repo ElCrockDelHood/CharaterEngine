@@ -65,4 +65,6 @@ Documento de arranque para cualquier hilo nuevo. Leer **solo esto** primero; el 
 **Verificación**: CI de GitHub en verde (lint y tests en Ubuntu y Windows, Python 3.10 y 3.11; export glTF). UPBGE no se corrió en estos cambios. `scripts/export_souls_clips.py --check` compara texto exacto: es válido en Windows, donde se genera el archivo, pero en Linux puede avisar "STALE" por los últimos dígitos.
 
 **Cerrado, no reabrir sin motivo**: manos y pies NO se mueven (A29); licencias de publicación y del código (Decisiones 76, 77).
+Umbrales de calidad (Decisión 89): los 8 vigentes pasan (2026-11-26); AN-3 con la excepción INFERIOR_NASAL_CONCHA (solo
+BodyParts3D 4.0), **aprobada por Mariano el 2026-11-26**. Reporte: `python scripts/quality_report.py`.
 `LICENSE` lleva solo el nombre del dueño; el dato personal anterior ya no está en el árbol de la rama (Decisión 77).

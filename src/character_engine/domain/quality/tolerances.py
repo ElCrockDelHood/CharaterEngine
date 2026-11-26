@@ -32,7 +32,7 @@ class Exception_:
     reference: str
     cause: str
     evidence: Tuple[Tuple[str, float], ...]
-    status: str                     # "pending owner approval" or "approved (date)"
+    status: str                     # "pending owner approval" or "approved by <owner> (date)"
 
 
 EXCEPTIONS: Tuple[Exception_, ...] = (
@@ -40,7 +40,7 @@ EXCEPTIONS: Tuple[Exception_, ...] = (
                "real asymmetry of the single BodyParts3D subject: the right concha sits 3.84 mm forward or back of "
                "the left and is 20.0 mm tall against 15.4 mm; mapping correct (FMA54738 / FMA54737), the canonical "
                "skeleton is not part of the measurement, the subject's midline mirror still gives p95 7.12 mm",
-               (("mean_mm", 2.43), ("p95_mm", 8.15)), "pending owner approval"),
+               (("mean_mm", 2.43), ("p95_mm", 8.15)), "approved by Mariano (2026-11-26)"),
 )
 
 EXCLUDED_FROM_MO2 = ("jump", "swim")   # jumps: left out for now (pointed toes, Decision 85); swim: no ground at all

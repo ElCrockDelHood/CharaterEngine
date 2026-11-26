@@ -19,6 +19,9 @@ All notable changes to Character Engine. Dates are ISO 8601.
   copies the source's own ground error and lowers the body for every foot in contact (landings no longer straighten a leg);
   AN-3 INFERIOR_NASAL_CONCHA is a documented exception pending approval. MO-2 passes (0 of 69), MO-3 fails on 2 of 84 (tucked
   NinjaJump clips).
+- Decision 89 amendment 4: leg grounding keeps the source's knee hinge axis (IK pole on the hinge axis; a foot in the air
+  goes onto the source's leg plane); the tucked NinjaJump clips drop from 6.8° to 0.2° and MO-3 passes 84 / 84. The AN-3
+  exception is approved by the owner (2026-11-26): all 8 tolerances in force pass.
 
 ## [Unreleased] — 2026-11-05 · Decision 78: jaw pivot at the temporomandibular joint (A32)
 
