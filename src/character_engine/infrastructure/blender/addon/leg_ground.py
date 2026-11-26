@@ -64,13 +64,26 @@ def ground_legs(context, src_arm, dst_arm, mapping: Mapping[str, str], scale: fl
     pb, spb = dst_arm.pose.bones, src_arm.pose.bones
     root = next(b for b in pb if b.parent is None)
     src_rest_z = {s: (smw @ src_arm.data.bones[mapping[legs[s][2]]].head_local).z for s in legs}
+    # source foot points for its own ground error (Decision 89 amendment 3): ankle, ball and ball end
+    balls = {s: mapping.get(f"TOE_PHALANX_PROXIMAL_3_{s}") for s in legs}
+
+    def _foot_points(s, posed: bool):
+        ball = balls[s]
+        names = [mapping[legs[s][2]]] + ([ball] if ball is not None and ball in src_arm.data.bones else [])
+        if posed:
+            return [(smw @ spb[n].head).z for n in names] + [(smw @ spb[n].tail).z for n in names[1:]]
+        bones = src_arm.data.bones
+        return [(smw @ bones[n].head_local).z for n in names] + [(smw @ bones[n].tail_local).z for n in names[1:]]
+
+    src_foot_rest = {s: _foot_points(s, False) for s in legs}
     dst_rest_z = {s: (mw @ dst_arm.data.bones[legs[s][2]].head_local).z for s in legs}
     shifts, unreached, lifted = [], 0, 0
     for f in range(frame_start, frame_end + 1):
         scene.frame_set(f)
         src = {s: [smw @ spb[mapping[n]].head for n in legs[s]] for s in legs}
         dst_z = {s: (mw @ pb[legs[s][2]].head).z for s in legs}
-        g = ground_domain.plan({s: src[s][2].z for s in legs}, src_rest_z, dst_z, dst_rest_z, scale)
+        err = {s: min(p - r for p, r in zip(_foot_points(s, True), src_foot_rest[s])) for s in legs}
+        g = ground_domain.plan({s: src[s][2].z for s in legs}, src_rest_z, dst_z, dst_rest_z, scale, err)
         world = mw @ root.matrix
         world.translation += Vector((0.0, 0.0, g.root_dz))
         root.matrix = inv @ world

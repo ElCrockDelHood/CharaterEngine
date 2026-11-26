@@ -103,10 +103,10 @@ def test_rg1_pf1_pf4_limits_and_missing_inputs():
 
 # --- leg metrics (MO-2 / MO-3 inputs) -----------------------------------------------------------------------------
 
-def _legs(knee_y_src, knee_y_dst, toe_z, side_offset=0.0):
+def _legs(knee_y_src, knee_y_dst, toe_z, side_offset=0.0, frames=1):
     """One frame and the rest pose of both legs. Rest legs are straight; ``side_offset`` puts the target knee that far
     to the side of its hip-ankle line in rest *and* in the frame (a fixed rig difference, like the canonical 13.5 mm)."""
-    rest_s, rest_t, src, dst = {}, {}, {}, {}
+    rest_s, rest_t, src, dst = {"pelvis": (0, 0, 0.95)}, {}, {"pelvis": (0, 0, 0.93)}, {}
     for side, x in (("L", 0.1), ("R", -0.1)):
         s, o = side.lower(), (side_offset if side == "L" else -side_offset)
         for pts, ky in ((rest_s, 0.0), (src, knee_y_src)):
@@ -118,14 +118,14 @@ def _legs(knee_y_src, knee_y_dst, toe_z, side_offset=0.0):
                         f"FEMUR_{side}.x": (x + 0.1, 0, 0.95), f"TIBIA_{side}": (x + o, ky, 0.46),
                         f"TALUS_{side}": (x, 0, 0.07), f"CALCANEUS_{side}": (x, 0.05, tz),
                         f"TOE_PHALANX_PROXIMAL_3_{side}": (x, -0.1, tz), f"TOE_PHALANX_PROXIMAL_3_{side}.tail": (x, -0.15, tz)})
-    return [src], [dst], rest_s, rest_t
+    return [src] * frames, [dst] * frames, rest_s, rest_t
 
 
 def test_leg_metrics_on_a_known_pose():
-    src, dst, rs, rt = _legs(-0.15, -0.15, -0.006)
+    src, dst, rs, rt = _legs(-0.15, -0.15, -0.006, frames=12)    # 12 still frames: 11 with a speed, 2 feet
     rec = lq.clip_legs(src, dst, rs, rt)
-    assert rec["sole_median_m"] == pytest.approx(-0.006) and rec["stance_samples"] == 2
-    assert rec["knee_median_deg"] == pytest.approx(0.0, abs=1e-6) and rec["knee_samples"] == 2
+    assert rec["sole_median_m"] == pytest.approx(-0.006) and rec["stance_samples"] == 22
+    assert rec["knee_median_deg"] == pytest.approx(0.0, abs=1e-6) and rec["knee_samples"] == 24
     src, dst, rs, rt = _legs(-0.15, 0.15, 0.0)                     # target knee bends backwards
     assert lq.clip_legs(src, dst, rs, rt)["knee_median_deg"] == pytest.approx(180.0)
 
@@ -141,6 +141,18 @@ def test_knee_hinge_axis_and_minimum_bend():
     assert max(errors) == pytest.approx(0.0, abs=1e-6)
 
 
+def test_stance_means_support():
+    """Decision 89 amendment 3: a moving foot, a lying body or too few frames give no MO-2 value."""
+    src, dst, rs, rt = _legs(-0.15, -0.15, -0.006, frames=12)
+    moving = [{k: ((v[0], v[1] + 0.02 * i, v[2]) if k.startswith(("foot", "ball")) else v) for k, v in f.items()}
+              for i, f in enumerate(src)]                          # 0.6 m/s at 30 fps: sliding, not a support
+    assert lq.clip_legs(moving, dst, rs, rt)["sole_median_m"] is None
+    lying = [{**f, "pelvis": (0, 0, 0.30)} for f in src]           # pelvis 0.65 m below rest
+    assert lq.clip_legs(lying, dst, rs, rt)["sole_median_m"] is None
+    src, dst, rs, rt = _legs(-0.15, -0.15, -0.006, frames=5)       # 8 support frames < 10
+    assert lq.clip_legs(src, dst, rs, rt)["sole_median_m"] is None
+
+
 def test_straight_source_leg_carries_no_knee_direction():
     src, dst, rs, rt = _legs(-0.05, -0.05, 0.0)                    # about 12.6 deg of bend: under the 15 deg minimum
     rec = lq.clip_legs(src, dst, rs, rt)
@@ -154,18 +166,24 @@ def test_an1_long_bone_fit_passes():
     assert v.status == tq.PASS and v.measured["bone_sides"] == 12, v.measured
 
 
-@pytest.mark.xfail(strict=True, reason="AN-3 fails today on one pair: INFERIOR_NASAL_CONCHA p95 8.15 mm > 6 mm "
-                                       "(mean 2.43 mm). Cause: real asymmetry of the single BodyParts3D subject (3.8 mm "
-                                       "position offset, 20.0 vs 15.4 mm tall), not mapping nor canonical data "
-                                       "(QUALITY_TOLERANCES.md, AN-3 diagnosis). The limit is not relaxed.")
-def test_an3_mirror_symmetry_passes():
+def test_an3_passes_with_its_one_documented_exception():
+    """Decision 89 amendment 3: INFERIOR_NASAL_CONCHA is a documented exception (BodyParts3D subject), shown in the
+    verdict; any other pair over the limit still fails."""
     v = tq.judge_an3(qr.an3_pairs(_json(A22)))
-    assert v.status == tq.PASS, v.measured["over"]
+    assert v.status == tq.PASS and v.measured["pairs"] == 83, v.measured["over"]
+    assert set(v.measured["exceptions"]) == {"INFERIOR_NASAL_CONCHA"} and "exceptions applied" in v.detail
 
 
-def test_an3_fails_only_where_recorded():
-    v = tq.judge_an3(qr.an3_pairs(_json(A22)))
-    assert set(v.measured["over"]) == {"INFERIOR_NASAL_CONCHA"} and v.measured["pairs"] == 83
+def test_an3_exception_evidence_still_matches():
+    """The exception holds only while the pair measures what was recorded; a fix or a new reference turns this red."""
+    e = next(x for x in tq.EXCEPTIONS if x.id == "AN-3" and x.item == "INFERIOR_NASAL_CONCHA")
+    pair = qr.an3_pairs(_json(A22))["INFERIOR_NASAL_CONCHA"]
+    assert {k: round(pair[k], 2) for k, _ in e.evidence} == dict(e.evidence)
+
+
+def test_an3_exception_does_not_carry_to_another_reference():
+    v = tq.judge_an3({"INFERIOR_NASAL_CONCHA": {"mean_mm": 2.43, "p95_mm": 8.15}}, reference="another atlas")
+    assert v.status == tq.FAIL and not v.measured["exceptions"]
 
 
 def test_rg6_face_contract_counts():
@@ -192,26 +210,25 @@ def test_pf1_from_the_godot_perf_report():
     assert v.status == tq.PASS, v.measured
 
 
-@pytest.mark.xfail(strict=True, reason="MO-2 fails today (batch retarget 2026-11-25, 79 clips): 7 clips over 1 cm in "
-                                       "game, 12 over 0.3 cm in cinema, worst Sword_Heavy_Combo +1.79 cm; Decision 89")
 def test_mo2_sole_height_from_the_retarget_report():
     clips = _report("retarget")["clips"]
     assert tq.judge_mo2(clips, "game").status == tq.PASS and tq.judge_mo2(clips, "cinema").status == tq.PASS
 
 
-JUMPS = {"ual1/Jump_Land", "ual2/NinjaJump_Land", "ual2/NinjaJump_Idle_Loop", "ual2/NinjaJump_Start"}
+TUCKED = {"ual2/NinjaJump_Idle_Loop", "ual2/NinjaJump_Start"}   # knee bent about 155 deg in the air
 
 
-@pytest.mark.xfail(strict=True, reason="MO-3 (hinge axis, amendment 2) fails today on 4 of 84 clips, all jumps, in game "
-                                       "and cinema: Jump_Land p90 78.0 deg, NinjaJump_Land p90 49.7, NinjaJump_Idle_Loop "
-                                       "median 6.8, NinjaJump_Start median 6.7; Decision 89")
+@pytest.mark.xfail(strict=True, reason="MO-3 fails today on 2 of 84 clips (batch retarget 2026-11-26), knee bent "
+                                       "about 155 deg in the air where rotations are copied without grounding: "
+                                       "NinjaJump_Idle_Loop median 6.8 / p90 7.5 deg, NinjaJump_Start 6.7 / 7.2; "
+                                       "Decision 89 amendment 3. Limits unchanged.")
 def test_mo3_knee_direction_from_the_retarget_report():
     clips = _report("retarget")["clips"]
     assert tq.judge_mo3(clips, "game").status == tq.PASS and tq.judge_mo3(clips, "cinema").status == tq.PASS
 
 
-def test_mo3_fails_only_on_the_recorded_jumps():
-    """Not an xfail: a knee failure outside the recorded jumps turns this red."""
+def test_mo3_fails_only_on_the_recorded_tucked_clips():
+    """Not an xfail: a knee failure outside the two recorded clips turns this red (landings fixed, amendment 3)."""
     clips = _report("retarget")["clips"]
     for profile in ("game", "cinema"):
-        assert set(tq.judge_mo3(clips, profile).measured.get("over", {})) <= JUMPS, profile
+        assert set(tq.judge_mo3(clips, profile).measured.get("over", {})) <= TUCKED, profile

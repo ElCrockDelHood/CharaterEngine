@@ -3,9 +3,13 @@
 Input is sampled world positions per frame (canonical axes: Z-up, metres), as written by
 ``runtime/blender/ce_batch_retarget.py``. Nothing here reads files or imports Blender.
 
-* **Stance** (per foot and frame) is taken from the *source*: the source foot is in contact when its lowest point
-  (ankle, ball, toe tip) is within ``contact_height_m`` of its rest height. The source stands on its own ground, so
-  this does not depend on how well the retarget grounded the target.
+* **Stance** (per foot and frame) is taken from the *source* and means *support* (Decision 89 amendment 3): the
+  source foot's lowest point (ankle, ball, toe tip) is within ``contact_height_m`` of its rest height, the ankle moves
+  at most ``STANCE_SPEED_M_S`` horizontally (a planted foot is still; a foot sliding on the floor, as in UAL Slide_*,
+  is not a support), the foot is within ``STANCE_TILT_DEG`` of its rest pitch (flat, not resting on the heel or the
+  toes of a lying body) and the pelvis is at most ``STANCE_PELVIS_DROP_M`` below its rest height (the legs carry the
+  body: a deep crouch counts, lying on the floor does not). It does not depend on how well the retarget grounded the
+  target. A clip with fewer than ``MIN_STANCE_FRAMES`` such frames is not judged (reported, not hidden).
 * **Sole height** (MO-2): on a stance frame, the lowest target foot point (heel, ball, toe tip) minus its rest
   height. Negative = the sole is under the ground, positive = it floats. The clip value is the median over all
   stance frames of both feet; the 95th percentile of ``|h|`` is reported beside it.
@@ -31,6 +35,10 @@ Vec3 = Sequence[float]
 SIDES = ("L", "R")
 PROVENANCE = "ESTIMATE"
 CONTACT_HEIGHT_M = 0.03     # same as clip_qa.Thresholds.contact_height_m
+STANCE_SPEED_M_S = 0.25    # ESTIMATE: horizontal ankle speed of a planted foot (walk stance median 0.07 m/s)
+STANCE_TILT_DEG = 20.0      # ESTIMATE: foot pitch change from rest (ankle -> ball)
+STANCE_PELVIS_DROP_M = 0.5  # ESTIMATE: crouch idle drops 0.44 m; lying on the floor 0.59-0.87 m
+MIN_STANCE_FRAMES = 10      # ESTIMATE: fewer support frames than this are too few for a clip median
 MIN_FLEXION_DEG = 15.0      # source knee bend below which no hinge axis is judged (rest bends 3.5-4.2 deg; A89 amendment 2)
 
 SOURCE_FOOT = {"L": ("foot_l", "ball_l", "ball_l.tail"), "R": ("foot_r", "ball_r", "ball_r.tail")}
@@ -82,15 +90,33 @@ def percentile(values: Sequence[float], q: float) -> float:
     return s[lo] + (s[hi] - s[lo]) * (k - lo)
 
 
+def _pitch(ankle: Vec3, ball: Vec3) -> float:
+    """Angle (deg) of the ankle -> ball vector below the horizontal."""
+    d = [ball[i] - ankle[i] for i in range(3)]
+    return math.degrees(math.atan2(-d[2], math.hypot(d[0], d[1])))
+
+
 def sole_heights(source: Sequence[Mapping[str, Vec3]], target: Sequence[Mapping[str, Vec3]],
                  source_rest: Mapping[str, Vec3], target_rest: Mapping[str, Vec3],
-                 contact_height_m: float = CONTACT_HEIGHT_M) -> List[float]:
-    """Target sole heights (m) on every source stance frame of either foot."""
+                 contact_height_m: float = CONTACT_HEIGHT_M, dt: float = 1.0 / 30.0) -> List[float]:
+    """Target sole heights (m) on every source support frame of either foot (see the module notes)."""
     out = []
+    prev: Dict[str, Vec3] = {}
+    pelvis_rest = (source_rest.get("pelvis") or (0.0, 0.0, None))[2]
     for s, t in zip(source, target):
         for side in SIDES:
+            ankle_name, ball_name = SOURCE_FOOT[side][0], SOURCE_FOOT[side][1]
+            ankle = s.get(ankle_name)
+            last, prev[side] = prev.get(side), ankle
             src = _lowest(s, source_rest, SOURCE_FOOT[side])
-            if src is None or src > contact_height_m:
+            if src is None or src > contact_height_m or ankle is None or last is None:
+                continue
+            if math.hypot(ankle[0] - last[0], ankle[1] - last[1]) / dt > STANCE_SPEED_M_S:
+                continue
+            if ball_name in s and ankle_name in source_rest and ball_name in source_rest and abs(
+                    _pitch(ankle, s[ball_name]) - _pitch(source_rest[ankle_name], source_rest[ball_name])) > STANCE_TILT_DEG:
+                continue
+            if pelvis_rest is not None and "pelvis" in s and s["pelvis"][2] - pelvis_rest < -STANCE_PELVIS_DROP_M:
                 continue
             h = _lowest(t, target_rest, TARGET_FOOT[side])
             if h is not None:
@@ -118,16 +144,18 @@ def knee_errors(source: Sequence[Mapping[str, Vec3]], target: Sequence[Mapping[s
 
 
 def clip_legs(source: Sequence[Mapping[str, Vec3]], target: Sequence[Mapping[str, Vec3]],
-              source_rest: Mapping[str, Vec3], target_rest: Mapping[str, Vec3]) -> Dict[str, object]:
+              source_rest: Mapping[str, Vec3], target_rest: Mapping[str, Vec3],
+              dt: float = 1.0 / 30.0) -> Dict[str, object]:
     """MO-2 / MO-3 values of one clip (``None`` where there is nothing to measure)."""
-    h = sole_heights(source, target, source_rest, target_rest)
+    h = sole_heights(source, target, source_rest, target_rest, dt=dt)
     k, excluded = knee_errors(source, target)
     rec: Dict[str, object] = {"provenance": PROVENANCE, "stance_samples": len(h), "knee_samples": len(k),
                               "knee_excluded_frames": excluded, "knee_min_flexion_deg": MIN_FLEXION_DEG,
                               "knee_reference": "hinge axis (Decision 89 amendment 2)",
                               "sole_median_m": None, "sole_abs_p95_m": None, "knee_median_deg": None,
                               "knee_p90_deg": None}
-    if h:
+    rec["stance_rule"] = "support (Decision 89 amendment 3)"
+    if len(h) >= MIN_STANCE_FRAMES:
         rec["sole_median_m"] = round(statistics.median(h), 5)
         rec["sole_abs_p95_m"] = round(percentile([abs(x) for x in h], 95), 5)
     if k:

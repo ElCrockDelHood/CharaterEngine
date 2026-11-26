@@ -33,10 +33,13 @@ repository already measured and production judgement, not from a published norm 
 
 ### Definitions
 
-- **MO-2:** stance is taken from the *source*: a source foot is in contact when its lowest point (ankle, ball, toe tip)
-  is within 3 cm of its rest height. On those frames the sole height *h* is the lowest target foot point (heel, ball,
-  toe tip) minus its rest height. The clip value is the median *h* over the stance frames of both feet; the p95 of
-  \|h\| is reported beside it. Excluded: jumps (for now: pointed toes in the air, Decision 85) and swimming (no ground).
+- **MO-2 (stance means support, amendment 3):** stance is taken from the *source*. A source foot counts as a support when its
+  lowest point (ankle, ball, toe tip) is within 3 cm of its rest height, the ankle moves at most 0.25 m/s horizontally, the
+  foot is within 20° of its rest pitch, and the pelvis is at most 0.5 m below its rest height. A foot sliding on the floor,
+  a body lying down or a heel resting on the ground is not a support. On those frames the sole height *h* is the lowest target
+  foot point (heel, ball, toe tip) minus its rest height. The clip value is the median *h* over the support frames of both
+  feet, judged when there are at least 10; the clips with fewer are listed in the report as not judged. Excluded: jumps (for
+  now: pointed toes in the air, Decision 85) and swimming (no ground).
 - **MO-3 (knee hinge axis, amendment 2, owner 2026-11-25):** per leg and frame, the hinge axis is the normal of the
   thigh–shin plane, (knee − hip) × (ankle − knee), in the source and in the target, and the angle between the two axes.
   Only frames where the source knee is bent at least **15°** count, because a straight leg has no plane. A target leg that stays
@@ -57,11 +60,11 @@ repository already measured and production judgement, not from a published norm 
 | ID | Profile | Result | Measured |
 |----|---------|--------|----------|
 | AN-1 | all | **PASS** | worst RADIUS_R 3.99 mm (12 bone sides), re-fitted on today's canonical skeleton |
-| AN-3 | all | **FAIL** | 82 of 83 pairs pass; INFERIOR_NASAL_CONCHA mean 2.43 mm, **p95 8.15 mm** |
-| MO-2 | game | **FAIL** | 7 of 79 clips over 1 cm, worst Sword_Heavy_Combo +1.79 cm (ClimbUp +1.61, LayToIdle −1.76, Slide ×3, Hit_Knockback) |
-| MO-2 | cinema | **FAIL** | 12 of 79 clips over 0.3 cm (adds Crouch_Idle −0.70, Jog −0.46, Sprint −0.31, Death01, Zombie_Walk) |
-| MO-3 | game | **FAIL** | hinge axis: 80 of 84 clips pass; the 4 failures are jumps: Jump_Land p90 78.0°, NinjaJump_Land p90 49.7°, NinjaJump_Idle median 6.8°, NinjaJump_Start median 6.7°; Idle 2.1°, Walk 2.1°, Crouch_Idle 2.0° |
-| MO-3 | cinema | **FAIL** | hinge axis: 80 of 84 pass, the same 4 jumps fail |
+| AN-3 | all | **PASS + 1 exception** | 82 of 83 pairs pass; INFERIOR_NASAL_CONCHA (mean 2.43, p95 8.15 mm) is a documented exception, **pending the owner's approval** (2026-11-26) |
+| MO-2 | game | **PASS** | 2026-11-26, amendment 3: 69 clips judged, 0 over 1 cm, worst Walk_Formal −0.12 cm; 11 not judged (fewer than 10 support frames). Before: 7 of 79 failed |
+| MO-2 | cinema | **PASS** | 0 of 69 over 0.3 cm. Before: 12 of 79 failed |
+| MO-3 | game | **FAIL** | 2026-11-26: 82 of 84 pass; the landings are fixed (Jump_Land p90 78.0 → 2.7°, NinjaJump_Land 49.7 → 3.2°); still failing: NinjaJump_Idle median 6.8°, NinjaJump_Start 6.7° (knees bent about 155° in the air) |
+| MO-3 | cinema | **FAIL** | 82 of 84 pass, the same 2 clips fail |
 | RG-1 | all | **PASS** | 0.0553 mm (IK rest 0.0019 mm) |
 | RG-6 | game / cinema | **PASS (contract)** | 20 / 52 names; the asset part is not measurable yet |
 | PF-1 | game, Q0 | **PASS** | GT 740M: mean 11.08 ms, p95 13.71 ms (2026-10-30: 2.93 / 4.18 ms) |
@@ -78,6 +81,16 @@ repository already measured and production judgement, not from a published norm 
 - **MO-3, hinge axis (amendment 2, in force):** 80 of 84 clips pass in both profiles (game: plain 53 / 86, amendment 1 11 / 84).
   Only jumps fail. No limit was changed.
 - **PF-1:** the arena frame time grew from 2.9 to 11.1 ms since October. It still passes, with a smaller margin.
+
+## Documented exceptions
+
+An exception is one item a tolerance does not judge. It names the reference it applies to, its cause and its measured evidence.
+The verdict and the report list it, so it is never silent. A test checks that the evidence still matches, so a fix or a new
+reference turns that test red. It needs the owner's approval.
+
+| ID | Item | Reference | Evidence | Status |
+|----|------|-----------|----------|--------|
+| AN-3 | INFERIOR_NASAL_CONCHA | BodyParts3D 4.0 | mean 2.43 mm, p95 8.15 mm (real asymmetry of the single subject, below) | **pending owner approval** |
 
 ## AN-3 diagnosis: INFERIOR_NASAL_CONCHA (2026-11-25)
 

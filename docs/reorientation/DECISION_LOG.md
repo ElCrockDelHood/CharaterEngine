@@ -1651,6 +1651,28 @@ are left out. Results, plain → amendment 1 → amendment 2 (clips passing): ga
 2 / 84 → **80 / 84**; Idle 2.8 → 6.4 → 2.1 deg median, Walk 3.9 → 7.3 → 2.1. Still failing, all jumps: Jump_Land p90 78.0, NinjaJump_Land
 p90 49.7, NinjaJump_Idle_Loop median 6.8, NinjaJump_Start median 6.7; the MO-3 xfail carries them. A_TPose has no bent frame.
 
+**Amendment 3** (owner, 2026-11-26, via the coordinator: "cerrar los 3 umbrales que fallan", causes first, no limit relaxed):
+
+- **MO-2, stance means support.** A source foot is in stance when its lowest point is within 3 cm of its ground *and* it is still
+  (ankle ≤ 0.25 m/s horizontally), flat (within 20° of its rest pitch) and carrying the body (pelvis at most 0.5 m below rest).
+  A clip needs at least 10 such frames to be judged; the others are listed in the report, not hidden. Cause found: the failing
+  frames were feet sliding on the floor (UAL Slide_*, foot at 4.3–4.5 m/s), a body lying or falling (LayToIdle, Death01,
+  Hit_Knockback: pelvis 59–87 cm down) and one-frame contacts (ClimbUp).
+- **Retarget (leg grounding, Decision 85), two physical fixes:** (1) the source's own ground error is not copied: a support foot
+  within the contact band is put on the ground (UAL Sword_Heavy_Combo floats 1.09 cm in the source, Zombie_Walk sinks 0.95 cm);
+  (2) when both source feet are in contact the body goes as low as the foot that needs it most, so both of ours reach the
+  ground. Before, a landing set the body from one foot and the other leg went straight while the source's knee was bent
+  21–27°, which read 78° in MO-3 (Jump_Land, NinjaJump_Land). The clip QA statuses of the 86 clips did not change.
+- **AN-3, documented exception pending the owner's approval:** INFERIOR_NASAL_CONCHA on BodyParts3D 4.0 only (real asymmetry of
+  the single subject: 3.84 mm offset, 20.0 vs 15.4 mm tall; mapping and canonical data not involved). The verdict lists it; a
+  test checks the evidence still matches (2.43 / 8.15 mm) and that it does not carry to another reference. Limit unchanged.
+- **Before → after** (clips failing, game / cinema): AN-3 1 pair → 0 + 1 exception; MO-2 7 / 12 of 79 → **0 / 0 of 69** judged
+  (11 not judged; worst Walk_Formal −0.12 cm; Sword_Heavy +1.79 → 0.0 cm, Crouch_Idle −0.70 → 0.0, Zombie_Walk −0.86 → −0.07);
+  MO-3 4 / 4 → **2 / 2** of 84 (Jump_Land p90 78.0 → 2.7°, NinjaJump_Land 49.7 → 3.2°).
+- **Still failing, decision open:** MO-3 on NinjaJump_Idle_Loop (median 6.8°) and NinjaJump_Start (6.7°): knees bent about 155°
+  in the air, where the copied rotations are not grounded; the axes drift about 7° at that bend (2° in ordinary clips). Not a
+  source-data defect, so no exception was made: either a knee-axis calibration in the retarget, or an owner decision.
+
 ---
 
 ## 14. SUMMARY

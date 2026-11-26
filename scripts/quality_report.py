@@ -79,7 +79,7 @@ def markdown(verdicts, sources) -> str:
     lines = ["# Quality tolerances in force (Decision 89) — all ESTIMATE", "",
              "| ID | Profile | Status | Measured | Limit | Note |", "|---|---|---|---|---|---|"]
     for v in verdicts:
-        m = {k: x for k, x in v.measured.items() if k not in ("over", "over_cm")}
+        m = {k: x for k, x in v.measured.items() if k not in ("over", "over_cm", "exceptions", "not_judged")}
         lines.append(f"| {v.id} | {v.profile} | **{v.status}** | {json.dumps(m)} | {json.dumps(dict(v.limit))} | "
                      f"{v.detail} |")
     for v in verdicts:
@@ -87,6 +87,14 @@ def markdown(verdicts, sources) -> str:
         if over:
             lines += ["", f"## {v.id} ({v.profile}) failing items", ""]
             lines += [f"- {k}: {val}" for k, val in sorted(over.items())]
+    for v in verdicts:
+        for item, e in (v.measured.get("exceptions") or {}).items():
+            lines += ["", f"## {v.id} ({v.profile}) documented exception: {item}", "",
+                      f"- measured: {', '.join(f'{k} {x}' for k, x in e.items() if k not in ('cause', 'status'))}",
+                      f"- cause: {e['cause']}", f"- status: **{e['status']}**"]
+        if v.measured.get("not_judged"):
+            lines += ["", f"## {v.id} ({v.profile}) clips not judged (too few support frames)", "",
+                      "- " + ", ".join(sorted(v.measured["not_judged"]))]
     lines += ["", "## Sources", ""] + [f"- {k}: `{p}` ({'found' if p.exists() else 'missing'})" for k, p in sources.items()]
     return "\n".join(lines) + "\n"
 
@@ -111,7 +119,9 @@ def main(argv=None) -> int:
     a.out.with_suffix(".json").write_text(json.dumps(report, indent=1), encoding="utf-8")
     a.out.with_suffix(".md").write_text(markdown(verdicts, sources), encoding="utf-8")
     for v in verdicts:
-        m = {k: x for k, x in v.measured.items() if k not in ("over", "over_cm")}
+        m = {k: x for k, x in v.measured.items() if k not in ("over", "over_cm", "exceptions", "not_judged")}
+        if v.measured.get("exceptions"):
+            m["exceptions"] = sorted(v.measured["exceptions"])
         print(f"{v.id:5s} {v.profile:7s} {v.status:12s} {m}  limit {dict(v.limit)}  {v.detail}")
     print(f"report: {a.out.with_suffix('.json')}  table: {a.out.with_suffix('.md')}")
     return 1 if any(v.status == tq.FAIL for v in verdicts) else 0

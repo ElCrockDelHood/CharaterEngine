@@ -18,6 +18,31 @@ from typing import Dict, Iterable, Mapping, Optional, Sequence, Tuple
 PROVENANCE = "ESTIMATE"
 PASS, FAIL, NOT_MEASURED = "PASS", "FAIL", "NOT_MEASURED"
 Q0_ADAPTER = "GT 740M"          # PF-1 Q0 reference hardware (A12)
+REFERENCE = "BodyParts3D 4.0"   # the reference meshes AN-1 / AN-3 measure (A18)
+
+
+@dataclass(frozen=True)
+class Exception_:
+    """A documented exception: one item a tolerance does not judge, with its cause and evidence (never silent).
+
+    It applies only to the stated reference and only while the measured value matches the evidence: a test checks
+    that, so a changed reference or a fix turns it red. Verdicts list every exception they applied."""
+    id: str
+    item: str
+    reference: str
+    cause: str
+    evidence: Tuple[Tuple[str, float], ...]
+    status: str                     # "pending owner approval" or "approved (date)"
+
+
+EXCEPTIONS: Tuple[Exception_, ...] = (
+    Exception_("AN-3", "INFERIOR_NASAL_CONCHA", REFERENCE,
+               "real asymmetry of the single BodyParts3D subject: the right concha sits 3.84 mm forward or back of "
+               "the left and is 20.0 mm tall against 15.4 mm; mapping correct (FMA54738 / FMA54737), the canonical "
+               "skeleton is not part of the measurement, the subject's midline mirror still gives p95 7.12 mm",
+               (("mean_mm", 2.43), ("p95_mm", 8.15)), "pending owner approval"),
+)
+
 EXCLUDED_FROM_MO2 = ("jump", "swim")   # jumps: left out for now (pointed toes, Decision 85); swim: no ground at all
 
 
@@ -101,16 +126,21 @@ def judge_an1(rows: Optional[Sequence[Mapping[str, object]]]) -> Verdict:
                "worst_rms_mm": round(float(worst["rms_mm"]), 3), "over": over})
 
 
-def judge_an3(pairs: Optional[Mapping[str, Mapping[str, float]]]) -> Verdict:
+def judge_an3(pairs: Optional[Mapping[str, Mapping[str, float]]], reference: str = REFERENCE) -> Verdict:
     """``pairs``: {name: {mean_mm, p95_mm}} (A22 mirror pairs)."""
     if not pairs:
         return _v("AN-3", "all", NOT_MEASURED, detail="no A22 mirror pairs")
     lim = tolerance("AN-3").limit
-    over = {k: {"mean_mm": round(v["mean_mm"], 2), "p95_mm": round(v["p95_mm"], 2)} for k, v in pairs.items()
-            if v["mean_mm"] > lim["mean_mm"] or v["p95_mm"] > lim["p95_mm"]}
+    out = {k: {"mean_mm": round(v["mean_mm"], 2), "p95_mm": round(v["p95_mm"], 2)} for k, v in pairs.items()
+           if v["mean_mm"] > lim["mean_mm"] or v["p95_mm"] > lim["p95_mm"]}
+    excepted = {e.item: e for e in EXCEPTIONS if e.id == "AN-3" and e.reference == reference and e.item in out}
+    over = {k: v for k, v in out.items() if k not in excepted}
     return _v("AN-3", "all", FAIL if over else PASS,
               {"pairs": len(pairs), "max_mean_mm": round(max(v["mean_mm"] for v in pairs.values()), 3),
-               "max_p95_mm": round(max(v["p95_mm"] for v in pairs.values()), 3), "over": over})
+               "max_p95_mm": round(max(v["p95_mm"] for v in pairs.values()), 3), "over": over,
+               "exceptions": {k: {**out[k], "cause": e.cause, "status": e.status} for k, e in excepted.items()}},
+              detail=(f"exceptions applied: {', '.join(sorted(excepted))} ({REFERENCE}; "
+                      f"{', '.join(sorted({e.status for e in excepted.values()}))})") if excepted else "")
 
 
 def _leg_values(clips: Iterable[Mapping[str, object]], key: str, exclude: Sequence[str] = ()):
@@ -130,10 +160,15 @@ def judge_mo2(clips: Optional[Sequence[Mapping[str, object]]], profile: str) -> 
     lim = tolerance("MO-2", profile).limit["abs_m"]
     over = {k: round(v["sole_median_m"] * 100, 2) for k, v in vals if abs(v["sole_median_m"]) > lim}
     worst = max(vals, key=lambda kv: abs(kv[1]["sole_median_m"]))
+    judged = {k for k, _ in vals}
+    not_judged = sorted(f"{c.get('library')}/{c['clip']}" for c in clips or ()
+                        if c.get("category") not in EXCLUDED_FROM_MO2 and c.get("legs")
+                        and f"{c.get('library')}/{c['clip']}" not in judged)
     return _v("MO-2", profile, FAIL if over else PASS,
               {"clips": len(vals), "failing": len(over), "worst": worst[0],
-               "worst_cm": round(worst[1]["sole_median_m"] * 100, 2), "over_cm": over},
-              detail=f"categories excluded: {', '.join(EXCLUDED_FROM_MO2)}")
+               "worst_cm": round(worst[1]["sole_median_m"] * 100, 2), "over_cm": over, "not_judged": not_judged},
+              detail=f"categories excluded: {', '.join(EXCLUDED_FROM_MO2)}; {len(not_judged)} clips not judged "
+                     f"(fewer than 10 support frames)")
 
 
 def judge_mo3(clips: Optional[Sequence[Mapping[str, object]]], profile: str) -> Verdict:

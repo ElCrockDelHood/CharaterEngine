@@ -157,7 +157,7 @@ def evaluate_library(lib: str, samples: dict[str, dict], glb_checks: dict[str, d
         rec["glb"] = {v: c.get("glb_out") for v, c in (("standard", s), ("rm", r)) if c and c.get("glb_out")}
         rec["mapped_bones"] = base.get("mapped_bones")
         rec["legs"] = {v: leg_quality.clip_legs(c["source"], c["target"], samples[v]["source_rest"],
-                                                samples[v]["target_rest"])
+                                                samples[v]["target_rest"], dt=dt)
                        for v, c in (("standard", s), ("rm", r)) if c and c["status"] == "ok"}   # MO-2 / MO-3
         rec["root_scale"] = {k: base.get(k) for k in ("root_scale", "root_scale_mode", "followers", "stance")}
         if r and r.get("foot_lock"):

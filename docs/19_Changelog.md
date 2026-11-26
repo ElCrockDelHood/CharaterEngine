@@ -15,6 +15,10 @@ All notable changes to Character Engine. Dates are ISO 8601.
   definition is proposed, not applied.
 - Decision 89 amendment 2: MO-3 judged on the knee hinge axis past a 15° source bend; 80 / 84 clips pass in game and cinema,
   the 4 failures are jumps. The thigh-twist sampling of amendment 1 is removed.
+- Decision 89 amendment 3: MO-2 stance means support (still, flat, body carried; at least 10 frames); leg grounding no longer
+  copies the source's own ground error and lowers the body for every foot in contact (landings no longer straighten a leg);
+  AN-3 INFERIOR_NASAL_CONCHA is a documented exception pending approval. MO-2 passes (0 of 69), MO-3 fails on 2 of 84 (tucked
+  NinjaJump clips).
 
 ## [Unreleased] — 2026-11-05 · Decision 78: jaw pivot at the temporomandibular joint (A32)
 
